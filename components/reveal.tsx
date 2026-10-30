@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, type HTMLMotionProps } from 'motion/react'
+import { useLocale } from './locale-provider'
 
 type RevealProps = HTMLMotionProps<'div'> & {
   delay?: number
@@ -9,9 +10,11 @@ type RevealProps = HTMLMotionProps<'div'> & {
 }
 
 export function Reveal({ delay = 0, y = 28, x = 0, children, ...props }: RevealProps) {
+  const { dir } = useLocale()
+  const startX = dir === 'rtl' ? x : -x
   return (
     <motion.div
-      initial={{ opacity: 0, y, x }}
+      initial={{ opacity: 0, y, x: startX }}
       whileInView={{ opacity: 1, y: 0, x: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}

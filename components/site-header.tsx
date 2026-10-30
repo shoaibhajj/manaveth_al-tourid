@@ -1,126 +1,135 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { motion, useScroll, useSpring, AnimatePresence } from 'motion/react'
-import { ArrowLeft, Globe, Menu, X } from 'lucide-react'
-
-const links = [
-  { href: '#home', label: 'الرئيسية' },
-  { href: '#about', label: 'من نحن' },
-  { href: '#services', label: 'خدماتنا' },
-  { href: '#gallery', label: 'المعرض' },
-  { href: '#sectors', label: 'القطاعات' },
-  { href: '#contact', label: 'تواصل معنا' },
-]
+import { Globe, Menu, X } from 'lucide-react'
+import { site } from '@/lib/content/site'
+import { DirArrow } from './dir-arrow'
+import { useLocale } from './locale-provider'
 
 export function SiteHeader() {
+  const pathname = usePathname()
+  const isHome = pathname === '/'
+  const { locale, setLocale, t } = useLocale()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const [active, setActive] = useState('#home')
+  const [activeSection, setActiveSection] = useState('home')
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
+
+  const solid = scrolled || !isHome
+  const activeId = isHome ? activeSection : site.nav.find((item) => item.href === pathname)?.id
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
+  useEffect(() => {
+    if (!isHome) return
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(`#${entry.target.id}`)
+          if (entry.isIntersecting) setActiveSection(entry.target.id)
         })
       },
       { rootMargin: '-45% 0px -50% 0px' },
     )
-    links.forEach(({ href }) => {
-      const el = document.querySelector(href)
+    site.nav.forEach(({ id }) => {
+      const el = document.getElementById(id)
       if (el) observer.observe(el)
     })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      observer.disconnect()
-    }
-  }, [])
+    return () => observer.disconnect()
+  }, [isHome])
+
+  const slide = locale === 'ar' ? 20 : -20
 
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-forest-deep/90 py-2 shadow-lg shadow-black/20 backdrop-blur-md' : 'bg-transparent py-4'
+        solid ? 'bg-forest-deep/90 py-2 shadow-lg shadow-black/20 backdrop-blur-md' : 'bg-transparent py-4'
       }`}
     >
       <motion.div
-        className="absolute inset-x-0 bottom-0 h-0.5 origin-right bg-gold-gradient"
+        className="absolute inset-x-0 bottom-0 h-0.5 bg-gold-gradient rtl:origin-right ltr:origin-left"
         style={{ scaleX: progress }}
         aria-hidden="true"
       />
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 md:px-6">
-        <a href="#home" className="flex items-center gap-3" aria-label="منافذ التوريد - الرئيسية">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 md:px-6">
+        <Link href="/#home" className="flex items-center gap-3" aria-label={t(site.brand.homeLabel)}>
           <Image
-            src="/images/logo.png"
+            src={site.brand.logo}
             alt=""
             width={56}
             height={56}
-            className={`rounded-full ring-1 ring-gold/40 transition-all duration-500 ${scrolled ? 'size-11' : 'size-14'}`}
+            className={`rounded-full ring-1 ring-gold/40 transition-all duration-500 ${solid ? 'size-11' : 'size-14'}`}
             priority
           />
           <span className="leading-tight">
-            <span className="block text-lg font-extrabold text-gold-gradient">منافذ التوريد</span>
-            <span className="block text-[11px] font-medium tracking-wider text-cream/70">Mnaveeh ALTourid · since 2001</span>
+            <span className="block text-lg font-extrabold text-gold-gradient">{t(site.brand.name)}</span>
+            <span className="block text-[11px] font-medium tracking-wider text-cream/70">
+              {t(site.brand.subtitle)}
+            </span>
           </span>
-        </a>
+        </Link>
 
-        <nav aria-label="القائمة الرئيسية" className="hidden lg:block">
-          <ul className="flex items-center gap-1">
-            {links.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className={`relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                    active === link.href ? 'text-gold' : 'text-cream/85 hover:text-gold'
+        <nav aria-label={t(site.ui.mainNav)} className="hidden xl:block">
+          <ul className="flex items-center gap-0.5">
+            {site.nav.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={item.href}
+                  className={`relative rounded-md px-2.5 py-2 text-sm font-medium transition-colors ${
+                    activeId === item.id ? 'text-gold' : 'text-cream/85 hover:text-gold'
                   }`}
                 >
-                  {link.label}
-                  {active === link.href && (
+                  {t(item.label)}
+                  {activeId === item.id && (
                     <motion.span
                       layoutId="nav-underline"
-                      className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gold"
+                      className="absolute inset-x-2.5 -bottom-0.5 h-0.5 rounded-full bg-gold"
                     />
                   )}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
 
         <div className="flex items-center gap-2">
-          <a
-            href="#contact"
+          <Link
+            href="/#contact"
             className="group relative hidden items-center gap-2 overflow-hidden rounded-lg bg-gold-gradient px-5 py-2.5 text-sm font-bold text-forest-deep shadow-md shadow-gold/20 transition-transform hover:-translate-y-0.5 sm:inline-flex"
           >
             <span
               className="pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-shine bg-white/40"
               aria-hidden="true"
             />
-            طلب عرض سعر
-            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
-          </a>
+            {t(site.ui.requestQuote)}
+            <DirArrow />
+          </Link>
           <button
             type="button"
-            className="hidden items-center gap-1.5 rounded-lg border border-cream/20 px-3 py-2 text-sm font-bold text-cream/85 transition-colors hover:border-gold hover:text-gold md:inline-flex"
-            aria-label="Switch to English"
+            onClick={() => setLocale(locale === 'ar' ? 'en' : 'ar')}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-cream/20 px-3 py-2 text-sm font-bold text-cream/85 transition-colors hover:border-gold hover:text-gold"
+            aria-label={t(site.ui.switchLanguage)}
+            lang={locale === 'ar' ? 'en' : 'ar'}
           >
             <Globe className="size-4" aria-hidden="true" />
-            EN
+            {t(site.ui.languageButton)}
           </button>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex size-10 items-center justify-center rounded-lg border border-cream/20 text-cream lg:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-lg border border-cream/20 text-cream xl:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
-            aria-label={open ? 'إغلاق القائمة' : 'فتح القائمة'}
+            aria-label={t(open ? site.ui.closeMenu : site.ui.openMenu)}
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -131,38 +140,40 @@ export function SiteHeader() {
         {open && (
           <motion.nav
             id="mobile-menu"
-            aria-label="قائمة الجوال"
+            aria-label={t(site.ui.mobileNav)}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden bg-forest-deep/95 backdrop-blur-md lg:hidden"
+            className="overflow-hidden bg-forest-deep/95 backdrop-blur-md xl:hidden"
           >
             <ul className="flex flex-col gap-1 px-4 py-4">
-              {links.map((link, i) => (
+              {site.nav.map((item, i) => (
                 <motion.li
-                  key={link.href}
-                  initial={{ opacity: 0, x: 20 }}
+                  key={item.id}
+                  initial={{ opacity: 0, x: slide }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: i * 0.04 }}
                 >
-                  <a
-                    href={link.href}
+                  <Link
+                    href={item.href}
                     onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-3 font-medium text-cream/90 hover:bg-white/5 hover:text-gold"
+                    className={`block rounded-lg px-3 py-3 font-medium hover:bg-white/5 hover:text-gold ${
+                      activeId === item.id ? 'text-gold' : 'text-cream/90'
+                    }`}
                   >
-                    {link.label}
-                  </a>
+                    {t(item.label)}
+                  </Link>
                 </motion.li>
               ))}
               <li className="pt-2">
-                <a
-                  href="#contact"
+                <Link
+                  href="/#contact"
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-gold-gradient px-5 py-3 font-bold text-forest-deep"
+                  className="group flex items-center justify-center gap-2 rounded-lg bg-gold-gradient px-5 py-3 font-bold text-forest-deep"
                 >
-                  طلب عرض سعر
-                  <ArrowLeft className="size-4" aria-hidden="true" />
-                </a>
+                  {t(site.ui.requestQuote)}
+                  <DirArrow />
+                </Link>
               </li>
             </ul>
           </motion.nav>

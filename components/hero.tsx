@@ -3,23 +3,20 @@
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
-import { ArrowLeft, ConciergeBell, FileText, Ship, Store, Truck } from 'lucide-react'
-
-const features = [
-  { icon: ConciergeBell, label: 'توريد المواد الغذائية' },
-  { icon: Store, label: 'المطاعم والفنادق' },
-  { icon: Truck, label: 'النقل البري' },
-  { icon: Ship, label: 'الاستيراد البحري' },
-]
-
-const titleLines = ['شريكك الموثوق في', 'توريد المواد الغذائية']
+import { FileText } from 'lucide-react'
+import { site } from '@/lib/content/site'
+import { DirArrow } from './dir-arrow'
+import { icons } from './icon-map'
+import { useLocale } from './locale-provider'
 
 export function Hero() {
+  const { t } = useLocale()
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const { hero } = site
 
   return (
     <section
@@ -29,8 +26,8 @@ export function Hero() {
     >
       <motion.div className="absolute inset-0 -z-20" style={{ y: imageY }}>
         <Image
-          src="/images/hero.png"
-          alt="ميناء تجاري عند الغروب فيه سفينة حاويات وشاحنة ومستودع"
+          src={site.brand.heroImage}
+          alt={t(hero.imageAlt)}
           fill
           priority
           sizes="100vw"
@@ -38,7 +35,7 @@ export function Hero() {
         />
       </motion.div>
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-l from-forest-deep via-forest-deep/80 to-forest-deep/10"
+        className="absolute inset-0 -z-10 from-forest-deep via-forest-deep/80 to-forest-deep/10 rtl:bg-gradient-to-l ltr:bg-gradient-to-r"
         aria-hidden="true"
       />
       <div
@@ -77,19 +74,19 @@ export function Hero() {
             className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-sm font-medium text-gold-light backdrop-blur-sm"
           >
             <span className="size-2 animate-pulse rounded-full bg-gold" aria-hidden="true" />
-            خبرة موثوقة منذ عام 2001
+            {t(hero.badge)}
           </motion.p>
 
           <h1 className="text-4xl font-extrabold leading-[1.25] text-cream md:text-6xl">
-            {titleLines.map((line, i) => (
-              <span key={line} className="block overflow-hidden pb-1">
+            {hero.titleLines.map((line, i) => (
+              <span key={line.en} className="block overflow-hidden pb-1">
                 <motion.span
                   className={`block ${i === 1 ? 'text-gold-gradient' : ''}`}
                   initial={{ y: '110%' }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.9, delay: 0.15 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {line}
+                  {t(line)}
                 </motion.span>
               </span>
             ))}
@@ -101,7 +98,7 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.55 }}
             className="mt-5 max-w-lg text-pretty text-lg leading-relaxed text-cream/80 md:text-xl"
           >
-            {'من المصدر إلى وجهتك .. بجودة عالمية وسلاسل إمداد متكاملة.'}
+            {t(hero.subtitle)}
           </motion.p>
 
           <motion.div
@@ -116,43 +113,46 @@ export function Hero() {
             >
               <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-shine bg-white/40" aria-hidden="true" />
               <FileText className="size-5" aria-hidden="true" />
-              طلب عرض سعر
+              {t(hero.primaryCta)}
             </a>
             <a
               href="#about"
               className="group inline-flex items-center gap-2 rounded-lg border border-cream/40 px-7 py-3.5 font-bold text-cream backdrop-blur-sm transition-colors hover:border-gold hover:text-gold"
             >
-              تعرف علينا
-              <ArrowLeft className="size-5 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
+              {t(hero.secondaryCta)}
+              <DirArrow className="size-5" />
             </a>
           </motion.div>
         </div>
 
         <ul className="mt-14 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
-          {features.map(({ icon: Icon, label }, i) => (
-            <motion.li
-              key={label}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.85 + i * 0.1 }}
-              className="group flex flex-col items-center gap-3 rounded-xl border border-cream/10 bg-forest-deep/40 px-3 py-5 text-center backdrop-blur-md transition-colors hover:border-gold/50 hover:bg-forest/60"
-            >
-              <span
-                className="animate-float text-gold transition-transform group-hover:scale-110"
-                style={{ animationDelay: `${i * 0.4}s` }}
+          {hero.features.map(({ icon, label }, i) => {
+            const Icon = icons[icon]
+            return (
+              <motion.li
+                key={icon}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.85 + i * 0.1 }}
+                className="group flex flex-col items-center gap-3 rounded-xl border border-cream/10 bg-forest-deep/40 px-3 py-5 text-center backdrop-blur-md transition-colors hover:border-gold/50 hover:bg-forest/60"
               >
-                <Icon className="size-9" strokeWidth={1.5} aria-hidden="true" />
-              </span>
-              <span className="text-sm font-bold text-cream">{label}</span>
-            </motion.li>
-          ))}
+                <span
+                  className="animate-float text-gold transition-transform group-hover:scale-110"
+                  style={{ animationDelay: `${i * 0.4}s` }}
+                >
+                  <Icon className="size-9" strokeWidth={1.5} aria-hidden="true" />
+                </span>
+                <span className="text-sm font-bold text-cream">{t(label)}</span>
+              </motion.li>
+            )
+          })}
         </ul>
       </motion.div>
 
       <a
         href="#about"
         className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs text-cream/60 md:flex"
-        aria-label="انتقل إلى قسم من نحن"
+        aria-label={t(hero.scrollLabel)}
       >
         <span className="flex h-9 w-5 justify-center rounded-full border border-cream/40 pt-1.5">
           <span className="h-2 w-1 animate-bounce rounded-full bg-gold" />

@@ -7,7 +7,7 @@ import { ProductsGrid } from './products-grid'
 import { Reveal, SectionHeading } from './reveal'
 
 export function FeaturedProducts() {
-  const { t } = useLocale()
+  const { t, localize } = useLocale()
   const { site, featuredProducts } = useContent()
   const { productsSection } = site
 
@@ -24,7 +24,7 @@ export function FeaturedProducts() {
         </div>
         <Reveal className="mt-10 flex justify-center">
           <Link
-            href="/products"
+            href={localize('/products')}
             className="group inline-flex items-center gap-2 rounded-lg border-2 border-gold px-7 py-3 font-bold text-forest transition-colors hover:bg-gold"
           >
             {t(productsSection.cta)}

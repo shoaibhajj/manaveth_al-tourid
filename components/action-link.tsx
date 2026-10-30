@@ -14,7 +14,7 @@ type ActionLinkProps = {
 }
 
 export function ActionLink({ href, external, className, activeClassName = '', children }: ActionLinkProps) {
-  const { t } = useLocale()
+  const { t, localize } = useLocale()
   const { site } = useContent()
 
   if (!href) {
@@ -43,7 +43,7 @@ export function ActionLink({ href, external, className, activeClassName = '', ch
     )
   }
   return (
-    <Link href={href} className={classes}>
+    <Link href={localize(href)} className={classes}>
       {children}
     </Link>
   )

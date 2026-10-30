@@ -1,22 +1,20 @@
 import type { Metadata } from 'next'
 import { PageHero } from '@/components/page-hero'
 import { ProductsPageContent } from '@/components/products-page-content'
-import { getContent } from '@/lib/sanity/get-content'
+import { JsonLd } from '@/components/json-ld'
 import { getLocale } from '@/lib/locale-server'
+import { getContent } from '@/lib/sanity/get-content'
+import { pageMetadata, productsGraph } from '@/lib/seo'
+import { getSiteUrl } from '@/lib/site-url'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const [locale, { seo }] = await Promise.all([getLocale(), getContent()])
-  return {
-    title: seo.products.title[locale],
-    description: seo.products.description[locale],
-    openGraph: seo.products.shareImage ? { images: [seo.products.shareImage] } : undefined,
-  }
-}
+export const generateMetadata = (): Promise<Metadata> => pageMetadata('products')
 
 export default async function ProductsPage() {
-  const { site } = await getContent()
+  const [content, locale, base] = await Promise.all([getContent(), getLocale(), getSiteUrl()])
+  const { site } = content
   return (
     <main>
+      <JsonLd graph={productsGraph(content, locale, base)} />
       <PageHero
         eyebrow={site.productsPage.eyebrow}
         title={site.productsPage.title}

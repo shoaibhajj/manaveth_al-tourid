@@ -7,7 +7,7 @@ import { useContent, useLocale } from './locale-provider'
 import { Reveal, SectionHeading } from './reveal'
 
 export function BranchesSection() {
-  const { t } = useLocale()
+  const { t, localize } = useLocale()
   const { site, branches } = useContent()
   const { branchesSection } = site
 
@@ -28,7 +28,7 @@ export function BranchesSection() {
         </div>
         <Reveal className="mt-10 flex justify-center">
           <Link
-            href="/branches"
+            href={localize('/branches')}
             className="group inline-flex items-center gap-2 rounded-lg border-2 border-gold px-7 py-3 font-bold text-forest transition-colors hover:bg-gold"
           >
             {t(branchesSection.cta)}

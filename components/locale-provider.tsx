@@ -1,48 +1,37 @@
 'use client'
 
-import { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
+import { createContext, useContext, useMemo } from 'react'
 import type { SiteContent } from '@/lib/content/model'
-import { directionOf, LOCALE_COOKIE, type Direction, type Locale, type Localized } from '@/lib/i18n'
+import { directionOf, localePath, type Direction, type Locale, type Localized } from '@/lib/i18n'
 
 type LocaleContextValue = {
   locale: Locale
   dir: Direction
-  setLocale: (locale: Locale) => void
   t: (value: Localized) => string
+  /** Prefixes internal links with /en when the page is English. */
+  localize: (path: string) => string
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null)
 const ContentContext = createContext<SiteContent | null>(null)
 
 export function LocaleProvider({
-  initialLocale,
+  locale,
   content,
   children,
 }: {
-  initialLocale: Locale
+  locale: Locale
   content: SiteContent
   children: React.ReactNode
 }) {
-  const [locale, setLocaleState] = useState<Locale>(initialLocale)
-  const router = useRouter()
-  const [, startTransition] = useTransition()
-
-  const setLocale = useCallback(
-    (next: Locale) => {
-      document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`
-      document.documentElement.lang = next
-      document.documentElement.dir = directionOf(next)
-      setLocaleState(next)
-      // Re-render the server tree so page metadata follows the new language.
-      startTransition(() => router.refresh())
-    },
-    [router],
-  )
-
   const value = useMemo<LocaleContextValue>(
-    () => ({ locale, dir: directionOf(locale), setLocale, t: (v) => v[locale] }),
-    [locale, setLocale],
+    () => ({
+      locale,
+      dir: directionOf(locale),
+      t: (v) => v[locale],
+      localize: (path) => localePath(path, locale),
+    }),
+    [locale],
   )
 
   return (

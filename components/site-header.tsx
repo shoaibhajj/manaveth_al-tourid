@@ -6,13 +6,15 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { motion, useScroll, useSpring, AnimatePresence } from 'motion/react'
 import { Globe, Menu, X } from 'lucide-react'
+import { localePath, stripLocalePrefix } from '@/lib/i18n'
 import { DirArrow } from './dir-arrow'
 import { useContent, useLocale } from './locale-provider'
 
 export function SiteHeader() {
-  const pathname = usePathname()
+  const pathname = stripLocalePrefix(usePathname())
   const isHome = pathname === '/'
-  const { locale, setLocale, t } = useLocale()
+  const { locale, localize, t } = useLocale()
+  const otherLocale = locale === 'ar' ? 'en' : 'ar'
   const { site, sections } = useContent()
   const navItems = site.nav.filter((item) => sections[item.id as keyof typeof sections] !== false)
   const [scrolled, setScrolled] = useState(false)
@@ -62,7 +64,7 @@ export function SiteHeader() {
         aria-hidden="true"
       />
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 md:px-6">
-        <Link href="/#home" className="flex items-center gap-3" aria-label={t(site.brand.homeLabel)}>
+        <Link href={localize('/#home')} className="flex items-center gap-3" aria-label={t(site.brand.homeLabel)}>
           <Image
             src={site.brand.logo}
             alt=""
@@ -84,7 +86,7 @@ export function SiteHeader() {
             {navItems.map((item) => (
               <li key={item.id}>
                 <Link
-                  href={item.href}
+                  href={localize(item.href)}
                   className={`relative rounded-md px-2.5 py-2 text-sm font-medium transition-colors ${
                     activeId === item.id ? 'text-gold' : 'text-cream/85 hover:text-gold'
                   }`}
@@ -104,7 +106,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/#contact"
+            href={localize('/#contact')}
             className="group relative hidden items-center gap-2 overflow-hidden rounded-lg bg-gold-gradient px-5 py-2.5 text-sm font-bold text-forest-deep shadow-md shadow-gold/20 transition-transform hover:-translate-y-0.5 sm:inline-flex"
           >
             <span
@@ -114,16 +116,16 @@ export function SiteHeader() {
             {t(site.ui.requestQuote)}
             <DirArrow />
           </Link>
-          <button
-            type="button"
-            onClick={() => setLocale(locale === 'ar' ? 'en' : 'ar')}
+          <a
+            href={localePath(pathname, otherLocale)}
+            hrefLang={otherLocale}
             className="inline-flex items-center gap-1.5 rounded-lg border border-cream/20 px-3 py-2 text-sm font-bold text-cream/85 transition-colors hover:border-gold hover:text-gold"
             aria-label={t(site.ui.switchLanguage)}
-            lang={locale === 'ar' ? 'en' : 'ar'}
+            lang={otherLocale}
           >
             <Globe className="size-4" aria-hidden="true" />
             {t(site.ui.languageButton)}
-          </button>
+          </a>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -156,7 +158,7 @@ export function SiteHeader() {
                   transition={{ delay: i * 0.04 }}
                 >
                   <Link
-                    href={item.href}
+                    href={localize(item.href)}
                     onClick={() => setOpen(false)}
                     className={`block rounded-lg px-3 py-3 font-medium hover:bg-white/5 hover:text-gold ${
                       activeId === item.id ? 'text-gold' : 'text-cream/90'
@@ -168,7 +170,7 @@ export function SiteHeader() {
               ))}
               <li className="pt-2">
                 <Link
-                  href="/#contact"
+                  href={localize('/#contact')}
                   onClick={() => setOpen(false)}
                   className="group flex items-center justify-center gap-2 rounded-lg bg-gold-gradient px-5 py-3 font-bold text-forest-deep"
                 >

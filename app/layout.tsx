@@ -9,6 +9,9 @@ import { directionOf } from '@/lib/i18n'
 import { getLocale } from '@/lib/locale-server'
 import { getContent } from '@/lib/sanity/get-content'
 import { SanityRuntime } from '@/components/sanity-runtime'
+import { JsonLd } from '@/components/json-ld'
+import { organizationGraph } from '@/lib/seo'
+import { getSiteUrl } from '@/lib/site-url'
 import './globals.css'
 
 const tajawal = Tajawal({
@@ -19,15 +22,15 @@ const tajawal = Tajawal({
 })
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [locale, content] = await Promise.all([getLocale(), getContent()])
+  const [locale, content, base] = await Promise.all([getLocale(), getContent(), getSiteUrl()])
   const { home } = content.seo
   const icon = content.favicon ?? '/images/logo.png'
   return {
+    metadataBase: new URL(base),
     title: home.title[locale],
     description: home.description[locale],
     generator: 'v0.app',
     icons: { icon, apple: icon },
-    openGraph: home.shareImage ? { images: [home.shareImage] } : undefined,
   }
 }
 
@@ -41,12 +44,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const [locale, content] = await Promise.all([getLocale(), getContent()])
+  const [locale, content, base] = await Promise.all([getLocale(), getContent(), getSiteUrl()])
 
   return (
     <html lang={locale} dir={directionOf(locale)} className={tajawal.variable}>
       <body className="antialiased">
-        <LocaleProvider initialLocale={locale} content={content}>
+        <LocaleProvider locale={locale} content={content}>
+          <JsonLd graph={organizationGraph(content, locale, base)} />
           <SiteHeader />
           {children}
           <SiteFooter />

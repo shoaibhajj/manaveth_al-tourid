@@ -8,7 +8,7 @@ import { useContent, useLocale } from './locale-provider'
 const quickLinkIds = ['about', 'services', 'products', 'gallery', 'sectors', 'branches']
 
 export function SiteFooter() {
-  const { t } = useLocale()
+  const { t, localize } = useLocale()
   const { site, contact, services, sections } = useContent()
   const quickLinks =
     site.footerLinks.length > 0
@@ -37,7 +37,7 @@ export function SiteFooter() {
           <ul className="space-y-2.5">
             {quickLinks.map((link, i) => (
               <li key={`${link.href}-${i}`}>
-                <Link href={link.href} className="transition-colors hover:text-gold">
+                <Link href={localize(link.href)} className="transition-colors hover:text-gold">
                   {t(link.label)}
                 </Link>
               </li>
@@ -50,7 +50,7 @@ export function SiteFooter() {
           <ul className="space-y-2.5">
             {services.map((service) => (
               <li key={service.id}>
-                <Link href="/#services" className="transition-colors hover:text-gold">
+                <Link href={localize('/#services')} className="transition-colors hover:text-gold">
                   {t(service.title)}
                 </Link>
               </li>
@@ -81,8 +81,23 @@ export function SiteFooter() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-cream/10 py-5 text-center text-sm">
-        © {new Date().getFullYear()} {t(site.footer.rights)}
+      <div className="border-t border-cream/10 py-5 text-sm">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-4 md:flex-row md:justify-between md:px-6">
+          <p>
+            © {new Date().getFullYear()} {t(site.footer.rights)}
+          </p>
+          <a
+            href="https://shoaib-haj-portfolio.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            lang="en"
+            dir="ltr"
+            className="transition-colors hover:text-gold"
+          >
+            Made by Shoaib Hajj
+            <span className="sr-only"> ({t({ ar: 'يفتح في نافذة جديدة', en: 'opens in a new tab' })})</span>
+          </a>
+        </div>
       </div>
     </footer>
   )

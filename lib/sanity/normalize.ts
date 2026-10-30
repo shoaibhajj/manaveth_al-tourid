@@ -200,7 +200,7 @@ function toGalleryItem(doc: Doc, index: number): GalleryItem {
   const video = isVideo ? (doc.videoFileUrl ?? (filled(doc.videoUrl) ? clean(doc.videoUrl) : undefined)) : undefined
   return {
     id: doc._id,
-    type: isVideo && video ? 'video' : 'image',
+    type: isVideo ? 'video' : 'image',
     src: cover ?? staticContent.site.brand.heroImage,
     videoSrc: video,
     alt: altOf(doc.image, localized(doc.alt, { ar: '', en: '' })),
@@ -365,7 +365,7 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
       branchesSection: sectionText(home.branches, base.site.branchesSection),
       stats: {
         label: localized(home.stats?.title, base.site.stats.label),
-        items: stats.length ? stats : base.site.stats.items,
+        items: stats,
       },
       contact: {
         ...base.site.contact,
@@ -399,11 +399,11 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
         .map((link) => ({ platform: clean(link.platform), url: clean(link.url) })),
     },
     currency: localized(settings.currency, base.currency),
-    products: data.products?.length ? products : base.products,
-    featuredProducts: data.products?.length ? featuredProducts : base.featuredProducts,
-    branches: places.length ? branches : base.branches,
-    warehouses: places.length ? warehouses : base.warehouses,
-    galleryCategories: data.galleryCategories?.length ? galleryCategories : base.galleryCategories,
+    products,
+    featuredProducts,
+    branches,
+    warehouses,
+    galleryCategories,
     galleryFeatured: featuredDoc
       ? {
           ...base.galleryFeatured,
@@ -412,20 +412,16 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
           caption: featuredAlt ?? base.galleryFeatured.caption,
         }
       : base.galleryFeatured,
-    galleryItems: galleryDocs.length ? galleryItems : base.galleryItems,
+    galleryItems,
     showCategoryFilter: home.gallery?.showCategoryFilter !== false,
-    services: data.services?.length
-      ? list(data.services)
-          .filter(isVisible)
-          .map((doc, index) =>
-            toCard(doc, index, base.services, { href: '/#contact', ctaLabel: { ar: 'اطلب الخدمة', en: 'Request this service' } }),
-          )
-      : base.services,
-    sectors: data.sectors?.length
-      ? list(data.sectors)
-          .filter(isVisible)
-          .map((doc, index) => toCard(doc, index, base.sectors, { href: '/#contact', ctaLabel: base.site.ui.requestQuote }))
-      : base.sectors,
+    services: list(data.services)
+      .filter(isVisible)
+      .map((doc, index) =>
+        toCard(doc, index, base.services, { href: '/#contact', ctaLabel: { ar: 'اطلب الخدمة', en: 'Request this service' } }),
+      ),
+    sectors: list(data.sectors)
+      .filter(isVisible)
+      .map((doc, index) => toCard(doc, index, base.sectors, { href: '/#contact', ctaLabel: base.site.ui.requestQuote })),
     seo: {
       home: seo(data.seoHome ?? settings.defaultSeo, base.seo.home),
       products: seo(data.seoProducts, base.seo.products),

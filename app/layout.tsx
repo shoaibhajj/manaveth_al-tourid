@@ -4,6 +4,7 @@ import { Tajawal } from 'next/font/google'
 import { LocaleProvider } from '@/components/locale-provider'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
+import { WhatsappWidget } from '@/components/whatsapp-widget'
 import { site } from '@/lib/content/site'
 import { directionOf } from '@/lib/i18n'
 import { getLocale } from '@/lib/locale-server'
@@ -48,6 +49,7 @@ export default async function RootLayout({
           <SiteHeader />
           {children}
           <SiteFooter />
+          <WhatsappWidget />
         </LocaleProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

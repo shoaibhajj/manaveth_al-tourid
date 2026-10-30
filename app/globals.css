@@ -11,6 +11,8 @@
   --color-gold: var(--gold);
   --color-gold-light: var(--gold-light);
   --color-cream: var(--cream);
+  --color-whatsapp: #25d366;
+  --color-whatsapp-foreground: #ffffff;
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);

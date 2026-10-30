@@ -4,6 +4,8 @@ export type WhatsappChannel = {
   /** International format, e.g. "9665XXXXXXXX". Leave empty until the owner provides the approved number; the button stays disabled. */
   number: string
   label: Localized
+  /** Compact label shown on the floating widget. */
+  shortLabel: Localized
   message: Localized
 }
 
@@ -18,6 +20,7 @@ export const contact = {
     quote: {
       number: '',
       label: { ar: 'واتساب: طلب عرض سعر', en: 'WhatsApp: Request a quote' },
+      shortLabel: { ar: 'عروض الأسعار', en: 'Quotes' },
       message: {
         ar: 'مرحبًا، أرغب في الحصول على عرض سعر لاحتياجات شركتي من المواد الغذائية.',
         en: 'Hello, I would like to receive a quote for my company’s food supply needs.',
@@ -26,6 +29,7 @@ export const contact = {
     orders: {
       number: '',
       label: { ar: 'واتساب: الطلبات والاستفسارات', en: 'WhatsApp: Orders and enquiries' },
+      shortLabel: { ar: 'الطلبات', en: 'Orders' },
       message: {
         ar: 'مرحبًا، لدي استفسار بخصوص طلب توريد.',
         en: 'Hello, I have an enquiry about a supply order.',

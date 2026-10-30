@@ -59,6 +59,9 @@ export const site = {
     video: { ar: 'فيديو', en: 'Video' },
     branch: { ar: 'فرع', en: 'Branch' },
     warehouse: { ar: 'مستودع', en: 'Warehouse' },
+    manager: { ar: 'الموظف المسؤول', en: 'Person in charge' },
+    managerPhone: { ar: 'هاتف المسؤول', en: 'Manager phone' },
+    whatsappWidget: { ar: 'تواصل عبر واتساب', en: 'Chat on WhatsApp' },
   },
   hero: {
     badge: { ar: 'خبرة موثوقة منذ عام 2001', en: 'Trusted experience since 2001' },
@@ -176,17 +179,17 @@ export const site = {
     eyebrow: { ar: 'فروعنا', en: 'Our branches' },
     title: { ar: 'قريبون منك أينما كنت', en: 'Close to you, wherever you are' },
     subtitle: {
-      ar: 'تعرف على مواقع فروعنا وافتحها مباشرة في خرائط Google.',
-      en: 'Find our branch locations and open them directly in Google Maps.',
+      ar: 'تواصل مع الفرع الأقرب إليك مباشرة، وافتح موقعه في خرائط Google عند الحاجة.',
+      en: 'Contact the branch closest to you directly, and open its location in Google Maps when needed.',
     },
     cta: { ar: 'عرض جميع الفروع', en: 'View all branches' },
   },
   branchesPage: {
     eyebrow: { ar: 'الفروع', en: 'Branches' },
-    title: { ar: 'فروعنا ومواقعنا', en: 'Our branches and locations' },
+    title: { ar: 'فروعنا ومستودعاتنا', en: 'Our branches and warehouses' },
     subtitle: {
-      ar: 'اعثر على أقرب فرع إليك وافتح موقعه في خرائط Google بضغطة واحدة.',
-      en: 'Find your nearest branch and open its location in Google Maps in one tap.',
+      ar: 'تعرف على فروعنا ومستودعاتنا وبيانات التواصل، وافتح الموقع في خرائط Google عند الحاجة.',
+      en: 'Meet our branches and warehouses, get the contact details, and open the location in Google Maps when needed.',
     },
     branchesTitle: { ar: 'الفروع', en: 'Branches' },
     warehousesTitle: { ar: 'المستودعات', en: 'Warehouses' },

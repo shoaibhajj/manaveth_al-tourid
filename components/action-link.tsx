@@ -1,8 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { site } from '@/lib/content/site'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 
 type ActionLinkProps = {
   /** When missing, the control keeps its look but is disabled and not clickable. */
@@ -16,6 +15,7 @@ type ActionLinkProps = {
 
 export function ActionLink({ href, external, className, activeClassName = '', children }: ActionLinkProps) {
   const { t } = useLocale()
+  const { site } = useContent()
 
   if (!href) {
     return (

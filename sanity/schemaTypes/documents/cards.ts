@@ -58,6 +58,7 @@ export const stat = defineType({
     defineField({ name: 'prefix', title: 'ما قبل الرقم', description: 'اختياري، مثل «+».', type: 'string' }),
     defineField({ name: 'suffix', title: 'ما بعد الرقم', description: 'اختياري، مثل «+» أو «K».', type: 'string' }),
     defineField({ name: 'label', title: 'الوصف', type: 'localizedString', validation: requiredTranslation }),
+    defineField({ name: 'icon', title: 'الأيقونة', type: 'string', options: { list: iconOptions } }),
     orderField,
     visibleField,
   ],

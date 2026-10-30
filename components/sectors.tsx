@@ -4,16 +4,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getSectors } from '@/lib/content/sectors'
-import { site } from '@/lib/content/site'
 import { DirArrow } from './dir-arrow'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 import { SectionHeading } from './reveal'
 
 export function Sectors() {
   const { t, dir } = useLocale()
+  const { site, sectors } = useContent()
   const track = useRef<HTMLUListElement>(null)
-  const sectors = getSectors()
   const NextIcon = dir === 'rtl' ? ChevronLeft : ChevronRight
   const PrevIcon = dir === 'rtl' ? ChevronRight : ChevronLeft
 

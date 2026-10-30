@@ -4,8 +4,7 @@ import Image from 'next/image'
 import { ExternalLink, Mail, MapPin, Phone, UserRound, type LucideIcon } from 'lucide-react'
 import { getMapEmbedUrl, getMapLinkUrl, type Place } from '@/lib/content/branches'
 import { telUrl } from '@/lib/content/contact'
-import { site } from '@/lib/content/site'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 
 type InfoRowProps = {
   icon: LucideIcon
@@ -17,6 +16,7 @@ type InfoRowProps = {
 
 function InfoRow({ icon: Icon, label, value, href, ltr }: InfoRowProps) {
   const { t } = useLocale()
+  const { site } = useContent()
   const text = value ? (
     <span dir={ltr ? 'ltr' : undefined} className={ltr ? 'inline-block text-start' : undefined}>
       {value}
@@ -46,6 +46,7 @@ function InfoRow({ icon: Icon, label, value, href, ltr }: InfoRowProps) {
 
 export function BranchCard({ place }: { place: Place }) {
   const { t } = useLocale()
+  const { site, showMaps } = useContent()
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-500 hover:border-gold hover:shadow-xl hover:shadow-gold/10">
@@ -92,15 +93,17 @@ export function BranchCard({ place }: { place: Place }) {
         </ul>
 
         <div className="mt-auto flex flex-col gap-3">
-          <div className="h-28 w-full overflow-hidden rounded-lg border border-border bg-secondary">
-            <iframe
-              src={getMapEmbedUrl(place.mapQuery)}
-              title={`${t(site.ui.mapOf)} ${t(place.name)}`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="size-full border-0"
-            />
-          </div>
+          {showMaps && (
+            <div className="h-28 w-full overflow-hidden rounded-lg border border-border bg-secondary">
+              <iframe
+                src={getMapEmbedUrl(place.mapQuery)}
+                title={`${t(site.ui.mapOf)} ${t(place.name)}`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="size-full border-0"
+              />
+            </div>
+          )}
           <a
             href={getMapLinkUrl(place.mapQuery)}
             target="_blank"

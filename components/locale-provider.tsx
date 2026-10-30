@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import type { SiteContent } from '@/lib/content/model'
 import { directionOf, LOCALE_COOKIE, type Direction, type Locale, type Localized } from '@/lib/i18n'
 
 type LocaleContextValue = {
@@ -12,8 +13,17 @@ type LocaleContextValue = {
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null)
+const ContentContext = createContext<SiteContent | null>(null)
 
-export function LocaleProvider({ initialLocale, children }: { initialLocale: Locale; children: React.ReactNode }) {
+export function LocaleProvider({
+  initialLocale,
+  content,
+  children,
+}: {
+  initialLocale: Locale
+  content: SiteContent
+  children: React.ReactNode
+}) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale)
   const router = useRouter()
   const [, startTransition] = useTransition()
@@ -35,11 +45,21 @@ export function LocaleProvider({ initialLocale, children }: { initialLocale: Loc
     [locale, setLocale],
   )
 
-  return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
+  return (
+    <LocaleContext.Provider value={value}>
+      <ContentContext.Provider value={content}>{children}</ContentContext.Provider>
+    </LocaleContext.Provider>
+  )
 }
 
 export function useLocale() {
   const ctx = useContext(LocaleContext)
   if (!ctx) throw new Error('useLocale must be used within LocaleProvider')
+  return ctx
+}
+
+export function useContent() {
+  const ctx = useContext(ContentContext)
+  if (!ctx) throw new Error('useContent must be used within LocaleProvider')
   return ctx
 }

@@ -1,15 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { getFeaturedProducts } from '@/lib/content/products'
-import { site } from '@/lib/content/site'
 import { DirArrow } from './dir-arrow'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 import { ProductsGrid } from './products-grid'
 import { Reveal, SectionHeading } from './reveal'
 
 export function FeaturedProducts() {
   const { t } = useLocale()
+  const { site, featuredProducts } = useContent()
   const { productsSection } = site
 
   return (
@@ -21,7 +20,7 @@ export function FeaturedProducts() {
           subtitle={t(productsSection.subtitle)}
         />
         <div className="mt-12">
-          <ProductsGrid products={getFeaturedProducts().slice(0, 3)} />
+          <ProductsGrid products={featuredProducts.slice(0, 3)} />
         </div>
         <Reveal className="mt-10 flex justify-center">
           <Link

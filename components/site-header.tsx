@@ -6,14 +6,15 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { motion, useScroll, useSpring, AnimatePresence } from 'motion/react'
 import { Globe, Menu, X } from 'lucide-react'
-import { site } from '@/lib/content/site'
 import { DirArrow } from './dir-arrow'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 
 export function SiteHeader() {
   const pathname = usePathname()
   const isHome = pathname === '/'
   const { locale, setLocale, t } = useLocale()
+  const { site, sections } = useContent()
+  const navItems = site.nav.filter((item) => sections[item.id as keyof typeof sections] !== false)
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
@@ -21,7 +22,7 @@ export function SiteHeader() {
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
 
   const solid = scrolled || !isHome
-  const activeId = isHome ? activeSection : site.nav.find((item) => item.href === pathname)?.id
+  const activeId = isHome ? activeSection : navItems.find((item) => item.href === pathname)?.id
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -40,12 +41,12 @@ export function SiteHeader() {
       },
       { rootMargin: '-45% 0px -50% 0px' },
     )
-    site.nav.forEach(({ id }) => {
+    navItems.forEach(({ id }) => {
       const el = document.getElementById(id)
       if (el) observer.observe(el)
     })
     return () => observer.disconnect()
-  }, [isHome])
+  }, [isHome, navItems])
 
   const slide = locale === 'ar' ? 20 : -20
 
@@ -80,7 +81,7 @@ export function SiteHeader() {
 
         <nav aria-label={t(site.ui.mainNav)} className="hidden xl:block">
           <ul className="flex items-center gap-0.5">
-            {site.nav.map((item) => (
+            {navItems.map((item) => (
               <li key={item.id}>
                 <Link
                   href={item.href}
@@ -147,7 +148,7 @@ export function SiteHeader() {
             className="overflow-hidden bg-forest-deep/95 backdrop-blur-md xl:hidden"
           >
             <ul className="flex flex-col gap-1 px-4 py-4">
-              {site.nav.map((item, i) => (
+              {navItems.map((item, i) => (
                 <motion.li
                   key={item.id}
                   initial={{ opacity: 0, x: slide }}

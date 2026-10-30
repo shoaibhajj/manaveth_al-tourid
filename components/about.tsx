@@ -2,14 +2,14 @@
 
 import Image from 'next/image'
 import { Award } from 'lucide-react'
-import { site } from '@/lib/content/site'
 import { DirArrow } from './dir-arrow'
 import { icons } from './icon-map'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 import { Reveal, RevealItem } from './reveal'
 
 export function About() {
   const { t } = useLocale()
+  const { site } = useContent()
   const { about } = site
 
   return (
@@ -20,14 +20,18 @@ export function About() {
           <h2 className="text-balance text-3xl font-extrabold leading-tight text-forest md:text-4xl">
             {t(about.title)}
           </h2>
-          <p className="mt-5 text-pretty text-lg leading-loose text-muted-foreground">{t(about.text)}</p>
+          {about.paragraphs.map((paragraph, i) => (
+            <p key={i} className="mt-5 text-pretty text-lg leading-loose text-muted-foreground">
+              {t(paragraph)}
+            </p>
+          ))}
 
           <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {about.pillars.map(({ icon, title, text }, i) => {
               const Icon = icons[icon]
               return (
                 <RevealItem
-                  key={icon}
+                  key={`${icon}-${i}`}
                   delay={0.1 * i}
                   className="group h-full rounded-xl border border-border bg-card p-4 text-center transition-[border-color,box-shadow] duration-300 hover:border-gold hover:shadow-xl hover:shadow-gold/10"
                 >

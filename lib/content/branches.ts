@@ -22,6 +22,8 @@ export type Place = {
   manager?: PlaceManager
   /** Text or "lat,lng" used for the embedded map and the Google Maps link. Replace with exact coordinates. */
   mapQuery: string
+  /** Optional Google Maps share link. It replaces the generated link when present. */
+  mapUrl?: string
   order: number
   visible?: boolean
 }

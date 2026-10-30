@@ -4,13 +4,13 @@ import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 import { FileText } from 'lucide-react'
-import { site } from '@/lib/content/site'
 import { DirArrow } from './dir-arrow'
 import { icons } from './icon-map'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 
 export function Hero() {
   const { t } = useLocale()
+  const { site } = useContent()
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
@@ -25,14 +25,28 @@ export function Hero() {
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-forest-deep pt-28 pb-16"
     >
       <motion.div className="absolute inset-0 -z-20" style={{ y: imageY }}>
-        <Image
-          src={site.brand.heroImage}
-          alt={t(hero.imageAlt)}
-          fill
-          priority
-          sizes="100vw"
-          className="animate-ken-burns object-cover"
-        />
+        {hero.media.type === 'video' && hero.media.video ? (
+          <video
+            className="absolute inset-0 size-full object-cover"
+            src={hero.media.video}
+            poster={hero.media.poster ?? hero.media.image}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label={t(hero.imageAlt)}
+          />
+        ) : (
+          <Image
+            src={hero.media.image}
+            alt={t(hero.imageAlt)}
+            fill
+            priority
+            sizes="100vw"
+            className="animate-ken-burns object-cover"
+          />
+        )}
       </motion.div>
       <div
         className="absolute inset-0 -z-10 from-forest-deep via-forest-deep/80 to-forest-deep/10 rtl:bg-gradient-to-l ltr:bg-gradient-to-r"
@@ -107,21 +121,28 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.7 }}
             className="mt-8 flex flex-wrap gap-3"
           >
-            <a
-              href="#contact"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gold-gradient px-7 py-3.5 font-bold text-forest-deep shadow-lg shadow-gold/25 transition-transform hover:-translate-y-0.5"
-            >
-              <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-shine bg-white/40" aria-hidden="true" />
-              <FileText className="size-5" aria-hidden="true" />
-              {t(hero.primaryCta)}
-            </a>
-            <a
-              href="#about"
-              className="group inline-flex items-center gap-2 rounded-lg border border-cream/40 px-7 py-3.5 font-bold text-cream backdrop-blur-sm transition-colors hover:border-gold hover:text-gold"
-            >
-              {t(hero.secondaryCta)}
-              <DirArrow className="size-5" />
-            </a>
+            {hero.buttons.map((button) =>
+              button.style === 'primary' ? (
+                <a
+                  key={button.href + button.label.en}
+                  href={button.href}
+                  className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-gold-gradient px-7 py-3.5 font-bold text-forest-deep shadow-lg shadow-gold/25 transition-transform hover:-translate-y-0.5"
+                >
+                  <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-shine bg-white/40" aria-hidden="true" />
+                  <FileText className="size-5" aria-hidden="true" />
+                  {t(button.label)}
+                </a>
+              ) : (
+                <a
+                  key={button.href + button.label.en}
+                  href={button.href}
+                  className="group inline-flex items-center gap-2 rounded-lg border border-cream/40 px-7 py-3.5 font-bold text-cream backdrop-blur-sm transition-colors hover:border-gold hover:text-gold"
+                >
+                  {t(button.label)}
+                  <DirArrow className="size-5" />
+                </a>
+              ),
+            )}
           </motion.div>
         </div>
 
@@ -130,7 +151,7 @@ export function Hero() {
             const Icon = icons[icon]
             return (
               <motion.li
-                key={icon}
+                key={`${icon}-${i}`}
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.85 + i * 0.1 }}

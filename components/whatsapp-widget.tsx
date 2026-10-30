@@ -1,9 +1,9 @@
 'use client'
 
 import { MessageCircle } from 'lucide-react'
-import { contact, whatsappUrl, type WhatsappChannel } from '@/lib/content/contact'
+import { whatsappUrl, type WhatsappChannel } from '@/lib/content/contact'
 import { ActionLink } from './action-link'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 
 function WidgetButton({ channel, side }: { channel: WhatsappChannel; side: 'left-4' | 'right-4' }) {
   const { t } = useLocale()
@@ -23,6 +23,7 @@ function WidgetButton({ channel, side }: { channel: WhatsappChannel; side: 'left
 }
 
 export function WhatsappWidget() {
+  const { contact } = useContent()
   const { orders, quote } = contact.whatsapp
 
   return (

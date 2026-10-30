@@ -3,15 +3,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
-import { getServices } from '@/lib/content/services'
-import { site } from '@/lib/content/site'
 import { DirArrow } from './dir-arrow'
 import { icons } from './icon-map'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 import { RevealItem, SectionHeading } from './reveal'
 
 export function Services() {
   const { t } = useLocale()
+  const { site, services } = useContent()
 
   return (
     <section id="services" className="relative overflow-hidden bg-forest py-20 md:py-28">
@@ -23,7 +22,7 @@ export function Services() {
         <SectionHeading eyebrow={t(site.servicesSection.eyebrow)} title={t(site.servicesSection.title)} light />
 
         <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {getServices().map((service, i) => {
+          {services.map((service, i) => {
             const Icon = service.icon ? icons[service.icon] : null
             return (
               <RevealItem

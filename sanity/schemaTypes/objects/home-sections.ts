@@ -1,5 +1,5 @@
 import { defineArrayMember, defineField, defineType, type FieldDefinition } from 'sanity'
-import { orderField, statusLabels, visibleField } from '../../lib/fields'
+import { iconOptions, orderField, statusLabels, visibleField } from '../../lib/fields'
 import { requiredTranslation } from '../../lib/localization'
 
 const sectionHeaderFields = [
@@ -83,6 +83,25 @@ export const heroSection = defineType({
       of: [defineArrayMember({ type: 'ctaButton' })],
       validation: (rule) => rule.max(3),
     }),
+    defineField({ name: 'badge', title: 'شارة صغيرة فوق العنوان', type: 'localizedString' }),
+    defineField({
+      name: 'features',
+      title: 'مزايا سريعة',
+      description: 'تظهر أسفل الواجهة الرئيسية. أربع مزايا كحد أقصى.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'heroFeature',
+          fields: [
+            defineField({ name: 'icon', title: 'الأيقونة', type: 'string', options: { list: iconOptions } }),
+            defineField({ name: 'label', title: 'النص', type: 'localizedString', validation: requiredTranslation }),
+          ],
+          preview: { select: { ar: 'label.ar', en: 'label.en' }, prepare: ({ ar, en }) => ({ title: ar || en }) },
+        }),
+      ],
+      validation: (rule) => rule.max(4),
+    }),
   ],
 })
 
@@ -101,6 +120,25 @@ export const aboutSection = defineSection('aboutSection', 'من نحن', [
     of: [defineArrayMember({ type: 'localizedString' })],
   }),
   defineField({ name: 'image', title: 'الصورة', type: 'localizedImage' }),
+  defineField({
+    name: 'pillars',
+    title: 'ركائز الشركة',
+    description: 'أربع بطاقات صغيرة تظهر أسفل نص التعريف.',
+    type: 'array',
+    of: [
+      defineArrayMember({
+        type: 'object',
+        name: 'aboutPillar',
+        fields: [
+          defineField({ name: 'icon', title: 'الأيقونة', type: 'string', options: { list: iconOptions } }),
+          defineField({ name: 'title', title: 'العنوان', type: 'localizedString', validation: requiredTranslation }),
+          defineField({ name: 'text', title: 'الوصف', type: 'localizedString' }),
+        ],
+        preview: { select: { ar: 'title.ar', en: 'title.en' }, prepare: ({ ar, en }) => ({ title: ar || en }) },
+      }),
+    ],
+    validation: (rule) => rule.max(4),
+  }),
 ])
 
 export const servicesSection = defineSection('servicesSection', 'الخدمات')

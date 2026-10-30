@@ -1,15 +1,20 @@
 import type { Metadata } from 'next'
 import { PageHero } from '@/components/page-hero'
 import { ProductsPageContent } from '@/components/products-page-content'
-import { site } from '@/lib/content/site'
+import { getContent } from '@/lib/sanity/get-content'
 import { getLocale } from '@/lib/locale-server'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  return { title: site.metadata.productsTitle[locale], description: site.productsPage.subtitle[locale] }
+  const [locale, { seo }] = await Promise.all([getLocale(), getContent()])
+  return {
+    title: seo.products.title[locale],
+    description: seo.products.description[locale],
+    openGraph: seo.products.shareImage ? { images: [seo.products.shareImage] } : undefined,
+  }
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const { site } = await getContent()
   return (
     <main>
       <PageHero

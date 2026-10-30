@@ -9,7 +9,7 @@ import { useContent, useLocale } from './locale-provider'
 import { RevealItem, SectionHeading } from './reveal'
 
 export function Services() {
-  const { t } = useLocale()
+  const { t, localize } = useLocale()
   const { site, services } = useContent()
 
   return (
@@ -53,7 +53,7 @@ export function Services() {
                   <p className="mt-3 flex-1 text-sm leading-relaxed text-cream/70">{t(service.text)}</p>
                   <div className="mt-5 flex items-center justify-between border-t border-cream/10 pt-4">
                     <Link
-                      href={service.href}
+                      href={localize(service.href)}
                       className="inline-flex size-9 items-center justify-center rounded-full border border-gold/50 text-gold transition-all group-hover:bg-gold group-hover:text-forest-deep"
                       aria-label={`${t(service.ctaLabel)}: ${t(service.title)}`}
                     >

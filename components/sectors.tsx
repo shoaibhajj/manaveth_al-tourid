@@ -9,7 +9,7 @@ import { useContent, useLocale } from './locale-provider'
 import { SectionHeading } from './reveal'
 
 export function Sectors() {
-  const { t, dir } = useLocale()
+  const { t, dir, localize } = useLocale()
   const { site, sectors } = useContent()
   const track = useRef<HTMLUListElement>(null)
   const NextIcon = dir === 'rtl' ? ChevronLeft : ChevronRight
@@ -72,7 +72,7 @@ export function Sectors() {
                   <h3 className="font-bold text-forest">{t(sector.title)}</h3>
                   <p className="flex-1 text-sm leading-relaxed text-muted-foreground">{t(sector.text)}</p>
                   <Link
-                    href={sector.href}
+                    href={localize(sector.href)}
                     className="mt-2 inline-flex items-center gap-1.5 text-sm font-bold text-forest transition-colors hover:text-gold"
                   >
                     {t(sector.ctaLabel)}

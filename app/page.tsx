@@ -7,7 +7,11 @@ import { Hero } from '@/components/hero'
 import { Sectors } from '@/components/sectors'
 import { Services } from '@/components/services'
 import { Stats } from '@/components/stats'
+import type { Metadata } from 'next'
 import { getContent } from '@/lib/sanity/get-content'
+import { pageMetadata } from '@/lib/seo'
+
+export const generateMetadata = (): Promise<Metadata> => pageMetadata('home')
 
 export default async function Home() {
   const { sections } = await getContent()

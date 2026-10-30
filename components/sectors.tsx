@@ -1,50 +1,55 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { getSectors } from '@/lib/content/sectors'
+import { site } from '@/lib/content/site'
+import { DirArrow } from './dir-arrow'
+import { useLocale } from './locale-provider'
 import { SectionHeading } from './reveal'
 
-const sectors = [
-  { title: 'الجهات الحكومية', image: '/images/s-government.png' },
-  { title: 'المصانع الغذائية', image: '/images/s-factory.png' },
-  { title: 'المطاعم والمقاهي', image: '/images/s-restaurant.png' },
-  { title: 'الفنادق والضيافة', image: '/images/s-hotel.png' },
-  { title: 'قطاع التجزئة', image: '/images/s-retail.png' },
-  { title: 'المطابخ المركزية', image: '/images/service-hotels.png' },
-]
-
 export function Sectors() {
+  const { t, dir } = useLocale()
   const track = useRef<HTMLUListElement>(null)
+  const sectors = getSectors()
+  const NextIcon = dir === 'rtl' ? ChevronLeft : ChevronRight
+  const PrevIcon = dir === 'rtl' ? ChevronRight : ChevronLeft
 
-  const scroll = (dir: 1 | -1) => {
+  const scroll = (step: 1 | -1) => {
     const el = track.current
     if (!el) return
     const card = el.querySelector('li')
-    el.scrollBy({ left: dir * ((card?.clientWidth ?? 280) + 16), behavior: 'smooth' })
+    const sign = dir === 'rtl' ? -1 : 1
+    el.scrollBy({ left: step * sign * ((card?.clientWidth ?? 280) + 16), behavior: 'smooth' })
   }
 
   return (
     <section id="sectors" className="bg-secondary/60 py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionHeading eyebrow="قطاعاتنا" title="القطاعات التي نخدمها" subtitle="نلبي احتياجات مجموعة واسعة من القطاعات" />
+        <SectionHeading
+          eyebrow={t(site.sectorsSection.eyebrow)}
+          title={t(site.sectorsSection.title)}
+          subtitle={t(site.sectorsSection.subtitle)}
+        />
 
         <div className="relative mt-10">
           <button
             type="button"
-            onClick={() => scroll(1)}
-            className="absolute top-1/2 -right-2 z-10 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-forest text-gold shadow-lg transition-transform hover:scale-110 md:flex"
-            aria-label="السابق"
+            onClick={() => scroll(-1)}
+            className="absolute top-1/2 -start-2 z-10 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-forest text-gold shadow-lg transition-transform hover:scale-110 md:flex"
+            aria-label={t(site.ui.previous)}
           >
-            <ChevronRight className="size-5" />
+            <PrevIcon className="size-5" />
           </button>
           <button
             type="button"
-            onClick={() => scroll(-1)}
-            className="absolute top-1/2 -left-2 z-10 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-forest text-gold shadow-lg transition-transform hover:scale-110 md:flex"
-            aria-label="التالي"
+            onClick={() => scroll(1)}
+            className="absolute top-1/2 -end-2 z-10 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-forest text-gold shadow-lg transition-transform hover:scale-110 md:flex"
+            aria-label={t(site.ui.next)}
           >
-            <ChevronLeft className="size-5" />
+            <NextIcon className="size-5" />
           </button>
 
           <ul
@@ -53,22 +58,29 @@ export function Sectors() {
           >
             {sectors.map((sector) => (
               <li
-                key={sector.title}
-                className="group w-[70%] shrink-0 snap-start overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl hover:ring-gold sm:w-[45%] lg:w-[calc(20%-13px)]"
+                key={sector.id}
+                className="group flex w-[70%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl hover:ring-gold sm:w-[45%] lg:w-[calc(20%-13px)]"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={sector.image}
-                    alt=""
+                    alt={t(sector.alt)}
                     fill
                     sizes="(min-width: 1024px) 20vw, 70vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>
-                <h3 className="relative py-4 text-center font-bold text-forest">
-                  {sector.title}
-                  <span className="absolute inset-x-1/2 bottom-2 h-0.5 bg-gold transition-all duration-500 group-hover:inset-x-10" aria-hidden="true" />
-                </h3>
+                <div className="flex flex-1 flex-col gap-2 p-4">
+                  <h3 className="font-bold text-forest">{t(sector.title)}</h3>
+                  <p className="flex-1 text-sm leading-relaxed text-muted-foreground">{t(sector.text)}</p>
+                  <Link
+                    href={sector.href}
+                    className="mt-2 inline-flex items-center gap-1.5 text-sm font-bold text-forest transition-colors hover:text-gold"
+                  >
+                    {t(sector.ctaLabel)}
+                    <DirArrow className="size-3.5" />
+                  </Link>
+                </div>
               </li>
             ))}
           </ul>

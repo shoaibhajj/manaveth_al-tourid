@@ -3,34 +3,22 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { ArrowLeft, Expand, X } from 'lucide-react'
+import { Expand, Play, X } from 'lucide-react'
+import { galleryCategories, galleryFeatured, getGalleryItems, type GalleryItem } from '@/lib/content/gallery'
+import { site } from '@/lib/content/site'
+import { useLocale } from './locale-provider'
 import { Reveal } from './reveal'
 
-type Category = 'products' | 'warehouses' | 'packing' | 'transport'
-
-const filters: { id: 'all' | Category; label: string }[] = [
-  { id: 'all', label: 'الكل' },
-  { id: 'products', label: 'المنتجات' },
-  { id: 'warehouses', label: 'المستودعات' },
-  { id: 'packing', label: 'التعبئة والتغليف' },
-  { id: 'transport', label: 'النقل والتوصيل' },
-]
-
-const items: { src: string; alt: string; category: Category }[] = [
-  { src: '/images/g-produce.png', alt: 'صناديق خضار وفواكه طازجة', category: 'products' },
-  { src: '/images/g-warehouse.png', alt: 'رافعة شوكية داخل المستودع', category: 'warehouses' },
-  { src: '/images/g-boxes.png', alt: 'كراتين مرتبة على منصات', category: 'warehouses' },
-  { src: '/images/g-truck.png', alt: 'شاحنة منافذ التوريد في ساحة الحاويات', category: 'transport' },
-  { src: '/images/g-juice.png', alt: 'عبوات عصير وزيت مغلفة', category: 'products' },
-  { src: '/images/g-packing.png', alt: 'فريق العمل يغلف الطرود', category: 'packing' },
-  { src: '/images/service-land.png', alt: 'شاحنة على الطريق', category: 'transport' },
-  { src: '/images/about.png', alt: 'مراجعة المخزون بالمستودع', category: 'packing' },
-]
+type LightboxMedia = Pick<GalleryItem, 'type' | 'src' | 'videoSrc' | 'alt'>
 
 export function Gallery() {
-  const [filter, setFilter] = useState<'all' | Category>('all')
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
+  const { t } = useLocale()
+  const [filter, setFilter] = useState('all')
+  const [lightbox, setLightbox] = useState<LightboxMedia | null>(null)
+  const items = getGalleryItems()
   const visible = filter === 'all' ? items : items.filter((item) => item.category === filter)
+  const { gallerySection, ui } = site
+  const filters = [{ id: 'all', label: gallerySection.all }, ...galleryCategories]
 
   useEffect(() => {
     if (!lightbox) return
@@ -42,26 +30,13 @@ export function Gallery() {
   return (
     <section id="gallery" className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <Reveal>
-            <p className="mb-2 text-lg font-bold text-gold">معرض الأعمال</p>
-            <h2 className="text-balance text-3xl font-extrabold text-forest md:text-4xl">
-              {'من المصدر إلى وجهتك ... في كل خطوة'}
-            </h2>
-            <p className="mt-3 text-lg text-muted-foreground">شاهد جانبًا من عملياتنا ومنتجاتنا المفيدة</p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <a
-              href="#gallery"
-              className="group inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-bold text-forest transition-colors hover:border-gold"
-            >
-              مشاهدة جميع الصور
-              <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
-            </a>
-          </Reveal>
-        </div>
+        <Reveal>
+          <p className="mb-2 text-lg font-bold text-gold">{t(gallerySection.eyebrow)}</p>
+          <h2 className="text-balance text-3xl font-extrabold text-forest md:text-4xl">{t(gallerySection.title)}</h2>
+          <p className="mt-3 text-lg text-muted-foreground">{t(gallerySection.subtitle)}</p>
+        </Reveal>
 
-        <div role="tablist" aria-label="تصنيفات المعرض" className="mt-8 flex flex-wrap gap-2">
+        <div role="tablist" aria-label={t(gallerySection.tabsLabel)} className="mt-8 flex flex-wrap gap-2">
           {filters.map((f) => (
             <button
               key={f.id}
@@ -76,7 +51,7 @@ export function Gallery() {
               {filter === f.id && (
                 <motion.span layoutId="gallery-pill" className="absolute inset-0 rounded-lg bg-forest" />
               )}
-              <span className="relative">{f.label}</span>
+              <span className="relative">{t(f.label)}</span>
             </button>
           ))}
         </div>
@@ -85,12 +60,13 @@ export function Gallery() {
           <Reveal className="relative col-span-2 row-span-2 overflow-hidden rounded-2xl">
             <button
               type="button"
-              onClick={() => setLightbox({ src: '/images/hero.png', alt: 'رحلة المنتج من بلد المورد حتى وصوله إلى وجهتك' })}
+              onClick={() => setLightbox({ type: 'image', src: galleryFeatured.src, alt: galleryFeatured.alt })}
               className="group relative size-full"
+              aria-label={`${t(ui.viewImage)}: ${t(galleryFeatured.alt)}`}
             >
               <Image
-                src="/images/hero.png"
-                alt="رحلة المنتج من بلد المورد حتى وصوله إلى وجهتك"
+                src={galleryFeatured.src}
+                alt={t(galleryFeatured.alt)}
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
@@ -99,9 +75,9 @@ export function Gallery() {
               <span className="absolute inset-x-5 bottom-5 flex items-center justify-between gap-3 text-start">
                 <span>
                   <span className="mb-1 inline-block rounded-full bg-gold px-3 py-0.5 text-xs font-bold text-forest-deep">
-                    رحلة المنتج
+                    {t(galleryFeatured.badge)}
                   </span>
-                  <span className="block text-lg font-bold text-cream">من بلد المورد حتى وصوله إلى وجهتك</span>
+                  <span className="block text-lg font-bold text-cream">{t(galleryFeatured.caption)}</span>
                 </span>
                 <span className="relative flex size-14 shrink-0 items-center justify-center rounded-full border-2 border-cream text-cream">
                   <span className="absolute inset-0 animate-ping rounded-full border border-gold" aria-hidden="true" />
@@ -115,7 +91,7 @@ export function Gallery() {
             {visible.map((item) => (
               <motion.button
                 layout
-                key={item.src}
+                key={item.id}
                 type="button"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -123,17 +99,30 @@ export function Gallery() {
                 transition={{ duration: 0.4 }}
                 onClick={() => setLightbox(item)}
                 className="group relative overflow-hidden rounded-xl"
-                aria-label={`عرض الصورة: ${item.alt}`}
+                aria-label={`${t(item.type === 'video' ? ui.playVideo : ui.viewImage)}: ${t(item.alt)}`}
               >
                 <Image
                   src={item.src}
-                  alt={item.alt}
+                  alt=""
                   fill
                   sizes="(min-width: 768px) 25vw, 50vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <span className="absolute inset-0 flex items-end bg-gradient-to-t from-forest-deep/80 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <span className="text-sm font-bold text-cream">{item.alt}</span>
+                {item.type === 'video' && (
+                  <>
+                    <span className="absolute inset-0 bg-forest-deep/35" aria-hidden="true" />
+                    <span className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                      <span className="flex size-14 items-center justify-center rounded-full bg-gold text-forest-deep shadow-lg transition-transform duration-300 group-hover:scale-110">
+                        <Play className="size-6 fill-current rtl:-scale-x-100" />
+                      </span>
+                    </span>
+                    <span className="absolute top-2 start-2 rounded-full bg-forest-deep/80 px-2.5 py-0.5 text-xs font-bold text-gold">
+                      {t(ui.video)}
+                    </span>
+                  </>
+                )}
+                <span className="absolute inset-0 flex items-end bg-gradient-to-t from-forest-deep/80 to-transparent p-3 text-start opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <span className="text-sm font-bold text-cream">{t(item.alt)}</span>
                 </span>
               </motion.button>
             ))}
@@ -146,7 +135,7 @@ export function Gallery() {
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label={lightbox.alt}
+            aria-label={t(lightbox.alt)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -156,8 +145,8 @@ export function Gallery() {
             <button
               type="button"
               onClick={() => setLightbox(null)}
-              className="absolute top-5 left-5 flex size-11 items-center justify-center rounded-full border border-cream/30 text-cream hover:border-gold hover:text-gold"
-              aria-label="إغلاق"
+              className="absolute top-5 end-5 flex size-11 items-center justify-center rounded-full border border-cream/30 text-cream hover:border-gold hover:text-gold"
+              aria-label={t(ui.close)}
             >
               <X className="size-5" />
             </button>
@@ -169,9 +158,20 @@ export function Gallery() {
               className="relative w-full max-w-5xl"
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
-                <Image src={lightbox.src} alt={lightbox.alt} fill sizes="90vw" className="object-contain" />
+                {lightbox.type === 'video' && lightbox.videoSrc ? (
+                  <video
+                    src={lightbox.videoSrc}
+                    poster={lightbox.src}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="size-full bg-forest-deep object-contain"
+                  />
+                ) : (
+                  <Image src={lightbox.src} alt={t(lightbox.alt)} fill sizes="90vw" className="object-contain" />
+                )}
               </div>
-              <figcaption className="mt-4 text-center text-lg font-bold text-cream">{lightbox.alt}</figcaption>
+              <figcaption className="mt-4 text-center text-lg font-bold text-cream">{t(lightbox.alt)}</figcaption>
             </motion.figure>
           </motion.div>
         )}

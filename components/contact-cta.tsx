@@ -1,5 +1,7 @@
 import Image from 'next/image'
-import { ArrowLeft, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowLeft, Mail, Phone } from 'lucide-react'
+import { branches } from '@/lib/branches'
+import { BranchCard } from './branch-card'
 import { Reveal } from './reveal'
 
 export function ContactCta() {
@@ -40,7 +42,6 @@ export function ContactCta() {
             {[
               { icon: Phone, label: 'الهاتف', value: '+966 50 000 0000', dir: 'ltr' as const },
               { icon: Mail, label: 'البريد الإلكتروني', value: 'info@mnafeth.com', dir: 'ltr' as const },
-              { icon: MapPin, label: 'العنوان', value: 'المملكة العربية السعودية' },
             ].map(({ icon: Icon, label, value, dir }) => (
               <li key={label} className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-white/5">
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-gold/15 text-gold">
@@ -55,6 +56,17 @@ export function ContactCta() {
               </li>
             ))}
           </ul>
+        </Reveal>
+      </div>
+
+      <div className="mx-auto mt-14 max-w-7xl px-4 md:px-6">
+        <Reveal>
+          <h3 className="mb-6 text-2xl font-extrabold text-cream">فروعنا</h3>
+          <div className="grid gap-6 md:grid-cols-2">
+            {branches.map((branch) => (
+              <BranchCard key={branch.id} branch={branch} />
+            ))}
+          </div>
         </Reveal>
       </div>
     </section>

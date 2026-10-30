@@ -4,21 +4,20 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Expand, Play, X } from 'lucide-react'
-import { galleryCategories, galleryFeatured, getGalleryItems, type GalleryItem } from '@/lib/content/gallery'
-import { site } from '@/lib/content/site'
-import { useLocale } from './locale-provider'
+import type { GalleryItem } from '@/lib/content/gallery'
+import { useContent, useLocale } from './locale-provider'
 import { Reveal } from './reveal'
 
 type LightboxMedia = Pick<GalleryItem, 'type' | 'src' | 'videoSrc' | 'alt'>
 
 export function Gallery() {
   const { t } = useLocale()
+  const { site, galleryItems: items, galleryCategories, galleryFeatured, showCategoryFilter } = useContent()
   const [filter, setFilter] = useState('all')
   const [lightbox, setLightbox] = useState<LightboxMedia | null>(null)
-  const items = getGalleryItems()
   const visible = filter === 'all' ? items : items.filter((item) => item.category === filter)
   const { gallerySection, ui } = site
-  const filters = [{ id: 'all', label: gallerySection.all }, ...galleryCategories]
+  const filters = showCategoryFilter ? [{ id: 'all', label: gallerySection.all }, ...galleryCategories] : []
 
   useEffect(() => {
     if (!lightbox) return
@@ -36,6 +35,7 @@ export function Gallery() {
           <p className="mt-3 text-lg text-muted-foreground">{t(gallerySection.subtitle)}</p>
         </Reveal>
 
+        {filters.length > 0 && (
         <div role="tablist" aria-label={t(gallerySection.tabsLabel)} className="mt-8 flex flex-wrap gap-2">
           {filters.map((f) => (
             <button
@@ -55,6 +55,7 @@ export function Gallery() {
             </button>
           ))}
         </div>
+        )}
 
         <div className="mt-8 grid auto-rows-[160px] grid-cols-2 gap-3 md:auto-rows-[180px] md:grid-cols-4">
           <Reveal className="relative col-span-2 row-span-2 overflow-hidden rounded-2xl">

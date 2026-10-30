@@ -1,15 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { getBranches } from '@/lib/content/branches'
-import { site } from '@/lib/content/site'
 import { BranchCard } from './branch-card'
 import { DirArrow } from './dir-arrow'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 import { Reveal, SectionHeading } from './reveal'
 
 export function BranchesSection() {
   const { t } = useLocale()
+  const { site, branches } = useContent()
   const { branchesSection } = site
 
   return (
@@ -21,7 +20,7 @@ export function BranchesSection() {
           subtitle={t(branchesSection.subtitle)}
         />
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {getBranches().map((branch, i) => (
+          {branches.map((branch, i) => (
             <Reveal key={branch.id} delay={i * 0.1}>
               <BranchCard place={branch} />
             </Reveal>

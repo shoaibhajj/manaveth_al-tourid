@@ -1,25 +1,28 @@
-import { Hero } from '@/components/hero'
 import { About } from '@/components/about'
-import { Services } from '@/components/services'
-import { FeaturedProducts } from '@/components/featured-products'
-import { Gallery } from '@/components/gallery'
-import { Stats } from '@/components/stats'
-import { Sectors } from '@/components/sectors'
 import { BranchesSection } from '@/components/branches-section'
 import { ContactCta } from '@/components/contact-cta'
+import { FeaturedProducts } from '@/components/featured-products'
+import { Gallery } from '@/components/gallery'
+import { Hero } from '@/components/hero'
+import { Sectors } from '@/components/sectors'
+import { Services } from '@/components/services'
+import { Stats } from '@/components/stats'
+import { getContent } from '@/lib/sanity/get-content'
 
-export default function Home() {
+export default async function Home() {
+  const { sections } = await getContent()
+
   return (
     <main>
       <Hero />
-      <About />
-      <Services />
-      <FeaturedProducts />
-      <Gallery />
-      <Stats />
-      <Sectors />
-      <BranchesSection />
-      <ContactCta />
+      {sections.about && <About />}
+      {sections.services && <Services />}
+      {sections.featuredProducts && <FeaturedProducts />}
+      {sections.gallery && <Gallery />}
+      {sections.stats && <Stats />}
+      {sections.sectors && <Sectors />}
+      {sections.branches && <BranchesSection />}
+      {sections.contact && <ContactCta />}
     </main>
   )
 }

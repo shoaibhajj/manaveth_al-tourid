@@ -1,13 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import { site } from '@/lib/content/site'
 import type { Localized } from '@/lib/i18n'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 import { Reveal } from './reveal'
 
 export function PageHero({ eyebrow, title, subtitle }: { eyebrow: Localized; title: Localized; subtitle: Localized }) {
   const { t } = useLocale()
+  const { site } = useContent()
   return (
     <section className="relative isolate overflow-hidden bg-forest-deep pt-32 pb-14 md:pt-40 md:pb-20">
       <Image src={site.brand.ctaImage} alt="" fill priority sizes="100vw" className="-z-20 object-cover opacity-25" />

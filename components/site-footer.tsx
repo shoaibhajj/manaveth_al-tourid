@@ -2,16 +2,20 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { contact, telUrl } from '@/lib/content/contact'
-import { getServices } from '@/lib/content/services'
-import { site } from '@/lib/content/site'
-import { useLocale } from './locale-provider'
+import { telUrl } from '@/lib/content/contact'
+import { useContent, useLocale } from './locale-provider'
 
 const quickLinkIds = ['about', 'services', 'products', 'gallery', 'sectors', 'branches']
 
 export function SiteFooter() {
   const { t } = useLocale()
-  const quickLinks = site.nav.filter((item) => quickLinkIds.includes(item.id))
+  const { site, contact, services, sections } = useContent()
+  const quickLinks =
+    site.footerLinks.length > 0
+      ? site.footerLinks
+      : site.nav
+          .filter((item) => quickLinkIds.includes(item.id) && sections[item.id as keyof typeof sections] !== false)
+          .map(({ label, href }) => ({ label, href }))
   const phoneHref = contact.phone ? telUrl(contact.phone) : undefined
 
   return (
@@ -31,8 +35,8 @@ export function SiteFooter() {
         <nav aria-label={t(site.footer.quickLinks)}>
           <h2 className="mb-4 font-bold text-cream">{t(site.footer.quickLinks)}</h2>
           <ul className="space-y-2.5">
-            {quickLinks.map((link) => (
-              <li key={link.id}>
+            {quickLinks.map((link, i) => (
+              <li key={`${link.href}-${i}`}>
                 <Link href={link.href} className="transition-colors hover:text-gold">
                   {t(link.label)}
                 </Link>
@@ -44,7 +48,7 @@ export function SiteFooter() {
         <nav aria-label={t(site.footer.services)}>
           <h2 className="mb-4 font-bold text-cream">{t(site.footer.services)}</h2>
           <ul className="space-y-2.5">
-            {getServices().map((service) => (
+            {services.map((service) => (
               <li key={service.id}>
                 <Link href="/#services" className="transition-colors hover:text-gold">
                   {t(service.title)}

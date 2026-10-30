@@ -1,10 +1,9 @@
 'use client'
 
-import { getBranches, getWarehouses, type Place } from '@/lib/content/branches'
+import type { Place } from '@/lib/content/branches'
 import type { Localized } from '@/lib/i18n'
-import { site } from '@/lib/content/site'
 import { BranchCard } from './branch-card'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 import { Reveal } from './reveal'
 
 function PlaceGroup({ title, places }: { title: Localized; places: Place[] }) {
@@ -26,11 +25,12 @@ function PlaceGroup({ title, places }: { title: Localized; places: Place[] }) {
 }
 
 export function BranchesPageContent() {
+  const { site, branches, warehouses } = useContent()
   return (
     <section className="py-16 md:py-24">
       <div className="mx-auto flex max-w-7xl flex-col gap-14 px-4 md:px-6">
-        <PlaceGroup title={site.branchesPage.branchesTitle} places={getBranches()} />
-        <PlaceGroup title={site.branchesPage.warehousesTitle} places={getWarehouses()} />
+        <PlaceGroup title={site.branchesPage.branchesTitle} places={branches} />
+        <PlaceGroup title={site.branchesPage.warehousesTitle} places={warehouses} />
       </div>
     </section>
   )

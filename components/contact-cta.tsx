@@ -2,16 +2,16 @@
 
 import Image from 'next/image'
 import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
-import { contact, telUrl, whatsappUrl } from '@/lib/content/contact'
-import { getBranches, getMapLinkUrl } from '@/lib/content/branches'
-import { site } from '@/lib/content/site'
+import { getMapLinkUrl } from '@/lib/content/branches'
+import { telUrl, whatsappUrl } from '@/lib/content/contact'
 import { ActionLink } from './action-link'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 import { Reveal } from './reveal'
 
 export function ContactCta() {
   const { t } = useLocale()
-  const primaryBranch = getBranches()[0]
+  const { site, contact, branches } = useContent()
+  const primaryBranch = branches[0]
   const quote = contact.whatsapp.quote
   const orders = contact.whatsapp.orders
   const labels = site.contact

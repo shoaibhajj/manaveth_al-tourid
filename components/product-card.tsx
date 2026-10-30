@@ -2,16 +2,16 @@
 
 import Image from 'next/image'
 import { MessageCircle } from 'lucide-react'
-import { contact, whatsappUrl } from '@/lib/content/contact'
-import { currency, type Product } from '@/lib/content/products'
-import { site } from '@/lib/content/site'
+import { whatsappUrl } from '@/lib/content/contact'
+import type { Product } from '@/lib/content/products'
 import { ActionLink } from './action-link'
-import { useLocale } from './locale-provider'
+import { useContent, useLocale } from './locale-provider'
 
 const formatAmount = (amount: number) => amount.toLocaleString('en-US')
 
 function PriceBlock({ product }: { product: Product }) {
   const { t } = useLocale()
+  const { site, currency } = useContent()
   const cur = t(currency)
 
   if (product.tiers) {
@@ -50,6 +50,7 @@ function PriceBlock({ product }: { product: Product }) {
 
 export function ProductCard({ product }: { product: Product }) {
   const { t } = useLocale()
+  const { site, contact } = useContent()
   const orderUrl = whatsappUrl(
     contact.whatsapp.orders.number,
     t(contact.productOrderMessage).replace('{product}', t(product.name)),

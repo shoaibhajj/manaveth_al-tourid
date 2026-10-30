@@ -1,0 +1,30 @@
+import 'server-only'
+import { createClient } from 'next-sanity'
+import { defineLive } from 'next-sanity/live'
+import { isSanityConfigured, sanityEnv } from '@/sanity/env'
+
+const token = process.env.SANITY_API_READ_TOKEN
+
+const client = isSanityConfigured
+  ? createClient({
+      projectId: sanityEnv.projectId,
+      dataset: sanityEnv.dataset,
+      apiVersion: sanityEnv.apiVersion,
+      useCdn: true,
+      perspective: 'published',
+      stega: { studioUrl: '/studio' },
+    })
+  : null
+
+const live = client
+  ? defineLive({
+      client,
+      // The token is optional: without it the site reads published content and draft preview is off.
+      serverToken: token || false,
+      browserToken: token || false,
+    })
+  : null
+
+export const sanityFetch = live?.sanityFetch ?? null
+export const SanityLive = live?.SanityLive ?? null
+export const hasDraftToken = Boolean(token)

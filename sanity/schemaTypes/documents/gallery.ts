@@ -1,14 +1,14 @@
 import { defineField, defineType } from 'sanity'
-import { displayOrderings, orderField, visibleField } from '../../lib/fields'
+import { displayOrderings, orderField, statusLabels, visibleField } from '../../lib/fields'
 import { requiredTranslation } from '../../lib/localization'
 import { cardPreview } from '../../lib/preview'
 
 export const galleryCategory = defineType({
   name: 'galleryCategory',
-  title: 'Gallery category — تصنيف المعرض',
+  title: 'تصنيف المعرض',
   type: 'document',
   fields: [
-    defineField({ name: 'name', title: 'Name', type: 'localizedString', validation: requiredTranslation }),
+    defineField({ name: 'name', title: 'الاسم', type: 'localizedString', validation: requiredTranslation }),
     orderField,
     visibleField,
   ],
@@ -18,73 +18,86 @@ export const galleryCategory = defineType({
 
 export const galleryItem = defineType({
   name: 'galleryItem',
-  title: 'Gallery item — عنصر المعرض',
+  title: 'عنصر في المعرض',
   type: 'document',
+  groups: [
+    { name: 'media', title: 'الصورة أو الفيديو', default: true },
+    { name: 'details', title: 'التفاصيل' },
+    { name: 'display', title: 'العرض' },
+  ],
   fields: [
     defineField({
       name: 'mediaType',
-      title: 'Type',
+      title: 'النوع',
       type: 'string',
       options: {
         list: [
-          { title: 'Image', value: 'image' },
-          { title: 'Video', value: 'video' },
+          { title: 'صورة', value: 'image' },
+          { title: 'فيديو', value: 'video' },
         ],
         layout: 'radio',
       },
       initialValue: 'image',
+      group: 'media',
     }),
     defineField({
       name: 'image',
-      title: 'Image',
+      title: 'الصورة',
       type: 'image',
       options: { hotspot: true },
+      group: 'media',
       hidden: ({ parent }) => parent?.mediaType === 'video',
     }),
     defineField({
       name: 'videoFile',
-      title: 'Video file',
-      description: 'Upload a video, or paste a video address below.',
+      title: 'ملف الفيديو',
+      description: 'ارفع ملف فيديو، أو الصق رابط فيديو في الحقل التالي.',
       type: 'file',
       options: { accept: 'video/*' },
+      group: 'media',
       hidden: ({ parent }) => parent?.mediaType !== 'video',
     }),
     defineField({
       name: 'videoUrl',
-      title: 'Video address',
+      title: 'رابط الفيديو',
       type: 'url',
+      group: 'media',
       hidden: ({ parent }) => parent?.mediaType !== 'video',
     }),
     defineField({
       name: 'poster',
-      title: 'Cover image',
-      description: 'Optional. Shown before the video plays.',
+      title: 'صورة الغلاف',
+      description: 'اختيارية. تظهر قبل تشغيل الفيديو.',
       type: 'image',
       options: { hotspot: true },
+      group: 'media',
       hidden: ({ parent }) => parent?.mediaType !== 'video',
     }),
     defineField({
       name: 'alt',
-      title: 'Alt text',
-      description: 'Describes the image or video for screen readers, in both languages.',
+      title: 'النص البديل',
+      description: 'يصف الصورة أو الفيديو لقارئات الشاشة. العربية مطلوبة والإنجليزية اختيارية.',
       type: 'localizedString',
+      group: 'details',
       validation: requiredTranslation,
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'التصنيف',
       type: 'reference',
       to: [{ type: 'galleryCategory' }],
+      group: 'details',
     }),
     defineField({
       name: 'featured',
-      title: 'Featured item',
-      description: 'Shown as the large item in the gallery.',
+      title: 'عنصر مميز',
+      description: 'يظهر كعنصر كبير في المعرض.',
       type: 'boolean',
       initialValue: false,
+      group: 'display',
     }),
-    orderField,
-    visibleField,
+    { ...orderField, group: 'display' },
+    { ...visibleField, group: 'display' },
   ],
   orderings: displayOrderings,
   preview: {
@@ -94,19 +107,20 @@ export const galleryItem = defineType({
       image: 'image',
       poster: 'poster',
       mediaType: 'mediaType',
-      category: 'category.name.en',
+      categoryAr: 'category.name.ar',
+      categoryEn: 'category.name.en',
       visible: 'visible',
       order: 'order',
     },
-    prepare: ({ ar, en, image, poster, mediaType, category, visible, order }) => {
-      const title = ar || en || 'Untitled item'
+    prepare: ({ ar, en, image, poster, mediaType, categoryAr, categoryEn, visible, order }) => {
+      const title = ar || en || 'عنصر بدون وصف'
       return {
-        title: visible === false ? `[Hidden] ${title}` : title,
+        title: visible === false ? `[مخفي] ${title}` : title,
         subtitle: [
-          visible === false ? 'Hidden' : 'Visible',
-          mediaType === 'video' ? 'Video' : 'Image',
-          category,
-          order != null ? `#${order}` : undefined,
+          visible === false ? statusLabels.hidden : statusLabels.visible,
+          mediaType === 'video' ? 'فيديو' : 'صورة',
+          categoryAr || categoryEn,
+          order != null ? `الترتيب ${order}` : undefined,
         ]
           .filter(Boolean)
           .join(' · '),

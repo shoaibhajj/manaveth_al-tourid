@@ -1,13 +1,14 @@
 import { defineArrayMember, defineField, defineType, type FieldDefinition } from 'sanity'
-import { displayOrderings, iconOptions, orderField, visibleField } from '../../lib/fields'
-import { requiredTranslation } from '../../lib/localization'
+import { displayOrderings, iconOptions, iconTitles, orderField, statusLabels, visibleField } from '../../lib/fields'
+import { emailMessage, requiredTranslation } from '../../lib/localization'
 import { cardPreview } from '../../lib/preview'
 
 const iconField = defineField({
   name: 'icon',
-  title: 'Icon',
+  title: 'الأيقونة',
   type: 'string',
   options: { list: iconOptions },
+  group: 'content',
 })
 
 function defineIconCard(name: string, title: string, extraFields: FieldDefinition[] = []) {
@@ -15,38 +16,48 @@ function defineIconCard(name: string, title: string, extraFields: FieldDefinitio
     name,
     title,
     type: 'document',
+    groups: [
+      { name: 'content', title: 'المحتوى', default: true },
+      { name: 'display', title: 'العرض' },
+    ],
     fields: [
-      defineField({ name: 'name', title: 'Name', type: 'localizedString', validation: requiredTranslation }),
-      defineField({ name: 'description', title: 'Description', type: 'localizedText', validation: requiredTranslation }),
+      defineField({ name: 'name', title: 'الاسم', type: 'localizedString', group: 'content', validation: requiredTranslation }),
+      defineField({
+        name: 'description',
+        title: 'الوصف',
+        type: 'localizedText',
+        group: 'content',
+        validation: requiredTranslation,
+      }),
       iconField,
-      defineField({ name: 'image', title: 'Image', type: 'localizedImage' }),
+      defineField({ name: 'image', title: 'الصورة', type: 'localizedImage', group: 'content' }),
       ...extraFields,
-      orderField,
-      visibleField,
+      { ...orderField, group: 'display' },
+      { ...visibleField, group: 'display' },
     ],
     orderings: displayOrderings,
-    preview: cardPreview({ detail: 'icon' }),
+    preview: cardPreview({ detail: 'icon', detailLabels: iconTitles }),
   })
 }
 
-export const service = defineIconCard('service', 'Service — خدمة')
+export const service = defineIconCard('service', 'خدمة')
 
-export const sector = defineIconCard('sector', 'Sector — قطاع')
+export const sector = defineIconCard('sector', 'قطاع')
 
 export const stat = defineType({
   name: 'stat',
-  title: 'Statistic — إحصائية',
+  title: 'إحصائية',
   type: 'document',
   fields: [
     defineField({
       name: 'value',
-      title: 'Value',
+      title: 'الرقم',
       type: 'number',
       validation: (rule) => rule.required().min(0),
     }),
-    defineField({ name: 'prefix', title: 'Prefix', description: 'Optional, for example "+".', type: 'string' }),
-    defineField({ name: 'suffix', title: 'Suffix', description: 'Optional, for example "+" or "K".', type: 'string' }),
-    defineField({ name: 'label', title: 'Label', type: 'localizedString', validation: requiredTranslation }),
+    defineField({ name: 'prefix', title: 'ما قبل الرقم', description: 'اختياري، مثل «+».', type: 'string' }),
+    defineField({ name: 'suffix', title: 'ما بعد الرقم', description: 'اختياري، مثل «+» أو «K».', type: 'string' }),
+    defineField({ name: 'label', title: 'الوصف', type: 'localizedString', validation: requiredTranslation }),
     orderField,
     visibleField,
   ],
@@ -54,8 +65,12 @@ export const stat = defineType({
   preview: {
     select: { value: 'value', prefix: 'prefix', suffix: 'suffix', ar: 'label.ar', en: 'label.en', visible: 'visible', order: 'order' },
     prepare: ({ value, prefix, suffix, ar, en, visible, order }) => ({
-      title: `${visible === false ? '[Hidden] ' : ''}${prefix ?? ''}${value ?? '?'}${suffix ?? ''} · ${ar || en || 'No label'}`,
-      subtitle: [visible === false ? 'Hidden' : 'Visible', ar && en ? en : undefined, order != null ? `#${order}` : undefined]
+      title: `${visible === false ? '[مخفي] ' : ''}${prefix ?? ''}${value ?? '؟'}${suffix ?? ''} · ${ar || en || 'بدون وصف'}`,
+      subtitle: [
+        visible === false ? statusLabels.hidden : statusLabels.visible,
+        ar && en ? en : undefined,
+        order != null ? `الترتيب ${order}` : undefined,
+      ]
         .filter(Boolean)
         .join(' · '),
     }),
@@ -64,10 +79,10 @@ export const stat = defineType({
 
 export const productCategory = defineType({
   name: 'productCategory',
-  title: 'Product category — تصنيف المنتجات',
+  title: 'تصنيف منتجات',
   type: 'document',
   fields: [
-    defineField({ name: 'name', title: 'Name', type: 'localizedString', validation: requiredTranslation }),
+    defineField({ name: 'name', title: 'الاسم', type: 'localizedString', validation: requiredTranslation }),
     orderField,
     visibleField,
   ],
@@ -77,65 +92,65 @@ export const productCategory = defineType({
 
 export const product = defineType({
   name: 'product',
-  title: 'Product — منتج',
+  title: 'منتج',
   type: 'document',
   groups: [
-    { name: 'content', title: 'Content', default: true },
-    { name: 'pricing', title: 'Pricing' },
-    { name: 'display', title: 'Display' },
+    { name: 'content', title: 'المحتوى', default: true },
+    { name: 'pricing', title: 'الأسعار' },
+    { name: 'display', title: 'العرض' },
   ],
   fields: [
-    defineField({ name: 'name', title: 'Name', type: 'localizedString', group: 'content', validation: requiredTranslation }),
+    defineField({ name: 'name', title: 'الاسم', type: 'localizedString', group: 'content', validation: requiredTranslation }),
     defineField({
       name: 'slug',
-      title: 'Slug',
-      description: 'Used for the product address when detail pages are added. Generated from the English name.',
+      title: 'المعرّف في الرابط (Slug)',
+      description: 'يُستخدم في عنوان المنتج عند إضافة صفحات تفاصيل لاحقًا. يُنشأ من الاسم الإنجليزي؛ اكتب الاسم الإنجليزي أولًا.',
       type: 'slug',
       group: 'content',
       options: { source: 'name.en', maxLength: 96 },
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'الوصف',
       type: 'localizedText',
       group: 'content',
       validation: requiredTranslation,
     }),
-    defineField({ name: 'image', title: 'Image', type: 'localizedImage', group: 'content' }),
+    defineField({ name: 'image', title: 'الصورة', type: 'localizedImage', group: 'content' }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'التصنيف',
       type: 'reference',
       to: [{ type: 'productCategory' }],
       group: 'content',
     }),
     defineField({
       name: 'showPrice',
-      title: 'Show price on site',
-      description: 'Turn off to show "price on request" instead of any price below.',
+      title: 'إظهار السعر في الموقع',
+      description: 'أوقفه ليظهر «السعر عند الطلب» بدل أي سعر مكتوب أدناه.',
       type: 'boolean',
       initialValue: false,
       group: 'pricing',
     }),
     defineField({
       name: 'price',
-      title: 'Single price',
-      description: 'Optional. Used when there are no quantity prices.',
+      title: 'سعر واحد',
+      description: 'اختياري. يُستخدم عندما لا توجد أسعار حسب الكمية.',
       type: 'unitPrice',
       group: 'pricing',
     }),
     defineField({
       name: 'priceTiers',
-      title: 'Quantity prices',
-      description: 'Prices by quantity. When present they are shown instead of the single price.',
+      title: 'أسعار حسب الكمية',
+      description: 'عند إضافتها تظهر بدل السعر الواحد.',
       type: 'array',
       of: [defineArrayMember({ type: 'priceTier' })],
       group: 'pricing',
     }),
     defineField({
       name: 'featured',
-      title: 'Featured product',
-      description: 'Featured products can appear on the home page (three are shown there).',
+      title: 'منتج مميز',
+      description: 'المنتجات المميزة يمكن أن تظهر في الصفحة الرئيسية (يظهر منها ثلاثة).',
       type: 'boolean',
       initialValue: false,
       group: 'display',
@@ -144,83 +159,78 @@ export const product = defineType({
     { ...visibleField, group: 'display' },
   ],
   orderings: displayOrderings,
-  preview: cardPreview({ detail: 'category.name.en' }),
+  preview: cardPreview({ detail: 'category.name.ar', detailFallback: 'category.name.en' }),
 })
 
 export const place = defineType({
   name: 'place',
-  title: 'Branch or warehouse — فرع أو مستودع',
+  title: 'فرع أو مستودع',
   type: 'document',
   groups: [
-    { name: 'content', title: 'Details', default: true },
-    { name: 'location', title: 'Location' },
-    { name: 'contact', title: 'Contact' },
-    { name: 'display', title: 'Display' },
+    { name: 'content', title: 'التفاصيل', default: true },
+    { name: 'location', title: 'الموقع' },
+    { name: 'contact', title: 'التواصل' },
+    { name: 'display', title: 'العرض' },
   ],
   fields: [
     defineField({
       name: 'kind',
-      title: 'Type',
+      title: 'النوع',
       type: 'string',
       options: {
         list: [
-          { title: 'Branch', value: 'branch' },
-          { title: 'Warehouse', value: 'warehouse' },
+          { title: 'فرع', value: 'branch' },
+          { title: 'مستودع', value: 'warehouse' },
         ],
         layout: 'radio',
       },
       initialValue: 'branch',
       group: 'content',
     }),
-    defineField({ name: 'name', title: 'Name', type: 'localizedString', group: 'content', validation: requiredTranslation }),
-    defineField({ name: 'description', title: 'Description', type: 'localizedText', group: 'content' }),
-    defineField({ name: 'image', title: 'Image', type: 'localizedImage', group: 'content' }),
-    defineField({ name: 'city', title: 'City', type: 'localizedString', group: 'location' }),
+    defineField({ name: 'name', title: 'الاسم', type: 'localizedString', group: 'content', validation: requiredTranslation }),
+    defineField({ name: 'description', title: 'الوصف', type: 'localizedText', group: 'content' }),
+    defineField({ name: 'image', title: 'الصورة', type: 'localizedImage', group: 'content' }),
+    defineField({ name: 'city', title: 'المدينة', type: 'localizedString', group: 'location' }),
     defineField({
       name: 'address',
-      title: 'Address',
-      description: 'Only enter an address once it is confirmed.',
+      title: 'العنوان',
+      description: 'اكتب العنوان فقط بعد التأكد منه.',
       type: 'localizedText',
       group: 'location',
     }),
     defineField({
       name: 'mapUrl',
-      title: 'Google Maps link',
-      description: 'A link copied from Google Maps (Share, then Copy link).',
+      title: 'رابط خرائط Google',
+      description: 'رابط منسوخ من خرائط Google (مشاركة ثم نسخ الرابط).',
       type: 'url',
       group: 'location',
       validation: (rule) => rule.uri({ scheme: ['https', 'http'] }),
     }),
     defineField({
       name: 'mapQuery',
-      title: 'Location text or coordinates',
-      description: 'Used when there is no map link, for example a place name or "24.7136,46.6753".',
+      title: 'نص الموقع أو الإحداثيات',
+      description: 'يُستخدم عند عدم وجود رابط خريطة، مثل اسم المكان أو «24.7136,46.6753».',
       type: 'string',
       group: 'location',
     }),
     defineField({
       name: 'phone',
-      title: 'Phone',
-      description: 'Leave empty until the number is provided.',
+      title: 'الهاتف',
+      description: 'اتركه فارغًا حتى يتوفر الرقم.',
       type: 'string',
       group: 'contact',
     }),
     defineField({
       name: 'email',
-      title: 'Email',
+      title: 'البريد الإلكتروني',
       type: 'string',
       group: 'contact',
-      validation: (rule) =>
-        rule
-          .custom((value?: string) =>
-            !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? true : 'This does not look like an email address.',
-          )
-          .warning(),
+      validation: (rule) => rule.custom(emailMessage).warning(),
     }),
     defineField({
       name: 'manager',
-      title: 'Person in charge',
-      description: 'The employee responsible for this place, mostly used for warehouses.',
+      title: 'المسؤول',
+      description: 'الموظف المسؤول عن هذا المكان، ويُستخدم غالبًا للمستودعات.',
       type: 'contactPerson',
       group: 'contact',
     }),
@@ -228,5 +238,5 @@ export const place = defineType({
     { ...visibleField, group: 'display' },
   ],
   orderings: displayOrderings,
-  preview: cardPreview({ detail: 'kind' }),
+  preview: cardPreview({ detail: 'kind', detailLabels: { branch: 'فرع', warehouse: 'مستودع' } }),
 })

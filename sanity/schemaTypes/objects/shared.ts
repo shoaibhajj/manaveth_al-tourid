@@ -1,73 +1,68 @@
 import { defineField, defineType } from 'sanity'
 import { phoneNumberMessage, requiredTranslation } from '../../lib/localization'
 
+const addressDescription =
+  'مسار صفحة مثل /products، أو رابط داخل الصفحة مثل /#contact، أو رابط كامل يبدأ بـ https://'
+
 export const seoFields = [
   defineField({
     name: 'title',
-    title: 'Page title',
-    description: 'Shown in browser tabs and search results. Around 60 characters works best.',
+    title: 'عنوان الصفحة',
+    description: 'يظهر في تبويب المتصفح ونتائج البحث. الأفضل أن يكون حوالي 60 حرفًا.',
     type: 'localizedString',
   }),
   defineField({
     name: 'description',
-    title: 'Description',
-    description: 'Search result summary. Around 155 characters works best.',
+    title: 'الوصف',
+    description: 'ملخص يظهر في نتائج البحث. الأفضل أن يكون حوالي 155 حرفًا.',
     type: 'localizedText',
   }),
   defineField({
     name: 'shareImage',
-    title: 'Share image',
-    description: 'Shown when the page is shared on social networks. Recommended size 1200 × 630.',
+    title: 'صورة المشاركة',
+    description: 'تظهر عند مشاركة الصفحة في شبكات التواصل. المقاس المقترح 1200 × 630.',
     type: 'localizedImage',
   }),
 ]
 
 export const seo = defineType({
   name: 'seo',
-  title: 'Search engine data',
+  title: 'بيانات محركات البحث',
   type: 'object',
   fields: seoFields,
 })
 
 export const link = defineType({
   name: 'link',
-  title: 'Link',
+  title: 'رابط',
   type: 'object',
   fields: [
-    defineField({ name: 'label', title: 'Label', type: 'localizedString', validation: requiredTranslation }),
-    defineField({
-      name: 'href',
-      title: 'Address',
-      description: 'A page path such as /products, an in-page anchor such as /#contact, or a full https:// address.',
-      type: 'string',
-    }),
+    defineField({ name: 'label', title: 'نص الرابط', type: 'localizedString', validation: requiredTranslation }),
+    defineField({ name: 'href', title: 'العنوان', description: addressDescription, type: 'string' }),
   ],
   preview: {
     select: { ar: 'label.ar', en: 'label.en', href: 'href' },
-    prepare: ({ ar, en, href }) => ({ title: ar || en || 'Untitled link', subtitle: href }),
+    prepare: ({ ar, en, href }) => ({ title: ar || en || 'رابط بدون نص', subtitle: href }),
   },
 })
 
+const buttonStyleLabels: Record<string, string> = { primary: 'أساسي', secondary: 'ثانوي' }
+
 export const ctaButton = defineType({
   name: 'ctaButton',
-  title: 'Button',
+  title: 'زر',
   type: 'object',
   fields: [
-    defineField({ name: 'label', title: 'Label', type: 'localizedString', validation: requiredTranslation }),
-    defineField({
-      name: 'href',
-      title: 'Address',
-      description: 'A page path such as /products, an in-page anchor such as /#contact, or a full https:// address.',
-      type: 'string',
-    }),
+    defineField({ name: 'label', title: 'نص الزر', type: 'localizedString', validation: requiredTranslation }),
+    defineField({ name: 'href', title: 'العنوان', description: addressDescription, type: 'string' }),
     defineField({
       name: 'style',
-      title: 'Style',
+      title: 'شكل الزر',
       type: 'string',
       options: {
         list: [
-          { title: 'Primary', value: 'primary' },
-          { title: 'Secondary', value: 'secondary' },
+          { title: 'أساسي', value: 'primary' },
+          { title: 'ثانوي', value: 'secondary' },
         ],
         layout: 'radio',
       },
@@ -77,164 +72,170 @@ export const ctaButton = defineType({
   preview: {
     select: { ar: 'label.ar', en: 'label.en', href: 'href', style: 'style' },
     prepare: ({ ar, en, href, style }) => ({
-      title: ar || en || 'Untitled button',
-      subtitle: [style, href].filter(Boolean).join(' · '),
+      title: ar || en || 'زر بدون نص',
+      subtitle: [buttonStyleLabels[style] ?? style, href].filter(Boolean).join(' · '),
     }),
   },
 })
 
+const platforms = [
+  { title: 'فيسبوك', value: 'facebook' },
+  { title: 'إنستغرام', value: 'instagram' },
+  { title: 'منصة X', value: 'x' },
+  { title: 'لينكدإن', value: 'linkedin' },
+  { title: 'يوتيوب', value: 'youtube' },
+  { title: 'تيك توك', value: 'tiktok' },
+  { title: 'سناب شات', value: 'snapchat' },
+  { title: 'تيليجرام', value: 'telegram' },
+  { title: 'أخرى', value: 'other' },
+]
+
 export const socialLink = defineType({
   name: 'socialLink',
-  title: 'Social link',
+  title: 'رابط تواصل اجتماعي',
   type: 'object',
   fields: [
+    defineField({ name: 'platform', title: 'المنصة', type: 'string', options: { list: platforms } }),
     defineField({
-      name: 'platform',
-      title: 'Platform',
-      type: 'string',
-      options: {
-        list: ['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'tiktok', 'snapchat', 'telegram', 'other'].map(
-          (value) => ({ title: value, value }),
-        ),
-      },
+      name: 'url',
+      title: 'الرابط',
+      type: 'url',
+      validation: (rule) => rule.uri({ scheme: ['https', 'http'] }),
     }),
-    defineField({ name: 'url', title: 'Address', type: 'url', validation: (rule) => rule.uri({ scheme: ['https', 'http'] }) }),
   ],
   preview: {
     select: { platform: 'platform', url: 'url' },
-    prepare: ({ platform, url }) => ({ title: platform || 'Social link', subtitle: url }),
+    prepare: ({ platform, url }) => ({
+      title: platforms.find((item) => item.value === platform)?.title ?? 'رابط تواصل اجتماعي',
+      subtitle: url,
+    }),
   },
 })
 
 export const contactPerson = defineType({
   name: 'contactPerson',
-  title: 'Person in charge',
+  title: 'المسؤول',
   type: 'object',
   fields: [
-    defineField({ name: 'name', title: 'Name', type: 'localizedString' }),
+    defineField({ name: 'name', title: 'الاسم', type: 'localizedString' }),
     defineField({
       name: 'phone',
-      title: 'Phone',
-      description: 'Leave empty until the number is provided.',
+      title: 'الهاتف',
+      description: 'اتركه فارغًا حتى يتوفر الرقم.',
       type: 'string',
     }),
   ],
   preview: {
     select: { ar: 'name.ar', en: 'name.en', phone: 'phone' },
-    prepare: ({ ar, en, phone }) => ({ title: ar || en || 'Person in charge', subtitle: phone }),
+    prepare: ({ ar, en, phone }) => ({ title: ar || en || 'المسؤول', subtitle: phone }),
   },
 })
 
 export const whatsappChannel = defineType({
   name: 'whatsappChannel',
-  title: 'WhatsApp channel',
+  title: 'قناة واتساب',
   type: 'object',
   fields: [
     defineField({
       name: 'name',
-      title: 'Name',
-      description: 'Full label, for example "WhatsApp: Request a quote".',
+      title: 'الاسم',
+      description: 'الاسم الكامل للقناة، مثال: «واتساب: طلب عرض سعر».',
       type: 'localizedString',
       validation: requiredTranslation,
     }),
     defineField({
       name: 'shortLabel',
-      title: 'Short label',
-      description: 'Compact label on the floating button, for example "Quotes".',
+      title: 'الاسم المختصر',
+      description: 'نص قصير على الزر العائم، مثال: «عروض الأسعار».',
       type: 'localizedString',
     }),
     defineField({
       name: 'purpose',
-      title: 'Purpose',
-      description: 'Internal note about what this number is used for.',
+      title: 'الغرض',
+      description: 'ملاحظة داخلية توضح فيمَ يُستخدم هذا الرقم.',
       type: 'localizedText',
     }),
     defineField({
       name: 'message',
-      title: 'Pre-filled message',
-      description: 'The text that appears ready to send when a visitor opens the chat.',
+      title: 'الرسالة الجاهزة',
+      description: 'النص الذي يظهر جاهزًا للإرسال عندما يفتح الزائر المحادثة.',
       type: 'localizedText',
       validation: requiredTranslation,
     }),
     defineField({
       name: 'number',
-      title: 'Number',
+      title: 'الرقم',
       description:
-        'International format, digits only, for example 9665XXXXXXXX. Leave empty until the owner provides it; the button stays disabled.',
+        'بالصيغة الدولية وبالأرقام فقط، مثال: 9665XXXXXXXX. اتركه فارغًا حتى يزوّدك المالك بالرقم؛ سيبقى الزر معطّلًا.',
       type: 'string',
       validation: (rule) => rule.custom(phoneNumberMessage).warning(),
     }),
-    defineField({ name: 'visible', title: 'Visible on site', type: 'boolean', initialValue: true }),
+    defineField({ name: 'visible', title: 'ظاهر في الموقع', type: 'boolean', initialValue: true }),
   ],
   preview: {
     select: { ar: 'name.ar', en: 'name.en', number: 'number', visible: 'visible' },
     prepare: ({ ar, en, number, visible }) => ({
-      title: ar || en || 'WhatsApp channel',
-      subtitle: [visible === false ? 'Hidden' : 'Visible', number || 'No number yet'].join(' · '),
+      title: ar || en || 'قناة واتساب',
+      subtitle: [visible === false ? 'مخفي' : 'ظاهر', number || 'لا يوجد رقم بعد'].join(' · '),
     }),
   },
 })
 
 export const unitPrice = defineType({
   name: 'unitPrice',
-  title: 'Price',
+  title: 'السعر',
   type: 'object',
   fields: [
-    defineField({
-      name: 'amount',
-      title: 'Price',
-      type: 'number',
-      validation: (rule) => rule.min(0),
-    }),
+    defineField({ name: 'amount', title: 'السعر', type: 'number', validation: (rule) => rule.min(0) }),
     defineField({
       name: 'unit',
-      title: 'Sale unit',
-      description: 'For example "per carton" or "per kg".',
+      title: 'وحدة البيع',
+      description: 'مثال: «للكرتون» أو «للكيلو».',
       type: 'localizedString',
     }),
   ],
   preview: {
     select: { amount: 'amount', ar: 'unit.ar', en: 'unit.en' },
-    prepare: ({ amount, ar, en }) => ({ title: amount != null ? String(amount) : 'No price', subtitle: ar || en }),
+    prepare: ({ amount, ar, en }) => ({ title: amount != null ? String(amount) : 'بدون سعر', subtitle: ar || en }),
   },
 })
 
 export const priceTier = defineType({
   name: 'priceTier',
-  title: 'Quantity price',
+  title: 'سعر حسب الكمية',
   type: 'object',
   fields: [
-    defineField({ name: 'minQuantity', title: 'Minimum quantity', type: 'number', validation: (rule) => rule.min(0) }),
+    defineField({ name: 'minQuantity', title: 'أقل كمية', type: 'number', validation: (rule) => rule.min(0) }),
     defineField({
       name: 'maxQuantity',
-      title: 'Maximum quantity',
-      description: 'Optional. Leave empty for "and above".',
+      title: 'أكبر كمية',
+      description: 'اختياري. اتركه فارغًا لتعني «وما فوق».',
       type: 'number',
       validation: (rule) =>
         rule.min(0).custom((value, context) => {
           const min = (context.parent as { minQuantity?: number } | undefined)?.minQuantity
-          return value != null && min != null && value < min ? 'The maximum must not be lower than the minimum.' : true
+          return value != null && min != null && value < min ? 'أكبر كمية يجب ألا تكون أقل من أقل كمية.' : true
         }),
     }),
     defineField({
       name: 'unit',
-      title: 'Sale unit',
-      description: 'For example "carton" or "kg".',
+      title: 'وحدة البيع',
+      description: 'مثال: «كرتون» أو «كيلو».',
       type: 'localizedString',
     }),
-    defineField({ name: 'price', title: 'Price', type: 'number', validation: (rule) => rule.min(0) }),
+    defineField({ name: 'price', title: 'السعر', type: 'number', validation: (rule) => rule.min(0) }),
     defineField({
       name: 'label',
-      title: 'Custom label',
-      description: 'Optional. Overrides the label generated from the quantities.',
+      title: 'نص مخصص',
+      description: 'اختياري. يستبدل النص الذي يُنشأ تلقائيًا من الكميات.',
       type: 'localizedString',
     }),
   ],
   preview: {
     select: { min: 'minQuantity', max: 'maxQuantity', price: 'price', ar: 'unit.ar', en: 'unit.en' },
     prepare: ({ min, max, price, ar, en }) => ({
-      title: `${min ?? '?'}${max != null ? `–${max}` : '+'} ${ar || en || ''}`.trim(),
-      subtitle: price != null ? `Price: ${price}` : 'No price yet',
+      title: `${min ?? '؟'}${max != null ? `–${max}` : '+'} ${ar || en || ''}`.trim(),
+      subtitle: price != null ? `السعر: ${price}` : 'بدون سعر بعد',
     }),
   },
 })

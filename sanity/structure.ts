@@ -6,13 +6,14 @@ const singleton = (S: StructureBuilder, typeName: string, title: string) =>
     .title(title)
     .child(S.document().schemaType(typeName).documentId(typeName).title(title))
 
-const orderedList = (S: StructureBuilder, typeName: string, title: string, filter?: string) =>
+/** `id` stays English and stable so Studio URLs do not change when a title is reworded. */
+const orderedList = (S: StructureBuilder, typeName: string, title: string, id: string, filter?: string) =>
   S.listItem()
-    .id(filter ? `${typeName}-${title}` : typeName)
+    .id(id)
     .title(title)
     .child(
       S.documentList()
-        .id(filter ? `${typeName}-${title}` : typeName)
+        .id(id)
         .title(title)
         .schemaType(typeName)
         .filter(filter ?? '_type == $type')
@@ -22,58 +23,74 @@ const orderedList = (S: StructureBuilder, typeName: string, title: string, filte
 
 export const structure: StructureResolver = (S) =>
   S.list()
-    .title('Website content')
+    .title('محتوى الموقع')
     .items([
       S.listItem()
-        .title('Company')
+        .id('company')
+        .title('الشركة')
         .child(
           S.list()
-            .title('Company')
+            .id('company')
+            .title('الشركة')
             .items([
-              singleton(S, 'siteSettings', 'Site settings and identity'),
-              singleton(S, 'contactSettings', 'WhatsApp and contact messages'),
+              singleton(S, 'siteSettings', 'إعدادات الموقع والهوية'),
+              singleton(S, 'contactSettings', 'واتساب ورسائل التواصل'),
             ]),
         ),
-      singleton(S, 'homePage', 'Home page'),
+      singleton(S, 'homePage', 'الصفحة الرئيسية'),
       S.divider(),
-      orderedList(S, 'service', 'Services'),
-      orderedList(S, 'sector', 'Sectors'),
-      orderedList(S, 'stat', 'Statistics'),
+      orderedList(S, 'service', 'الخدمات', 'service'),
+      orderedList(S, 'sector', 'القطاعات', 'sector'),
+      orderedList(S, 'stat', 'الإحصائيات', 'stat'),
       S.listItem()
-        .title('Products')
+        .id('products-group')
+        .title('المنتجات')
         .child(
           S.list()
-            .title('Products')
-            .items([orderedList(S, 'product', 'Products'), orderedList(S, 'productCategory', 'Categories')]),
-        ),
-      S.listItem()
-        .title('Branches and warehouses')
-        .child(
-          S.list()
-            .title('Branches and warehouses')
+            .id('products-group')
+            .title('المنتجات')
             .items([
-              orderedList(S, 'place', 'All locations'),
-              orderedList(S, 'place', 'Branches', '_type == "place" && kind == "branch"'),
-              orderedList(S, 'place', 'Warehouses', '_type == "place" && kind == "warehouse"'),
+              orderedList(S, 'product', 'المنتجات', 'product'),
+              orderedList(S, 'productCategory', 'التصنيفات', 'productCategory'),
             ]),
         ),
       S.listItem()
-        .title('Work gallery')
+        .id('places-group')
+        .title('الفروع والمستودعات')
         .child(
           S.list()
-            .title('Work gallery')
-            .items([orderedList(S, 'galleryItem', 'Gallery items'), orderedList(S, 'galleryCategory', 'Categories')]),
+            .id('places-group')
+            .title('الفروع والمستودعات')
+            .items([
+              orderedList(S, 'place', 'كل المواقع', 'place'),
+              orderedList(S, 'place', 'الفروع', 'place-Branches', '_type == "place" && kind == "branch"'),
+              orderedList(S, 'place', 'المستودعات', 'place-Warehouses', '_type == "place" && kind == "warehouse"'),
+            ]),
+        ),
+      S.listItem()
+        .id('gallery-group')
+        .title('معرض الأعمال')
+        .child(
+          S.list()
+            .id('gallery-group')
+            .title('معرض الأعمال')
+            .items([
+              orderedList(S, 'galleryItem', 'عناصر المعرض', 'galleryItem'),
+              orderedList(S, 'galleryCategory', 'التصنيفات', 'galleryCategory'),
+            ]),
         ),
       S.divider(),
       S.listItem()
-        .title('Search engine data (SEO)')
+        .id('seo-group')
+        .title('محركات البحث (SEO)')
         .child(
           S.list()
-            .title('Search engine data (SEO)')
+            .id('seo-group')
+            .title('محركات البحث (SEO)')
             .items([
-              singleton(S, 'seoHome', 'Home page'),
-              singleton(S, 'seoProducts', 'Products page'),
-              singleton(S, 'seoBranches', 'Branches and warehouses page'),
+              singleton(S, 'seoHome', 'الصفحة الرئيسية'),
+              singleton(S, 'seoProducts', 'صفحة المنتجات'),
+              singleton(S, 'seoBranches', 'صفحة الفروع والمستودعات'),
             ]),
         ),
     ])

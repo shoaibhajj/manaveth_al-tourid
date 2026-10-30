@@ -2,35 +2,44 @@ import { defineField, type SortOrdering } from 'sanity'
 
 export const orderField = defineField({
   name: 'order',
-  title: 'Display order',
+  title: 'ترتيب الظهور',
   type: 'number',
-  description: 'Lower numbers appear first. Leave gaps (10, 20, 30) so items can be inserted later.',
+  description: 'الأرقام الأصغر تظهر أولًا. اترك فروقًا بين الأرقام (10، 20، 30) لتتمكن من إدراج عناصر جديدة لاحقًا.',
   initialValue: 100,
   validation: (rule) => rule.integer().min(0),
 })
 
 export const visibleField = defineField({
   name: 'visible',
-  title: 'Visible on site',
+  title: 'ظاهر في الموقع',
   type: 'boolean',
-  description: 'Turn off to hide the item without deleting it.',
+  description: 'أوقف هذا الخيار لإخفاء العنصر عن الموقع دون حذفه.',
   initialValue: true,
 })
 
 export const displayOrderings: SortOrdering[] = [
-  { name: 'displayOrderAsc', title: 'Display order', by: [{ field: 'order', direction: 'asc' }] },
+  { name: 'displayOrderAsc', title: 'ترتيب الظهور (من الأول)', by: [{ field: 'order', direction: 'asc' }] },
+  { name: 'displayOrderDesc', title: 'ترتيب الظهور (من الأخير)', by: [{ field: 'order', direction: 'desc' }] },
+  { name: 'hiddenFirst', title: 'المخفي أولًا', by: [{ field: 'visible', direction: 'asc' }, { field: 'order', direction: 'asc' }] },
 ]
 
+/** Values are stored in the data and read by the website, so only the titles are translated. */
 export const iconOptions = [
-  'concierge',
-  'store',
-  'truck',
-  'ship',
-  'award',
-  'globe',
-  'shield',
-  'handshake',
-  'gem',
-  'users',
-  'container',
-].map((value) => ({ title: value, value }))
+  { title: 'خدمة العملاء (concierge)', value: 'concierge' },
+  { title: 'متجر (store)', value: 'store' },
+  { title: 'شاحنة (truck)', value: 'truck' },
+  { title: 'سفينة (ship)', value: 'ship' },
+  { title: 'جائزة (award)', value: 'award' },
+  { title: 'عالمي (globe)', value: 'globe' },
+  { title: 'حماية (shield)', value: 'shield' },
+  { title: 'شراكة (handshake)', value: 'handshake' },
+  { title: 'جودة (gem)', value: 'gem' },
+  { title: 'فريق (users)', value: 'users' },
+  { title: 'حاوية (container)', value: 'container' },
+]
+
+export const iconTitles: Record<string, string> = Object.fromEntries(
+  iconOptions.map((option) => [option.value, option.title]),
+)
+
+export const statusLabels = { visible: 'ظاهر', hidden: 'مخفي' } as const

@@ -1,24 +1,27 @@
 import type { Rule } from 'sanity'
 
 export const languages = [
-  { id: 'ar', title: 'العربية (Arabic)' },
+  { id: 'ar', title: 'العربية' },
   { id: 'en', title: 'English' },
 ] as const
 
 export type LocalizedValue = { ar?: string; en?: string } | undefined
 
-/** Warns when only one of the two languages is filled in. Saving and publishing stay possible. */
+/** Arabic is the primary language. English is optional, so only a missing Arabic text next to an English one is flagged. */
 export function partialTranslationMessage(value: LocalizedValue): true | string {
   if (!value) return true
-  const missing = languages.filter((language) => !value[language.id]?.trim())
-  if (missing.length === 0 || missing.length === languages.length) return true
-  return `Missing translation: ${missing.map((language) => language.title).join(', ')}. You can save now and complete it later.`
+  const hasArabic = Boolean(value.ar?.trim())
+  const hasEnglish = Boolean(value.en?.trim())
+  if (hasEnglish && !hasArabic) {
+    return 'النص العربي ناقص. يمكنك الحفظ الآن وإكماله لاحقًا.'
+  }
+  return true
 }
 
-/** Warns when a field that the site shows is still empty in both languages. */
+/** Warns when a field that the site always shows is empty in both languages. */
 export function emptyTranslationMessage(value: LocalizedValue): true | string {
   if (!value?.ar?.trim() && !value?.en?.trim()) {
-    return 'Add the Arabic and English text. You can save now and complete it later.'
+    return 'هذا الحقل مطلوب: اكتب النص العربي (النص الإنجليزي اختياري). يمكنك الحفظ الآن وإكماله لاحقًا.'
   }
   return true
 }
@@ -31,5 +34,11 @@ export function phoneNumberMessage(value: string | undefined): true | string {
   if (!value) return true
   return /^\d{8,15}$/.test(value.trim())
     ? true
-    : 'Use international format with digits only (no +, spaces or dashes), for example 9665XXXXXXXX.'
+    : 'اكتب الرقم بالصيغة الدولية وبالأرقام فقط (بدون + أو مسافات أو شرطات)، مثال: 9665XXXXXXXX.'
+}
+
+export const invalidEmailMessage = 'هذا لا يبدو بريدًا إلكترونيًا صحيحًا.'
+
+export function emailMessage(value: string | undefined): true | string {
+  return !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? true : invalidEmailMessage
 }

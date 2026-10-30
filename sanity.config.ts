@@ -2,6 +2,7 @@ import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { sanityEnv } from './sanity/env'
+import { arabicBundles, arabicLocale } from './sanity/i18n/arabic'
 import { schemaTypes, singletonTypes } from './sanity/schemaTypes'
 import { structure } from './sanity/structure'
 
@@ -16,6 +17,11 @@ export default defineConfig({
   basePath: '/studio',
   projectId: sanityEnv.projectId ?? '',
   dataset: sanityEnv.dataset ?? '',
+  // Arabic is listed last so it becomes the default; editors can still switch to English from the user menu.
+  i18n: {
+    bundles: arabicBundles,
+    locales: (prev) => [...prev, arabicLocale],
+  },
   schema: {
     types: schemaTypes,
     templates: (templates) => templates.filter((template) => !isSingleton(template.schemaType)),

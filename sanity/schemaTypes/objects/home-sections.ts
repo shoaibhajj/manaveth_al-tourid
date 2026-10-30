@@ -1,13 +1,12 @@
 import { defineArrayMember, defineField, defineType, type FieldDefinition } from 'sanity'
-import { orderField, visibleField } from '../../lib/fields'
+import { orderField, statusLabels, visibleField } from '../../lib/fields'
 import { requiredTranslation } from '../../lib/localization'
 
 const sectionHeaderFields = [
   visibleField,
-  orderField,
-  defineField({ name: 'eyebrow', title: 'Small label above the title', type: 'localizedString' }),
-  defineField({ name: 'title', title: 'Title', type: 'localizedString', validation: requiredTranslation }),
-  defineField({ name: 'description', title: 'Intro text', type: 'localizedText' }),
+  defineField({ name: 'title', title: 'العنوان', type: 'localizedString', validation: requiredTranslation }),
+  defineField({ name: 'eyebrow', title: 'نص صغير فوق العنوان', type: 'localizedString' }),
+  defineField({ name: 'description', title: 'نص تمهيدي', type: 'localizedText' }),
 ]
 
 function defineSection(name: string, title: string, extraFields: FieldDefinition[] = []) {
@@ -15,12 +14,13 @@ function defineSection(name: string, title: string, extraFields: FieldDefinition
     name,
     title,
     type: 'object',
-    fields: [...sectionHeaderFields, ...extraFields],
+    fieldsets: [{ name: 'advanced', title: 'خيارات متقدمة', options: { collapsible: true, collapsed: true } }],
+    fields: [...sectionHeaderFields, ...extraFields, { ...orderField, fieldset: 'advanced' }],
     preview: {
       select: { ar: 'title.ar', en: 'title.en', visible: 'visible', order: 'order' },
       prepare: ({ ar, en, visible, order }) => ({
         title: ar || en || title,
-        subtitle: [visible === false ? 'Hidden' : 'Visible', order != null ? `#${order}` : undefined]
+        subtitle: [visible === false ? statusLabels.hidden : statusLabels.visible, order != null ? `الترتيب ${order}` : undefined]
           .filter(Boolean)
           .join(' · '),
       }),
@@ -30,19 +30,19 @@ function defineSection(name: string, title: string, extraFields: FieldDefinition
 
 export const heroSection = defineType({
   name: 'heroSection',
-  title: 'Hero',
+  title: 'الواجهة الرئيسية',
   type: 'object',
   fields: [
-    defineField({ name: 'title', title: 'Headline', type: 'localizedString', validation: requiredTranslation }),
-    defineField({ name: 'text', title: 'Supporting text', type: 'localizedText', validation: requiredTranslation }),
+    defineField({ name: 'title', title: 'العنوان الرئيسي', type: 'localizedString', validation: requiredTranslation }),
+    defineField({ name: 'text', title: 'النص الداعم', type: 'localizedText', validation: requiredTranslation }),
     defineField({
       name: 'mediaType',
-      title: 'Background media',
+      title: 'خلفية الواجهة',
       type: 'string',
       options: {
         list: [
-          { title: 'Image', value: 'image' },
-          { title: 'Video', value: 'video' },
+          { title: 'صورة', value: 'image' },
+          { title: 'فيديو', value: 'video' },
         ],
         layout: 'radio',
       },
@@ -50,34 +50,35 @@ export const heroSection = defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Image',
+      title: 'الصورة',
       type: 'localizedImage',
       hidden: ({ parent }) => parent?.mediaType === 'video',
     }),
     defineField({
       name: 'videoFile',
-      title: 'Video file',
-      description: 'Upload a short, compressed video. Alternatively paste a video address below.',
+      title: 'ملف الفيديو',
+      description: 'ارفع فيديو قصيرًا ومضغوطًا، أو الصق رابط فيديو في الحقل التالي.',
       type: 'file',
       options: { accept: 'video/*' },
       hidden: ({ parent }) => parent?.mediaType !== 'video',
     }),
     defineField({
       name: 'videoUrl',
-      title: 'Video address',
+      title: 'رابط الفيديو',
       type: 'url',
       hidden: ({ parent }) => parent?.mediaType !== 'video',
     }),
     defineField({
       name: 'videoPoster',
-      title: 'Video cover image',
-      description: 'Optional. Shown while the video loads.',
+      title: 'صورة غلاف الفيديو',
+      description: 'اختيارية. تظهر أثناء تحميل الفيديو.',
       type: 'localizedImage',
       hidden: ({ parent }) => parent?.mediaType !== 'video',
     }),
     defineField({
       name: 'buttons',
-      title: 'Buttons',
+      title: 'الأزرار',
+      description: 'ثلاثة أزرار كحد أقصى.',
       type: 'array',
       of: [defineArrayMember({ type: 'ctaButton' })],
       validation: (rule) => rule.max(3),
@@ -85,60 +86,66 @@ export const heroSection = defineType({
   ],
 })
 
-export const aboutSection = defineSection('aboutSection', 'About', [
+export const aboutSection = defineSection('aboutSection', 'من نحن', [
   defineField({
     name: 'paragraphs',
-    title: 'Paragraphs',
+    title: 'الفقرات',
     type: 'array',
     of: [defineArrayMember({ type: 'localizedText' })],
   }),
   defineField({
     name: 'highlights',
-    title: 'Highlights',
-    description: 'Short points shown next to the text.',
+    title: 'نقاط بارزة',
+    description: 'نقاط قصيرة تظهر بجانب النص.',
     type: 'array',
     of: [defineArrayMember({ type: 'localizedString' })],
   }),
-  defineField({ name: 'image', title: 'Image', type: 'localizedImage' }),
+  defineField({ name: 'image', title: 'الصورة', type: 'localizedImage' }),
 ])
 
-export const servicesSection = defineSection('servicesSection', 'Services')
+export const servicesSection = defineSection('servicesSection', 'الخدمات')
 
-export const gallerySection = defineSection('gallerySection', 'Work gallery', [
+export const gallerySection = defineSection('gallerySection', 'معرض الأعمال', [
   defineField({
     name: 'showCategoryFilter',
-    title: 'Show category filter',
+    title: 'إظهار تصفية التصنيفات',
     type: 'boolean',
     initialValue: true,
   }),
 ])
 
-export const statsSection = defineSection('statsSection', 'Statistics')
+export const statsSection = defineSection('statsSection', 'الإحصائيات')
 
-export const sectorsSection = defineSection('sectorsSection', 'Sectors')
+export const sectorsSection = defineSection('sectorsSection', 'القطاعات')
 
-export const featuredProductsSection = defineSection('featuredProductsSection', 'Featured products', [
+export const featuredProductsSection = defineSection('featuredProductsSection', 'المنتجات المميزة', [
   defineField({
     name: 'products',
-    title: 'Chosen products',
+    title: 'المنتجات المختارة',
     description:
-      'Pick up to three products for the home page. If left empty, the site can fall back to products marked as featured.',
+      'اختر حتى ثلاثة منتجات للصفحة الرئيسية. إن تركتها فارغة يمكن للموقع أن يعرض المنتجات المعلّمة كمميزة.',
     type: 'array',
     of: [defineArrayMember({ type: 'reference', to: [{ type: 'product' }] })],
     validation: (rule) => rule.max(3).unique(),
   }),
-  defineField({ name: 'buttonLabel', title: 'Button label', description: 'The button that opens the products page.', type: 'localizedString' }),
+  defineField({
+    name: 'buttonLabel',
+    title: 'نص الزر',
+    description: 'الزر الذي يفتح صفحة المنتجات.',
+    type: 'localizedString',
+  }),
 ])
 
-export const branchesSection = defineSection('branchesSection', 'Branches', [
-  defineField({ name: 'showMap', title: 'Show map links', type: 'boolean', initialValue: true }),
+export const branchesSection = defineSection('branchesSection', 'الفروع', [
+  defineField({ name: 'showMap', title: 'إظهار روابط الخريطة', type: 'boolean', initialValue: true }),
 ])
 
-export const contactSection = defineSection('contactSection', 'Contact', [
-  defineField({ name: 'image', title: 'Image', type: 'localizedImage' }),
+export const contactSection = defineSection('contactSection', 'تواصل معنا', [
+  defineField({ name: 'image', title: 'الصورة', type: 'localizedImage' }),
   defineField({
     name: 'buttons',
-    title: 'Buttons',
+    title: 'الأزرار',
+    description: 'ثلاثة أزرار كحد أقصى.',
     type: 'array',
     of: [defineArrayMember({ type: 'ctaButton' })],
     validation: (rule) => rule.max(3),
@@ -147,17 +154,17 @@ export const contactSection = defineSection('contactSection', 'Contact', [
 
 export const footerSection = defineType({
   name: 'footerSection',
-  title: 'Footer',
+  title: 'التذييل',
   type: 'object',
   fields: [
-    defineField({ name: 'visible', title: 'Visible on site', type: 'boolean', initialValue: true }),
-    defineField({ name: 'description', title: 'Short description', type: 'localizedText' }),
+    visibleField,
+    defineField({ name: 'description', title: 'وصف مختصر', type: 'localizedText' }),
     defineField({
       name: 'links',
-      title: 'Links',
+      title: 'الروابط',
       type: 'array',
       of: [defineArrayMember({ type: 'link' })],
     }),
-    defineField({ name: 'copyright', title: 'Copyright line', type: 'localizedString' }),
+    defineField({ name: 'copyright', title: 'سطر حقوق النشر', type: 'localizedString' }),
   ],
 })

@@ -1,12 +1,12 @@
 import type { MetadataRoute } from 'next'
 import { localePath, locales, publicPaths } from '@/lib/i18n'
+import { getDetailSlugs } from '@/lib/sanity/articles'
 import { getSiteUrl } from '@/lib/site-url'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = await getSiteUrl()
+  const [base, details] = await Promise.all([getSiteUrl(), getDetailSlugs()])
   const urlFor = (path: string, locale: (typeof locales)[number]) => `${base}${localePath(path, locale)}`
-
-  return publicPaths.flatMap((path) =>
+  const staticEntries = publicPaths.flatMap((path) =>
     locales.map((locale) => ({
       url: urlFor(path, locale),
       alternates: {
@@ -14,4 +14,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     })),
   )
+  const dynamicEntries = [
+    ...details.products.map((item) => ({ path: `/products/${item.slug}`, updatedAt: item.updatedAt })),
+    ...details.services.map((item) => ({ path: `/services/${item.slug}`, updatedAt: item.updatedAt })),
+    ...details.articles.map((item) => ({ path: `/blog/${item.slug}`, updatedAt: item.updatedAt })),
+  ].flatMap(({ path, updatedAt }) =>
+    locales.map((locale) => ({
+      url: urlFor(path, locale),
+      lastModified: updatedAt ? new Date(updatedAt) : undefined,
+      alternates: {
+        languages: { ar: urlFor(path, 'ar'), en: urlFor(path, 'en'), 'x-default': urlFor(path, 'ar') },
+      },
+    })),
+  )
+  return [...staticEntries, ...dynamicEntries]
 }

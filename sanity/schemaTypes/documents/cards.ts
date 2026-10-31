@@ -48,6 +48,7 @@ export const service = defineIconCard('service', 'خدمة', [
     group: 'content',
     options: { source: 'name.en', maxLength: 96 },
   }),
+  defineField({ name: 'longDescription', title: 'التفاصيل الكاملة', type: 'localizedText', group: 'content' }),
 ])
 
 export const sector = defineIconCard('sector', 'قطاع')
@@ -126,6 +127,19 @@ export const product = defineType({
       validation: requiredTranslation,
     }),
     defineField({ name: 'image', title: 'الصورة', type: 'localizedImage', group: 'content' }),
+    defineField({ name: 'longDescription', title: 'التفاصيل الكاملة', type: 'localizedText', group: 'content' }),
+    defineField({ name: 'origin', title: 'بلد المنشأ', type: 'localizedString', group: 'content' }),
+    defineField({ name: 'packaging', title: 'التعبئة والأحجام', type: 'localizedString', group: 'content' }),
+    defineField({ name: 'storage', title: 'تعليمات التخزين', type: 'localizedText', group: 'content' }),
+    defineField({ name: 'usage', title: 'الاستخدامات', type: 'localizedText', group: 'content' }),
+    defineField({
+      name: 'targetPhrases',
+      title: 'عبارات البحث المستهدفة',
+      description: 'عبارات تساعد المحرر على تضمين نية البحث في وصف المنتج ومقالاته. لا تكتب قائمة كلمات مكررة داخل الصفحة.',
+      type: 'array',
+      of: [defineArrayMember({ type: 'localizedString' })],
+      group: 'content',
+    }),
     defineField({
       name: 'category',
       title: 'التصنيف',

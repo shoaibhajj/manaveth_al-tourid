@@ -70,6 +70,18 @@ export const siteSettings = defineType({
   preview: { prepare: () => ({ title: 'إعدادات الموقع والهوية' }) },
 })
 
+export const visitorCounter = defineType({
+  name: 'visitorCounter',
+  title: 'عداد الزيارات',
+  type: 'document',
+  fields: [
+    defineField({ name: 'totalVisits', title: 'العدد الفعلي للزيارات', type: 'number', readOnly: true, initialValue: 0 }),
+    defineField({ name: 'displayOffset', title: 'رقم إضافي للعرض', description: 'يزاد على العدد الفعلي الظاهر للزوار.', type: 'number', initialValue: 0, validation: (rule) => rule.min(0) }),
+    defineField({ name: 'enabled', title: 'إظهار العداد في الموقع', type: 'boolean', initialValue: true }),
+  ],
+  preview: { prepare: () => ({ title: 'عداد الزيارات' }) },
+})
+
 export const contactSettings = defineType({
   name: 'contactSettings',
   title: 'واتساب ورسائل التواصل',

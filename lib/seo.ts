@@ -5,6 +5,7 @@ import { localePath, locales, type Locale } from './i18n'
 import type { SiteContent } from './content/model'
 import { getLocale } from './locale-server'
 import { getContent } from './sanity/get-content'
+import { imageUrl } from './sanity/image'
 import { getSiteUrl, isIndexableEnvironment } from './site-url'
 
 export type SeoPage = 'home' | 'products' | 'branches'
@@ -88,6 +89,83 @@ export function productsGraph(content: SiteContent, locale: Locale, base: string
         brand: { '@type': 'Brand', name: content.site.brand.name[locale] },
       }),
     )
+}
+
+/** Single product detail schema */
+export function productDetailGraph(product: Record<string, any>, locale: Locale, base: string, siteName = 'منافذ التوريد') {
+  const name = product.name?.[locale] || product.name?.ar || product.name?.en || ''
+  const description = product.longDescription?.[locale] || product.description?.[locale] || ''
+  const path = `/products/${product.slug}`
+  const image = imageUrl(product.image, 1200)
+  const price = product.showPrice !== false && typeof product.price?.amount === 'number' ? product.price.amount : undefined
+
+  return [
+    compact({
+      '@type': 'Product',
+      name,
+      description,
+      image: image ? absolute(image, base) : undefined,
+      url: `${base}${localePath(path, locale)}`,
+      brand: { '@type': 'Brand', name: siteName },
+      offers: price
+        ? {
+            '@type': 'Offer',
+            price,
+            priceCurrency: 'SAR',
+            availability: 'https://schema.org/InStock',
+          }
+        : undefined,
+    }),
+  ]
+}
+
+/** Single article detail schema */
+export function articleDetailGraph(article: Record<string, any>, locale: Locale, base: string, siteName = 'منافذ التوريد') {
+  const headline = article.title?.[locale] || article.title?.ar || article.title?.en || ''
+  const description = article.excerpt?.[locale] || article.excerpt?.ar || article.excerpt?.en || ''
+  const path = `/blog/${article.slug}`
+  const image = imageUrl(article.coverImage, 1200)
+
+  return [
+    compact({
+      '@type': 'Article',
+      headline,
+      description,
+      image: image ? absolute(image, base) : undefined,
+      datePublished: article.publishedAt,
+      dateModified: article._updatedAt || article.publishedAt,
+      url: `${base}${localePath(path, locale)}`,
+      publisher: {
+        '@type': 'Organization',
+        name: siteName,
+        url: base,
+      },
+      author: article.author ? { '@type': 'Person', name: article.author } : undefined,
+    }),
+  ]
+}
+
+/** Single service detail schema */
+export function serviceDetailGraph(service: Record<string, any>, locale: Locale, base: string, siteName = 'منافذ التوريد') {
+  const name = service.name?.[locale] || service.name?.ar || service.name?.en || ''
+  const description = service.longDescription?.[locale] || service.description?.[locale] || ''
+  const path = `/services/${service.slug}`
+  const image = imageUrl(service.image, 1200)
+
+  return [
+    compact({
+      '@type': 'Service',
+      name,
+      description,
+      image: image ? absolute(image, base) : undefined,
+      url: `${base}${localePath(path, locale)}`,
+      provider: {
+        '@type': 'Organization',
+        name: siteName,
+        url: base,
+      },
+    }),
+  ]
 }
 
 export const allLocales = locales

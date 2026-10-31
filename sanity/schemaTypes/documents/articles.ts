@@ -18,7 +18,14 @@ export const article = defineType({
     defineField({ name: 'coverImage', title: 'الصورة الرئيسية', type: 'localizedImage', group: 'content' }),
     defineField({
       name: 'body',
-      title: 'المحتوى',
+      title: 'المحتوى بالعربية',
+      type: 'array',
+      group: 'content',
+      of: [defineArrayMember({ type: 'block' })],
+    }),
+    defineField({
+      name: 'bodyEn',
+      title: 'المحتوى بالإنجليزية',
       type: 'array',
       group: 'content',
       of: [defineArrayMember({ type: 'block' })],

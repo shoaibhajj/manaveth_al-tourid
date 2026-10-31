@@ -10,6 +10,13 @@ export type Product = {
   id: string
   name: Localized
   description: Localized
+  slug?: string
+  longDescription?: Localized
+  origin?: Localized
+  packaging?: Localized
+  storage?: Localized
+  usage?: Localized
+  targetPhrases?: Localized[]
   image: string
   alt: Localized
   /** Single price. Omit it, together with `tiers`, to show "price on request". */

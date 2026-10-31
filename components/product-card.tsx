@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
 import { whatsappUrl } from '@/lib/content/contact'
 import type { Product } from '@/lib/content/products'
@@ -74,6 +75,11 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         <div className="mt-auto flex flex-col gap-4">
           <PriceBlock product={product} />
+          {product.slug ? (
+            <Link href={localize(`/products/${product.slug}`)} className="text-center text-sm font-bold text-gold underline-offset-4 hover:underline">
+              {t({ ar: 'تفاصيل المنتج', en: 'Product details' })}
+            </Link>
+          ) : null}
           <ActionLink
             href={orderUrl}
             external

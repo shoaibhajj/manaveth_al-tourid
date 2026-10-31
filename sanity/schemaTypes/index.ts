@@ -9,6 +9,7 @@ import {
   seoHome,
   seoProducts,
   siteSettings,
+  visitorCounter,
 } from './documents/singletons'
 import { localizedImage, localizedString, localizedText } from './objects/localized'
 import {
@@ -30,6 +31,7 @@ export const singletonTypes = [
   'siteSettings',
   'homePage',
   'contactSettings',
+  'visitorCounter',
   'seoHome',
   'seoProducts',
   'seoBranches',
@@ -40,6 +42,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   siteSettings,
   homePage,
   contactSettings,
+  visitorCounter,
   seoHome,
   seoProducts,
   seoBranches,

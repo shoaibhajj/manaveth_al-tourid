@@ -131,7 +131,7 @@ function toCard(doc: Doc, index: number, fallbacks: Card[], defaults: { href: st
     text: localized(doc.description, { ar: '', en: '' }),
     image: imageUrl(doc.image) ?? fallback?.image ?? staticContent.site.brand.heroImage,
     alt: altOf(doc.image, title),
-    href: defaults.href,
+    href: filled(doc.slug?.current) ? `/services/${clean(doc.slug.current)}` : defaults.href,
     ctaLabel: defaults.ctaLabel,
     order: doc.order ?? index,
   }
@@ -183,8 +183,15 @@ function toProduct(doc: Doc, index: number, featuredIds: Set<string>): Product {
   const price = showPrice && !tiers && typeof amount === 'number' ? { amount, unit: singleUnit } : undefined
   return {
     id: doc._id,
+    slug: filled(doc.slug?.current) ? clean(doc.slug.current) : undefined,
     name,
     description: localized(doc.description, { ar: '', en: '' }),
+    longDescription: optionalLocalized(doc.longDescription),
+    origin: optionalLocalized(doc.origin),
+    packaging: optionalLocalized(doc.packaging),
+    storage: optionalLocalized(doc.storage),
+    usage: optionalLocalized(doc.usage),
+    targetPhrases: list(doc.targetPhrases).map((phrase) => localized(phrase, { ar: '', en: '' })),
     image: imageUrl(doc.image, 900) ?? staticContent.site.brand.heroImage,
     alt: altOf(doc.image, name),
     price,

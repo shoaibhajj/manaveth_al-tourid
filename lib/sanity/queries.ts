@@ -23,5 +23,11 @@ export const siteContentQuery = defineQuery(`{
     ...,
     "videoFileUrl": videoFile.asset->url,
     "categoryId": category._ref
+  },
+  "articles": *[_type == "article" && visible != false && defined(slug.current)] | order(publishedAt desc){
+    ...,
+    "slug": slug.current,
+    "coverImage": coverImage{..., "assetUrl": ar.asset->url},
+    "seo": seo{...}
   }
 }`)

@@ -20,7 +20,7 @@ export function SiteFooter() {
   const phoneHref = contact.phone ? telUrl(contact.phone) : undefined
 
   return (
-    <footer className="border-t border-gold/20 bg-forest-deep text-cream/70">
+    <footer id="site-footer" className="border-t border-gold/20 bg-forest-deep text-cream/70">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-2 md:px-6 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
         <div>
           <div className="flex items-center gap-3">
@@ -83,7 +83,7 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-gold/15 bg-forest-deep/90 py-6 text-sm backdrop-blur-sm">
+      <div id="site-footer-bottom" className="border-t border-gold/15 bg-forest-deep/90 py-6 text-sm backdrop-blur-sm">
         <div className="relative mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
           <p className="text-xs font-normal tracking-wide text-cream/60">
             © {new Date().getFullYear()} {t(site.footer.rights)}

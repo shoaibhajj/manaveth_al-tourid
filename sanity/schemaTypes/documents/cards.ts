@@ -49,6 +49,8 @@ export const service = defineIconCard('service', 'خدمة', [
     options: { source: 'name.en', maxLength: 96 },
   }),
   defineField({ name: 'longDescription', title: 'التفاصيل الكاملة', type: 'localizedText', group: 'content' }),
+  defineField({ name: 'seo', title: 'بيانات محركات البحث', type: 'seo', group: 'content' }),
+  defineField({ name: 'targetPhrases', title: 'عبارات البحث المستهدفة', type: 'array', of: [defineArrayMember({ type: 'localizedString' })], group: 'content' }),
 ])
 
 export const sector = defineIconCard('sector', 'قطاع')
@@ -128,6 +130,7 @@ export const product = defineType({
     }),
     defineField({ name: 'image', title: 'الصورة', type: 'localizedImage', group: 'content' }),
     defineField({ name: 'longDescription', title: 'التفاصيل الكاملة', type: 'localizedText', group: 'content' }),
+    defineField({ name: 'seo', title: 'بيانات محركات البحث', type: 'seo', group: 'content' }),
     defineField({ name: 'origin', title: 'بلد المنشأ', type: 'localizedString', group: 'content' }),
     defineField({ name: 'packaging', title: 'التعبئة والأحجام', type: 'localizedString', group: 'content' }),
     defineField({ name: 'storage', title: 'تعليمات التخزين', type: 'localizedText', group: 'content' }),

@@ -33,6 +33,7 @@ export const currency: Localized = { ar: 'ر.س', en: 'SAR' }
 export const products: Product[] = [
   {
     id: 'olive-oil',
+    slug: 'extra-virgin-olive-oil',
     name: { ar: 'زيت زيتون بكر ممتاز', en: 'Extra Virgin Olive Oil' },
     description: {
       ar: 'زيت زيتون معصور على البارد بعبوات 5 لترات، مناسب للمطابخ والمطاعم.',
@@ -52,6 +53,7 @@ export const products: Product[] = [
   },
   {
     id: 'basmati-rice',
+    slug: 'basmati-rice',
     name: { ar: 'أرز بسمتي فاخر', en: 'Premium Basmati Rice' },
     description: {
       ar: 'حبوب طويلة ناصعة البياض بأكياس 20 كجم، تعطي نتائج ثابتة في الطهي.',
@@ -65,6 +67,7 @@ export const products: Product[] = [
   },
   {
     id: 'fresh-produce',
+    slug: 'fresh-produce',
     name: { ar: 'خضار وفواكه طازجة', en: 'Fresh Fruit & Vegetables' },
     description: {
       ar: 'تشكيلة موسمية مختارة بعناية وتصل مبردة إلى وجهتك بجداول توريد منتظمة.',
@@ -77,6 +80,7 @@ export const products: Product[] = [
   },
   {
     id: 'natural-juice',
+    slug: 'natural-juice',
     name: { ar: 'عصائر طبيعية', en: 'Natural Juices' },
     description: {
       ar: 'عصائر مغلفة بعبوات متنوعة، مناسبة للفنادق والمقاهي ومحلات التجزئة.',
@@ -95,6 +99,7 @@ export const products: Product[] = [
   },
   {
     id: 'canned-goods',
+    slug: 'canned-goods',
     name: { ar: 'معلبات الطماطم والبقوليات', en: 'Canned Tomatoes & Legumes' },
     description: {
       ar: 'معجون طماطم وحمص ومعلبات أساسية بعبوات تجارية تناسب الاستخدام اليومي.',
@@ -107,6 +112,7 @@ export const products: Product[] = [
   },
   {
     id: 'premium-dates',
+    slug: 'premium-dates',
     name: { ar: 'تمور فاخرة', en: 'Premium Dates' },
     description: {
       ar: 'تمور مجدول طرية بعلب خشبية وكراتين، للضيافة والهدايا والبيع بالجملة.',

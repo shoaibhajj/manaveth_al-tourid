@@ -183,7 +183,13 @@ function toProduct(doc: Doc, index: number, featuredIds: Set<string>): Product {
   const price = showPrice && !tiers && typeof amount === 'number' ? { amount, unit: singleUnit } : undefined
   return {
     id: doc._id,
-    slug: filled(doc.slug?.current) ? clean(doc.slug.current) : undefined,
+    slug: filled(doc.slug)
+      ? clean(doc.slug)
+      : filled(doc.slug?.current)
+        ? clean(doc.slug.current)
+        : filled(doc._id)
+          ? clean(doc._id)
+          : undefined,
     name,
     description: localized(doc.description, { ar: '', en: '' }),
     longDescription: optionalLocalized(doc.longDescription),

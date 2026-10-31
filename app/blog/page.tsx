@@ -38,7 +38,14 @@ export default async function BlogPage() {
               <li key={article._id} className="overflow-hidden rounded-2xl border border-border bg-card">
                 <Link href={localePath(`/blog/${article.slug}`, locale)} className="block h-full">
                   {image ? <Image src={image} alt={title ?? ''} width={900} height={520} className="aspect-[16/9] w-full object-cover" /> : null}
-                  <div className="p-5"><h2 className="text-xl font-bold">{title}</h2>{excerpt ? <p className="mt-3 leading-7 text-muted-foreground">{excerpt}</p> : null}</div>
+                  <div className="flex flex-col p-5">
+                    <h2 className="text-xl font-bold text-forest">{title}</h2>
+                    {excerpt ? <p className="mt-3 leading-7 text-muted-foreground">{excerpt}</p> : null}
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-gold transition-transform group-hover:translate-x-1">
+                      {locale === 'ar' ? 'قراءة المقال' : 'Read article'}
+                      <span aria-hidden="true">{locale === 'ar' ? '←' : '→'}</span>
+                    </span>
+                  </div>
                 </Link>
               </li>
             )

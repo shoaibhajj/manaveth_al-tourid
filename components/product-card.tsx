@@ -50,45 +50,80 @@ function PriceBlock({ product }: { product: Product }) {
 }
 
 export function ProductCard({ product }: { product: Product }) {
-  const { t } = useLocale()
+  const { t, localize, locale } = useLocale()
   const { site, contact } = useContent()
   const orderUrl = whatsappUrl(
     contact.whatsapp.orders.number,
     t(contact.productOrderMessage).replace('{product}', t(product.name)),
   )
 
+  const productSlug = product.slug || product.id
+  const detailHref = productSlug ? localize(`/products/${productSlug}`) : null
+
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-500 hover:border-gold hover:shadow-xl hover:shadow-gold/10">
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <Image
-          src={product.image}
-          alt={t(product.alt)}
-          fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-      </div>
+      {detailHref ? (
+        <Link href={detailHref} className="relative aspect-[4/3] overflow-hidden" aria-label={t(product.name)}>
+          <Image
+            src={product.image}
+            alt={t(product.alt)}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </Link>
+      ) : (
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={product.image}
+            alt={t(product.alt)}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      )}
+
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div>
-          <h3 className="text-lg font-bold text-forest">{t(product.name)}</h3>
+          <h3 className="text-lg font-bold text-forest transition-colors group-hover:text-gold">
+            {detailHref ? (
+              <Link href={detailHref} className="hover:text-gold transition-colors">
+                {t(product.name)}
+              </Link>
+            ) : (
+              t(product.name)
+            )}
+          </h3>
           <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{t(product.description)}</p>
         </div>
-        <div className="mt-auto flex flex-col gap-4">
+
+        <div className="mt-auto flex flex-col gap-3">
           <PriceBlock product={product} />
-          {product.slug ? (
-            <Link href={localize(`/products/${product.slug}`)} className="text-center text-sm font-bold text-gold underline-offset-4 hover:underline">
-              {t({ ar: 'تفاصيل المنتج', en: 'Product details' })}
-            </Link>
-          ) : null}
-          <ActionLink
-            href={orderUrl}
-            external
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-forest px-5 py-3 font-bold text-cream transition-colors"
-            activeClassName="hover:bg-forest-deep hover:text-gold"
-          >
-            <MessageCircle className="size-5" aria-hidden="true" />
-            {t(site.ui.orderViaWhatsapp)}
-          </ActionLink>
+
+          <div className="flex flex-col gap-2 pt-1">
+            {detailHref ? (
+              <Link
+                href={detailHref}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gold/40 bg-gold/10 px-4 py-2.5 text-sm font-bold text-forest transition-all duration-300 hover:border-gold hover:bg-gold hover:text-forest-deep shadow-sm"
+              >
+                <span>{t({ ar: 'تفاصيل المنتج', en: 'Product details' })}</span>
+                <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">
+                  {locale === 'ar' ? '←' : '→'}
+                </span>
+              </Link>
+            ) : null}
+
+            <ActionLink
+              href={orderUrl}
+              external
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-forest px-5 py-2.5 text-sm font-bold text-cream transition-colors"
+              activeClassName="hover:bg-forest-deep hover:text-gold"
+            >
+              <MessageCircle className="size-4" aria-hidden="true" />
+              {t(site.ui.orderViaWhatsapp)}
+            </ActionLink>
+          </div>
         </div>
       </div>
     </article>

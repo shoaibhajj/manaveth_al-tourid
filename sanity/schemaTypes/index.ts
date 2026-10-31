@@ -4,11 +4,13 @@ import { place, product, productCategory, sector, service, stat } from './docume
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
   contactSettings,
+  visitorCounter,
   homePage,
   seoBranches,
   seoHome,
   seoProducts,
   siteSettings,
+  visitorCounter,
 } from './documents/singletons'
 import { localizedImage, localizedString, localizedText } from './objects/localized'
 import {
@@ -30,6 +32,7 @@ export const singletonTypes = [
   'siteSettings',
   'homePage',
   'contactSettings',
+  'visitorCounter',
   'seoHome',
   'seoProducts',
   'seoBranches',

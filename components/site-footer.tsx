@@ -30,7 +30,7 @@ export function SiteFooter() {
               <span className="block text-xs tracking-wider">{t(site.brand.subtitle)}</span>
             </span>
           </div>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/60">{t(site.about.text)}</p>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/60">{t(site.footer.description)}</p>
         </div>
 
         <div>

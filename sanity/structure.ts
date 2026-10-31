@@ -35,6 +35,7 @@ export const structure: StructureResolver = (S) =>
             .items([
               singleton(S, 'siteSettings', 'إعدادات الموقع والهوية'),
               singleton(S, 'contactSettings', 'واتساب ورسائل التواصل'),
+              singleton(S, 'visitorCounter', 'عداد الزيارات'),
             ]),
         ),
       singleton(S, 'homePage', 'الصفحة الرئيسية'),
@@ -42,6 +43,7 @@ export const structure: StructureResolver = (S) =>
       orderedList(S, 'service', 'الخدمات', 'service'),
       orderedList(S, 'sector', 'القطاعات', 'sector'),
       orderedList(S, 'stat', 'الإحصائيات', 'stat'),
+      orderedList(S, 'article', 'المقالات', 'article'),
       S.listItem()
         .id('products-group')
         .title('المنتجات')

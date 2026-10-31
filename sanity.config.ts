@@ -1,6 +1,8 @@
 import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
+import { presentationTool } from 'sanity/presentation'
+import { mainDocuments } from './sanity/presentation/resolve'
 import { sanityEnv } from './sanity/env'
 import { arabicBundles, arabicLocale } from './sanity/i18n/arabic'
 import { schemaTypes, singletonTypes } from './sanity/schemaTypes'
@@ -32,5 +34,16 @@ export default defineConfig({
     newDocumentOptions: (options, { creationContext }) =>
       creationContext.type === 'global' ? options.filter((option) => !isSingleton(option.templateId)) : options,
   },
-  plugins: [structureTool({ structure }), visionTool({ defaultApiVersion: sanityEnv.apiVersion })],
+  plugins: [
+    structureTool({ structure }),
+    presentationTool({
+      title: 'معاينة الموقع',
+      previewUrl: {
+        initial: process.env.SITE_URL || 'https://www.mnaveth-altourid.com',
+        previewMode: { enable: '/api/draft-mode/enable' },
+      },
+      resolve: { mainDocuments },
+    }),
+    visionTool({ defaultApiVersion: sanityEnv.apiVersion }),
+  ],
 })

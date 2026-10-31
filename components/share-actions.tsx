@@ -36,7 +36,7 @@ export function ShareActions({ url, title, locale }: { url: string; title: strin
       <a className="rounded-full border border-border px-3 py-1.5 hover:border-gold" href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" rel="noopener noreferrer">X</a>
       <a className="rounded-full border border-border px-3 py-1.5 hover:border-gold" href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`} target="_blank" rel="noopener noreferrer">WhatsApp</a>
       <button type="button" onClick={copyLink} className="rounded-full border border-border px-3 py-1.5 hover:border-gold">{copyLabel}</button>
-      {'share' in navigator ? <button type="button" onClick={nativeShare} className="rounded-full border border-border px-3 py-1.5 hover:border-gold">{locale === 'ar' ? 'مشاركة من الجهاز' : 'More options'}</button> : null}
+      {typeof navigator !== 'undefined' && typeof navigator.share === 'function' ? <button type="button" onClick={nativeShare} className="rounded-full border border-border px-3 py-1.5 hover:border-gold">{locale === 'ar' ? 'مشاركة من الجهاز' : 'More options'}</button> : null}
     </div>
   )
 }

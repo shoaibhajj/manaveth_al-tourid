@@ -7,7 +7,14 @@ const singleton = (S: StructureBuilder, typeName: string, title: string) =>
     .child(S.document().schemaType(typeName).documentId(typeName).title(title))
 
 /** `id` stays English and stable so Studio URLs do not change when a title is reworded. */
-const orderedList = (S: StructureBuilder, typeName: string, title: string, id: string, filter?: string) =>
+const orderedList = (
+  S: StructureBuilder,
+  typeName: string,
+  title: string,
+  id: string,
+  filter?: string,
+  defaultOrder: { field: string; direction: 'asc' | 'desc' }[] = [{ field: 'order', direction: 'asc' }],
+) =>
   S.listItem()
     .id(id)
     .title(title)
@@ -18,7 +25,7 @@ const orderedList = (S: StructureBuilder, typeName: string, title: string, id: s
         .schemaType(typeName)
         .filter(filter ?? '_type == $type')
         .params(filter ? {} : { type: typeName })
-        .defaultOrdering([{ field: 'order', direction: 'asc' }]),
+        .defaultOrdering(defaultOrder),
     )
 
 export const structure: StructureResolver = (S) =>
@@ -43,7 +50,7 @@ export const structure: StructureResolver = (S) =>
       orderedList(S, 'service', 'الخدمات', 'service'),
       orderedList(S, 'sector', 'القطاعات', 'sector'),
       orderedList(S, 'stat', 'الإحصائيات', 'stat'),
-      orderedList(S, 'article', 'المقالات', 'article'),
+      orderedList(S, 'article', 'المقالات', 'article', undefined, [{ field: 'publishedAt', direction: 'desc' }]),
       S.listItem()
         .id('products-group')
         .title('المنتجات')

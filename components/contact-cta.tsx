@@ -5,11 +5,12 @@ import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import { getMapLinkUrl } from '@/lib/content/branches'
 import { telUrl, whatsappUrl } from '@/lib/content/contact'
 import { ActionLink } from './action-link'
+import { SocialLinks } from './social-links'
 import { useContent, useLocale } from './locale-provider'
 import { Reveal } from './reveal'
 
 export function ContactCta() {
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
   const { site, contact, branches } = useContent()
   const primaryBranch = branches[0]
   const quote = contact.whatsapp.quote
@@ -71,42 +72,52 @@ export function ContactCta() {
         </Reveal>
 
         <Reveal delay={0.15}>
-          <ul className="space-y-3 rounded-2xl border border-gold/30 bg-forest-deep/70 p-6 backdrop-blur-md">
-            {infoRows.map(({ icon: Icon, label, value, href, ltr }) => {
-              const content = (
-                <>
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-gold/15 text-gold">
-                    <Icon className="size-5" aria-hidden="true" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-xs text-cream/60">{t(label)}</span>
-                    <span
-                      className={`block break-words font-bold ${href ? 'text-cream' : 'text-cream/60'}`}
-                      dir={ltr ? 'ltr' : undefined}
-                    >
-                      {value}
+          <div className="space-y-4 rounded-2xl border border-gold/30 bg-forest-deep/70 p-6 backdrop-blur-md">
+            <ul className="space-y-3">
+              {infoRows.map(({ icon: Icon, label, value, href, ltr }) => {
+                const content = (
+                  <>
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-gold/15 text-gold">
+                      <Icon className="size-5" aria-hidden="true" />
                     </span>
-                  </span>
-                </>
-              )
-              const rowClass = 'flex items-center gap-4 rounded-xl p-3 transition-colors'
-              return (
-                <li key={label.en}>
-                  {href ? (
-                    <a
-                      href={href}
-                      className={`${rowClass} hover:bg-white/5`}
-                      {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    >
-                      {content}
-                    </a>
-                  ) : (
-                    <div className={rowClass}>{content}</div>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
+                    <span className="min-w-0">
+                      <span className="block text-xs text-cream/60">{t(label)}</span>
+                      <span
+                        className={`block break-words font-bold ${href ? 'text-cream' : 'text-cream/60'}`}
+                        dir={ltr ? 'ltr' : undefined}
+                      >
+                        {value}
+                      </span>
+                    </span>
+                  </>
+                )
+                const rowClass = 'flex items-center gap-4 rounded-xl p-3 transition-colors'
+                return (
+                  <li key={label.en}>
+                    {href ? (
+                      <a
+                        href={href}
+                        className={`${rowClass} hover:bg-white/5`}
+                        {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      >
+                        {content}
+                      </a>
+                    ) : (
+                      <div className={rowClass}>{content}</div>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+            {contact.social && contact.social.length > 0 && (
+              <div className="border-t border-gold/20 pt-4">
+                <span className="mb-3 block text-xs font-semibold text-cream/70">
+                  {t({ ar: 'تابعنا على منصات التواصل', en: 'Follow us on social media' })}
+                </span>
+                <SocialLinks items={contact.social} locale={locale} />
+              </div>
+            )}
+          </div>
         </Reveal>
       </div>
     </section>

@@ -6,7 +6,7 @@ export type NavItem = { id: string; href: string; label: Localized }
 export const site = {
   brand: {
     name: { ar: 'منافذ التوريد', en: 'Mnaveeh ALTourid' } satisfies Localized,
-    subtitle: { ar: 'Mnaveeh ALTourid · since 2001', en: 'Food supply · since 2001' } satisfies Localized,
+    subtitle: { ar: 'Mnaveeh ALTourid · since 2004', en: 'Food supply · since 2004' } satisfies Localized,
     homeLabel: { ar: 'منافذ التوريد - الرئيسية', en: 'Mnaveeh ALTourid - Home' } satisfies Localized,
     // Replace these files with the approved logo and company photos; no code changes are needed.
     logo: '/images/logo.png',
@@ -16,8 +16,8 @@ export const site = {
   },
   metadata: {
     title: {
-      ar: 'منافذ التوريد | شريكك الموثوق في توريد المواد الغذائية منذ 2001',
-      en: 'Mnaveeh ALTourid | Your trusted partner in food supply since 2001',
+      ar: 'منافذ التوريد | شريكك الموثوق في توريد المواد الغذائية منذ 2004',
+      en: 'Mnaveeh ALTourid | Your trusted partner in food supply since 2004',
     } satisfies Localized,
     description: {
       ar: 'منافذ التوريد شركة رائدة في استيراد وتوريد وتوزيع المواد الغذائية، من المصدر إلى وجهتك بجودة عالمية وسلاسل إمداد متكاملة للمطاعم والفنادق والقطاعات المختلفة.',
@@ -65,7 +65,7 @@ export const site = {
     whatsappWidget: { ar: 'تواصل عبر واتساب', en: 'Chat on WhatsApp' },
   },
   hero: {
-    badge: { ar: 'خبرة موثوقة منذ عام 2001', en: 'Trusted experience since 2001' },
+    badge: { ar: 'خبرة موثوقة منذ عام 2004', en: 'Trusted experience since 2004' },
     titleLines: [
       { ar: 'شريكك الموثوق في', en: 'Your trusted partner in' },
       { ar: 'توريد المواد الغذائية', en: 'food supply' },
@@ -101,11 +101,11 @@ export const site = {
       en: 'A team member checking inventory in the company warehouse',
     },
     badgeLabel: { ar: 'خبرة منذ', en: 'Experience since' },
-    badgeValue: '2001',
+    badgeValue: '2004',
     pillars: [
       {
         icon: 'globe',
-        title: { ar: 'خبرة منذ 2001', en: 'Experience since 2001' },
+        title: { ar: 'خبرة منذ 2004', en: 'Experience since 2004' },
         text: { ar: 'أكثر من عقدين من النجاح', en: 'More than two decades of success' },
       },
       {

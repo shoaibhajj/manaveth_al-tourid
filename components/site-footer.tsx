@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { telUrl } from '@/lib/content/contact'
 import { useContent, useLocale } from './locale-provider'
+import { SocialLinks } from './social-links'
 import { VisitorCounter } from './visitor-counter'
 
 const quickLinkIds = ['about', 'services', 'products', 'gallery', 'sectors', 'branches', 'blog']
@@ -31,6 +32,11 @@ export function SiteFooter() {
             </span>
           </div>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/60">{t(site.footer.description)}</p>
+          {contact.social && contact.social.length > 0 && (
+            <div className="mt-5">
+              <SocialLinks items={contact.social} locale={locale} />
+            </div>
+          )}
         </div>
 
         <div>

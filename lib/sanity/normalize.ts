@@ -369,6 +369,8 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
         text: aboutParagraphs[0],
         paragraphs: aboutParagraphs,
         imageAlt: altOf(about.image, base.site.about.imageAlt),
+        badgeValue: filled(about.badgeValue) ? clean(about.badgeValue) : (base.site.about.badgeValue ?? '2004'),
+        badgeLabel: localized(about.badgeLabel, base.site.about.badgeLabel),
         pillars: pillars.length ? pillars : base.site.about.pillars,
       },
       servicesSection: sectionText(home.services, base.site.servicesSection),

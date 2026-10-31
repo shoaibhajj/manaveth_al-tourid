@@ -107,6 +107,19 @@ export const heroSection = defineType({
 
 export const aboutSection = defineSection('aboutSection', 'من نحن', [
   defineField({
+    name: 'badgeValue',
+    title: 'سنة التأسيس / الرقم البارز على الصورة',
+    description: 'يظهر في الشارة العائمة على صورة قسم من نحن (مثل: 2004).',
+    type: 'string',
+    initialValue: '2004',
+  }),
+  defineField({
+    name: 'badgeLabel',
+    title: 'نص الشارة على الصورة',
+    description: 'مثل «خبرة منذ».',
+    type: 'localizedString',
+  }),
+  defineField({
     name: 'paragraphs',
     title: 'الفقرات',
     type: 'array',

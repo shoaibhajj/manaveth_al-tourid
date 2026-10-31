@@ -21,10 +21,6 @@ async function getSettings(client: ReturnType<typeof createClient>) {
   )
 }
 
-function response(count: number, enabled: boolean, headers?: HeadersInit) {
-  return NextResponse.json({ count, enabled }, { headers, headers: headers as never })
-}
-
 export async function POST(request: Request) {
   if (!isSanityConfigured) return NextResponse.json({ count: 0, enabled: false }, { status: 503 })
   const origin = request.headers.get('origin')

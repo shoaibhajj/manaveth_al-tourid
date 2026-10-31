@@ -11,6 +11,11 @@ import { structure } from './sanity/structure'
 const isSingleton = (type: string | undefined) => singletonTypes.some((name) => name === type)
 const blockedSingletonActions = ['unpublish', 'delete', 'duplicate']
 
+const siteOrigin =
+  typeof window !== 'undefined' && window.location.origin
+    ? window.location.origin
+    : process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mnaveth-altourid.com'
+
 // The Studio is only mounted when the project is configured (see app/studio),
 // so empty fallbacks here never reach a real Sanity request.
 export default defineConfig({
@@ -39,7 +44,7 @@ export default defineConfig({
     presentationTool({
       title: 'معاينة الموقع',
       previewUrl: {
-        initial: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mnaveth-altourid.com',
+        initial: siteOrigin,
         previewMode: { enable: '/api/draft-mode/enable' },
       },
       resolve: { mainDocuments },

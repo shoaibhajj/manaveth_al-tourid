@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
+import { orderField } from '../../lib/fields'
 import { requiredTranslation } from '../../lib/localization'
 import { seoFields } from '../objects/shared'
 
@@ -32,11 +33,16 @@ export const article = defineType({
     }),
     defineField({ name: 'author', title: 'الكاتب', type: 'string', group: 'publishing' }),
     defineField({ name: 'publishedAt', title: 'تاريخ النشر', type: 'datetime', group: 'publishing' }),
-    defineField({ name: 'order', title: 'الترتيب', type: 'number', group: 'publishing' }),
+    { ...orderField, group: 'publishing' },
     defineField({ name: 'visible', title: 'ظاهر في الموقع', type: 'boolean', initialValue: true, group: 'publishing' }),
     defineField({ name: 'seo', title: 'بيانات SEO مخصصة', type: 'seo', group: 'seo' }),
   ],
-  orderings: [{ title: 'الأحدث أولًا', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] }],
+  orderings: [
+    { title: 'الأحدث أولًا', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] },
+    { title: 'الأقدم أولًا', name: 'publishedAtAsc', by: [{ field: 'publishedAt', direction: 'asc' }] },
+    { title: 'ترتيب الظهور (من الأول)', name: 'displayOrderAsc', by: [{ field: 'order', direction: 'asc' }] },
+    { title: 'ترتيب الظهور (من الأخير)', name: 'displayOrderDesc', by: [{ field: 'order', direction: 'desc' }] },
+  ],
   preview: {
     select: { title: 'title.ar', fallbackTitle: 'title.en', media: 'coverImage.ar', publishedAt: 'publishedAt', visible: 'visible' },
     prepare: ({ title, fallbackTitle, media, publishedAt, visible }) => ({

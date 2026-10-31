@@ -15,17 +15,30 @@ function publicClient() {
 }
 
 async function getSettings(client: ReturnType<typeof createClient>) {
-  return client.fetch<{ totalVisits?: number; displayOffset?: number; enabled?: boolean } | null>(
-    '*[_id == $id][0]{totalVisits, displayOffset, enabled}',
-    { id: documentId },
-  )
+  try {
+    return await client.fetch<{ totalVisits?: number; displayOffset?: number; enabled?: boolean } | null>(
+      '*[_id == $id][0]{totalVisits, displayOffset, enabled}',
+      { id: documentId },
+    )
+  } catch {
+    return null
+  }
 }
 
 export async function POST(request: Request) {
   if (!isSanityConfigured) return NextResponse.json({ count: 0, enabled: false }, { status: 503 })
+
   const origin = request.headers.get('origin')
-  if (!origin || new URL(origin).host !== new URL(request.url).host) {
-    return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host')
+  if (origin && host) {
+    try {
+      const originHost = new URL(origin).host
+      if (originHost !== host) {
+        return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+      }
+    } catch {
+      return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+    }
   }
 
   const client = publicClient()
@@ -34,23 +47,32 @@ export async function POST(request: Request) {
   const token = process.env.SANITY_API_WRITE_TOKEN
   let settings = await getSettings(client)
 
+  let visitUpdated = false
   if (!alreadyCounted && token) {
-    const writer = client.withConfig({ token, useCdn: false })
-    await writer.createIfNotExists({
-      _id: documentId,
-      _type: 'visitorCounter',
-      totalVisits: 0,
-      displayOffset: 0,
-      enabled: true,
-    })
-    await writer.patch(documentId).inc({ totalVisits: 1 }).commit()
-    settings = await getSettings(client)
+    try {
+      const writer = client.withConfig({ token, useCdn: false })
+      await writer.createIfNotExists({
+        _id: documentId,
+        _type: 'visitorCounter',
+        totalVisits: 0,
+        displayOffset: 0,
+        enabled: true,
+      })
+      await writer.patch(documentId).inc({ totalVisits: 1 }).commit()
+      settings = await getSettings(client)
+      visitUpdated = true
+    } catch (error) {
+      console.error('Failed to increment visitor counter:', error)
+    }
   }
 
   const count = Math.max(0, Number(settings?.totalVisits ?? 0) + Number(settings?.displayOffset ?? 0))
   const headers = new Headers()
-  if (!alreadyCounted && token) {
-    headers.append('Set-Cookie', `site_visit_counted=1; Path=/; Max-Age=1800; HttpOnly; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`)
+  if (visitUpdated) {
+    headers.append(
+      'Set-Cookie',
+      `site_visit_counted=1; Path=/; Max-Age=1800; HttpOnly; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`,
+    )
   }
   return NextResponse.json({ count, enabled: settings?.enabled !== false }, { headers })
 }

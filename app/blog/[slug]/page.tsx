@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
+import { JsonLd } from '@/components/json-ld'
 import { ShareActions } from '@/components/share-actions'
 import { getLocale } from '@/lib/locale-server'
 import { localePath } from '@/lib/i18n'
 import { getArticleBySlug } from '@/lib/sanity/details'
 import { imageUrl } from '@/lib/sanity/image'
+import { articleDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
@@ -49,7 +51,8 @@ function renderBlock(block: any, index: number) {
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const [{ slug }, locale, base] = await Promise.all([params, getLocale(), getSiteUrl()])
   const article = await getArticleBySlug(slug)
-  if (!article) notFound()
+  if (!article) return notFound()
+
   const title = textFor(article.title, locale)
   const excerpt = textFor(article.excerpt, locale)
   const body = locale === 'en' && article.bodyEn?.length ? article.bodyEn : article.body ?? []
@@ -57,6 +60,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const shareUrl = `${base}${localePath(`/blog/${slug}`, locale)}`
   return (
     <main className="mx-auto max-w-4xl px-6 py-16 lg:px-8">
+      <JsonLd graph={articleDetailGraph(article, locale, base)} />
       <article className="flex flex-col gap-8">
         {image ? <img src={image} alt={title} className="aspect-[16/9] w-full rounded-3xl object-cover" /> : null}
         <header className="flex flex-col gap-4">

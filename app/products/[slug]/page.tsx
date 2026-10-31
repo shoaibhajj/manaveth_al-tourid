@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
+import { JsonLd } from '@/components/json-ld'
 import { ProductDetailActions } from '@/components/product-detail-actions'
 import { ShareActions } from '@/components/share-actions'
 import { getLocale } from '@/lib/locale-server'
 import { localePath } from '@/lib/i18n'
 import { getProductBySlug } from '@/lib/sanity/details'
 import { imageUrl } from '@/lib/sanity/image'
+import { productDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
@@ -34,7 +36,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const [{ slug }, locale, base] = await Promise.all([params, getLocale(), getSiteUrl()])
   const product = await getProductBySlug(slug)
-  if (!product) notFound()
+  if (!product) return notFound()
+
   const title = textFor(product.name, locale)
   const description = textFor(product.description, locale)
   const longDescription = textFor(product.longDescription, locale)
@@ -54,6 +57,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
+      <JsonLd graph={productDetailGraph(product, locale, base)} />
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
         {image ? <img src={image} alt={title} className="aspect-[4/3] w-full rounded-3xl object-cover" /> : null}
         <article className="flex flex-col gap-5">

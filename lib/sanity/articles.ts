@@ -23,7 +23,12 @@ export async function getDetailSlugs(): Promise<{ products: any[]; services: any
   if (!sanityFetch) return { products: [], services: [], articles: [] }
   try {
     const { data } = await sanityFetch({ query: detailSitemapQuery })
-    return (data as { products?: any[]; services?: any[]; articles?: any[] }) ?? { products: [], services: [], articles: [] }
+    const result = data as { products?: any[]; services?: any[]; articles?: any[] } | null
+    return {
+      products: Array.isArray(result?.products) ? result.products : [],
+      services: Array.isArray(result?.services) ? result.services : [],
+      articles: Array.isArray(result?.articles) ? result.articles : [],
+    }
   } catch {
     return { products: [], services: [], articles: [] }
   }

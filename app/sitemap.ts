@@ -14,10 +14,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     })),
   )
+  const products = Array.isArray(details?.products) ? details.products : []
+  const services = Array.isArray(details?.services) ? details.services : []
+  const articles = Array.isArray(details?.articles) ? details.articles : []
+
   const dynamicEntries = [
-    ...details.products.map((item) => ({ path: `/products/${item.slug}`, updatedAt: item.updatedAt })),
-    ...details.services.map((item) => ({ path: `/services/${item.slug}`, updatedAt: item.updatedAt })),
-    ...details.articles.map((item) => ({ path: `/blog/${item.slug}`, updatedAt: item.updatedAt })),
+    ...products.filter((p) => p?.slug).map((item) => ({ path: `/products/${item.slug}`, updatedAt: item.updatedAt })),
+    ...services.filter((s) => s?.slug).map((item) => ({ path: `/services/${item.slug}`, updatedAt: item.updatedAt })),
+    ...articles.filter((a) => a?.slug).map((item) => ({ path: `/blog/${item.slug}`, updatedAt: item.updatedAt })),
   ].flatMap(({ path, updatedAt }) =>
     locales.map((locale) => ({
       url: urlFor(path, locale),

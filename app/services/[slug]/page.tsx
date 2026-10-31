@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
+import { JsonLd } from '@/components/json-ld'
 import { ShareActions } from '@/components/share-actions'
 import { getLocale } from '@/lib/locale-server'
 import { localePath } from '@/lib/i18n'
 import { getServiceBySlug } from '@/lib/sanity/details'
 import { imageUrl } from '@/lib/sanity/image'
+import { serviceDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
@@ -30,7 +32,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const [{ slug }, locale, base] = await Promise.all([params, getLocale(), getSiteUrl()])
   const service = await getServiceBySlug(slug)
-  if (!service) notFound()
+  if (!service) return notFound()
+
   const title = textFor(service.name, locale)
   const description = textFor(service.description, locale)
   const details = textFor(service.longDescription, locale)
@@ -39,6 +42,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   const shareUrl = `${base}${localePath(path, locale)}`
   return (
     <main className="mx-auto max-w-5xl px-6 py-16 lg:px-8">
+      <JsonLd graph={serviceDetailGraph(service, locale, base)} />
       <article className="grid gap-10 md:grid-cols-2 md:items-center">
         {image ? <img src={image} alt={title} className="aspect-[4/3] w-full rounded-3xl object-cover" /> : null}
         <div className="flex flex-col gap-5">

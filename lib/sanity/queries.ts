@@ -33,7 +33,10 @@ export const siteContentQuery = defineQuery(`{
 }`)
 
 export const productBySlugQuery = defineQuery(`*[_type == "product" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "category": category->{name}, "image": image{...}}`)
+export const productBySlugDraftQuery = defineQuery(`*[_type == "product" && slug.current == $slug][0]{..., "slug": slug.current, "category": category->{name}, "image": image{...}}`)
 
 export const serviceBySlugQuery = defineQuery(`*[_type == "service" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "image": image{...}}`)
+export const serviceBySlugDraftQuery = defineQuery(`*[_type == "service" && slug.current == $slug][0]{..., "slug": slug.current, "image": image{...}}`)
 
 export const articleBySlugQuery = defineQuery(`*[_type == "article" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "coverImage": coverImage{...}, "seo": seo{...}}`)
+export const articleBySlugDraftQuery = defineQuery(`*[_type == "article" && slug.current == $slug][0]{..., "slug": slug.current, "coverImage": coverImage{...}, "seo": seo{...}}`)

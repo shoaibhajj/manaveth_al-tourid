@@ -4,7 +4,6 @@ import { place, product, productCategory, sector, service, stat } from './docume
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
   contactSettings,
-  visitorCounter,
   homePage,
   seoBranches,
   seoHome,
@@ -43,6 +42,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   siteSettings,
   homePage,
   contactSettings,
+  visitorCounter,
   seoHome,
   seoProducts,
   seoBranches,

@@ -39,7 +39,7 @@ export default defineConfig({
     presentationTool({
       title: 'معاينة الموقع',
       previewUrl: {
-        initial: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mnaveth-altourid.com',
+        initial: '/',
         previewMode: { enable: '/api/draft-mode/enable' },
       },
       resolve: { mainDocuments },

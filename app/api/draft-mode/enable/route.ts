@@ -2,7 +2,10 @@ import { createClient } from 'next-sanity'
 import { defineEnableDraftMode } from 'next-sanity/draft-mode'
 import { isSanityConfigured, sanityEnv } from '@/sanity/env'
 
-const token = process.env.SANITY_API_READ_TOKEN_2 || process.env.SANITY_API_READ_TOKEN
+const token =
+  process.env.SANITY_API_READ_TOKEN_2 ||
+  process.env.SANITY_API_READ_TOKEN ||
+  process.env.SANITY_API_WRITE_TOKEN
 
 const handler =
   isSanityConfigured && token

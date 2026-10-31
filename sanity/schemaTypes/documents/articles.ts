@@ -32,6 +32,7 @@ export const article = defineType({
     }),
     defineField({ name: 'author', title: 'الكاتب', type: 'string', group: 'publishing' }),
     defineField({ name: 'publishedAt', title: 'تاريخ النشر', type: 'datetime', group: 'publishing' }),
+    defineField({ name: 'order', title: 'الترتيب', type: 'number', group: 'publishing' }),
     defineField({ name: 'visible', title: 'ظاهر في الموقع', type: 'boolean', initialValue: true, group: 'publishing' }),
     defineField({ name: 'seo', title: 'بيانات SEO مخصصة', type: 'seo', group: 'seo' }),
   ],

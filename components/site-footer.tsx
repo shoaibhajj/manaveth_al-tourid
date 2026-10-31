@@ -47,7 +47,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h4 className="font-bold text-cream">{t(site.servicesSection.title)}</h4>
+          <h4 className="font-bold text-cream">{t(site.footer.services)}</h4>
           <ul className="mt-4 space-y-2 text-sm">
             {services.map((service) => (
               <li key={service.id}>
@@ -60,7 +60,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h4 className="font-bold text-cream">{t(site.contactSection.title)}</h4>
+          <h4 className="font-bold text-cream">{t(site.footer.contact)}</h4>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
               {phoneHref ? (

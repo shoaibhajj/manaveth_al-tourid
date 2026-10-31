@@ -1,4 +1,5 @@
 import type { SchemaTypeDefinition } from 'sanity'
+import { article } from './documents/articles'
 import { place, product, productCategory, sector, service, stat } from './documents/cards'
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
@@ -43,6 +44,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   seoProducts,
   seoBranches,
   // Repeatable documents
+  article,
   service,
   sector,
   stat,

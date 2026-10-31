@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { LOCALE_HEADER, publicPaths } from '@/lib/i18n'
+import { LOCALE_HEADER } from '@/lib/i18n'
 
 /**
  * English pages are served from /en and Arabic from the root. The /en prefix is stripped here so both
@@ -11,7 +11,6 @@ export function proxy(request: NextRequest) {
 
   if (pathname === '/en' || pathname.startsWith('/en/')) {
     const stripped = pathname.slice(3) || '/'
-    if (!(publicPaths as readonly string[]).includes(stripped)) return NextResponse.next()
 
     requestHeaders.set(LOCALE_HEADER, 'en')
     const url = request.nextUrl.clone()

@@ -23,5 +23,17 @@ export const siteContentQuery = defineQuery(`{
     ...,
     "videoFileUrl": videoFile.asset->url,
     "categoryId": category._ref
+  },
+  "articles": *[_type == "article" && visible != false && defined(slug.current)] | order(publishedAt desc){
+    ...,
+    "slug": slug.current,
+    "coverImage": coverImage{..., "assetUrl": ar.asset->url},
+    "seo": seo{...}
   }
 }`)
+
+export const productBySlugQuery = defineQuery(`*[_type == "product" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "category": category->{name}, "image": image{...}}`)
+
+export const serviceBySlugQuery = defineQuery(`*[_type == "service" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "image": image{...}}`)
+
+export const articleBySlugQuery = defineQuery(`*[_type == "article" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "coverImage": coverImage{...}, "seo": seo{...}}`)

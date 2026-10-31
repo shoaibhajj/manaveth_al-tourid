@@ -40,7 +40,15 @@ function defineIconCard(name: string, title: string, extraFields: FieldDefinitio
   })
 }
 
-export const service = defineIconCard('service', 'خدمة')
+export const service = defineIconCard('service', 'خدمة', [
+  defineField({
+    name: 'slug',
+    title: 'المعرّف في الرابط',
+    type: 'slug',
+    group: 'content',
+    options: { source: 'name.en', maxLength: 96 },
+  }),
+])
 
 export const sector = defineIconCard('sector', 'قطاع')
 

@@ -4,11 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { telUrl } from '@/lib/content/contact'
 import { useContent, useLocale } from './locale-provider'
+import { VisitorCounter } from './visitor-counter'
 
-const quickLinkIds = ['about', 'services', 'products', 'gallery', 'sectors', 'branches']
+const quickLinkIds = ['about', 'services', 'products', 'gallery', 'sectors', 'branches', 'blog']
 
 export function SiteFooter() {
-  const { t, localize } = useLocale()
+  const { t, localize, locale } = useLocale()
   const { site, contact, services, sections } = useContent()
   const quickLinks =
     site.footerLinks.length > 0
@@ -82,10 +83,11 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-cream/10 py-5 text-sm">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-4 md:flex-row md:justify-between md:px-6">
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-2 px-4 md:min-h-10 md:flex-row md:justify-between md:px-6">
           <p>
             © {new Date().getFullYear()} {t(site.footer.rights)}
           </p>
+          <span className="order-2 md:absolute md:left-1/2 md:order-none md:-translate-x-1/2"><VisitorCounter locale={locale} /></span>
           <a
             href="https://shoaib-haj-portfolio.vercel.app/"
             target="_blank"

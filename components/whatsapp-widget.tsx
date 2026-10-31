@@ -12,7 +12,7 @@ function WidgetButton({ channel, side }: { channel: WhatsappChannel; side: 'left
     <ActionLink
       href={whatsappUrl(channel.number, t(channel.message))}
       external
-      className={`pointer-events-auto fixed bottom-4 ${side} z-40 flex items-center gap-2 rounded-full bg-whatsapp p-3.5 font-bold text-whatsapp-foreground shadow-lg shadow-forest-deep/30 transition-transform sm:px-5 sm:py-3`}
+      className={`pointer-events-auto fixed bottom-24 ${side} z-40 flex items-center gap-2 rounded-full bg-whatsapp p-3.5 font-bold text-whatsapp-foreground shadow-lg shadow-forest-deep/30 transition-transform sm:px-5 sm:py-3`}
       activeClassName="hover:-translate-y-0.5 hover:shadow-xl"
     >
       <MessageCircle className="size-6" aria-hidden="true" />

@@ -16,15 +16,7 @@ type InfoRowProps = {
 }
 
 function InfoRow({ icon: Icon, label, value, href, ltr }: InfoRowProps) {
-  const { t } = useLocale()
-  const { site } = useContent()
-  const text = value ? (
-    <span dir={ltr ? 'ltr' : undefined} className={ltr ? 'inline-block text-start' : undefined}>
-      {value}
-    </span>
-  ) : (
-    <span className="text-muted-foreground/70">{t(site.ui.comingSoon)}</span>
-  )
+  if (!value) return null
 
   return (
     <li className="flex items-start gap-3 text-sm">
@@ -33,12 +25,18 @@ function InfoRow({ icon: Icon, label, value, href, ltr }: InfoRowProps) {
       </span>
       <div className="min-w-0">
         <p className="text-xs text-muted-foreground">{label}</p>
-        {href && value ? (
+        {href ? (
           <a href={href} className="break-words font-medium text-forest transition-colors hover:text-gold">
-            {text}
+            <span dir={ltr ? 'ltr' : undefined} className={ltr ? 'inline-block text-start' : undefined}>
+              {value}
+            </span>
           </a>
         ) : (
-          <p className="break-words font-medium text-forest">{text}</p>
+          <p className="break-words font-medium text-forest">
+            <span dir={ltr ? 'ltr' : undefined} className={ltr ? 'inline-block text-start' : undefined}>
+              {value}
+            </span>
+          </p>
         )}
       </div>
     </li>
@@ -47,7 +45,7 @@ function InfoRow({ icon: Icon, label, value, href, ltr }: InfoRowProps) {
 
 export function BranchCard({ place }: { place: Place }) {
   const { t } = useLocale()
-  const { site, showMaps } = useContent()
+  const { site, contact, showMaps } = useContent()
   const [showLightbox, setShowLightbox] = useState(false)
 
   useEffect(() => {
@@ -67,6 +65,23 @@ export function BranchCard({ place }: { place: Place }) {
       : place.imagePosition === 'bottom'
         ? 'center bottom'
         : 'center top'
+
+  // Complete, robust contact information without any empty placeholders
+  const branchPhone = place.phone || contact.phone || '+966509971699'
+  const branchEmail = place.email || contact.email || 'info@mnafeth.com'
+  
+  // Resolve manager or operations management contact
+  const isPlaceholderManager =
+    !place.manager?.name ||
+    t(place.manager.name) === 'اسم المسؤول' ||
+    t(place.manager.name) === 'Manager name'
+    
+  const managerName = isPlaceholderManager
+    ? (place.kind === 'warehouse' ? t({ ar: 'إدارة العمليات والتوريد المركزية', en: 'Central Operations & Logistics' }) : undefined)
+    : t(place.manager!.name)
+    
+  const managerPhone = place.manager?.phone || (isPlaceholderManager ? branchPhone : undefined)
+  const mapLink = place.mapUrl || getMapLinkUrl(place.mapQuery)
 
   return (
     <>
@@ -117,23 +132,25 @@ export function BranchCard({ place }: { place: Place }) {
             <InfoRow
               icon={Phone}
               label={t(site.contact.phone)}
-              value={place.phone}
-              href={telUrl(place.phone)}
+              value={branchPhone}
+              href={telUrl(branchPhone)}
               ltr
             />
-            {place.email && (
-              <InfoRow icon={Mail} label={t(site.contact.email)} value={place.email} href={`mailto:${place.email}`} ltr />
+            {branchEmail && (
+              <InfoRow icon={Mail} label={t(site.contact.email)} value={branchEmail} href={`mailto:${branchEmail}`} ltr />
             )}
-            {place.manager && (
+            {managerName && (
               <>
-                <InfoRow icon={UserRound} label={t(site.ui.manager)} value={t(place.manager.name)} />
-                <InfoRow
-                  icon={Phone}
-                  label={t(site.ui.managerPhone)}
-                  value={place.manager.phone}
-                  href={telUrl(place.manager.phone)}
-                  ltr
-                />
+                <InfoRow icon={UserRound} label={t(site.ui.manager)} value={managerName} />
+                {managerPhone && (
+                  <InfoRow
+                    icon={Phone}
+                    label={t(site.ui.managerPhone)}
+                    value={managerPhone}
+                    href={telUrl(managerPhone)}
+                    ltr
+                  />
+                )}
               </>
             )}
           </ul>
@@ -151,7 +168,7 @@ export function BranchCard({ place }: { place: Place }) {
               </div>
             )}
             <a
-              href={getMapLinkUrl(place.mapQuery)}
+              href={mapLink}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gold px-4 py-2.5 text-sm font-bold text-forest transition-colors hover:bg-gold"

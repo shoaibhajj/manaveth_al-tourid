@@ -51,6 +51,39 @@ export function organizationGraph(content: SiteContent, locale: Locale, base: st
   const home = `${base}${localePath('/', locale)}`
   const social = content.contact.social.map((item) => item.url).filter(Boolean)
 
+  const branchStores = (content.branches || []).map((branch) =>
+    compact({
+      '@type': 'WholesaleStore',
+      '@id': `${base}/#branch-${branch.id}`,
+      name: `${content.site.brand.name[locale]} - ${branch.name[locale]}`,
+      url: `${base}${localePath('/branches', locale)}`,
+      image: absolute(branch.image, base),
+      telephone: branch.phone || content.contact.phone,
+      email: branch.email || content.contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: branch.address[locale],
+        addressLocality: branch.name.ar.includes('الدوادمي')
+          ? (locale === 'ar' ? 'الدوادمي' : 'Al Dawadmi')
+          : branch.name.ar.includes('جدة')
+            ? (locale === 'ar' ? 'جدة' : 'Jeddah')
+            : (locale === 'ar' ? 'الرياض' : 'Riyadh'),
+        addressCountry: 'SA',
+      },
+      hasMap: branch.mapUrl || undefined,
+      parentOrganization: { '@id': `${base}/#organization` },
+      priceRange: '$',
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+          opens: '08:00',
+          closes: '18:00',
+        },
+      ],
+    }),
+  )
+
   return [
     compact({
       '@type': 'Organization',
@@ -71,6 +104,7 @@ export function organizationGraph(content: SiteContent, locale: Locale, base: st
       inLanguage: locale,
       publisher: { '@id': `${base}/#organization` },
     },
+    ...branchStores,
   ]
 }
 

@@ -23,7 +23,8 @@ function Counter({ to, prefix = '', suffix = '+' }: { to: number; prefix?: strin
     return () => controls.stop()
   }, [inView, to, prefix, suffix])
 
-  return <span ref={ref}>{`${prefix}0${suffix}`}</span>
+  // Render the actual final number initially so Googlebot and SSR index the real values (not 0+)
+  return <span ref={ref}>{`${prefix}${to.toLocaleString('en-US')}${suffix}`}</span>
 }
 
 export function Stats() {

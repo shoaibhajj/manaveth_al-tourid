@@ -1,6 +1,6 @@
 import 'server-only'
 import { draftMode } from 'next/headers'
-import { batch1Articles } from '../content/articles-data'
+import { allArticles } from '../content/articles-data'
 import { sanityFetch } from './live'
 import {
   articleBySlugDraftQuery,
@@ -31,6 +31,6 @@ export const getServiceBySlug = (slug: string) => fetchDetail(serviceBySlugQuery
 export const getArticleBySlug = async (slug: string) => {
   const fromSanity = await fetchDetail(articleBySlugQuery, articleBySlugDraftQuery, slug)
   if (fromSanity) return fromSanity
-  const fallback = batch1Articles.find((a) => a.slug.current === slug)
+  const fallback = allArticles.find((a) => a.slug.current === slug)
   return (fallback as unknown as DetailDocument) ?? null
 }

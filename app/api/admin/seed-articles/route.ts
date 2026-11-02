@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from 'next-sanity'
-import { batch1Articles } from '@/lib/content/articles-data'
+import { allArticles } from '@/lib/content/articles-data'
 import { isSanityConfigured, sanityEnv } from '@/sanity/env'
 
 export const dynamic = 'force-dynamic'
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
   })
 
   const results: any[] = []
-  for (const article of batch1Articles) {
+  for (const article of allArticles) {
     try {
       const doc = await client.createOrReplace(article as any)
       results.push({ id: doc._id, slug: article.slug.current, status: 'synced' })
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     success: true,
-    total: batch1Articles.length,
+    total: allArticles.length,
     results,
   })
 }

@@ -16,7 +16,13 @@ export const article = defineType({
     defineField({ name: 'title', title: 'العنوان', type: 'localizedString', group: 'content', validation: requiredTranslation }),
     defineField({ name: 'slug', title: 'المعرّف في الرابط', type: 'slug', group: 'content', options: { source: 'title.en', maxLength: 96 }, validation: (rule) => rule.required() }),
     defineField({ name: 'excerpt', title: 'المقتطف', type: 'localizedText', group: 'content', validation: requiredTranslation }),
-    defineField({ name: 'coverImage', title: 'الصورة الرئيسية', type: 'localizedImage', group: 'content' }),
+    defineField({
+      name: 'coverImage',
+      title: 'الصورة الرئيسية',
+      description: 'صورة غلاف المقال. الأبعاد الموصى بها: 1600×900 بكسل (نسبة 16:9 شاشة عريضة).',
+      type: 'localizedImage',
+      group: 'content',
+    }),
     defineField({
       name: 'body',
       title: 'المحتوى بالعربية',

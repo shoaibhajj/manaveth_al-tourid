@@ -15,6 +15,9 @@ export type Place = {
   address: Localized
   image: string
   imageAlt: Localized
+  imageFit?: 'cover' | 'contain'
+  imagePosition?: 'top' | 'center' | 'bottom'
+  hotspot?: { x: number; y: number }
   /** Leave empty until the number is provided. */
   phone: string
   email?: string

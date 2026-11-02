@@ -43,6 +43,7 @@ export const galleryItem = defineType({
     defineField({
       name: 'image',
       title: 'الصورة',
+      description: 'الأبعاد الموصى بها: 1200×900 بكسل (نسبة 4:3) أو 1600×900 بكسل (نسبة 16:9). يدعم Hotspot للتحكم بمركز الصورة.',
       type: 'image',
       options: { hotspot: true },
       group: 'media',
@@ -51,7 +52,7 @@ export const galleryItem = defineType({
     defineField({
       name: 'videoFile',
       title: 'ملف الفيديو',
-      description: 'ارفع ملف فيديو، أو الصق رابط فيديو في الحقل التالي.',
+      description: 'ارفع ملف فيديو (صيغة MP4 أو WebM، دقة 1080p أو 720p، ويُفضل ألا يتجاوز 30 ميغابايت لتسريع التحميل).',
       type: 'file',
       options: { accept: 'video/*' },
       group: 'media',
@@ -67,7 +68,7 @@ export const galleryItem = defineType({
     defineField({
       name: 'poster',
       title: 'صورة الغلاف',
-      description: 'اختيارية. تظهر قبل تشغيل الفيديو.',
+      description: 'تظهر كصورة غلاف قبل تشغيل الفيديو (الأبعاد الموصى بها: 1600×900 بكسل، 16:9).',
       type: 'image',
       options: { hotspot: true },
       group: 'media',

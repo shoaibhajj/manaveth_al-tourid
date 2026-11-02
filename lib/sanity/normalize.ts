@@ -141,13 +141,19 @@ function toPlace(doc: Doc, index: number): Place {
   const name = localized(doc.name, { ar: '', en: '' })
   const address = optionalLocalized(doc.address) ?? optionalLocalized(doc.city) ?? { ar: '', en: '' }
   const manager = doc.manager
+  const hotspot = doc.image?.hotspot
+    ? { x: Number(doc.image.hotspot.x ?? 0.5), y: Number(doc.image.hotspot.y ?? 0.5) }
+    : undefined
   return {
     id: doc._id,
     kind: clean(doc.kind) === 'warehouse' ? 'warehouse' : 'branch',
     name,
     address,
-    image: imageUrl(doc.image, 1200) ?? staticContent.site.brand.aboutImage,
+    image: imageUrl(doc.image, 1400) ?? staticContent.site.brand.aboutImage,
     imageAlt: altOf(doc.image, name),
+    imageFit: doc.imageFit === 'contain' ? 'contain' : 'cover',
+    imagePosition: doc.imagePosition === 'center' ? 'center' : doc.imagePosition === 'bottom' ? 'bottom' : 'top',
+    hotspot,
     phone: clean(doc.phone),
     email: filled(doc.email) ? clean(doc.email) : undefined,
     manager: manager && (optionalLocalized(manager.name) || filled(manager.phone))

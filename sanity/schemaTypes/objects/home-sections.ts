@@ -132,7 +132,12 @@ export const aboutSection = defineSection('aboutSection', 'من نحن', [
     type: 'array',
     of: [defineArrayMember({ type: 'localizedString' })],
   }),
-  defineField({ name: 'image', title: 'الصورة', type: 'localizedImage' }),
+  defineField({
+    name: 'image',
+    title: 'الصورة',
+    description: 'صورة قسم من نحن. الأبعاد الموصى بها: 1400×1050 بكسل (نسبة 4:3).',
+    type: 'localizedImage',
+  }),
   defineField({
     name: 'pillars',
     title: 'ركائز الشركة',

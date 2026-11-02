@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const [{ slug }, locale, base, draft] = await Promise.all([params, getLocale(), getSiteUrl(), draftMode()])
   const service = await getServiceBySlug(slug)
   if (!service) return { title: 'Service', robots: { index: false, follow: false } }
-  const title = textFor(service.seo?.title, locale) || textFor(service.name, locale)
+  const title = textFor(service.seo?.title, locale) || (locale === 'ar' ? `${textFor(service.name, locale)} في السعودية للشركات والمطاعم | منافذ التوريد` : `${textFor(service.name, locale)} in Saudi Arabia for B2B | Mnaveeh`)
   const description = textFor(service.seo?.description, locale) || textFor(service.longDescription, locale) || textFor(service.description, locale)
   const path = `/services/${slug}`
   const image = imageUrl(service.seo?.shareImage, 1200) || imageUrl(service.image, 1200)

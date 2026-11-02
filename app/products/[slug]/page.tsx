@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const [{ slug }, locale, base, draft] = await Promise.all([params, getLocale(), getSiteUrl(), draftMode()])
   const product = await getProductBySlug(slug)
   if (!product) return { title: 'Product', robots: { index: false, follow: false } }
-  const title = textFor(product.seo?.title, locale) || textFor(product.name, locale)
+  const title = textFor(product.seo?.title, locale) || (locale === 'ar' ? `${textFor(product.name, locale)} بالجملة للشركات والمطاعم في الرياض وجدة | منافذ التوريد` : `${textFor(product.name, locale)} Wholesale for Restaurants in Saudi Arabia | Mnaveeh`)
   const description = textFor(product.seo?.description, locale) || textFor(product.longDescription, locale) || textFor(product.description, locale)
   const path = `/products/${slug}`
   const image = imageUrl(product.seo?.shareImage, 1200) || imageUrl(product.image, 1200)
@@ -46,9 +46,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const shareUrl = `${base}${localePath(productPath, locale)}`
   const sections = [
     ['origin', labelFor(locale, 'بلد المنشأ', 'Country of origin')],
-    ['packaging', labelFor(locale, 'التعبئة والأحجام', 'Packaging and sizes')],
-    ['storage', labelFor(locale, 'تعليمات التخزين', 'Storage instructions')],
-    ['usage', labelFor(locale, 'الاستخدامات', 'Suggested uses')],
+    ['aging', labelFor(locale, 'درجة ومدة التعتيق', 'Aging duration')],
+    ['grainType', labelFor(locale, 'نوع الحبة / القطعيات والمواصفات', 'Grain type & cuts')],
+    ['packaging', labelFor(locale, 'التعبئة والأوزان', 'Packaging & sizes')],
+    ['storage', labelFor(locale, 'درجات الحفظ والتخزين', 'Storage instructions')],
+    ['certifications', labelFor(locale, 'الشهادات والاعتمادات الرسمية', 'Certifications & compliance')],
+    ['usage', labelFor(locale, 'الاستخدامات الموصى بها', 'Suggested commercial uses')],
   ] as const
   const showPrice = product.showPrice !== false
   const tierRows = (product.priceTiers ?? []).filter((tier: any) => typeof tier.price === 'number')
@@ -66,7 +69,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           {description ? <p className="text-lg leading-8 text-muted-foreground">{description}</p> : null}
           {longDescription ? <p className="leading-8 text-muted-foreground">{longDescription}</p> : null}
           {product.origin ? <p><strong>{labelFor(locale, 'بلد المنشأ:', 'Country of origin:')}</strong> {textFor(product.origin, locale)}</p> : null}
+          {product.aging ? <p><strong>{labelFor(locale, 'التعتيق:', 'Aging:')}</strong> {textFor(product.aging, locale)}</p> : null}
+          {product.grainType ? <p><strong>{labelFor(locale, 'المواصفات:', 'Type & Specs:')}</strong> {textFor(product.grainType, locale)}</p> : null}
           {product.packaging ? <p><strong>{labelFor(locale, 'التعبئة:', 'Packaging:')}</strong> {textFor(product.packaging, locale)}</p> : null}
+          {product.certifications ? <p><strong>{labelFor(locale, 'الاعتمادات:', 'Certifications:')}</strong> {textFor(product.certifications, locale)}</p> : null}
           {showPrice && tierRows.length ? (
             <section className="rounded-2xl bg-secondary/70 p-5">
               <h2 className="mb-3 font-bold">{labelFor(locale, 'السعر حسب الكمية', 'Price by quantity')}</h2>

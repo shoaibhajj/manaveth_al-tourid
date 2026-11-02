@@ -1112,5 +1112,358 @@ export const batch3Articles: ArticleData[] = [
 ]
 
 
-export const allArticles: ArticleData[] = [...batch1Articles, ...batch2Articles, ...batch3Articles]
+
+export const batch4Articles: ArticleData[] = [
+  {
+    _id: 'article-indian-basmati-rice-wholesale-import-guide-saudi',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'دليل استيراد وشراء الأرز البسمتي الهندي بالجملة: الفروقات، التعتيق، والجودة',
+      en: 'Sourcing & Buying Bulk Indian Basmati Rice in Saudi Arabia: Aging, Varieties & Yield',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'indian-basmati-rice-wholesale-import-guide-saudi',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'دليلك الشامل لمديري المشتريات وملاك المطاعم في السعودية لشراء الأرز البسمتي بالجملة: الفروق بين مزة 1121 والسيلا والأبيض، معايير التعتيق، وكيفية حساب حجم التمدد بعد الطهي.',
+      en: 'Complete procurement guide to wholesale Indian Basmati rice for commercial Saudi kitchens: 1121 Sella vs Creamy parboiled, aging criteria, and expansion cooking yields.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'أرز بسمتي هندي فاخر بالجملة للمطاعم - منافذ التوريد',
+        en: 'Premium wholesale Indian Basmati rice for Saudi restaurants - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-59490b248b32e2013b3122cc27e0d7f9f9adc15d-1254x1254-png',
+        _type: 'reference',
+      },
+    },
+    author: 'قطاع الحبوب والأرز | منافذ التوريد',
+    publishedAt: '2026-11-02T21:00:00.000Z',
+    order: 16,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'شراء أرز بسمتي هندي بالجملة للمطاعم في السعودية | منافذ التوريد',
+        en: 'Bulk Indian Basmati Rice Wholesale for Saudi Restaurants | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'دليل شراء الأرز البسمتي بالجملة في الرياض وجدة: مواصفات أرز مزة 1121، معايير التعتيق سنتين، نسبة التمدد ومقاومة التكسر في قدور الطهي الكبيرة.',
+        en: 'Wholesale guide to Indian Basmati rice in Saudi Arabia: 1121 sella specifications, two-year aging metrics, grain elongation, and volume kitchen yield.',
+      },
+    },
+    body: [
+      b('مكانة الأرز البسمتي في قطاع المأكولات والمطاعم السعودي', 'p16-h2-1', 'h2'),
+      b('يعد الأرز البسمتي السلعة التموينية الأكثر استهلاكاً وأهمية في قطاع المطاعم بالمملكة العربية السعودية؛ فهو المكون الرئيسي لأشهر الأطباق الوطنية مثل الكبسة، المندي، البخاري، والبرياني. اختيار الصنف الأنسب ليس مجرد مسألة نكهة، بل هو قرار اقتصادي يؤثر مباشرة على حجم إنتاجية المطبخ (Kitchen Yield) وهوامش الربح التشغيلية.', 'p16-b1'),
+      b('أبرز أصناف الأرز البسمتي والفرق بين الأبيض والمزة (السيلا)', 'p16-h2-2', 'h2'),
+      b('1. أرز بسمتي 1121 مزة (Sella Basmati)', 'p16-h3-1', 'h3'),
+      b('يخضع أرز السيلا للبسترة والمعالجة بالبخار قبل التقشير، مما يجعل حبة الأرز صفراء ذهبية شديدة الصلابة ومقاومة للتكسر أثناء الطهي في القدور التجارية الضخمة ومواقد الضغط العالي. يتميز بنسبة تمدد مذهلة تصل إلى مرتين ونصف طول الحبة الأصلية.', 'p16-b2'),
+      b('2. أرز بسمتي أبيض طويل الحبة (Traditional White Basmati)', 'p16-h3-2', 'h3'),
+      b('يتميز برائحته العطرية الفواحة وقوامه الخفيف الناعم، وهو الخيار المفضل لمطاعم الفنادق الراقية ومطاعم المأكولات العالمية والبرياني الكشميري، ويتطلب مهارة وتحكماً دقيقاً في درجات حرارة النقع والغلي لتجنب التصاقه.', 'p16-b3'),
+      b('أهمية التعتيق (Rice Aging) في تحسين جودة الطهي', 'p16-h2-3', 'h2'),
+      b('الأرز البسمتي المعتق لمدة تتراوح بين سنة إلى سنتين يفقد نسبة الرطوبة الزائدة تدريجياً، مما يمنحه قدرة استثنائية على امتصاص المرق ودهون اللحم دون أن يتعجن، ويعطي حبات متفرقة ونثرية بالكامل عند التقديم للعميل.', 'p16-b4'),
+      b('خدمات توريد الأرز بالجملة من منافذ التوريد', 'p16-h2-4', 'h2'),
+      b('تستورد شركة منافذ التوريد أجود محاصيل بنجاب وهاريانا الهندية مباشرة في أكياس خيش وبولي بروبيلين محكمة الإغلاق بأوزان 10 كجم و 40 كجم، مع ضمان ثبات الجودة طوال العام بأسعار منافسة للمطاعم ومطابخ الإعاشة والفنادق.', 'p16-b5'),
+    ],
+    bodyEn: [
+      b('Basmati Rice as the Cornerstone of Saudi Foodservice', 'p16en-h2-1', 'h2'),
+      b('In Saudi culinary tradition, long-grain Basmati rice underpins signature dishes like Kabsa and Mandi, making grain yield and texture consistency critical for restaurant profitability.', 'p16en-b1'),
+      b('Comparing 1121 Sella Parboiled vs Classic White Basmati', 'p16en-h2-2', 'h2'),
+      b('Parboiled 1121 Sella delivers exceptional heat resistance and double grain elongation in high-volume commercial pots, while White Basmati provides unmatched natural aroma for premium hotel banquets.', 'p16en-b2'),
+      b('Direct Indian Mill Import & Bulk Sourcing with Mnaveeh', 'p16en-h2-3', 'h2'),
+      b('Mnaveeh ALTourid supplies aged Basmati rice directly to Saudi restaurateurs in 10kg and 40kg wholesale bags with guaranteed lot consistency across all seasons.', 'p16en-b3'),
+    ],
+  },
+  {
+    _id: 'article-wholesale-cooking-oil-food-service-factories-saudi',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'توريد زيوت الطعام بالجملة للمطابخ والمصانع: مقارنة بين أنواع الزيوت وأسعارها',
+      en: 'Wholesale Cooking Oil Procurement for Restaurants & Food Processors in Saudi Arabia',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'wholesale-cooking-oil-food-service-factories-saudi',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'مقارنة اقتصادية وتقنية بين زيوت القلي النباتية، زيت النخيل (أولين)، زيت الذرة، وزيت دوار الشمس للمطاعم ومصانع الأغذية: نقطة الدخان، ثبات القلي المتكرر، وتوفير التكاليف.',
+      en: 'Sourcing commercial cooking oils in Saudi Arabia: palm olein, sunflower, corn, and vegetable frying blends for industrial kitchens, high smoke points, and bulk tin pricing.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'توريد زيوت طعام وقلي بالجملة للمطاعم والمصانع - منافذ التوريد',
+        en: 'Wholesale cooking oils for commercial restaurants - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-9e386b13a5e41e6cc5dd811f350dbaa7846006ca-1200x896-png',
+        _type: 'reference',
+      },
+    },
+    author: 'قطاع الزيوت والمواد التموينية | منافذ التوريد',
+    publishedAt: '2026-11-02T21:30:00.000Z',
+    order: 17,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'توريد زيوت طعام وقلي بالجملة للمطاعم في السعودية | منافذ التوريد',
+        en: 'Commercial Cooking & Frying Oil Wholesale Supply Saudi Arabia | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'أسعار صفائح زيت القلي بالجملة للمطاعم في الرياض وجدة: زيت دوار الشمس، زيت الذرة، وزيت أولين النخيل عبوات 17 و 18 لتراً بجودة عالية ونقطة دخان مرتفعة.',
+        en: 'Bulk commercial frying oil distributor in Saudi Arabia: 18L tins of palm olein, sunflower oil, and corn oil for fast food chains and catering kitchens.',
+      },
+    },
+    body: [
+      b('أثر جودة ونوع زيت القلي على تكاليف ونكهة الطعام', 'p17-h2-1', 'h2'),
+      b('تستهلك مطابخ المطاعم ومصانع الأغذية كميات ضخمة من زيوت الطعام أسبوعياً، خاصة في مطاعم البروستد، الفلافل، المعجنات، والشاورما. إن اختيار الزيت الخاطئ قد يؤدي إلى سرعة احتراقه، اسوداد لون الوجبات، وتكرار تفريغ المقالي، مما يضاعف تكلفة الزيت المهدر ويسيء لتجربة الزبون.', 'p17-b1'),
+      b('مقارنة بين أشهر أنواع زيوت الطهي والقلي التجارية', 'p17-h2-2', 'h2'),
+      b('1. زيت أولين النخيل (Palm Olein Frying Oil)', 'p17-h3-1', 'h3'),
+      b('يعتبر الزيت الأكثر كفاءة واقتصادية لمقالي الغمر العميق (Deep Frying). يتميز بنقطة دخان فائقة الارتفاع (235° مئوية) ومقاومة عالية للتأكسد والتحلل الحراري، مما يجعله يدوم لفترات تشغيل أطول بنسبة 40% مقارنة بالزيوت الخفيفة.', 'p17-b2'),
+      b('2. زيت دوار الشمس وزيت الذرة النقي', 'p17-h3-2', 'h3'),
+      b('الخيار الذهبي لمطاعم الوجبات الصحية، المعجنات الفاخرة، والطبخ الخفيف. يتميز بلونه الفاتح الشفاف وخلوه التام من أي طعم أو رائحة تؤثر على نكهة المكونات الأصلية.', 'p17-b3'),
+      b('3. مزيج زيوت القلي المزدوج (Blended Frying Oil)', 'p17-h3-3', 'h3'),
+      b('مزيج علمي مدروس يجمع بين ثبات زيت النخيل وخفة زيت الصويا ودوار الشمس، مما يعطي توازناً مثالياً بين المقرمشة السطحية والتكلفة التنافسية.', 'p17-b4'),
+      b('تأمين توريد دوري لصفائح الزيت مع منافذ التوريد', 'p17-h2-3', 'h2'),
+      b('توفر شركة منافذ التوريد صفائح صفيح متينة ومحكمة الإغلاق سعة 17 لتراً و 18 لتراً، وجوالين بلاستيكية غذائية معتمدة لدى SFDA، مع إمكانية التوريد الأسبوعي المنتظم لمستودعات مطعمك مباشرة بأسعار الجملة المباشرة.', 'p17-b5'),
+    ],
+    bodyEn: [
+      b('The Economics of Commercial Frying Oils in Foodservice', 'p17en-h2-1', 'h2'),
+      b('Commercial fryers in Saudi fast food and catering operations process hundreds of liters weekly; oil thermal stability directly impacts kitchen overhead and food crispiness.', 'p17en-b1'),
+      b('Palm Olein vs Sunflower vs Blended Vegetable Oils', 'p17en-h2-2', 'h2'),
+      b('Palm olein delivers unmatched longevity with a 235C smoke point for high-turnover deep frying, while pure sunflower oil is optimal for light sauteing and delicate flavor preservation.', 'p17en-b2'),
+      b('Bulk Tins & Regular Delivery from Mnaveeh', 'p17en-h2-3', 'h2'),
+      b('We distribute certified 17L and 18L industrial tins across Riyadh and Jeddah, supporting restaurant groups with contract supply predictability.', 'p17en-b3'),
+    ],
+  },
+  {
+    _id: 'article-wholesale-canned-food-tomato-paste-legumes-saudi',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'معلبات الطماطم والبقوليات بالجملة: دليلك لأفضل العبوات والموردين المعتمدين',
+      en: 'Wholesale Canned Food: Bulk Tomato Paste & Legumes for Catering in Saudi Arabia',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'wholesale-canned-food-tomato-paste-legumes-saudi',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'دليل التوريد المؤسسي للمعلبات الغذائية: معجون الطماطم بتركيز بريكس 28-30%، الفول المدمس، الحمص، واللوبيا، والعبوات الفندقية المناسبة لتشغيل المطابخ الكبرى دون هدر.',
+      en: 'Commercial catering guide to wholesale canned provisions: brix 28-30% tomato paste, fava beans, chickpeas, and industrial A10 packings for Saudi foodservice operators.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'معلبات غذائية ومعجون طماطم وبقوليات بالجملة - منافذ التوريد',
+        en: 'Wholesale canned foods and tomato paste - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-8d0c38aa65a3536935c0ad34ff0e5adf05c9943a-1200x896-png',
+        _type: 'reference',
+      },
+    },
+    author: 'قسم المواد الجافة والمعلبات | منافذ التوريد',
+    publishedAt: '2026-11-02T22:00:00.000Z',
+    order: 18,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'توريد معلبات غذائية ومعجون طماطم بالجملة في السعودية | منافذ التوريد',
+        en: 'Wholesale Canned Foods & Bulk Tomato Paste Supplier Saudi Arabia | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'مورد معتمد للمعلبات الغذائية بالجملة للمطاعم والفنادق: معجون طماطم عبوات كبيرة A10، فول مدمس، حمص حب، وفاصولياء حمراء بأسعار تنافسية في الرياض وجدة.',
+        en: 'Institutional distributor of wholesale canned foods in Saudi Arabia: bulk tomato paste (Brix 28-30%), canned chickpeas, fava beans, and sweet corn.',
+      },
+    },
+    body: [
+      b('دور المعلبات الغذائية في استقرار مطابخ الإعاشة والمطاعم', 'p18-h2-1', 'h2'),
+      b('تمثل المعلبات الغذائية شريان الحياة في مطابخ التموين السريع والفنادق ومطاعم المأكولات الشعبية والشامية في المملكة. توفر الأغذية المعلبة جاهزية فورية للتحضير، وتلغي هدر التقشير والنقع الطويل، مع تميزها بصلاحية تمتد إلى عامين أو ثلاثة أعوام في بيئة التخزين الجاف المعتدلة.', 'p18-b1'),
+      b('معايير جودة معجون الطماطم للمطاعم والمطابخ المركزية', 'p18-h2-2', 'h2'),
+      b('1. نسبة التركيز والمواد الصلبة الذائبة (Brix Degree)', 'p18-h3-1', 'h3'),
+      b('يعد تركيز بريكس 28% إلى 30% المعيار الذهبي للمطاعم الممتازة؛ حيث يوفر قواماً كثيفاً ولوناً أحمر طبيعياً دون الحاجة لإضافة أصباغ، وتمنح الملعقة الواحدة منه تركيزاً يعادل ثلاثة أضعاف الصلصات التجارية الخفيفة.', 'p18-b2'),
+      b('2. حجم ونوعية العبوات الاقتصادية (Foodservice Size A10)', 'p18-h3-2', 'h3'),
+      b('بدلاً من شراء العلب الصغيرة سعة 135 غراماً، توفر عبوات الحجم الفندقي الكبير (A10 بوزن 3 كجم إلى 4.5 كجم) وفراً مالياً يصل إلى 35% في فاتورة المشتريات الشهرية، مع سرعة تفريغ في قدور الطبخ الكبيرة.', 'p18-b3'),
+      b('البقوليات المعلبة الأكثر طلباً لقطاع الضيافة والإفطار', 'p18-h2-3', 'h2'),
+      b('• الفول المدمس السادة وفول الخلطات بعبوات الكيلوجرام والعبوات الفندقية لمطاعم الإفطار والبوفيهات.', 'p18-b4'),
+      b('• الحمص الحب المسلوق لتحضير متبل ومسبحة الحمص الطازجة بجودة ناعمة ومتجانسة.', 'p18-b5'),
+      b('• الفاصولياء الحمراء والبيضاء، الذرة الحلوة، والفطر (المشروم) المقطع لمطاعم البيتزا والباستا والسلطات.', 'p18-b6'),
+      b('خدمات التخزين والتوريد للمعلبات من منافذ التوريد', 'p18-h2-4', 'h2'),
+      b('نضمن تخزين كافة الشحنات في مستودعات جافة مكيفة ومطابقة لاشتراطات SFDA، مع توصيل سريع بالكرتون والباليتات الكاملة إلى باب مطبخك في جميع مدن المملكة.', 'p18-b7'),
+    ],
+    bodyEn: [
+      b('Strategic Importance of Canned Provisions in High-Turnover Kitchens', 'p18en-h2-1', 'h2'),
+      b('Canned foods guarantee immediate culinary readiness, consistent portion yields, and a 2-3 year ambient shelf life, eliminating pre-soaking and preparation downtime.', 'p18en-b1'),
+      b('Tomato Paste Quality Metrics & Brix Concentration', 'p18en-h2-2', 'h2'),
+      b('Commercial kitchens rely on Brix 28-30% paste for robust color and rich viscosity; institutional A10 (3kg-4.5kg) tins reduce packaging waste and deliver 35% procurement savings.', 'p18en-b2'),
+      b('Comprehensive Legumes Catalog with Mnaveeh', 'p18en-h2-3', 'h2'),
+      b('From fava beans and chickpeas to mushrooms and sweet corn, Mnaveeh ALTourid distributes certified canned provisions directly to restaurant chains and central kitchens.', 'p18en-b3'),
+    ],
+  },
+  {
+    _id: 'article-premium-dates-wholesale-hospitality-corporate-saudi',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'توريد التمور الفاخرة لقطاع الضيافة والشركات في المملكة',
+      en: 'Sourcing Premium Saudi Dates Wholesale for Luxury Hospitality & Corporate Gifting',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'premium-dates-wholesale-hospitality-corporate-saudi',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'دليل اختيار وتوريد التمور السعودية الفاخرة (السكري، العجوة، الخلاص، والمجدول) للفنادق والشركات والجهات الحكومية: معايير الفرز، التغليف الفردي الفاخر، واشتراطات التخزين المبرد.',
+      en: 'Commercial guide to buying premium Saudi dates for corporate amenities and luxury hotels: Sukkari, Ajwa, Khalas, and Medjool grading, hygienic packaging, and cold storage.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'توريد تمور سعودية فاخرة بالجملة للفنادق والشركات - منافذ التوريد',
+        en: 'Premium Saudi dates wholesale for corporate hospitality - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-654b7c3d5ab43686e0309e2c1655a9db56ee6527-1200x896-png',
+        _type: 'reference',
+      },
+    },
+    author: 'قطاع التمور والضيافة السعودية | منافذ التوريد',
+    publishedAt: '2026-11-02T22:30:00.000Z',
+    order: 19,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'توريد تمور فاخرة بالجملة للفنادق والشركات في السعودية | منافذ التوريد',
+        en: 'Premium Saudi Dates Wholesale Supplier for Hospitality & Corporate | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'مورد معتمد للتمور السعودية الفاخرة لقطاع الضيافة والفنادق والجهات الحكومية: سكري القصيم، خلاص الأحساء، وعجوة المدينة المنورة مغلفة فردياً وجملة بأسعار منافسة.',
+        en: 'Wholesale distributor of premium Saudi dates for luxury hotels, airlines, and corporate events: Sukkari, Khalas, and Ajwa in elegant individual and bulk packaging.',
+      },
+    },
+    body: [
+      b('التمور كأيقونة للضيافة السعودية الأصيلة', 'p19-h2-1', 'h2'),
+      b('تمثل التمور رمز الكرم وعنوان الهوية الثقافية في المملكة العربية السعودية. تقدم التمور الفاخرة يومياً في ردهات فنادق الـ 5 نجوم، مجالس الإدارات، قاعات المؤتمرات، والطيران الملكي والتجاري. اختيار الصنف المصنف درجة أولى وحجم الحبة وتناسق لونها يعكس فخامة المنشأة واعتناءها بأدق تفاصيل تجربة ضيوفها.', 'p19-b1'),
+      b('أشهر أصناف التمور للقطاع المؤسسي والضيافة', 'p19-h2-2', 'h2'),
+      b('1. سكري القصيم المفتل والجالكسي', 'p19-h3-1', 'h3'),
+      b('يعد السكري المفتل الخيار الأول والأكثر طلباً في ضيافة القهوة السعودية بالشركات والفنادق، بفضل لونه الذهبي الفاتح وقوامه المقرمش اللذيذ وحلاوته الطبيعية المتوازنة.', 'p19-b2'),
+      b('2. خلاص الأحساء والخرج الفاخر', 'p19-h3-2', 'h3'),
+      b('يتميز بقوامه الدبق الناعم ونكهته العسلية الغنية، وهو الصنف الأنسب لتقديم التمور المحشوة بالمكسرات الفاخرة (اللوز والبيكان) وتوزيعات الهدايا المؤسسية.', 'p19-b3'),
+      b('3. عجوة المدينة المنورة المباركة', 'p19-h3-3', 'h3'),
+      b('الخيار الاستراتيجي الأول لفنادق مكة المكرمة والمدينة المنورة وهدايا كبار الشخصيات والوفود الدولية القادمة للمملكة لقيمتها التاريخية والدينية ومذاقها الفريد.', 'p19-b4'),
+      b('أنماط التعبئة والتغليف الحديثة المعتمدة لدى منافذ التوريد', 'p19-h2-3', 'h2'),
+      b('توفر شركة منافذ التوريد حلول تغليف فردي معقم (Single Wrapped) تحافظ على نظافة الحبة وتمنع ملامستها بالأيدي في بوفيهات الفنادق وغرف النزلاء، بالإضافة إلى كراتين الجملة المبردة سعة 3 كجم و 5 كجم والمحفوظة في مستودعات تبريد متحكم برطوبتها لضمان طراوة التمر طوال العام.', 'p19-b5'),
+    ],
+    bodyEn: [
+      b('Dates as the Signature of Saudi Hospitality', 'p19en-h2-1', 'h2'),
+      b('Premium Saudi dates represent cultural heritage and premier hospitality across 5-star hotel lobbies, royal lounges, and corporate executive suites.', 'p19en-b1'),
+      b('Premier Date Varieties for Corporate Hospitality', 'p19en-h2-2', 'h2'),
+      b('Crisp golden Qassim Sukkari is the hallmark pairing for Arabic coffee, rich Al-Ahsa Khalas is perfect for artisan nut fillings, and Madinah Ajwa serves as the ultimate gift of honor.', 'p19en-b2'),
+      b('Hygienic Single-Wrap & Bulk Packaging with Mnaveeh', 'p19en-h2-3', 'h2'),
+      b('Mnaveeh ALTourid distributes individually flow-wrapped hygienic dates and climate-stored wholesale boxes to premier hospitality clients throughout the Kingdom.', 'p19en-b3'),
+    ],
+  },
+  {
+    _id: 'article-future-saudi-food-trade-supply-chains-vision-2030',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'مستقبل التجارة وسلاسل الإمداد الغذائي في السعودية وفق رؤية 2030',
+      en: 'The Future of Food Trading & Supply Chains in Saudi Arabia Under Vision 2030',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'future-saudi-food-trade-supply-chains-vision-2030',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'نظرة استشرافية على تحول قطاع التوريد الغذائي B2B في المملكة: الموانئ اللوجستية الذكية، منصات الربط الرقمي، مبادرات الأمن الغذائي الوطني، ودور منافذ التوريد في تمكين الشركات.',
+      en: 'In-depth analysis of Saudi Arabia\'s food logistics revolution under Vision 2030: automated cold hubs, digital procurement platforms, national food security, and agile B2B distribution.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'مستقبل سلاسل الإمداد الغذائي في السعودية ورؤية 2030 - منافذ التوريد',
+        en: 'Future of food supply chains in Saudi Arabia under Vision 2030 - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-501b2f1789b17aa3d5227d0cf5539dabebcd6b66-1734x907-png',
+        _type: 'reference',
+      },
+    },
+    author: 'الإدارة العامة للأبحاث واستراتيجيات السوق | منافذ التوريد',
+    publishedAt: '2026-11-02T23:00:00.000Z',
+    order: 20,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'مستقبل سلاسل الإمداد الغذائي والتجارة في السعودية رؤية 2030 | منافذ التوريد',
+        en: 'Future of Food Supply Chains & B2B Trading in Saudi Arabia Vision 2030 | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'كيف تعيد رؤية السعودية 2030 تشكيل قطاع التوريد الغذائي؟ الموانئ اللوجستية الجافة، التحول الرقمي في مشتريات الأغذية، واستراتيجيات تعزيز الأمن الغذائي الوطني.',
+        en: 'Exploring the transformation of food supply chains in Saudi Arabia: Vision 2030 logistics hubs, cold chain digitalization, and national food security architecture.',
+      },
+    },
+    body: [
+      b('التحول الهيكلي لقطاع الأغذية والخدمات اللوجستية في السعودية', 'p20-h2-1', 'h2'),
+      b('يشهد قطاع الأغذية والمشروبات (F&B) وسلاسل الإمداد اللوجستية في المملكة ثورة تحديث جذرية في إطار رؤية السعودية 2030. لم تعد تجارة المواد الغذائية بالجملة تعتمد على الطرق التقليدية غير المنظمة، بل تحولت إلى صناعة مؤسسية ذكية ترتكز على المراكز اللوجستية الجافة، الحاويات المبردة الذكية، والمنصات الرقمية المترابطة مع الهيئات الحكومية.', 'p20-b1'),
+      b('أبرز ركائز مستقبل التوريد الغذائي في المملكة', 'p20-h2-2', 'h2'),
+      b('1. تعزيز منظومة الأمن الغذائي الوطني (National Food Security)', 'p20-h3-1', 'h3'),
+      b('تركز الاستراتيجية الوطنية للأمن الغذائي على تأمين مخزونات كافية من السلع الاستراتيجية الأساسية (القمح، الأرز، الزيوت، واللحوم) وتوسيع الشراكات الزراعية والتجارية العالمية مع دول المنشأ، مما يضمن استقرار الإمدادات وتجنب تقلبات الأسواق العالمية.', 'p20-b2'),
+      b('2. الموانئ الجافة والمناطق اللوجستية الحرة', 'p20-h3-2', 'h3'),
+      b('إطلاق المخطط العام للمراكز اللوجستية يربط الموانئ البحرية الرئيسية (ميناء جدة الإسلامي وميناء الملك عبد العزيز بالدمام) بالموانئ الجافة في الرياض والقصيم عبر شبكات السكك الحديدية الحديثة، مما يقلص زمن الإفراج الجمركي ونقل البضائع من أسابيع إلى أيام معدودة.', 'p20-b3'),
+      b('3. أتمتة سلاسل التبريد والتتبع الرقمي (Cold Chain Automation)', 'p20-h3-3', 'h3'),
+      b('الاعتماد المتزايد على مستشعرات إنترنت الأشياء (IoT) لمراقبة حرارة البضائع أثناء النقل البحري والبري لحظياً، وربطها بنظام الفاتورة الإلكترونية ومنصات الربط الجمركي «فسح»، لضمان أعلى مستويات الشفافية وسلامة الأغذية.', 'p20-b4'),
+      b('دور شركة منافذ التوريد في قيادة هذا التحول', 'p20-h2-3', 'h2'),
+      b('تتبنى شركة منافذ التوريد للتجارة أحدث معايير التحول الرقمي وحوكمة سلاسل الإمداد، من خلال مستودعاتنا المركزية وشبكة فروعنا الموسعة، لنكون الذراع الموثوق لقطاع المطاعم، الفنادق، المصانع، والمشاريع الكبرى في بناء مستقبل غذائي مستدام وواعد.', 'p20-b5'),
+    ],
+    bodyEn: [
+      b('Structural Transformation of Saudi Food Logistics', 'p20en-h2-1', 'h2'),
+      b('Under Saudi Vision 2030, the foodservice and bulk trading sector is evolving into an integrated, digitized ecosystem driven by state-of-the-art cold hubs and dry port corridors.', 'p20en-b1'),
+      b('Key Pillars Shaping the Next Decade of Food Procurement', 'p20en-h2-2', 'h2'),
+      b('National food security buffers, automated IoT temperature monitoring, FASAH customs integration, and direct rail logistics ensure seamless trade from maritime docks to commercial kitchens.', 'p20en-b2'),
+      b('Leading the B2B Supply Frontier with Mnaveeh ALTourid', 'p20en-h2-3', 'h2'),
+      b('Mnaveeh ALTourid continues to pioneer tech-enabled B2B food distribution across Saudi Arabia, empowering hotels, mega-camps, and restaurant groups with resilient supply chain architectures.', 'p20en-b3'),
+    ],
+  },
+]
+
+
+export const allArticles: ArticleData[] = [
+  ...batch1Articles,
+  ...batch2Articles,
+  ...batch3Articles,
+  ...batch4Articles,
+]
+
 

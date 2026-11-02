@@ -763,4 +763,354 @@ export const batch2Articles: ArticleData[] = [
   },
 ]
 
-export const allArticles: ArticleData[] = [...batch1Articles, ...batch2Articles]
+
+export const batch3Articles: ArticleData[] = [
+  {
+    _id: 'article-hotel-hospitality-food-supply-makkah-madinah-jeddah',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'حلول التوريد الغذائي لقطاع الفنادق والضيافة في مكة والمدينة وجدة',
+      en: 'Food Supply Solutions for Hospitality & Hotels in Makkah, Madinah & Jeddah',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'hotel-hospitality-food-supply-makkah-madinah-jeddah',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'دليل إمداد الفنادق وقطاع الضيافة في المنطقة الغربية: خطط التوريد لمواسم الحج والعمرة، معايير البوفيهات المفتوحة، وتأمين السلع الأساسية والمجمدات بأعلى درجات الجاهزية دون انقطاع.',
+      en: 'Complete food procurement and catering guide for Western Province hotels: Hajj & Umrah seasonal readiness, banquet supply logistics, and bulk food safety compliance.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'توريد مواد غذائية وإعاشة فنادق مكة وجدة والمدينة - منافذ التوريد',
+        en: 'Hotel & Hospitality Food Supply in Makkah and Jeddah - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-b49c59a43c4b161df3b706b262ab2d9590549f19-1200x896-png',
+        _type: 'reference',
+      },
+    },
+    author: 'قطاع الفنادق والضيافة | منافذ التوريد',
+    publishedAt: '2026-11-02T16:00:00.000Z',
+    order: 11,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'شركات إعاشة وتوريد فنادق مكة والمدينة وجدة بالجملة | منافذ التوريد',
+        en: 'Hotel Food Catering & Bulk Supply in Makkah, Madinah & Jeddah | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'حلول التوريد الغذائي الشاملة لفنادق مكة والمدينة المنورة وجدة: عقود إعاشة مواسم الحج والعمرة، تأمين اللحوم المجمدة والأرز والزيوت، وجداول تسليم دقيقة 24/7.',
+        en: 'Hospitality catering and food procurement contracts in Makkah and Madinah: peak season logistics for Hajj & Umrah, meat supply, and bulk staples.',
+      },
+    },
+    body: [
+      b('ديناميكية قطاع الضيافة والفنادق في المنطقة الغربية', 'p11-h2-1', 'h2'),
+      b('تتميز فنادق مكة المكرمة والمدينة المنورة وجدة بطبيعة تشغيلية فريدة على مستوى العالم؛ حيث تشهد فترات ذروة قياسية متتالية خلال مواسم العمرة وشهر رمضان المبارك وموسم الحج. تتطلب هذه المواسم رفع الطاقة الاستيعابية لمطابخ الفنادق بنسبة تتجاوز 400% أحياناً، مما يجعل استقرار سلاسل الإمداد الغذائي مسألة أمن تشغيلي وسمعة فندقية لا تقبل التهاون.', 'p11-b1'),
+      b('التحديات اللوجستية في مواسم الحج والعمرة وكيف نتغلب عليها', 'p11-h2-2', 'h2'),
+      b('1. تصاريح الدخول وأوقات التفريغ المقيدة في المنطقة المركزية', 'p11-h3-1', 'h3'),
+      b('تخضع المناطق المركزية المحيطة بالحرم المكي والحرم النبوي الشريف لقيود مرورية صارمة وساعات محددة لدخول شاحنات الإمداد. تمتلك شركة منافذ التوريد أسطولاً مجهزاً ومجدولاً بتصاريح معتمدة وتنسيق مسبق للتفريغ في أوقات التهدئة المرورية لضمان وصول الشحنات دون تأخير دقيقة واحدة.', 'p11-b2'),
+      b('2. إدارة المخزون الاستراتيجي المؤقت (Buffer Stocking)', 'p11-h3-2', 'h3'),
+      b('بدلاً من إرهاق مستودعات الفنادق ذات المساحات المحدودة، نخصص مساحات تخزين مبردة وجافة في مستودعاتنا المركزية بجدة والرياض كأرصدة احتياطية مخصصة لكل فندق متعاقد، تُسحب منها الطلبيات اليومية بسلاسة.', 'p11-b3'),
+      b('متطلبات قوائم الطعام والبوفيهات المفتوحة (Open Buffet Supply)', 'p11-h2-3', 'h2'),
+      b('تتنوع جنسيات وثقافات نزلاء الفنادق والحجاج والمعتمرين، مما يتطلب توريد سلع غذائية تلبي أذواقاً عالمية متعددة:', 'p11-b4'),
+      b('• الأرز البسمتي والمزة الهندي والباكستاني بأصناف متنوعة تناسب مختلف المطابخ الآسيوية والعربية.', 'p11-b5'),
+      b('• اللحوم البقرية ولحوم الضأن المجمدة المعتمدة بشهادات ذبح حلال ومطابقة لاشتراطات SFDA الصارمة.', 'p11-b6'),
+      b('• كبدة الأبقار والدواجن المجمدة، وزيوت القلي النباتية وزيت دوار الشمس بعبوات اقتصادية 18 لتراً.', 'p11-b7'),
+      b('• السكر، الدقيق، البقوليات المعلبة، منتجات الطماطم، والأجبان بعبوات الخدمة الفندقية الفورية.', 'p11-b8'),
+      b('مزايا التعاقد المؤسسي مع منافذ التوريد لقطاع الضيافة', 'p11-h2-4', 'h2'),
+      b('نوفر لفنادق الـ 5 نجوم والـ 4 نجوم ومجموعات الضيافة أسعاراً تعاقدية ثابتة تغطي كامل الموسم، مع إمكانية التوريد الليلي أو الصباحي الباكر وفواتير ضريبية مفصلة معتمدة لدى هيئة الزكاة والضريبة والجمارك (ZATCA).', 'p11-b9'),
+    ],
+    bodyEn: [
+      b('Hospitality Food Supply Dynamics in Western Province', 'p11en-h2-1', 'h2'),
+      b('Hotels in Makkah, Madinah, and Jeddah operate under unprecedented demand surges during Ramadan, Hajj, and Umrah seasons, necessitating robust food supply lines.', 'p11en-b1'),
+      b('Central Zone Logistics & Delivery Precision', 'p11en-h2-2', 'h2'),
+      b('Strict municipal traffic curfews around the Holy Mosques require specialized delivery permits and strategic buffer inventory management, seamlessly executed by Mnaveeh ALTourid.', 'p11en-b2'),
+      b('Tailored Menus & Comprehensive Buffet Staples', 'p11en-h2-3', 'h2'),
+      b('From premium Basmati rice and Halal certified meats to bulk frying oils and canned provisions, our multi-category wholesale catalog caters to diverse international pilgrim palettes.', 'p11en-b3'),
+    ],
+  },
+  {
+    _id: 'article-government-corporate-food-supply-contracts-saudi-arabia',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'عقود توريد الأغذية للجهات الحكومية والشركات الكبرى في السعودية',
+      en: 'Food Supply Contracts for Government Entities & Mega Corporations in Saudi Arabia',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'government-corporate-food-supply-contracts-saudi-arabia',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'استراتيجيات صياغة وترسية مناقصات التوريد الغذائي والإعاشة المؤسسية: الشروط الفنية، الضمانات البنكية، استقرار سلاسل الإمداد، وضمان التوافق مع منصة اعتماد ولوائح المشتريات الحكومية.',
+      en: 'Strategic guide to corporate and government food procurement contracts in Saudi Arabia: Etimad platform compliance, tender SLAs, cold storage logistics, and supply guarantees.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'عقود ومناقصات توريد المواد الغذائية الحكومية - منافذ التوريد',
+        en: 'Government & Corporate Food Supply Contracts - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-fe7f89322bd76cec74c8b4b52c3490705f59cc4a-1200x896-png',
+        _type: 'reference',
+      },
+    },
+    author: 'إدارة المناقصات والعقود الحكومية | منافذ التوريد',
+    publishedAt: '2026-11-02T17:00:00.000Z',
+    order: 12,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'عقود ومناقصات توريد الأغذية الحكومية والمؤسسية | منافذ التوريد',
+        en: 'Government & Mega Corporate Food Procurement Contracts Saudi Arabia | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'شريكك المعتمد في مناقصات الإعاشة والتوريد الغذائي عبر منصة اعتماد في السعودية: اشتراطات التأهيل المسبق، السجلات التجارية المحدثة، وتأمين سلاسل الإمداد للجهات الحكومية والشركات الكبرى.',
+        en: 'Certified food supply contractor for Saudi government tenders and corporate mega-camps: Etimad compliance, wholesale supply agreements, and strict SLA guarantees.',
+      },
+    },
+    body: [
+      b('أهمية الحوكمة والامتثال في مناقصات الإعاشة الحكومية', 'p12-h2-1', 'h2'),
+      b('تتطلب مناقصات وعقود التوريد الغذائي للقطاعات العسكرية، المستشفيات الحكومية، السجون، الجامعات، والمدن الصناعية مستوى استثنائياً من الجاهزية الإدارية والملاءة المالية. لا يقتصر الأمر على تقديم أقل الأسعار، بل يرتكز التقييم الفني على موثوقية المستودعات، شهادات سلامة الغذاء، وسرعة الاستجابة للطوارئ.', 'p12-b1'),
+      b('المتطلبات الأساسية للفوز بمناقصات التوريد الغذائي عبر منصة اعتماد', 'p12-h2-2', 'h2'),
+      b('1. التأهيل النظامي والتراخيص الحكومية المحدثة', 'p12-h3-1', 'h3'),
+      b('يجب أن يمتلك المورد سجلاً تجارياً نشطاً مصنفاً في تجارة الجملة للمواد الغذائية، شهادة عضوية الغرفة التجارية سارية، شهادة الزكاة والدخل، شهادة السعودة (نطاقات)، وشهادة مطابقة من الهيئة العامة للغذاء والدواء (SFDA).', 'p12-b2'),
+      b('2. اتفاقيات مستوى الخدمة الصارمة (SLA) وجداول التسليم', 'p12-h3-2', 'h3'),
+      b('تتضمن العقود الحكومية شروطاً جزائية صارمة في حال تأخر أي دفعة توريد أو نقص في مطابقة الأوزان والمواصفات الفنية. وضع خطة إمداد بديلة (Contingency Logistics) هو الشرط الجوهري لضمان استمرارية التوريد دون انقطاع.', 'p12-b3'),
+      b('3. توفير عينات فحص مخبرية وشهادات الصلاحية الرسمية', 'p12-h3-3', 'h3'),
+      b('تخضع الشحنات الغذائية في المستودعات الحكومية والشركات الكبرى لفحص استلام دقيق يشمل قياس درجات حرارة النقل، تواريخ الإنتاج والصلاحية، وسلامة العبوات الكرتونية من أي تلف ميكانيكي أو رطوبة.', 'p12-b4'),
+      b('لماذا تختار الجهات والمقاولون الكبار شركة منافذ التوريد؟', 'p12-h2-3', 'h2'),
+      b('تتمتع شركة منافذ التوريد بسجل حافل في تلبية متطلبات المشاريع الكبرى والمصانع؛ حيث نمتلك مستودعات مركزية مرخصة بالرياض وجدة، وأسطول شاحنات مبردة وجافة، وقدرة استيرادية مباشرة تضمن ثبات أسعار العقود طويلة الأجل بنظام الدفعات الدورية المعتمدة.', 'p12-b5'),
+    ],
+    bodyEn: [
+      b('Governance & Compliance in Saudi Institutional Tenders', 'p12en-h2-1', 'h2'),
+      b('Government catering and food supply tenders for military, healthcare, and educational institutions demand uncompromising standards of quality, financial stability, and SFDA compliance.', 'p12en-b1'),
+      b('Key Prerequisites for Etimad Platform Food Tenders', 'p12en-h2-2', 'h2'),
+      b('A valid commercial registry, ZATCA tax clearance, Saudization certificates, and rigorous SLA penalty agreements form the bedrock of winning government food contracts.', 'p12en-b2'),
+      b('Corporate Supply Reliability with Mnaveeh', 'p12en-h2-3', 'h2'),
+      b('Mnaveeh ALTourid operates as a vetted, dependable food supply partner with expansive multi-city warehousing, direct import capabilities, and flexible periodic billing.', 'p12en-b3'),
+    ],
+  },
+  {
+    _id: 'article-labor-camp-catering-construction-food-supply-saudi',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'إعاشة وسكن العمال في المشاريع الكبرى: كيف تؤمن وجبات متوازنة بتكلفة مدروسة؟',
+      en: 'Labor Camp & Megaproject Catering: Balancing Nutrition & Cost Efficiency in Saudi Arabia',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'labor-camp-catering-construction-food-supply-saudi',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'دليل المقاولين وشركات الإنشاءات لإدارة تموين مخيمات العمال والمشاريع الإنشائية الضخمة: حساب كميات الإعاشة، توريد الأرز والزيوت واللحوم بالجملة، وتأمين معايير السلامة المهنية بأقل تكلفة هدر.',
+      en: 'Sourcing food supplies for labor camps and massive construction projects in Saudi Arabia: wholesale grains, proteins, balanced nutritional quotas, and logistics delivery.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'توريد أغذية مخيمات العمال ومشاريع الإنشاءات في السعودية - منافذ التوريد',
+        en: 'Labor camp food catering and megaproject supply - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-ffb7231f9d5cc6362d8238d8559a1bc8d6aa69af-1200x896-png',
+        _type: 'reference',
+      },
+    },
+    author: 'قسم إعاشة المشاريع والمقاولات | منافذ التوريد',
+    publishedAt: '2026-11-02T18:00:00.000Z',
+    order: 13,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'تموين سكن العمال ومشاريع المقاولات بالجملة في السعودية | منافذ التوريد',
+        en: 'Labor Camp Food Catering & Construction Sites Wholesale Supply | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'توريد مواد غذائية جملة لمخيمات وسكن عمال مشاريع البنية التحتية والمقاولات في الرياض ونيوم وجدة: أرز، زيوت، لحوم مجمدة، ومعلبات بأسعار تنافسية وجداول تسليم دورية.',
+        en: 'Bulk food supply for workforce camps and contractor residential complexes across Saudi megaprojects: cost-controlled wholesale food rations and dependable logistics.',
+      },
+    },
+    body: [
+      b('أهمية كفاءة التموين الغذائي في مواقع المشاريع الكبرى', 'p13-h2-1', 'h2'),
+      b('تشهد المملكة نهضة إنشائية غير مسبوقة تماشياً مع رؤية السعودية 2030، حيث تضم مواقع المشاريع الكبرى (Gigaprojects) آلاف المهندسين والعمال. تمثل الإعاشة اليومية وسكن العمال عنصراً حاسماً في إنتاجية الموقع واستقراره؛ فالوجبة المتوازنة والمشبعة تحافظ على طاقة القوى العاملة، بينما التكلفة المنضبطة تمنع تآكل هوامش أرباح المقاول.', 'p13-b1'),
+      b('هندسة المقررات الغذائية اليومية للعمال (Ration Planning)', 'p13-h2-2', 'h2'),
+      b('1. الطاقة والنشويات الأساسية (الأرز والدقيق والزيوت)', 'p13-h3-1', 'h3'),
+      b('يحتاج العامل في الأعمال الميدانية الشاقة إلى وجبات غنية بالطاقة. يشكل الأرز طويل الحبة (البسمتي الاقتصادي أو السيلا) والدقيق المخصص للمخابز الميدانية العنصر الأساسي، مع حساب معدل استهلاك وسطي يتراوح بين 180 إلى 220 غراماً من الأرز الجاف للعامل في الوجبة الواحدة.', 'p13-b2'),
+      b('2. مصادر البروتين الاقتصادية والمغذية (اللحوم المجمدة والكبدة والبيض)', 'p13-h3-2', 'h3'),
+      b('تعتبر اللحوم البقرية ولحوم الضأن المجمدة، بالإضافة إلى الكبدة المجمدة وقطع الدواجن، الخيارات الأكثر اقتصادية وموثوقية في مطابخ الإعاشة الكبرى نظراً لسهولة تخزينها في المستودعات الميدانية المبردة وثبات أسعارها التعاقدية مقارنة باللحوم الطازجة.', 'p13-b3'),
+      b('3. البقوليات والصلصات والمكملات الغذائية', 'p13-h3-3', 'h3'),
+      b('توريد العدس الأصفر والأحمر، الحمص، الفول المدمس، معجون الطماطم، والبهارات الهندية والعربية بالجملة في أكياس 20 كجم و 50 كجم يسهم في خفض تكلفة الوجبة الواحدة بما يصل إلى 30% مقارنة بالعبوات الاستهلاكية الصغيرة.', 'p13-b4'),
+      b('سلاسل التوريد لمواقع المشاريع النائية والبعيدة', 'p13-h2-3', 'h2'),
+      b('توفر شركة منافذ التوريد حلول الشحن البري المبرد والجاف مباشرة إلى مخيمات وسكن العمال في مختلف مدن ومناطق المملكة، مع جدولة شحنات أسبوعية أو نصف شهرية تضمن عدم انقطاع الإمداد حتى في الظروف المناخية القاسية.', 'p13-b5'),
+    ],
+    bodyEn: [
+      b('The Role of Food Catering in Mega Construction Projects', 'p13en-h2-1', 'h2'),
+      b('Across Saudi mega developments, feeding thousands of daily site workers requires careful nutritional planning, sanitary compliance, and rigorous cost engineering.', 'p13en-b1'),
+      b('Daily Ration Calculations for High-Energy Field Work', 'p13en-h2-2', 'h2'),
+      b('Caloric density hinges on bulk rice, high-yield edible oils, and cost-effective frozen proteins like beef and poultry, delivered in industrial 20kg to 50kg wholesale packings.', 'p13en-b2'),
+      b('Remote Site Logistics Across the Kingdom', 'p13en-h2-3', 'h2'),
+      b('Mnaveeh ALTourid guarantees reliable scheduled supply dispatches to remote worker compounds and construction camps, maintaining cold chain integrity throughout transit.', 'p13en-b3'),
+    ],
+  },
+  {
+    _id: 'article-peak-season-food-supply-risk-management-ramadan-riyadh-season',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'إدارة مخاطر الإمداد الغذائي في مواسم الذروة بالمملكة (رمضان وموسم الرياض)',
+      en: 'Managing Food Supply Risks During Peak Seasons in Saudi Arabia (Ramadan & Riyadh Season)',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'peak-season-food-supply-risk-management-ramadan-riyadh-season',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'خطط الطوارئ الاستباقية لتأمين المخزون الغذائي الاستراتيجي وتفادي انقطاع التوريد أو قفزات الأسعار خلال شهر رمضان الفضيل والفعاليات الكبرى ومواسم السياحة والترفيه في السعودية.',
+      en: 'Contingency supply chain planning for Saudi peak commercial periods: Ramadan buffer inventory, entertainment seasons rush, bulk logistics continuity, and price stabilization.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'إدارة سلاسل التوريد الغذائي في مواسم الذروة بالسعودية - منافذ التوريد',
+        en: 'Peak season food supply chain management in Saudi Arabia - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-99e1addbc325b91a794a660bac22d691c75714b8-1734x907-png',
+        _type: 'reference',
+      },
+    },
+    author: 'إدارة التخطيط الاستراتيجي وسلاسل الإمداد | منافذ التوريد',
+    publishedAt: '2026-11-02T19:00:00.000Z',
+    order: 14,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'تأمين المخزون الغذائي لمواسم الذروة ورمضان وموسم الرياض بالجملة | منافذ التوريد',
+        en: 'Securing Food Inventory During Peak Seasons (Ramadan & Riyadh Season) | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'كيف تدير مخاطر انقطاع الأغذية وتقلبات الأسعار في مواسم الذروة بالسعودية؟ خطط توريد شهر رمضان وموسم الرياض للمطاعم والفنادق وشركات الإعاشة بالجملة.',
+        en: 'Strategies for managing food supply volatility in Saudi Arabia during Ramadan and Riyadh Season: buffer stocks, contract price locks, and contingency distribution.',
+      },
+    },
+    body: [
+      b('لماذا تتأزم سلاسل الإمداد الغذائي خلال مواسم الذروة؟', 'p14-h2-1', 'h2'),
+      b('يشهد السوق السعودي طفرات استهلاكية كبرى تتكرر دورياً، أبرزها شهر رمضان المبارك، موسم الحج، ومواسم الترفيه الكبرى مثل موسم الرياض وفعاليات جدة والعلا. في هذه المواسم، يتضاعف الطلب على المواد الغذائية الأساسية (الأرز، الزيوت، الدواجن، واللحوم المجمدة) بنسب تتراوح بين 150% إلى 300%، مما يؤدي إلى شح معروض محلي واختناقات في أساطيل التوزيع وارتفاع حاد في الأسعار الفورية (Spot Market Prices).', 'p14-b1'),
+      b('المحاور الأربعة لإدارة مخاطر التوريد الغذائي الاستباقية', 'p14-h2-2', 'h2'),
+      b('1. التنبؤ المبكر بالطلب (Demand Forecasting & Buffer Stocking)', 'p14-h3-1', 'h3'),
+      b('يجب على مديري المشتريات مراجعة بيانات الاستهلاك في المواسم السابقة قبل حلول الذروة بـ 60 إلى 90 يوماً على الأقل، وحجز كميات تعاقدية مسبقة مع الموردين المعتمدين لضمان تخصيص الحصص وتجنب الشراء الاضطراري بأسعار مرتفعة.', 'p14-b2'),
+      b('2. عقود تثبيت الأسعار (Price Lock Agreements)', 'p14-h3-2', 'h3'),
+      b('تتيح شركة منافذ التوريد لعملائها من الفنادق وسلاسل المطاعم وشركات الإعاشة توقيع عقود توريد موسمية بأسعار ثابتة ومحمية من تقلبات السوق العالمية، مما يمنح الشركات وضوحاً مالياً كاملاً في حساب تكلفة الوجبات وميزانيات التشغيل.', 'p14-b3'),
+      b('3. تنويع مناشئ الاستيراد والبدائل الجاهزة', 'p14-h3-3', 'h3'),
+      b('الاعتماد على مصدر واحد أو بلد منشأ وحيد يعرض المنشأة لمخاطر التوقف الفجائي بسبب تأخر الشحن البحري أو الإجراءات الجمركية. نحرص في منافذ التوريد على توفير بدائل مطابقة للمواصفات من البرازيل والهند ومصر لضمان التدفق السلس للبضائع.', 'p14-b4'),
+      b('4. التنسيق اللوجستي على مدار الساعة (24/7 Dispatch)', 'p14-h3-4', 'h3'),
+      b('خلال شهر رمضان ومواسم الفعاليات، تعمل مستودعاتنا ومستودعات فروعنا في الرياض والدوادمي وجدة بنظام النوبات المتتابعة لخدمة الطلبات الطارئة والتسليم الليلي قبل بدء ساعات الذروة التشغيلية.', 'p14-b5'),
+    ],
+    bodyEn: [
+      b('Understanding Food Supply Volatility During Saudi Peak Periods', 'p14en-h2-1', 'h2'),
+      b('Events like the holy month of Ramadan, Hajj, and Riyadh Season trigger unprecedented surges in food consumption, challenging inventory availability and baseline logistics.', 'p14en-b1'),
+      b('Four Strategic Pillars for Mitigating Seasonal Food Risks', 'p14en-h2-2', 'h2'),
+      b('Proactive demand forecasting 60-90 days in advance, fixed-price supply agreements, diversified sourcing origins, and 24/7 delivery dispatches safeguard business continuity.', 'p14en-b2'),
+      b('Reliable Buffer Inventory Management with Mnaveeh', 'p14en-h2-3', 'h2'),
+      b('Mnaveeh ALTourid operates resilient regional warehouses and dedicated reefer delivery fleets to insulate commercial partners from market shortages during peak trading windows.', 'p14en-b3'),
+    ],
+  },
+  {
+    _id: 'article-haccp-iso-food-safety-standards-dry-cold-storage-saudi',
+    _type: 'article',
+    title: {
+      _type: 'localizedString',
+      ar: 'معايير الهاسب (HACCP) ومطابقة الآيزو في مستودعات ومخازن الأغذية الجافة والمبردة',
+      en: 'HACCP & ISO Food Safety Standards in Saudi Dry & Cold Storage Warehouses',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'haccp-iso-food-safety-standards-dry-cold-storage-saudi',
+    },
+    excerpt: {
+      _type: 'localizedText',
+      ar: 'الدليل التقني لتطبيق نظم سلامة الغذاء HACCP و ISO 22000 في المستودعات الغذائية: نقاط التحكم الحرجة (CCPs)، اشتراطات مكافحة الآفات، وسجلات التتبع المعتمدة لدى SFDA.',
+      en: 'Technical compliance manual for HACCP and ISO 22000 food safety standards in dry and refrigerated Saudi warehouses: critical control points, SFDA audits, and cold chain traceability.',
+    },
+    coverImage: {
+      _type: 'localizedImage',
+      alt: {
+        _type: 'localizedString',
+        ar: 'معايير الجودة وسلامة الغذاء والهاسب في مستودعات الأغذية - منافذ التوريد',
+        en: 'HACCP & ISO Food Safety in Saudi Food Warehouses - Mnaveeh',
+      },
+      asset: {
+        _ref: 'image-f7afd3780d236ecc816f2b187e71005ea3d9e625-1451x1084-png',
+        _type: 'reference',
+      },
+    },
+    author: 'قطاع الجودة وسلامة الأغذية | منافذ التوريد',
+    publishedAt: '2026-11-02T20:00:00.000Z',
+    order: 15,
+    visible: true,
+    seo: {
+      _type: 'seo',
+      title: {
+        _type: 'localizedString',
+        ar: 'معايير الهاسب والآيزو في مستودعات المواد الغذائية بالسعودية | منافذ التوريد',
+        en: 'HACCP & ISO 22000 Standards in Saudi Food Storage Warehouses | Mnaveeh',
+      },
+      description: {
+        _type: 'localizedText',
+        ar: 'دليل تطبيق معايير الهاسب HACCP وشهادات الآيزو في مستودعات الأغذية الجافة والمجمدة بالمملكة: اشتراطات هيئة الغذاء والدواء SFDA، مكافحة الآفات، وسجلات التتبع الدقيقة.',
+        en: 'Comprehensive guide to HACCP compliance, ISO 22000 protocols, and SFDA warehouse licensing for dry, chilled, and frozen food storage in Saudi Arabia.',
+      },
+    },
+    body: [
+      b('أهمية معايير سلامة الغذاء العالمية في سلاسل الإمداد الحديثة', 'p15-h2-1', 'h2'),
+      b('لم يعد الالتزام بمعايير سلامة الأغذية مجرد إجراء روتيني اختياري، بل غدا شرطاً نظامياً وتجارياً أساسياً للتعامل مع الفنادق العالمية وسلاسل المطاعم الكبرى والجهات الحكومية في المملكة. يمثل نظام تحليل المخاطر ونقاط التحكم الحرجة (HACCP) ومواصفة ISO 22000 الإطار العلمي الأوثق لمنع المخاطر البيولوجية والكيميائية والفيزيائية في بيئة التخزين والتوزيع.', 'p15-b1'),
+      b('نقاط التحكم الحرجة (CCPs) في المستودعات الغذائية الجافة والمبردة', 'p15-h2-2', 'h2'),
+      b('1. مراقبة درجات الحرارة والرطوبة في غرف التجميد والتبريد', 'p15-h3-1', 'h3'),
+      b('تتطلب اللحوم والبروتينات المجمدة استقراراً تاماً عند درجة حرارة لا تتجاوز -18 درجة مئوية، بينما الأغذية الجافة (الأرز، الزيوت، المعلبات) تتطلب بيئة جافة مهواة بدرجة حرارة معتدلة ورطوبة لا تزيد عن 60% لتجنب تلف العبوات أو تكاثر الحشرات.', 'p15-b2'),
+      b('2. برامج النظافة ومكافحة الآفات (Integrated Pest Management)', 'p15-h3-2', 'h3'),
+      b('تطبيق برامج وقائية صارمة لعزل المستودعات عن طريق الستائر الهوائية، الأبواب الكهربائية سريعة الإغلاق، ومصائد الحشرات الإلكترونية المعتمدة غذائياً، مع عقود فحص دورية موثقة بسجلات تفقد معتمدة لدى الجهات الرقابية.', 'p15-b3'),
+      b('3. نظام التتبع وإدارة المخزون وفق مبدأ (FEFO / FIFO)', 'p15-h3-3', 'h3'),
+      b('الاعتماد على قاعدة «ما ينتهي أولاً يخرج أولاً» (First Expired, First Out) يضمن عدم بقاء أي صنف قريب من تاريخ انتهاء الصلاحية في المستودع، مع ربط كل كرتونة برقم تشغيلة إلكتروني يتيح تتبع مسار الشحنة من الميناء وحتى باب العميل.', 'p15-b4'),
+      b('التزام شركة منافذ التوريد بأعلى معايير الجودة والسلامة', 'p15-h2-3', 'h2'),
+      b('تخضع كافة مستودعات ومرافق شركة منافذ التوريد لرقابة صارمة ومطابقة دورية مع اشتراطات الهيئة العامة للغذاء والدواء (SFDA) والبلديات، مما يضمن لعملائنا استلام منتجات غذائية آمنة ومطابقة للمواصفات القياسية السعودية (SASO).', 'p15-b5'),
+    ],
+    bodyEn: [
+      b('Global Food Safety Systems in Saudi Supply Chains', 'p15en-h2-1', 'h2'),
+      b('Implementing HACCP and ISO 22000 food safety management systems ensures complete risk prevention across biological, physical, and chemical hazards in warehousing and logistics.', 'p15en-b1'),
+      b('Critical Control Points (CCPs) in Ambient & Cold Storage', 'p15en-h2-2', 'h2'),
+      b('From digital temperature logging at -18C for frozen meats to climate-controlled ambient zones for grains and oils, strict threshold controls protect cargo integrity.', 'p15en-b2'),
+      b('FEFO Inventory Rotation & Full Batch Traceability', 'p15en-h2-3', 'h2'),
+      b('Applying First Expired, First Out stock management paired with automated barcode tracking ensures full compliance with SFDA and SASO regulatory mandates.', 'p15en-b3'),
+    ],
+  },
+]
+
+
+export const allArticles: ArticleData[] = [...batch1Articles, ...batch2Articles, ...batch3Articles]
+

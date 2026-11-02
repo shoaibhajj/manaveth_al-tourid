@@ -1,5 +1,6 @@
 import 'server-only'
 import { draftMode } from 'next/headers'
+import { batch1Articles } from '../content/articles-data'
 import { sanityFetch } from './live'
 import {
   articleBySlugDraftQuery,
@@ -27,4 +28,9 @@ async function fetchDetail(query: string, draftQuery: string, slug: string): Pro
 
 export const getProductBySlug = (slug: string) => fetchDetail(productBySlugQuery, productBySlugDraftQuery, slug)
 export const getServiceBySlug = (slug: string) => fetchDetail(serviceBySlugQuery, serviceBySlugDraftQuery, slug)
-export const getArticleBySlug = (slug: string) => fetchDetail(articleBySlugQuery, articleBySlugDraftQuery, slug)
+export const getArticleBySlug = async (slug: string) => {
+  const fromSanity = await fetchDetail(articleBySlugQuery, articleBySlugDraftQuery, slug)
+  if (fromSanity) return fromSanity
+  const fallback = batch1Articles.find((a) => a.slug.current === slug)
+  return (fallback as unknown as DetailDocument) ?? null
+}

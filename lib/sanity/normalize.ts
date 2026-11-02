@@ -156,6 +156,7 @@ function toPlace(doc: Doc, index: number): Place {
     imageFit: doc.imageFit === 'contain' ? 'contain' : 'cover',
     imagePosition: doc.imagePosition === 'center' ? 'center' : doc.imagePosition === 'bottom' ? 'bottom' : 'top',
     hotspot,
+    aspectRatio: doc.aspectRatio === '1/1' || doc.aspectRatio === '16/9' || doc.aspectRatio === '16/10' || doc.aspectRatio === '4/3' ? doc.aspectRatio : '4/3',
     phone: clean(doc.phone),
     email: filled(doc.email) ? clean(doc.email) : undefined,
     manager: manager && (optionalLocalized(manager.name) || filled(manager.phone))

@@ -17,6 +17,7 @@ export type Place = {
   imageAlt: Localized
   imageFit?: 'cover' | 'contain'
   imagePosition?: 'top' | 'center' | 'bottom'
+  aspectRatio?: '16/10' | '4/3' | '1/1' | '16/9'
   hotspot?: { x: number; y: number }
   /** Leave empty until the number is provided. */
   phone: string

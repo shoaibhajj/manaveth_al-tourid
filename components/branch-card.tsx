@@ -58,6 +58,14 @@ export function BranchCard({ place }: { place: Place }) {
   }, [showLightbox])
 
   const isContain = place.imageFit === 'contain'
+  const aspectClass =
+    place.aspectRatio === '1/1'
+      ? 'aspect-square'
+      : place.aspectRatio === '4/3'
+        ? 'aspect-[4/3]'
+        : place.aspectRatio === '16/9'
+          ? 'aspect-video'
+          : 'aspect-[4/3]'
   const positionStyle = place.hotspot
     ? `${Math.round(place.hotspot.x * 100)}% ${Math.round(place.hotspot.y * 100)}%`
     : place.imagePosition === 'center'
@@ -96,9 +104,17 @@ export function BranchCard({ place }: { place: Place }) {
               setShowLightbox(true)
             }
           }}
-          className="group/img relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-forest-deep/10"
+          className={`group/img relative ${aspectClass} w-full cursor-pointer overflow-hidden bg-forest-deep/10`}
           aria-label={t({ ar: 'تكبير صورة ' + t(place.name), en: 'Enlarge photo of ' + t(place.name) })}
         >
+          {isContain && (
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-25 blur-md scale-110"
+              style={{ backgroundImage: `url(${place.image})` }}
+              aria-hidden="true"
+            />
+          )}
+
           <Image
             src={place.image}
             alt={t(place.imageAlt)}
@@ -201,7 +217,7 @@ export function BranchCard({ place }: { place: Place }) {
               <X className="size-5" />
             </button>
 
-            <div className="relative aspect-[16/10] w-[90vw] max-w-4xl max-h-[75vh]">
+            <div className="relative h-[70vh] w-[90vw] max-w-4xl flex items-center justify-center">
               <Image
                 src={place.image}
                 alt={t(place.imageAlt)}

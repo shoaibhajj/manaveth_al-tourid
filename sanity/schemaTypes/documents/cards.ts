@@ -223,20 +223,37 @@ export const place = defineType({
     defineField({ name: 'description', title: 'الوصف', type: 'localizedText', group: 'content' }),
     defineField({
       name: 'image',
-      title: 'الصورة',
-      description: 'صورة واجهة الفرع أو المستودع. الأبعاد المثالية: 1600×1000 بكسل (16:10) أو 1920×1080 (16:9). يمكنك النقر على الصورة لتعديل نقطة التركيز (Hotspot).',
+      title: 'صورة الواجهة',
+      description: 'صورة واجهة الفرع أو المستودع. القياسات المثالية: للصور العرضية 1600×1000 بكسل (16:10)، وللواجهات المرتفعة والمربعة 1200×900 أو 1200×1200 بكسل. يدعم Hotspot للتحكم بمركز التركيز.',
       type: 'localizedImage',
       group: 'content',
     }),
     defineField({
+      name: 'aspectRatio',
+      title: 'نسبة أبعاد بطاقة الفرع (Aspect Ratio)',
+      description: 'تحكم في شكل البطاقة: (4:3 واجهة عميقة - موصى به للفروع لإظهار اللوحة والمدخل معاً)، أو (1:1 مربعة كاملة)، أو (16:10 مستطيل عرضي كلاسيكي).',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'واجهة عميقة (4:3) - موصى به لواجهات المحلات واللوحات المرتفعة', value: '4/3' },
+          { title: 'مربعة كاملة (1:1) - للصور المربعة والشاملة من اللوحة للأرضية', value: '1/1' },
+          { title: 'مستطيل عرضي كلاسيكي (16:10)', value: '16/10' },
+          { title: 'أفقي سينمائي (16:9)', value: '16/9' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: '4/3',
+      group: 'content',
+    }),
+    defineField({
       name: 'imageFit',
-      title: 'نمط ملء الصورة في البطاقة',
-      description: '«تغطية متناسقة (Cover)» تملأ إطار البطاقة بشكل موحد، أو «احتواء كامل (Contain)» تعرض الصورة كاملة 100% بدون أي قص.',
+      title: 'نمط ملء الصورة في البطاقة (Fit Mode)',
+      description: '«تغطية متناسقة (Cover)» تملأ إطار البطاقة بالكامل، أو «احتواء كامل (Contain)» تعرض الصورة كاملة 100% دون اقتطاع أي بكسل مع خلفية ضبابية فخمة.',
       type: 'string',
       options: {
         list: [
           { title: 'تغطية متناسقة للإطار (Cover) - الافتراضي', value: 'cover' },
-          { title: 'احتواء كامل بدون أي قص (Contain)', value: 'contain' },
+          { title: 'احتواء كامل بدون أي قص (Contain) - تظهر الصورة 100% كاملة', value: 'contain' },
         ],
         layout: 'radio',
       },
@@ -245,12 +262,12 @@ export const place = defineType({
     }),
     defineField({
       name: 'imagePosition',
-      title: 'محاذاة وتركيز الصورة',
-      description: 'يحدد الجزء الذي يتم التركيز عليه عند قص الصورة. خيار «أعلى الصورة» يضمن ظهور لوحة المحل والواجهة بالكامل.',
+      title: 'محاذاة وتركيز الصورة (Focal Position)',
+      description: 'يحدد أي جزء يتم تثبيته: «أعلى الصورة» يضمن ثبات لوحة المحل والاسم التجاري دائماً، «المنتصف» يركز على الواجهة، «الأسفل» يركز على المدخل.',
       type: 'string',
       options: {
         list: [
-          { title: 'أعلى الصورة (لإظهار اللوحة والواجهة العلوية) - موصى به للفروع', value: 'top' },
+          { title: 'أعلى الصورة (Top) - تثبيت لوحة المحل والاسم التجاري', value: 'top' },
           { title: 'منتصف الصورة (Center)', value: 'center' },
           { title: 'أسفل الصورة (Bottom)', value: 'bottom' },
         ],

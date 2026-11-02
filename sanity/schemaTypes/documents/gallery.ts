@@ -61,7 +61,25 @@ export const galleryItem = defineType({
     defineField({
       name: 'videoUrl',
       title: 'رابط الفيديو',
+      description: 'يمكنك وضع رابط مباشر لملف فيديو MP4 أو رابط فيديو خارجي.',
       type: 'url',
+      group: 'media',
+      hidden: ({ parent }) => parent?.mediaType !== 'video',
+    }),
+    defineField({
+      name: 'videoAspectRatio',
+      title: 'نسبة أبعاد الفيديو (Aspect Ratio)',
+      description: 'اختر 16:9 للفيديوهات الأفقية، أو 9:16 للفيديوهات الرأسية (ريلز / ستوري / تيك توك).',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'أفقي كلاسيكي (16:9) - 1920×1080', value: '16/9' },
+          { title: 'رأسي / ريلز (9:16) - 1080×1920', value: '9/16' },
+          { title: 'شبه مربع (4:3) - 1440×1080', value: '4/3' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: '16/9',
       group: 'media',
       hidden: ({ parent }) => parent?.mediaType !== 'video',
     }),

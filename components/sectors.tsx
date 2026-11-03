@@ -64,7 +64,8 @@ export function Sectors() {
                     src={sector.image}
                     alt={t(sector.alt)}
                     fill
-                    sizes="(min-width: 1024px) 20vw, 70vw"
+                    sizes="(min-width: 1024px) 20vw, (min-width: 640px) 45vw, 70vw"
+                    quality={80}
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>

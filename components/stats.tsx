@@ -33,7 +33,7 @@ export function Stats() {
 
   return (
     <section aria-label={t(site.stats.label)} className="relative isolate overflow-hidden bg-forest-deep py-14">
-      <Image src="/images/service-sea.png" alt="" fill sizes="100vw" className="-z-20 object-cover opacity-25" />
+      <Image src="/images/service-sea.png" alt="" fill sizes="(max-width: 768px) 100vw, 1200px" quality={60} className="-z-20 object-cover opacity-25" />
       <div
         className="absolute inset-0 -z-10 from-forest-deep via-forest-deep/90 to-forest-deep/60 rtl:bg-gradient-to-l ltr:bg-gradient-to-r"
         aria-hidden="true"

@@ -68,7 +68,8 @@ export function ProductCard({ product }: { product: Product }) {
             src={product.image}
             alt={t(product.alt)}
             fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 92vw"
+            quality={80}
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </Link>
@@ -78,7 +79,8 @@ export function ProductCard({ product }: { product: Product }) {
             src={product.image}
             alt={t(product.alt)}
             fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 92vw"
+            quality={80}
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </div>

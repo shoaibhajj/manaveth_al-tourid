@@ -1459,11 +1459,118 @@ export const batch4Articles: ArticleData[] = [
 ]
 
 
+
+export const batch5PrArticles: ArticleData[] = [
+  {
+    _id: 'article-pr-1',
+    title: {
+      ar: '«منافذ التوريد» تعزز منظومة الإمداد الغذائي لقطاع المطاعم والفنادق بالمملكة وتواكب مستهدفات رؤية 2030',
+      en: 'Mnaveth ALTourid Expands Integrated Food Supply Networks for Saudi Hospitality and Restaurant Sectors in Line with Vision 2030',
+    },
+    slug: 'mnaveth-altourid-food-supply-chain-expansion-vision-2030',
+    category: {
+      ar: 'علاقات إعلامية وبيانات صحفية',
+      en: 'Press Releases & Media Relations',
+    },
+    publishedAt: '2026-11-03T10:00:00.000Z',
+    author: {
+      name: { ar: 'المركز الإعلامي - شركة منافذ التوريد', en: 'Media Center - Mnaveth ALTourid Trading Co.' },
+      role: { ar: 'بيان صحفي رسمي', en: 'Official Press Release' },
+    },
+    coverImage: '/images/branches-hero.png',
+    excerpt: {
+      ar: 'الرياض - أعلنت شركة منافذ التوريد للتجارة (سجل تجاري 1110011768) عن توسيع عملياتها اللوجستية وتدشين منظومة إمداد متطورة لخدمة قطاعات الضيافة والمطاعم والمطابخ المركزية بالمملكة، دعماً لمستهدفات رؤية السعودية 2030.',
+      en: 'Riyadh - Mnaveth ALTourid Trading Co. (CR 1110011768) announced the strategic expansion of its cold chain logistics network to serve hospitality, central kitchens, and food service sectors across Saudi Arabia.',
+    },
+    seo: {
+      title: {
+        ar: 'بيان صحفي: منافذ التوريد تعزز سلاسل الإمداد الغذائي لقطاع المطاعم والفنادق بالمملكة | رؤية 2030',
+        en: 'Press Release: Mnaveth ALTourid Expands Food Supply Chain Infrastructure in Saudi Arabia',
+      },
+      description: {
+        ar: 'بيان صحفي رسمي: شركة منافذ التوريد للتجارة توسع أسطول التوزيع المبرد ومراكز التخزين اللوجستي في الرياض والمنطقة الغربية لتلبية الطلب المتنامي في قطاع الإعاشة والضيافة والمطاعم.',
+        en: 'Official press release: Mnaveth ALTourid Trading Co. scales up cold storage hubs and reefer transport to empower Saudi hotels, restaurants, and catering contractors.',
+      },
+    },
+    body: [
+      b('إعلان صحفي رسمي: شراكات استراتيجية لدعم الأمن الغذائي ومشاريع الضيافة', 'pr1-h2-1', 'h2'),
+      b('الرياض، المملكة العربية السعودية — أعلنت شركة منافذ التوريد للتجارة (سجل تجاري: 1110011768)، إحدى الشركات الوطنية الرائدة في قطاع تجارة الجملة والتوريد الغذائي بالمملكة، عن إطلاق خطتها التوسعية الشاملة لتطوير سلاسل الإمداد والتوزيع المبرد للسلع الغذائية الاستراتيجية والبروتينات المجمدة، تزامناً مع الطفرة الاقتصادية والنمو المتسارع لقطاع السياحة والترفيه والمطاعم في إطار مستهدفات رؤية السعودية 2030.', 'pr1-b1'),
+      b('توسيع شبكة المستودعات المركزية في الرياض والغربية', 'pr1-h2-2', 'h2'),
+      b('وفي تصريح للإدارة التنفيذية، أكدت «منافذ التوريد» رفع الطاقة الاستيعابية لمستودعاتها المركزية في الرياض ومنطقة الحائر، بالتوازي مع توسيع نطاق العمليات في المنطقة الغربية (جدة، مكة المكرمة، والمدينة المنورة) لتلبية متطلبات كبرى سلاسل المطاعم، والمطابخ السحابية، وشركات الإعاشة المتعاقدة مع المشاريع الكبرى ومواسم العمرة والحج.', 'pr1-b2'),
+      b('منظومة تبريد متقدمة ومطابقة شاملة لاشتراطات SFDA', 'pr1-h2-3', 'h2'),
+      b('تعتمد الشركة أحدث تقنيات إدارة سلاسل التبريد (Cold Chain Integrity) مع مراقبة حرارية لحظية للشحنات على مدار الساعة لضمان وصول اللحوم المجمدة والكبدة والسلع التموينية بأعلى معايير السلامة والجودة المعتمدة من الهيئة العامة للغذاء والدواء (SFDA) والأنظمة الصحية الدولية (HACCP).', 'pr1-b3'),
+      b('التزام راسخ بدعم الشركاء التجاريين وعقود التوريد الحكومية', 'pr1-h2-4', 'h2'),
+      b('واختتم البيان بالتأكيد على جاهزية منافذ التوريد لتوقيع وتفعيل عقود التوريد السنوية والتنافس في منصات الأعمال المعتمدة (مثل منصة اعتماد والغرف التجارية)، مع تقديم حلول تموينية مرنة تضمن ثبات الأسعار وتدفق المخزون الاستراتيجي دون انقطاع.', 'pr1-b4'),
+    ],
+    bodyEn: [
+      b('Official Press Release: Strengthening Food Security and Hospitality Supply Chains', 'pr1en-h2-1', 'h2'),
+      b('Riyadh, Saudi Arabia — Mnaveth ALTourid Trading Co. (Commercial Registration: 1110011768), a premier Saudi wholesale and institutional food supplier, announced today the strategic scale-up of its temperature-controlled logistics infrastructure to support the rapid growth of Saudi hospitality, mega-events, and restaurant brands under Vision 2030.', 'pr1en-b1'),
+      b('Centralized Cold Hubs in Riyadh and Western Province', 'pr1en-h2-2', 'h2'),
+      b('The expansion enhances cold storage capacity across Riyadh and Western Province distribution hubs, enabling reliable supply continuity for hotels, cloud kitchens, and institutional catering contractors.', 'pr1en-b2'),
+      b('Full Compliance with SFDA & HACCP Standards', 'pr1en-h2-3', 'h2'),
+      b('Through active IoT thermal tracking and rigorous cold chain controls, Mnaveth ALTourid ensures all meats, proteins, and dry goods maintain unbroken freshness and strict adherence to Saudi Food and Drug Authority regulations.', 'pr1en-b3'),
+    ],
+  },
+  {
+    _id: 'article-pr-2',
+    title: {
+      ar: 'مسيرة 24 عاماً في قيادة سلاسل التوريد الغذائي: كيف رسخت «منافذ التوريد» معايير الجودة وسلامة الغذاء منذ 2004؟',
+      en: 'A 24-Year Legacy in Food Supply Leadership: How Mnaveth ALTourid Redefined Quality and Cold Chain Standards Since 2004',
+    },
+    slug: '24-years-excellence-food-supply-saudi-arabia-since-2004',
+    category: {
+      ar: 'تقارير الأعمال والريادة B2B',
+      en: 'B2B Business & Leadership',
+    },
+    publishedAt: '2026-11-03T11:00:00.000Z',
+    author: {
+      name: { ar: 'قسم الدراسات الاقتصادية والتوريد', en: 'Supply Chain & Economic Insights' },
+      role: { ar: 'تقرير استقصائي B2B', en: 'B2B Industry Feature' },
+    },
+    coverImage: '/images/warehouse-main.png',
+    excerpt: {
+      ar: 'تقرير شامل يسلط الضوء على رحلة شركة منافذ التوريد للتجارة منذ انطلاقتها عام 2004، ونجاحها في بناء شبكة إمداد غذائي موثوقة تخدم أكثر من 500 عميل وتدير ما يزيد عن 1,200 شحنة سنوية عبر أرجاء المملكة.',
+      en: 'An in-depth business report chronicling Mnaveth ALTourid Trading Co.’s 24-year journey since 2004, scaling institutional wholesale distribution to over 500 corporate clients with 1,200+ annual shipments across Saudi Arabia.',
+    },
+    seo: {
+      title: {
+        ar: 'تقرير أعمال: 24 عاماً من الريادة في سلاسل التوريد الغذائي بالمملكة | شركة منافذ التوريد للتجارة',
+        en: 'B2B Report: 24 Years of Food Logistics Excellence in Saudi Arabia | Mnaveth ALTourid',
+      },
+      description: {
+        ar: 'قصة نجاح B2B: كيف تمكنت شركة منافذ التوريد للتجارة منذ تأسيسها عام 2004 من كسب ثقة كبرى الفنادق والمطاعم والمطابخ المركزية بالمملكة عبر الالتزام الصارم بسلامة الغذاء وضمان استقرار الأسعار.',
+        en: 'Business feature: Exploring the 24-year heritage of Mnaveth ALTourid Trading Co. since 2004, serving premier restaurants, hotels, and institutional catering groups across the Kingdom.',
+      },
+    },
+    body: [
+      b('من التأسيس إلى الريادة الوطنية: ربع قرن من الثقة والتميز', 'pr2-h2-1', 'h2'),
+      b('عندما انطلقت شركة منافذ التوريد للتجارة في العاصمة الرياض عام 2004، كان قطاع تجارة الأغذية بالجملة يعتمد على قنوات تقليدية. وعلى مدار أكثر من 24 عاماً، وضعت الشركة نصب أعينها التحول إلى شريك استراتيجي طويل الأمد لقطاع الأعمال، وليس مجرد مورد بضائع عابر.', 'pr2-b1'),
+      b('أرقام وإنجازات تعكس حجم الحضور في السوق السعودي', 'pr2-h2-2', 'h2'),
+      b('اليوم، تفخر «منافذ التوريد» بسجل حافل يضم أكثر من 500 عميل نشط في قطاعات الفنادق، المستشفيات، سلاسل المطاعم، والجهات الحكومية، مع إدارة وتشغيل ما يزيد عن 1,200 شحنة تجارية سنوياً ترتبط بمصادر توريد معتمدة من أكثر من 20 دولة حول العالم.', 'pr2-b2'),
+      b('ثلاث ركائز جعلت «منافذ التوريد» الخيار الأول لمديري المشتريات', 'pr2-h2-3', 'h2'),
+      b('1. سلامة سلسلة التبريد المعتمدة: التزام لا يقبل المساومة مع شهادات الحلال واشتراطات هيئة الغذاء والدواء (SFDA).', 'pr2-b3'),
+      b('2. استقرار الأسعار والوفرة الدائمة: حماية الشركاء من تقلبات الأسواق العالمية عبر تعاقدات زراعية واستيرادية طويلة الأجل للسلع الاستراتيجية مثل الأرز البسمتي الهندي وزيوت الطعام واللحوم المجمدة.', 'pr2-b4'),
+      b('3. سرعة الاستجابة والمرونة التشغيلية: مستودعات متطورة وأسطول نقل مجهز وموزع جغرافياً يتيح التوصيل في أوقات قياسية ودعم العمليات على مدار الساعة.', 'pr2-b5'),
+      b('التطلع نحو المستقبل: شريك موثوق لمشاريع المملكة الكبرى', 'pr2-h2-4', 'h2'),
+      b('مع استمرار التوسع العمراني والسياحي، تواصل «منافذ التوريد» الاستثمار في الرقمنة اللوجستية وتوسيع محفظة المنتجات لتظل الذراع التمويني الأكثر اعتمادية لقطاع الأعمال السعودي.', 'pr2-b6'),
+    ],
+    bodyEn: [
+      b('From Foundation to National Leadership: Over Two Decades of B2B Excellence', 'pr2en-h2-1', 'h2'),
+      b('Founded in Riyadh in 2004, Mnaveth ALTourid Trading Co. has transformed into a strategic supply chain cornerstone for hospitality, healthcare, and commercial food enterprises across Saudi Arabia.', 'pr2en-b1'),
+      b('Milestones Defining Market Trust', 'pr2en-h2-2', 'h2'),
+      b('With over 500 active B2B clients, 1,200+ annual shipments, and direct sourcing from 20+ partner nations, Mnaveth ALTourid delivers unmatched reliability in frozen proteins, basmati rice, and dry staples.', 'pr2en-b2'),
+      b('Uncompromising Commitment to Safety & Price Stability', 'pr2en-h2-3', 'h2'),
+      b('Through active SFDA regulatory compliance, HACCP benchmarks, and forward contracting, the company insulates commercial buyers from global commodity volatility.', 'pr2en-b3'),
+    ],
+  },
+]
+
 export const allArticles: ArticleData[] = [
   ...batch1Articles,
   ...batch2Articles,
   ...batch3Articles,
   ...batch4Articles,
+  ...batch5PrArticles,
 ]
 
 

@@ -61,8 +61,9 @@ export function About() {
               src={site.brand.aboutImage}
               alt={t(about.imageAlt)}
               fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover transition-transform duration-[1.5s] group-hover:scale-105"
+              sizes="(min-width: 1024px) 50vw, (min-width: 640px) 70vw, 92vw"
+              quality={80}
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/60 to-transparent" aria-hidden="true" />
           </div>

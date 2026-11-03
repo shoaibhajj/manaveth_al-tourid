@@ -24,7 +24,7 @@ export function Hero() {
       ref={ref}
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-forest-deep pt-28 pb-16"
     >
-      <motion.div className="absolute inset-0 -z-20" style={{ y: imageY }}>
+      <div className="absolute inset-0 -z-20">
         {hero.media.type === 'video' && hero.media.video ? (
           <video
             className="absolute inset-0 size-full object-cover"
@@ -43,11 +43,13 @@ export function Hero() {
             alt={t(hero.imageAlt)}
             fill
             priority
-            sizes="100vw"
-            className="animate-ken-burns object-cover"
+            fetchPriority="high"
+            sizes="(max-width: 768px) 100vw, 100vw"
+            quality={80}
+            className="object-cover md:animate-ken-burns"
           />
         )}
-      </motion.div>
+      </div>
       <div
         className="absolute inset-0 -z-10 from-forest-deep via-forest-deep/80 to-forest-deep/10 rtl:bg-gradient-to-l ltr:bg-gradient-to-r"
         aria-hidden="true"

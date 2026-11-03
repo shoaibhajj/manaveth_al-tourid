@@ -367,8 +367,8 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
         name: localized(settings.companyName, base.site.brand.name),
         subtitle: localized(settings.tagline, base.site.brand.subtitle),
         logo: imageUrl(settings.logo, 600) ?? base.site.brand.logo,
-        aboutImage: imageUrl(about.image, 1400) ?? base.site.brand.aboutImage,
-        ctaImage: imageUrl(home.contact?.image, 1400) ?? base.site.brand.ctaImage,
+        aboutImage: imageUrl(about.image, 1000) ?? base.site.brand.aboutImage,
+        ctaImage: imageUrl(home.contact?.image, 1000) ?? base.site.brand.ctaImage,
       },
       hero: {
         ...base.site.hero,
@@ -379,9 +379,9 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
         buttons: buttons(hero.buttons, base.site.hero.buttons),
         media: {
           type: mediaIsVideo && videoSrc ? 'video' : 'image',
-          image: imageUrl(hero.image, 2000) ?? base.site.hero.media.image,
+          image: imageUrl(hero.image, 1600) ?? base.site.hero.media.image,
           video: mediaIsVideo ? videoSrc : undefined,
-          poster: imageUrl(hero.videoPoster, 2000),
+          poster: imageUrl(hero.videoPoster, 1600),
         },
       },
       about: {
@@ -444,7 +444,7 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
     galleryFeatured: featuredDoc
       ? {
           ...base.galleryFeatured,
-          src: imageUrl(featuredDoc.image, 1800) ?? base.galleryFeatured.src,
+          src: imageUrl(featuredDoc.image, 1200) ?? base.galleryFeatured.src,
           alt: featuredAlt ?? base.galleryFeatured.alt,
           caption: featuredAlt ?? base.galleryFeatured.caption,
         }

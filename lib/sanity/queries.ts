@@ -17,7 +17,10 @@ export const siteContentQuery = defineQuery(`{
   "stats": *[_type == "stat"] | order(order asc),
   "products": *[_type == "product"] | order(order asc){..., "slug": slug.current, "categoryId": category._ref},
   "productCategories": *[_type == "productCategory"] | order(order asc),
-  "places": *[_type == "place"] | order(order asc),
+  "places": *[_type == "place"] | order(order asc){
+    ...,
+    "videoFileUrl": videoFile.asset->url
+  },
   "galleryCategories": *[_type == "galleryCategory"] | order(order asc),
   "galleryItems": *[_type == "galleryItem"] | order(order asc){
     ...,

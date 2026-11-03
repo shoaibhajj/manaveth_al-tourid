@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { ExternalLink, Mail, MapPin, Maximize2, Phone, UserRound, X, type LucideIcon } from 'lucide-react'
+import { ExternalLink, Mail, MapPin, Maximize2, Phone, Star, UserRound, X, type LucideIcon } from 'lucide-react'
 import { getMapEmbedUrl, getMapLinkUrl, type Place } from '@/lib/content/branches'
 import { telUrl } from '@/lib/content/contact'
 import { useContent, useLocale } from './locale-provider'
@@ -58,6 +58,7 @@ export function BranchCard({ place }: { place: Place }) {
   }, [showLightbox])
 
   const isContain = place.imageFit === 'contain'
+  const isVideo = place.mediaType === 'video' && Boolean(place.videoUrl)
   const aspectClass =
     place.aspectRatio === '1/1'
       ? 'aspect-square'
@@ -65,7 +66,9 @@ export function BranchCard({ place }: { place: Place }) {
         ? 'aspect-[4/3]'
         : place.aspectRatio === '16/9'
           ? 'aspect-video'
-          : 'aspect-[4/3]'
+          : place.aspectRatio === '16/10'
+            ? 'aspect-[16/10]'
+            : 'aspect-square'
   const positionStyle = place.hotspot
     ? `${Math.round(place.hotspot.x * 100)}% ${Math.round(place.hotspot.y * 100)}%`
     : place.imagePosition === 'center'
@@ -105,43 +108,61 @@ export function BranchCard({ place }: { place: Place }) {
             }
           }}
           className={`group/img relative ${aspectClass} w-full cursor-pointer overflow-hidden bg-forest-deep/10`}
-          aria-label={t({ ar: 'تكبير صورة ' + t(place.name), en: 'Enlarge photo of ' + t(place.name) })}
+          aria-label={t({ ar: 'عرض وسائط ' + t(place.name), en: 'View media of ' + t(place.name) })}
         >
-          {isContain && (
-            <div
-              className="absolute inset-0 bg-cover bg-center opacity-25 blur-md scale-110"
-              style={{ backgroundImage: `url(${place.image})` }}
-              aria-hidden="true"
-            />
+          {isVideo ? (
+            <div className="relative size-full">
+              <video
+                src={place.videoUrl}
+                poster={place.videoPoster || place.image}
+                playsInline
+                muted
+                loop
+                autoPlay
+                preload="metadata"
+                className={`size-full ${isContain ? 'object-contain' : 'object-cover'}`}
+              />
+            </div>
+          ) : (
+            <>
+              {isContain && (
+                <div
+                  className="absolute inset-0 bg-cover bg-center opacity-30 blur-md scale-110"
+                  style={{ backgroundImage: `url(${place.image})` }}
+                  aria-hidden="true"
+                />
+              )}
+
+              <Image
+                src={place.image}
+                alt={t(place.imageAlt)}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className={`transition-transform duration-700 group-hover/img:scale-105 ${
+                  isContain ? 'object-contain' : 'object-cover'
+                }`}
+                style={{ objectPosition: positionStyle }}
+              />
+
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-forest-deep/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover/img:opacity-100"
+                aria-hidden="true"
+              />
+            </>
           )}
 
-          <Image
-            src={place.image}
-            alt={t(place.imageAlt)}
-            fill
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className={`transition-transform duration-700 group-hover/img:scale-105 ${
-              isContain ? 'object-contain' : 'object-cover'
-            }`}
-            style={{ objectPosition: positionStyle }}
-          />
-
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-forest-deep/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover/img:opacity-100"
-            aria-hidden="true"
-          />
-
-          <span className="absolute start-3 top-3 rounded-md bg-forest-deep/85 px-3 py-1 text-xs font-bold text-gold backdrop-blur-sm shadow-sm">
-            {t(place.kind === 'branch' ? site.ui.branch : site.ui.warehouse)}
-          </span>
-
-          <span className="absolute end-3 top-3 flex size-8 items-center justify-center rounded-md bg-forest-deep/85 text-cream/90 opacity-0 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-gold hover:text-forest-deep group-hover/img:opacity-100">
+          <span className="absolute end-3 bottom-3 flex size-8 items-center justify-center rounded-md bg-forest-deep/85 text-cream/90 opacity-0 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-gold hover:text-forest-deep group-hover/img:opacity-100">
             <Maximize2 className="size-4" aria-hidden="true" />
           </span>
         </div>
 
         <div className="flex flex-1 flex-col gap-5 p-5">
-          <h3 className="text-lg font-extrabold text-forest">{t(place.name)}</h3>
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="text-lg font-extrabold text-forest">{t(place.name)}</h3>
+            <span className="shrink-0 rounded-md bg-forest/10 px-2.5 py-1 text-xs font-bold text-forest">
+              {t(place.kind === 'branch' ? site.ui.branch : site.ui.warehouse)}
+            </span>
+          </div>
 
           <ul className="space-y-3">
             <InfoRow icon={MapPin} label={t(site.contact.address)} value={t(place.address)} />
@@ -183,15 +204,26 @@ export function BranchCard({ place }: { place: Place }) {
                 />
               </div>
             )}
-            <a
-              href={mapLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gold px-4 py-2.5 text-sm font-bold text-forest transition-colors hover:bg-gold"
-            >
-              <ExternalLink className="size-4" aria-hidden="true" />
-              {t(site.ui.openInMaps)}
-            </a>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <a
+                href={mapLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-gold/60 px-3 py-2 text-xs font-bold text-forest transition-colors hover:bg-gold hover:text-forest-deep"
+              >
+                <ExternalLink className="size-3.5" aria-hidden="true" />
+                {t(site.ui.openInMaps)}
+              </a>
+              <a
+                href={place.reviewUrl || place.mapUrl || mapLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-gold/15 border border-gold/40 px-3 py-2 text-xs font-bold text-forest transition-colors hover:bg-gold hover:text-forest-deep"
+              >
+                <Star className="size-3.5 fill-gold text-gold" aria-hidden="true" />
+                {t({ ar: 'قيّمنا على Google', en: 'Rate on Google' })}
+              </a>
+            </div>
           </div>
         </div>
       </article>
@@ -218,14 +250,25 @@ export function BranchCard({ place }: { place: Place }) {
             </button>
 
             <div className="relative h-[70vh] w-[90vw] max-w-4xl flex items-center justify-center">
-              <Image
-                src={place.image}
-                alt={t(place.imageAlt)}
-                fill
-                sizes="90vw"
-                className="object-contain"
-                priority
-              />
+              {isVideo ? (
+                <video
+                  src={place.videoUrl}
+                  poster={place.videoPoster || place.image}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-h-[70vh] w-full object-contain"
+                />
+              ) : (
+                <Image
+                  src={place.image}
+                  alt={t(place.imageAlt)}
+                  fill
+                  sizes="90vw"
+                  className="object-contain"
+                  priority
+                />
+              )}
             </div>
 
             <div className="border-t border-gold/15 bg-forest-deep/95 px-5 py-3 text-start">

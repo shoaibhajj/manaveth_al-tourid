@@ -13,8 +13,11 @@ export type Place = {
   kind: 'branch' | 'warehouse'
   name: Localized
   address: Localized
+  mediaType?: 'image' | 'video'
   image: string
   imageAlt: Localized
+  videoUrl?: string
+  videoPoster?: string
   imageFit?: 'cover' | 'contain'
   imagePosition?: 'top' | 'center' | 'bottom'
   aspectRatio?: '16/10' | '4/3' | '1/1' | '16/9'
@@ -28,6 +31,8 @@ export type Place = {
   mapQuery: string
   /** Optional Google Maps share link. It replaces the generated link when present. */
   mapUrl?: string
+  /** Direct link for customers to post 5-star Google Maps reviews */
+  reviewUrl?: string
   order: number
   visible?: boolean
 }
@@ -37,37 +42,56 @@ export const places: Place[] = [
     id: 'riyadh',
     kind: 'branch',
     name: { ar: 'الفرع الرئيسي - الرياض', en: 'Main Branch - Riyadh' },
-    address: { ar: 'الرياض، المملكة العربية السعودية', en: 'Riyadh, Saudi Arabia' },
+    address: {
+      ar: 'مكتب شركة منافذ التوريد التجارية، طريق الحائر، الدار البيضاء، الرياض 14519، المملكة العربية السعودية',
+      en: 'Mnaveth ALTourid Trading Office, Al Hair Road, Al Dar Al Baida, Riyadh 14519, Saudi Arabia',
+    },
     image: '/images/branch-riyadh.png',
     imageAlt: { ar: 'واجهة الفرع الرئيسي في الرياض', en: 'Exterior of the main branch in Riyadh' },
-    phone: '',
+    imagePosition: 'top',
+    aspectRatio: '1/1',
+    phone: '+966509971699',
     email: contact.email,
-    mapQuery: 'Riyadh, Saudi Arabia',
+    mapQuery: 'طريق الحائر، الدار البيضاء، الرياض 14519 المملكة العربية السعودية',
+    mapUrl: 'https://maps.app.goo.gl/51haFKyZQLDaHPaC8',
+    reviewUrl: 'https://maps.app.goo.gl/51haFKyZQLDaHPaC8',
     order: 1,
   },
   {
     id: 'jeddah',
     kind: 'branch',
-    name: { ar: 'فرع جدة', en: 'Jeddah Branch' },
-    address: { ar: 'جدة، المملكة العربية السعودية', en: 'Jeddah, Saudi Arabia' },
+    name: { ar: 'فرع جدة والمنطقة الغربية', en: 'Jeddah & Western Province Branch' },
+    address: {
+      ar: 'جدة، المملكة العربية السعودية',
+      en: 'Jeddah, Saudi Arabia',
+    },
     image: '/images/branch-jeddah.png',
     imageAlt: { ar: 'واجهة فرع جدة', en: 'Exterior of the Jeddah branch' },
-    phone: '',
+    imagePosition: 'top',
+    aspectRatio: '4/3',
+    phone: '+966509971699',
     email: contact.email,
     mapQuery: 'Jeddah, Saudi Arabia',
+    mapUrl: 'https://maps.google.com/?q=21.5433,39.1728',
+    reviewUrl: 'https://maps.google.com/?q=21.5433,39.1728',
     order: 2,
   },
   {
     id: 'warehouse-riyadh',
     kind: 'warehouse',
     name: { ar: 'المستودع الرئيسي - الرياض', en: 'Main Warehouse - Riyadh' },
-    address: { ar: 'المنطقة الصناعية، الرياض', en: 'Industrial Area, Riyadh' },
+    address: {
+      ar: 'المنطقة الصناعية، الرياض، المملكة العربية السعودية',
+      en: 'Industrial Area, Riyadh, Saudi Arabia',
+    },
     image: '/images/warehouse-main.png',
     imageAlt: { ar: 'المستودع الرئيسي مع منصات التحميل', en: 'The main warehouse with loading docks' },
-    phone: '',
+    imagePosition: 'top',
+    aspectRatio: '16/10',
+    phone: '+966509971699',
     manager: {
-      name: { ar: 'اسم المسؤول', en: 'Manager name' },
-      phone: '',
+      name: { ar: 'إدارة العمليات والتوريد المركزية', en: 'Central Operations & Logistics' },
+      phone: '+966509971699',
     },
     mapQuery: 'Riyadh Industrial Area, Saudi Arabia',
     order: 1,

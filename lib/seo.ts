@@ -51,28 +51,43 @@ export function organizationGraph(content: SiteContent, locale: Locale, base: st
   const home = `${base}${localePath('/', locale)}`
   const social = content.contact.social.map((item) => item.url).filter(Boolean)
 
-  const branchStores = (content.branches || []).map((branch) =>
-    compact({
-      '@type': 'WholesaleStore',
+  const branchStores = (content.branches || []).map((branch) => {
+    const isDawadmi = branch.name.ar.includes('الدوادمي')
+    const isJeddah = branch.name.ar.includes('جدة')
+    const cityAr = isDawadmi ? 'الدوادمي' : isJeddah ? 'جدة' : 'الرياض'
+    const cityEn = isDawadmi ? 'Al Dawadmi' : isJeddah ? 'Jeddah' : 'Riyadh'
+    const geo = isDawadmi
+      ? { '@type': 'GeoCoordinates', latitude: 24.5071, longitude: 44.3924 }
+      : isJeddah
+        ? { '@type': 'GeoCoordinates', latitude: 21.5433, longitude: 39.1728 }
+        : { '@type': 'GeoCoordinates', latitude: 24.5822, longitude: 46.7725 }
+
+    return compact({
+      '@type': ['WholesaleStore', 'FoodEstablishment'],
       '@id': `${base}/#branch-${branch.id}`,
       name: `${content.site.brand.name[locale]} - ${branch.name[locale]}`,
-      url: `${base}${localePath('/branches', locale)}`,
+      legalName: 'شركة منافذ التوريد للتجارة',
+      url: `${base}${localePath('/branches', locale)}#branch-${branch.id}`,
       image: absolute(branch.image, base),
-      telephone: branch.phone || content.contact.phone,
+      telephone: branch.phone || content.contact.phone || '+966509971699',
       email: branch.email || content.contact.email,
+      priceRange: '$',
+      currenciesAccepted: 'SAR',
+      paymentAccepted: 'Cash, Credit Card, Bank Transfer',
       address: {
         '@type': 'PostalAddress',
         streetAddress: branch.address[locale],
-        addressLocality: branch.name.ar.includes('الدوادمي')
-          ? (locale === 'ar' ? 'الدوادمي' : 'Al Dawadmi')
-          : branch.name.ar.includes('جدة')
-            ? (locale === 'ar' ? 'جدة' : 'Jeddah')
-            : (locale === 'ar' ? 'الرياض' : 'Riyadh'),
+        addressLocality: locale === 'ar' ? cityAr : cityEn,
+        addressRegion: isJeddah ? (locale === 'ar' ? 'منطقة مكة المكرمة' : 'Makkah Province') : (locale === 'ar' ? 'منطقة الرياض' : 'Riyadh Province'),
         addressCountry: 'SA',
       },
+      geo,
+      areaServed: isJeddah
+        ? ['Jeddah', 'Makkah', 'Madinah', 'Saudi Arabia']
+        : ['Riyadh', 'Central Province', 'Saudi Arabia'],
       hasMap: branch.mapUrl || undefined,
+      sameAs: [branch.mapUrl, branch.reviewUrl, ...social].filter(Boolean),
       parentOrganization: { '@id': `${base}/#organization` },
-      priceRange: '$',
       openingHoursSpecification: [
         {
           '@type': 'OpeningHoursSpecification',
@@ -81,8 +96,8 @@ export function organizationGraph(content: SiteContent, locale: Locale, base: st
           closes: '18:00',
         },
       ],
-    }),
-  )
+    })
+  })
 
   return [
     compact({

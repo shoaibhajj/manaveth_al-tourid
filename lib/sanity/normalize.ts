@@ -146,17 +146,26 @@ function toPlace(doc: Doc, index: number): Place {
   const hotspot = doc.image?.hotspot
     ? { x: Number(doc.image.hotspot.x ?? 0.5), y: Number(doc.image.hotspot.y ?? 0.5) }
     : undefined
+  const isVideo = clean(doc.mediaType) === 'video'
+  const video = isVideo
+    ? (doc.videoFileUrl ?? (filled(doc.videoUrl) ? clean(doc.videoUrl) : undefined))
+    : undefined
+  const poster = imageUrl(doc.videoPoster, 1400)
+
   return {
     id: doc._id,
     kind: clean(doc.kind) === 'warehouse' ? 'warehouse' : 'branch',
     name,
     address,
-    image: imageUrl(doc.image, 1400) ?? staticContent.site.brand.aboutImage,
+    mediaType: isVideo ? 'video' : 'image',
+    image: imageUrl(doc.image, 1400) ?? poster ?? staticContent.site.brand.aboutImage,
     imageAlt: altOf(doc.image, name),
+    videoUrl: video,
+    videoPoster: poster,
     imageFit: doc.imageFit === 'contain' ? 'contain' : 'cover',
     imagePosition: doc.imagePosition === 'center' ? 'center' : doc.imagePosition === 'bottom' ? 'bottom' : 'top',
     hotspot,
-    aspectRatio: doc.aspectRatio === '1/1' || doc.aspectRatio === '16/9' || doc.aspectRatio === '16/10' || doc.aspectRatio === '4/3' ? doc.aspectRatio : '4/3',
+    aspectRatio: doc.aspectRatio === '1/1' || doc.aspectRatio === '16/9' || doc.aspectRatio === '16/10' || doc.aspectRatio === '4/3' ? doc.aspectRatio : '1/1',
     phone: clean(doc.phone),
     email: filled(doc.email) ? clean(doc.email) : undefined,
     manager: manager && (optionalLocalized(manager.name) || filled(manager.phone))
@@ -164,6 +173,7 @@ function toPlace(doc: Doc, index: number): Place {
       : undefined,
     mapQuery: clean(doc.mapQuery) || clean(address.en) || clean(address.ar),
     mapUrl: filled(doc.mapUrl) ? clean(doc.mapUrl) : undefined,
+    reviewUrl: filled(doc.reviewUrl) ? clean(doc.reviewUrl) : (filled(doc.mapUrl) ? clean(doc.mapUrl) : undefined),
     order: doc.order ?? index,
   }
 }

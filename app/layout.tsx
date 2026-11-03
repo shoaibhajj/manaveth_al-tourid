@@ -31,6 +31,11 @@ export async function generateMetadata(): Promise<Metadata> {
     description: home.description[locale],
     generator: 'v0.app',
     icons: { icon, apple: icon },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+      yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || undefined,
+      other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } : undefined,
+    },
   }
 }
 

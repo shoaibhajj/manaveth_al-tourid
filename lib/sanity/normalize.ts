@@ -115,10 +115,11 @@ function titleLines(title: Localized): Localized[] {
 function seo(doc: Doc | null | undefined, fallback: PageSeo): PageSeo {
   if (!doc) return fallback
   const rawTitle = localized(doc.title, fallback.title)
+  const rawDesc = localized(doc.description, fallback.description)
   const cleanYear = (text: string) => text.replace(/2001/g, '2004').replace(/2004المواد الغذائية منذ 200220/g, 'المواد الغذائية منذ 2004')
   return {
     title: { ar: cleanYear(rawTitle.ar), en: cleanYear(rawTitle.en) },
-    description: localized(doc.description, fallback.description),
+    description: { ar: cleanYear(rawDesc.ar), en: cleanYear(rawDesc.en) },
     shareImage: imageUrl(doc.shareImage, 1200) ?? fallback.shareImage,
   }
 }

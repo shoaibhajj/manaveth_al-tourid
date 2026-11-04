@@ -106,10 +106,10 @@ export function organizationGraph(content: SiteContent, locale: Locale, base: st
       name: content.site.brand.name[locale],
       legalName: 'شركة منافذ التوريد للتجارة',
       foundingDate: '2004',
-      identifier: '1110011768',
+      identifier: '1116011768',
       taxID: '300000000000003',
-      vatID: 'CR 1110011768',
-      iso6523Code: '0199:1110011768',
+      vatID: 'CR 1116011768',
+      iso6523Code: '0199:1116011768',
       knowsAbout: [
         'Food Supply Chains',
         'Frozen Meat Wholesale',

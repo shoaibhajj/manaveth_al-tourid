@@ -34,7 +34,7 @@ export function SiteFooter() {
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/60">{t(site.footer.description)}</p>
           <div className="mt-4 flex flex-wrap items-center gap-2.5 text-xs text-cream/75">
             <span className="inline-flex items-center gap-1.5 rounded-md border border-gold/30 bg-forest/30 px-2.5 py-1 font-mono text-gold">
-              <span className="font-semibold">{t({ ar: 'سجل تجاري:', en: 'CR:' })}</span> 1110011768
+              <span className="font-semibold">{t({ ar: 'سجل تجاري:', en: 'CR:' })}</span> 1116011768
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-md border border-gold/20 bg-forest/20 px-2.5 py-1 text-cream/80">
               {t({ ar: 'تأسست عام 2004 م', en: 'Est. 2004' })}

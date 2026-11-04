@@ -87,6 +87,45 @@ export async function GET(request: Request) {
     results.push({ id: 'place-jeddah', status: 'error', message: err.message })
   }
 
+  // 3. Update seoHome Founding Year to 2004
+  try {
+    const seoHomeDoc = await client
+      .patch('seoHome')
+      .set({
+        title: {
+          _type: 'localizedString',
+          ar: 'منافذ التوريد | شريكك الموثوق في توريد المواد الغذائية منذ 2004',
+          en: 'Mnaveth ALTourid | Your trusted partner in food supply since 2004',
+        },
+      })
+      .commit()
+    results.push({ id: seoHomeDoc._id, status: 'updated' })
+  } catch (err: any) {
+    results.push({ id: 'seoHome', status: 'error', message: err.message })
+  }
+
+  // 4. Update siteSettings defaultSeo to 2004
+  try {
+    const siteSettingsDoc = await client
+      .patch('siteSettings')
+      .set({
+        'defaultSeo.title': {
+          _type: 'localizedString',
+          ar: 'منافذ التوريد | شريكك الموثوق في توريد المواد الغذائية منذ 2004',
+          en: 'Mnaveth ALTourid | Your trusted partner in food supply since 2004',
+        },
+        'defaultSeo.shareImage.alt': {
+          _type: 'localizedString',
+          ar: '**منافذ التوريد التجارية | Mnaveth ALTourid** منذ 2004، نمدّ أعمالكم بمنتجات غذائية عالية الجودة، وشراكات عالمية، وحلول توريد موثوقة تلبي تطلعات المطاعم والفنادق وتجار الجملة. **منافذ التوريد – توريد يُعتمد عليه منذ 2004.** 🌐 mnaveth-altourid.com',
+          en: '**Mnaveth ALTourid | Commercial Trading** Since 2004, we have been delivering premium-quality food products through trusted global partnerships and reliable supply solutions, serving wholesalers, restaurants, and hotels. **Mnaveth ALTourid – Supply You Can Rely On Since 2004.** 🌐 mnaveth-altourid.com',
+        },
+      })
+      .commit()
+    results.push({ id: siteSettingsDoc._id, status: 'updated' })
+  } catch (err: any) {
+    results.push({ id: 'siteSettings', status: 'error', message: err.message })
+  }
+
   return NextResponse.json({
     success: true,
     results,

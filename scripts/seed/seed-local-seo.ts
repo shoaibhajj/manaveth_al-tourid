@@ -7,7 +7,8 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const key = url.searchParams.get('key')
-  if (key !== 'mnaveth2026') {
+  const adminSecret = process.env.ADMIN_API_SECRET
+  if (!adminSecret || key !== adminSecret) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

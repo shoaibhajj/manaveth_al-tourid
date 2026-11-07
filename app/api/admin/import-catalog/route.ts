@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from 'next-sanity'
 import { isSanityConfigured, sanityEnv } from '@/sanity/env'
-import { catalogCategories, defaultCatalogProducts } from '@/lib/content/catalog-data'
 
 export const dynamic = 'force-dynamic'
 
@@ -97,147 +96,22 @@ function parseCsv(text: string): Record<string, string>[] {
   return result
 }
 
-export async function GET(request: Request) {
-  const url = new URL(request.url)
-  const key = url.searchParams.get('key')
-  const action = url.searchParams.get('action')
-
-  if (key !== 'mnaveth2026') {
-    return NextResponse.json({ error: 'Unauthorized: invalid or missing key' }, { status: 401 })
-  }
-
-  const client = getSanityClient()
-  if (!client) {
-    return NextResponse.json({ error: 'Sanity write client is not configured or token missing' }, { status: 500 })
-  }
-
-  if (action === 'seed-defaults') {
-    try {
-      // 1. Seed categories
-      const categoryRefs: Record<string, string> = {}
-      for (const cat of catalogCategories) {
-        const catId = `category-${cat.id}`
-        await client.createOrReplace({
-          _id: catId,
-          _type: 'productCategory',
-          name: {
-            _type: 'localizedString',
-            ar: cat.name.ar,
-            en: cat.name.en,
-          },
-          order: cat.order,
-          visible: true,
-        })
-        categoryRefs[cat.id] = catId
-      }
-
-      // 2. Seed products
-      let seededCount = 0
-      for (const p of defaultCatalogProducts) {
-        const catRef = categoryRefs[p.categoryId] || `category-${p.categoryId}`
-        const slug = slugify(p.sku || p.id)
-        await client.createOrReplace({
-          _id: p.id,
-          _type: 'product',
-          name: {
-            _type: 'localizedString',
-            ar: p.name.ar,
-            en: p.name.en,
-          },
-          slug: {
-            _type: 'slug',
-            current: slug,
-          },
-          description: {
-            _type: 'localizedText',
-            ar: p.description.ar,
-            en: p.description.en,
-          },
-          origin: {
-            _type: 'localizedString',
-            ar: p.origin.ar,
-            en: p.origin.en,
-          },
-          packaging: {
-            _type: 'localizedString',
-            ar: p.packaging.ar,
-            en: p.packaging.en,
-          },
-          storage: {
-            _type: 'localizedText',
-            ar: p.storage.ar,
-            en: p.storage.en,
-          },
-          certifications: {
-            _type: 'localizedText',
-            ar: p.certifications.ar,
-            en: p.certifications.en,
-          },
-          usage: p.usage ? {
-            _type: 'localizedText',
-            ar: p.usage.ar,
-            en: p.usage.en,
-          } : undefined,
-          category: {
-            _type: 'reference',
-            _ref: catRef,
-          },
-          featured: Boolean(p.featured),
-          order: p.order,
-          visible: true,
-        })
-        seededCount++
-      }
-
-      // 3. Ensure catalogPage singleton exists
-      await client.createIfNotExists({
-        _id: 'catalogPage',
-        _type: 'catalogPage',
-        title: {
-          _type: 'localizedString',
-          ar: 'كتالوج الأصناف والمنتجات التموينية',
-          en: 'Wholesale Foodservice Product Catalog',
-        },
-        subtitle: {
-          _type: 'localizedText',
-          ar: 'الدليل المعتمد للأصناف والمواد الغذائية التموينية لكبرى المطاعم، الفنادق، ومطابخ الإعاشة في المملكة العربية السعودية.',
-          en: 'Official certified catalog of wholesale foodservice ingredients and staples for restaurants, hotels, and central catering kitchens across Saudi Arabia.',
-        },
-        catalogVersion: '2025.1',
-        lastUpdated: new Date().toISOString().split('T')[0],
-        bannerAlert: {
-          _type: 'localizedString',
-          ar: 'الأسعار خاضعة لحجم الكميات وعقود التوريد الدورية · إمكانية توفير عينات للمطابخ المركزية والفنادق',
-          en: 'Volume-based pricing and commercial catering contracts · Sample testing available for central commissaries',
-        },
-        inquiryWhatsApp: '966509971699',
-      })
-
-      return NextResponse.json({
-        success: true,
-        message: 'Successfully seeded 7 wholesale categories and 18 products into Sanity!',
-        categoriesCount: catalogCategories.length,
-        productsCount: seededCount,
-      })
-    } catch (err: any) {
-      return NextResponse.json({ error: err?.message || 'Error seeding products' }, { status: 500 })
-    }
-  }
-
-  return NextResponse.json({
-    status: 'ready',
-    message: 'Send POST with a CSV file (exported from Excel) to import products, or GET with action=seed-defaults to populate default products.',
-  })
-}
-
+// POST ONLY: Secure bulk import from spreadsheet requiring environment secret
 export async function POST(request: Request) {
   try {
+    const adminSecret = process.env.ADMIN_API_SECRET
+    const authHeader = request.headers.get('authorization')
+    const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+
     const formData = await request.formData()
     const file = formData.get('file') as File | null
-    const key = (formData.get('key') as string) || new URL(request.url).searchParams.get('key')
+    const key = (formData.get('key') as string) || bearerToken
 
-    if (key !== 'mnaveth2026') {
-      return NextResponse.json({ error: 'Unauthorized: invalid or missing key' }, { status: 401 })
+    if (!adminSecret || key !== adminSecret) {
+      return NextResponse.json(
+        { error: 'Unauthorized: valid ADMIN_API_SECRET required' },
+        { status: 401 }
+      )
     }
 
     if (!file) {
@@ -252,20 +126,37 @@ export async function POST(request: Request) {
     }
 
     const client = getSanityClient()
+    if (!client) {
+      return NextResponse.json(
+        { error: 'Sanity write client is not configured' },
+        { status: 500 }
+      )
+    }
+
     const results: any[] = []
     const categoriesSeen = new Map<string, string>()
 
     for (let index = 0; index < rawRows.length; index++) {
       const row = rawRows[index]
 
-      const sku = String(row['كود الصنف (SKU)'] || row['كود الصنف'] || row['sku'] || row['SKU'] || `MNV-${index + 1}`).trim()
-      const nameAr = String(row['اسم الصنف بالعربي'] || row['اسم الصنف'] || row['name_ar'] || row['name'] || '').trim()
-      const nameEn = String(row['Product Name (EN)'] || row['Product Name'] || row['name_en'] || nameAr).trim()
+      const sku = String(
+        row['كود الصنف (SKU)'] || row['كود الصنف'] || row['sku'] || row['SKU'] || `MNV-${index + 1}`
+      ).trim()
+      const nameAr = String(
+        row['اسم الصنف بالعربي'] || row['اسم الصنف'] || row['name_ar'] || row['name'] || ''
+      ).trim()
+      const nameEn = String(
+        row['Product Name (EN)'] || row['Product Name'] || row['name_en'] || nameAr
+      ).trim()
 
       if (!nameAr) continue
 
-      const catAr = String(row['التصنيف بالعربي'] || row['التصنيف'] || row['category_ar'] || row['category'] || 'أصناف تموينية عامة').trim()
-      const catEn = String(row['Category (EN)'] || row['Category'] || row['category_en'] || catAr).trim()
+      const catAr = String(
+        row['التصنيف بالعربي'] || row['التصنيف'] || row['category_ar'] || row['category'] || 'أصناف تموينية عامة'
+      ).trim()
+      const catEn = String(
+        row['Category (EN)'] || row['Category'] || row['category_en'] || catAr
+      ).trim()
 
       const originAr = String(row['بلد المنشأ'] || row['المنشأ'] || row['origin_ar'] || row['origin'] || '').trim()
       const originEn = String(row['Origin (EN)'] || row['origin_en'] || originAr).trim()
@@ -291,18 +182,17 @@ export async function POST(request: Request) {
         catRefId = `category-${catSlug}`
         categoriesSeen.set(catAr, catRefId)
 
-        if (client) {
-          await client.createIfNotExists({
-            _id: catRefId,
-            _type: 'productCategory',
-            name: { _type: 'localizedString', ar: catAr, en: catEn },
-            order: categoriesSeen.size,
-            visible: true,
-          })
-        }
+        await client.createIfNotExists({
+          _id: catRefId,
+          _type: 'productCategory',
+          name: { _type: 'localizedString', ar: catAr, en: catEn },
+          order: categoriesSeen.size,
+          visible: true,
+        })
       }
 
-      const prodSlug = slugify(sku || nameEn) || `item-${index + 1}`
+      // Generate slug from English name as required by F2
+      const prodSlug = slugify(nameEn) || slugify(sku) || `item-${index + 1}`
       const prodId = `prod-${prodSlug}`
 
       const productDoc: any = {
@@ -310,43 +200,49 @@ export async function POST(request: Request) {
         _type: 'product',
         name: { _type: 'localizedString', ar: nameAr, en: nameEn },
         slug: { _type: 'slug', current: prodSlug },
-        description: { _type: 'localizedText', ar: descAr || nameAr, en: descEn || nameEn },
-        origin: originAr ? { _type: 'localizedString', ar: originAr, en: originEn } : undefined,
-        packaging: packagingAr ? { _type: 'localizedString', ar: packagingAr, en: packagingEn } : undefined,
-        storage: storageAr ? { _type: 'localizedText', ar: storageAr, en: storageEn } : undefined,
-        certifications: certAr ? { _type: 'localizedText', ar: certAr, en: certEn } : undefined,
-        category: catRefId ? { _type: 'reference', _ref: catRefId } : undefined,
+        sku,
+        category: { _type: 'reference', _ref: catRefId },
         order: index + 1,
         visible: true,
       }
 
+      if (descAr) {
+        productDoc.description = { _type: 'localizedString', ar: descAr, en: descEn || descAr }
+      }
+      if (originAr) {
+        productDoc.origin = { _type: 'localizedString', ar: originAr, en: originEn || originAr }
+      }
+      if (packagingAr) {
+        productDoc.packaging = { _type: 'localizedString', ar: packagingAr, en: packagingEn || packagingAr }
+      }
+      if (storageAr) {
+        productDoc.storage = { _type: 'localizedString', ar: storageAr, en: storageEn || storageAr }
+      }
+      if (certAr) {
+        productDoc.certifications = { _type: 'localizedString', ar: certAr, en: certEn || certAr }
+      }
       if (hasPrice) {
         productDoc.showPrice = true
-        productDoc.price = { amount: priceVal, unit: { _type: 'localizedString', ar: 'ر.س', en: 'SAR' } }
+        productDoc.price = {
+          _type: 'productPrice',
+          amount: priceVal,
+          unit: { _type: 'localizedString', ar: 'ر.س', en: 'SAR' },
+        }
       }
 
-      if (client) {
-        await client.createOrReplace(productDoc)
-      }
-
-      results.push({
-        sku,
-        nameAr,
-        nameEn,
-        categoryAr: catAr,
-        status: client ? 'synced_to_sanity' : 'parsed_only',
-      })
+      const res = await client.createOrReplace(productDoc)
+      results.push({ id: res._id, name: nameAr, sku })
     }
 
     return NextResponse.json({
       success: true,
-      totalRows: rawRows.length,
       importedCount: results.length,
-      categoriesCount: categoriesSeen.size,
-      syncedWithSanity: Boolean(client),
       items: results,
     })
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Error processing spreadsheet file' }, { status: 500 })
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error?.message || 'Internal server error while importing catalog' },
+      { status: 500 }
+    )
   }
 }

@@ -1,11 +1,18 @@
 import React, { useState } from 'react'
+import { useClient } from 'sanity'
+import { defaultSectionsList } from '@/lib/content/default-sections'
 
 export function ResetSectionsButton() {
+  const client = useClient({ apiVersion: '2024-01-01' })
   const [loading, setLoading] = useState(false)
   const [statusText, setStatusText] = useState('')
 
   const handleReset = async () => {
-    if (!window.confirm('هل تريد بالتأكيد إعادة رص واسترجاع كافة أقسام الصفحة الرئيسية الـ 10 إلى ترتيبها وحالتها الأصلية؟')) {
+    if (
+      !window.confirm(
+        'هل تريد بالتأكيد إعادة رص واسترجاع كافة أقسام الصفحة الرئيسية الـ 10 إلى ترتيبها وحالتها الأصلية؟'
+      )
+    ) {
       return
     }
 
@@ -13,18 +20,20 @@ export function ResetSectionsButton() {
     setStatusText('جاري استرجاع الأقسام...')
 
     try {
-      const res = await fetch('/api/admin/reset-sections?key=mnaveth2026')
-      const data = await res.json()
-      if (data.success) {
-        setStatusText('✅ تمت الاستعادة بنجاح! جاري التحديث...')
-        setTimeout(() => {
-          window.location.reload()
-        }, 1200)
-      } else {
-        setStatusText('❌ حدث خطأ: ' + (data.error || 'فشلت الاستعادة'))
-      }
+      // Direct authenticated patch using the Sanity Studio session
+      await client.patch('homePage').set({ sectionsList: defaultSectionsList }).commit()
+      await client
+        .patch('drafts.homePage')
+        .set({ sectionsList: defaultSectionsList })
+        .commit()
+        .catch(() => null)
+
+      setStatusText('✅ تمت الاستعادة بنجاح! جاري التحديث...')
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
     } catch (err: any) {
-      setStatusText('❌ فشل الاتصال: ' + err.message)
+      setStatusText('❌ حدث خطأ: ' + (err.message || 'فشلت الاستعادة'))
     } finally {
       setLoading(false)
     }
@@ -42,12 +51,33 @@ export function ResetSectionsButton() {
         direction: 'rtl',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+        }}
+      >
         <div>
-          <div style={{ fontWeight: 'bold', fontSize: '13px', color: '#c5a028', marginBottom: '4px' }}>
+          <div
+            style={{
+              fontWeight: 'bold',
+              fontSize: '13px',
+              color: '#c5a028',
+              marginBottom: '4px',
+            }}
+          >
             🔄 استعادة ترتيب أقسام الصفحة الرئيسية (Reset to Default)
           </div>
-          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>
+          <div
+            style={{
+              fontSize: '11px',
+              color: 'rgba(255,255,255,0.7)',
+              lineHeight: 1.5,
+            }}
+          >
             إذا حذفت قسماً بالخطأ أو أردت العودة الفورية لكافة الأقسام الـ 10 بترتيبها الأصلي، اضغط على هذا الزر:
           </div>
         </div>
@@ -72,25 +102,18 @@ export function ResetSectionsButton() {
           >
             {loading ? '⏳ جاري الاسترجاع...' : '🔄 استعادة الترتيب الافتراضي للأقسام'}
           </button>
-
-          <a
-            href="/api/admin/reset-sections?key=mnaveth2026"
-            target="_blank"
-            rel="noreferrer"
-            style={{
-              fontSize: '11px',
-              color: '#d4af37',
-              textDecoration: 'underline',
-              padding: '6px 8px',
-            }}
-          >
-            رابط مباشر للاستعادة ↗
-          </a>
         </div>
       </div>
 
       {statusText && (
-        <div style={{ marginTop: '10px', fontSize: '12px', fontWeight: 'bold', color: statusText.includes('✅') ? '#4ade80' : '#f87171' }}>
+        <div
+          style={{
+            marginTop: '10px',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            color: statusText.includes('✅') ? '#4ade80' : '#f87171',
+          }}
+        >
           {statusText}
         </div>
       )}

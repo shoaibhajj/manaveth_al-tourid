@@ -161,6 +161,14 @@ export const aboutSection = defineSection('aboutSection', 'من نحن', [
 
 export const servicesSection = defineSection('servicesSection', 'الخدمات')
 
+export const newsFeedSection = defineSection('newsFeedSection', 'نبض الشركة والأخبار والفعاليات', [
+  defineField({
+    name: 'subtitle',
+    title: 'نص إضافي أسفل العنوان',
+    type: 'localizedString',
+  }),
+])
+
 export const gallerySection = defineSection('gallerySection', 'معرض الأعمال', [
   defineField({
     name: 'showCategoryFilter',

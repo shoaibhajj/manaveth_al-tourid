@@ -7,7 +7,17 @@ export const siteContentQuery = defineQuery(`{
   "home": *[_type == "homePage"][0]{
     ...,
     "hero": hero{..., "videoFileUrl": videoFile.asset->url},
-    "featuredProducts": featuredProducts{..., "productIds": products[]._ref}
+    "featuredProducts": featuredProducts{..., "productIds": products[]._ref},
+    "sectionsList": sectionsList[]{
+      ...,
+      "customSection": customSectionRef->{...}
+    }
+  },
+  "customSections": *[_type == "customSection" && visible != false]{...},
+  "companyPosts": *[_type == "companyPost" && visible != false] | order(pinned desc, publishedAt desc){
+    ...,
+    "slug": slug.current,
+    "coverImage": coverImage.ar.asset->url
   },
   "seoHome": *[_type == "seoHome"][0],
   "seoProducts": *[_type == "seoProducts"][0],

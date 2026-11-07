@@ -1,5 +1,7 @@
 import type { SchemaTypeDefinition } from 'sanity'
 import { article } from './documents/articles'
+import { companyPost } from './documents/companyPost'
+import { customSection } from './documents/customSection'
 import { place, product, productCategory, sector, service, stat } from './documents/cards'
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
@@ -20,6 +22,7 @@ import {
   footerSection,
   gallerySection,
   heroSection,
+  newsFeedSection,
   sectorsSection,
   servicesSection,
   statsSection,
@@ -48,6 +51,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   seoBranches,
   // Repeatable documents
   article,
+  companyPost,
+  customSection,
   service,
   sector,
   stat,
@@ -70,6 +75,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   priceTier,
   heroSection,
   aboutSection,
+  newsFeedSection,
   servicesSection,
   gallerySection,
   statsSection,

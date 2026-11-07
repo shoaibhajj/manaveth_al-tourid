@@ -3,6 +3,7 @@ import type { Localized } from '../i18n'
 import type { Place } from '../content/branches'
 import type { Card } from '../content/services'
 import type { GalleryItem } from '../content/gallery'
+import type { CompanyPost } from '../content/company-news'
 import type { Product } from '../content/products'
 import type { IconKey } from '../content/types'
 import {
@@ -11,6 +12,7 @@ import {
   type GalleryCategory,
   type PageSeo,
   type SectionKey,
+  type SectionOrderItem,
   type SiteContent,
   type StatItem,
 } from '../content/model'
@@ -245,6 +247,57 @@ function toGalleryItem(doc: Doc, index: number): GalleryItem {
   }
 }
 
+function toCustomSection(doc: Doc | null | undefined) {
+  if (!doc) return undefined
+  return {
+    id: doc._id || doc._key,
+    internalName: clean(doc.internalName),
+    title: localized(doc.title, { ar: '', en: '' }),
+    eyebrow: optionalLocalized(doc.eyebrow),
+    description: optionalLocalized(doc.description),
+    layout: clean(doc.layout) || 'cards',
+    image: imageUrl(doc.image, 1200),
+    text: optionalLocalized(doc.text),
+    buttonLabel: optionalLocalized(doc.buttonLabel),
+    buttonHref: clean(doc.buttonHref) || '/#contact',
+    cards: list(doc.cards).map((c) => ({
+      id: c._key || c._id,
+      title: localized(c.title, { ar: '', en: '' }),
+      text: optionalLocalized(c.text),
+      icon: c.icon ? iconOf(c.icon, 'concierge') : undefined,
+      image: imageUrl(c.image, 800),
+      href: clean(c.href) || '/#contact',
+      ctaLabel: optionalLocalized(c.ctaLabel),
+    })),
+  }
+}
+
+function toCompanyPost(doc: Doc, index: number): CompanyPost {
+  const title = localized(doc.title, { ar: '', en: '' })
+  const excerpt = localized(doc.excerpt, { ar: '', en: '' })
+  const coverImage = doc.coverImage ?? imageUrl(doc.coverImage, 1000) ?? '/images/s-hotel.png'
+  const paragraphs = list(doc.body).map((p) => optionalLocalized(p)).filter((p): p is Localized => Boolean(p))
+  const highlights = list(doc.highlights).map((h) => optionalLocalized(h)).filter((h): h is Localized => Boolean(h))
+  return {
+    id: doc._id || `post-${index}`,
+    slug: clean(doc.slug) || `post-${index}`,
+    title,
+    badge: localized(doc.badge, { ar: 'مستجدات', en: 'Updates' }),
+    badgeType: (doc.badgeType as any) || 'event',
+    publishedAt: clean(doc.publishedAt) || new Date().toISOString().split('T')[0],
+    author: localized(doc.author, { ar: 'المركز الإعلامي', en: 'Media Center' }),
+    readTime: localized(doc.readTime, { ar: 'قراءة دقيقتين', en: '2 min read' }),
+    coverImage,
+    videoUrl: filled(doc.videoUrl) ? clean(doc.videoUrl) : undefined,
+    excerpt,
+    body: paragraphs.length > 0 ? paragraphs : [excerpt],
+    highlights: highlights.length > 0 ? highlights : undefined,
+    initialLikes: Number(doc.initialLikes) || 120,
+    initialComments: [],
+    pinned: Boolean(doc.pinned),
+  }
+}
+
 export function normalizeContent(data: Doc | null | undefined): SiteContent {
   if (!data || (!data.settings && !data.home && !data.products?.length)) return staticContent
 
@@ -255,12 +308,43 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
 
   const sectionFlags = (Object.keys(base.sections) as SectionKey[]).reduce(
     (flags, key) => {
-      const source: Doc | undefined = key === 'featuredProducts' ? home.featuredProducts : home[key]
+      const source: Doc | undefined =
+        key === 'featuredProducts'
+          ? home.featuredProducts
+          : key === 'news'
+            ? home.newsFeed
+            : home[key]
       flags[key] = source ? isVisible(source) : true
       return flags
     },
     {} as Record<SectionKey, boolean>,
   )
+
+  const customSections = list(data.customSections).filter(isVisible).map(toCustomSection).filter(Boolean)
+  const sanityPosts = list(data.companyPosts).filter(isVisible).map(toCompanyPost)
+  const companyPosts = sanityPosts.length > 0 ? sanityPosts : base.companyPosts
+
+  const rawSectionsList = list(home.sectionsList)
+  const orderedSections: SectionOrderItem[] = rawSectionsList.length > 0
+    ? rawSectionsList.map((item) => ({
+        key: clean(item.key),
+        enabled: item.enabled !== false,
+        customTitle: optionalLocalized(item.title),
+        customSectionRef: clean(item.customSectionRef?._ref),
+        customSection: item.customSection ? toCustomSection(item.customSection) : undefined,
+      }))
+    : [
+        { key: 'hero', enabled: true },
+        { key: 'about', enabled: sectionFlags.about !== false },
+        { key: 'news', enabled: sectionFlags.news !== false },
+        { key: 'services', enabled: sectionFlags.services !== false },
+        { key: 'featuredProducts', enabled: sectionFlags.featuredProducts !== false },
+        { key: 'gallery', enabled: sectionFlags.gallery !== false },
+        { key: 'stats', enabled: sectionFlags.stats !== false },
+        { key: 'sectors', enabled: sectionFlags.sectors !== false },
+        { key: 'branches', enabled: sectionFlags.branches !== false },
+        { key: 'contact', enabled: sectionFlags.contact !== false },
+      ]
 
   // Hero
   const hero: Doc = home.hero ?? {}
@@ -359,6 +443,9 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
     ...base,
     source: 'sanity',
     sections: sectionFlags,
+    orderedSections,
+    customSections,
+    companyPosts,
     showMaps: home.branches?.showMap !== false,
     contactButtons: buttons(home.contact?.buttons, []),
     site: {

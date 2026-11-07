@@ -45,12 +45,17 @@ export const structure: StructureResolver = (S) =>
               singleton(S, 'visitorCounter', 'عداد الزيارات'),
             ]),
         ),
-      singleton(S, 'homePage', 'الصفحة الرئيسية'),
+      singleton(S, 'homePage', 'الصفحة الرئيسية وتنسيق الأقسام'),
+      orderedList(S, 'customSection', 'الأقسام المخصصة (قابلة للنسخ والتكرار)', 'customSection'),
+      orderedList(S, 'companyPost', 'نبض الشركة وآخر الأخبار والفعاليات', 'companyPost', undefined, [
+        { field: 'pinned', direction: 'desc' },
+        { field: 'publishedAt', direction: 'desc' },
+      ]),
       S.divider(),
       orderedList(S, 'service', 'الخدمات', 'service'),
       orderedList(S, 'sector', 'القطاعات', 'sector'),
       orderedList(S, 'stat', 'الإحصائيات', 'stat'),
-      orderedList(S, 'article', 'المقالات', 'article', undefined, [{ field: 'publishedAt', direction: 'desc' }]),
+      orderedList(S, 'article', 'المقالات والبيانات الصحفية', 'article', undefined, [{ field: 'publishedAt', direction: 'desc' }]),
       S.listItem()
         .id('products-group')
         .title('المنتجات')

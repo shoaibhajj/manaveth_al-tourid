@@ -123,6 +123,86 @@ export const homePage = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'sectionsList',
+      title: '📋 ترتيب وإظهار/إخفاء أقسام الصفحة الرئيسية (Drag & Drop)',
+      description: 'اسحب الأقسام للأعلى أو الأسفل لتغيير ترتيب ظهورها على الموقع مباشرة. يمكنك إيقاف تفعيل أي قسم لإخفائه بنقرة واحدة.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'homeSectionConfig',
+          title: 'قسم في الصفحة',
+          fields: [
+            defineField({
+              name: 'key',
+              title: 'نوع القسم',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'الواجهة الرئيسية (Hero)', value: 'hero' },
+                  { title: 'من نحن (About)', value: 'about' },
+                  { title: 'نبض الشركة وآخر الأخبار والفعاليات (Company News)', value: 'news' },
+                  { title: 'الخدمات (Services)', value: 'services' },
+                  { title: 'المنتجات المميزة (Featured Products)', value: 'featuredProducts' },
+                  { title: 'معرض الأعمال التفاعلي (Gallery)', value: 'gallery' },
+                  { title: 'الإحصائيات والأرقام (Stats)', value: 'stats' },
+                  { title: 'القطاعات المستهدفة (Sectors)', value: 'sectors' },
+                  { title: 'الفروع والمستودعات (Branches)', value: 'branches' },
+                  { title: 'تواصل معنا (Contact)', value: 'contact' },
+                  { title: 'قسم مخصص مكرر (Custom Section)', value: 'custom' },
+                ],
+              },
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'title',
+              title: 'عنوان مخصص للقسم (اختياري)',
+              type: 'localizedString',
+            }),
+            defineField({
+              name: 'enabled',
+              title: 'إظهار هذا القسم على الموقع',
+              type: 'boolean',
+              initialValue: true,
+            }),
+            defineField({
+              name: 'customSectionRef',
+              title: 'اختر القسم المخصص المكرر',
+              type: 'reference',
+              to: [{ type: 'customSection' }],
+              hidden: ({ parent }) => parent?.key !== 'custom',
+            }),
+          ],
+          preview: {
+            select: {
+              key: 'key',
+              titleAr: 'title.ar',
+              enabled: 'enabled',
+            },
+            prepare: ({ key, titleAr, enabled }) => {
+              const names: Record<string, string> = {
+                hero: 'الواجهة الرئيسية (Hero)',
+                about: 'من نحن (About)',
+                news: 'نبض الشركة وآخر الأخبار (Company News)',
+                services: 'الخدمات (Services)',
+                featuredProducts: 'المنتجات المميزة (Featured Products)',
+                gallery: 'معرض الأعمال التفاعلي (Gallery)',
+                stats: 'الإحصائيات (Stats)',
+                sectors: 'القطاعات (Sectors)',
+                branches: 'الفروع والمستودعات (Branches)',
+                contact: 'تواصل معنا (Contact)',
+                custom: 'قسم مخصص مكرر (Custom Section)',
+              }
+              return {
+                title: titleAr || names[key] || key || 'قسم',
+                subtitle: enabled !== false ? '✅ مفعّل وظاهر' : '❌ مخفي حالياً',
+              }
+            },
+          },
+        }),
+      ],
+    }),
+    defineField({
       name: 'hero',
       title: 'الواجهة الرئيسية (Hero)',
       type: 'heroSection',
@@ -131,6 +211,7 @@ export const homePage = defineType({
     ...(
       [
         ['about', 'aboutSection', 'من نحن'],
+        ['newsFeed', 'newsFeedSection', 'نبض الشركة وآخر الأخبار والفعاليات'],
         ['services', 'servicesSection', 'الخدمات'],
         ['gallery', 'gallerySection', 'معرض الأعمال'],
         ['stats', 'statsSection', 'الإحصائيات'],

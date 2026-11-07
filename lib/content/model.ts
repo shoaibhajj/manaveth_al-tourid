@@ -8,6 +8,8 @@ import { services, type Card } from './services'
 import { site } from './site'
 import { visibleSorted, type IconKey } from './types'
 
+import { initialCompanyPosts, type CompanyPost } from './company-news'
+
 export type CtaButton = { label: Localized; href: string; style: 'primary' | 'secondary' }
 
 export type HeroMedia = {
@@ -56,6 +58,7 @@ export type PageSeo = { title: Localized; description: Localized; shareImage?: s
 
 export type SectionKey =
   | 'about'
+  | 'news'
   | 'services'
   | 'gallery'
   | 'stats'
@@ -64,8 +67,20 @@ export type SectionKey =
   | 'branches'
   | 'contact'
 
+export type SectionOrderItem = {
+  key: string
+  enabled: boolean
+  customTitle?: Localized
+  customSectionRef?: string
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  customSection?: any
+}
+
 export type SiteContent = {
   sections: Record<SectionKey, boolean>
+  orderedSections: SectionOrderItem[]
+  customSections: any[]
+  companyPosts?: CompanyPost[]
   showMaps: boolean
   contactButtons: CtaButton[]
   site: SiteData
@@ -117,6 +132,7 @@ const staticSite: SiteData = {
 export const staticContent: SiteContent = {
   sections: {
     about: true,
+    news: true,
     services: true,
     gallery: true,
     stats: true,
@@ -125,6 +141,20 @@ export const staticContent: SiteContent = {
     branches: true,
     contact: true,
   },
+  orderedSections: [
+    { key: 'hero', enabled: true },
+    { key: 'about', enabled: true },
+    { key: 'news', enabled: true },
+    { key: 'services', enabled: true },
+    { key: 'featuredProducts', enabled: true },
+    { key: 'gallery', enabled: true },
+    { key: 'stats', enabled: true },
+    { key: 'sectors', enabled: true },
+    { key: 'branches', enabled: true },
+    { key: 'contact', enabled: true },
+  ],
+  customSections: [],
+  companyPosts: initialCompanyPosts,
   showMaps: true,
   contactButtons: [],
   site: staticSite,

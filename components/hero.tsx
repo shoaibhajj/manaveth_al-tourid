@@ -45,8 +45,8 @@ export function Hero() {
             priority
             fetchPriority="high"
             sizes="(max-width: 768px) 100vw, 100vw"
-            quality={80}
-            className="object-cover md:animate-ken-burns"
+            quality={85}
+            className="object-cover"
           />
         )}
       </div>
@@ -83,46 +83,26 @@ export function Hero() {
         className="mx-auto w-full max-w-7xl px-4 md:px-6"
       >
         <div className="max-w-2xl">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-sm font-medium text-gold-light backdrop-blur-sm"
-          >
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-sm font-medium text-gold-light backdrop-blur-sm">
             <span className="size-2 animate-pulse rounded-full bg-gold" aria-hidden="true" />
             {t(hero.badge)}
-          </motion.p>
+          </p>
 
           <h1 className="text-4xl font-extrabold leading-[1.25] text-cream md:text-6xl">
             {hero.titleLines.map((line, i) => (
-              <span key={line.en} className="block overflow-hidden pb-1">
-                <motion.span
-                  className={`block ${i === 1 ? 'text-gold-gradient' : ''}`}
-                  initial={{ y: '110%' }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.15 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-                >
+              <span key={line.en} className="block pb-1">
+                <span className={`block ${i === 1 ? 'text-gold-gradient' : ''}`}>
                   {t(line)}
-                </motion.span>
+                </span>
               </span>
             ))}
           </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.55 }}
-            className="mt-5 max-w-lg text-pretty text-lg leading-relaxed text-cream/80 md:text-xl"
-          >
+          <p className="mt-5 max-w-lg text-pretty text-lg leading-relaxed text-cream/80 md:text-xl">
             {t(hero.subtitle)}
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.7 }}
-            className="mt-8 flex flex-wrap gap-3"
-          >
+          <div className="mt-8 flex flex-wrap gap-3">
             {hero.buttons.map((button) =>
               button.style === 'primary' ? (
                 <a
@@ -145,18 +125,15 @@ export function Hero() {
                 </a>
               ),
             )}
-          </motion.div>
+          </div>
         </div>
 
         <ul className="mt-14 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
           {hero.features.map(({ icon, label }, i) => {
             const Icon = icons[icon]
             return (
-              <motion.li
+              <li
                 key={`${icon}-${i}`}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.85 + i * 0.1 }}
                 className="group flex flex-col items-center gap-3 rounded-xl border border-cream/10 bg-forest-deep/40 px-3 py-5 text-center backdrop-blur-md transition-colors hover:border-gold/50 hover:bg-forest/60"
               >
                 <span
@@ -166,7 +143,7 @@ export function Hero() {
                   <Icon className="size-9" strokeWidth={1.5} aria-hidden="true" />
                 </span>
                 <span className="text-sm font-bold text-cream">{t(label)}</span>
-              </motion.li>
+              </li>
             )
           })}
         </ul>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { JsonLd } from '@/components/json-ld'
@@ -67,7 +68,16 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <JsonLd graph={productDetailGraph(product, locale, base)} />
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
         {image ? (
-          <img src={image} alt={title} className="aspect-[4/3] w-full rounded-3xl object-cover" />
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-forest/5 shadow-md">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
         ) : (
           <div className="aspect-[4/3] w-full rounded-3xl bg-forest/5 border border-dashed border-forest/20 flex flex-col items-center justify-center text-forest/50 p-6 text-center">
             <span className="text-sm font-semibold">{labelFor(locale, 'صورة المنتج قيد الاعتماد', 'Product image pending verification')}</span>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { JsonLd } from '@/components/json-ld'
 import { ShareActions } from '@/components/share-actions'
@@ -60,7 +61,18 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">{locale === 'ar' ? 'خدمة تموينية' : 'Service'}</p>
         <h1 className="text-4xl font-bold tracking-tight text-foreground">{title}</h1>
         {description ? <p className="text-xl leading-8 text-muted-foreground">{description}</p> : null}
-        {image ? <img src={image} alt={title} className="aspect-[16/9] w-full rounded-3xl object-cover" /> : null}
+        {image ? (
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl bg-forest/5 shadow-md">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 896px"
+              className="object-cover"
+            />
+          </div>
+        ) : null}
         <div className="prose prose-invert max-w-none text-foreground/90">
           <p className="leading-8">{details || description}</p>
         </div>

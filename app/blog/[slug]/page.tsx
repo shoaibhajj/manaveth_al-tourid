@@ -72,7 +72,15 @@ function renderBlocks(blocks: any[], locale: Locale) {
       if (src) {
         elements.push(
           <figure key={block._key ?? index} className="my-8 overflow-hidden rounded-2xl border border-forest/10">
-            <img src={src} alt={block.alt || ''} className="w-full object-cover max-h-[480px]" />
+            <div className="relative aspect-[16/9] w-full max-h-[480px]">
+              <Image
+                src={src}
+                alt={block.alt || ''}
+                fill
+                sizes="(max-width: 1024px) 100vw, 800px"
+                className="object-cover"
+              />
+            </div>
             {block.caption && (
               <figcaption className="p-3 text-center text-xs text-muted-foreground bg-forest/5">
                 {block.caption}

@@ -111,6 +111,43 @@ export const city = defineType({
       description: 'مثال: منطقة الرياض، منطقة مكة المكرمة، المنطقة الشرقية',
       type: 'localizedString',
     }),
+    defineField({
+      name: 'isSupplyConfirmed',
+      title: 'التوريد مؤكد إلى المدينة',
+      description: 'شرط النشر: يجب تفعيل هذا الحقل مع توفر 3 عناصر فعلية على الأقل لإنشاء صفحة المدينة',
+      type: 'boolean',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'coveredDistricts',
+      title: 'الأحياء والمناطق المغطاة',
+      description: 'قائمة الأحياء الصناعية والتجارية المخدومة بالشاحنات المبردة',
+      type: 'localizedText',
+    }),
+    defineField({
+      name: 'deliveryTime',
+      title: 'زمن التوصيل وجدولة الشحن المبرد',
+      description: 'مثال: توصيل يومي صباحي بين 4:00 إلى 8:00 صباحاً للمطابخ والفنادق',
+      type: 'localizedString',
+    }),
+    defineField({
+      name: 'minOrder',
+      title: 'الحد الأدنى للطلب (MOQ)',
+      description: 'مثال: 30 كرتون للحوم المجمدة أو 500 كجم إجمالي توريد',
+      type: 'localizedString',
+    }),
+    defineField({
+      name: 'pickupPoint',
+      title: 'نقطة أو مستودع الاستلام الفوري',
+      description: 'عنوان مستودع الشركة المعتمد في المدينة',
+      type: 'localizedString',
+    }),
+    defineField({
+      name: 'coldChainFacility',
+      title: 'مستودع التبريد والتخزين المرخص',
+      description: 'ترخيص الهيئة العامة للغذاء والدواء SFDA',
+      type: 'localizedString',
+    }),
   ],
   preview: {
     select: {

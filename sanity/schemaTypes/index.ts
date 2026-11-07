@@ -7,6 +7,7 @@ import { place, product, productCategory, sector, service, stat } from './docume
 import { brand, certificate, city, country } from './documents/taxonomy'
 import { redirect } from './documents/redirect'
 import { keywordCluster } from './documents/keywordCluster'
+import { landingPage } from './documents/landingPage'
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
   contactSettings,
@@ -71,6 +72,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   place,
   redirect,
   keywordCluster,
+  landingPage,
   galleryCategory,
   galleryItem,
   // Objects

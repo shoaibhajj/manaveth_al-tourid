@@ -7,7 +7,22 @@ export const locales: Locale[] = ['ar', 'en']
 /** Request header set by proxy.ts so server code knows which language URL was requested. */
 export const LOCALE_HEADER = 'x-locale'
 /** Public pages that exist in both languages. Arabic lives at the root, English under /en. */
-export const publicPaths = ['/', '/catalog', '/products', '/branches', '/blog', '/about'] as const
+export const publicPaths = [
+  '/',
+  '/catalog',
+  '/products',
+  '/meat-supply',
+  '/meat-supply/restaurants',
+  '/meat-supply/hotels',
+  '/meat-supply/catering',
+  '/meat-supply/riyadh',
+  '/meat-supply/jeddah',
+  '/certifications',
+  '/contact',
+  '/branches',
+  '/blog',
+  '/about',
+] as const
 
 export const isLocale = (value: unknown): value is Locale => value === 'ar' || value === 'en'
 export const directionOf = (locale: Locale): Direction => (locale === 'ar' ? 'rtl' : 'ltr')

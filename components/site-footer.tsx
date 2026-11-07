@@ -7,7 +7,18 @@ import { useContent, useLocale } from './locale-provider'
 import { SocialLinks } from './social-links'
 import { VisitorCounter } from './visitor-counter'
 
-const quickLinkIds = ['about', 'services', 'products', 'gallery', 'sectors', 'branches', 'blog']
+const quickLinkIds = [
+  'meat-supply',
+  'catalog',
+  'about',
+  'products',
+  'services',
+  'sectors',
+  'certifications',
+  'branches',
+  'contact',
+  'blog',
+]
 
 export function SiteFooter() {
   const { t, localize, locale } = useLocale()

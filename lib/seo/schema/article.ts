@@ -7,9 +7,20 @@ export function buildArticleSchema(article: any, locale: Locale, base: string) {
   const articleUrl = `${base}${isAr ? '' : '/en'}/blog/${slug}`
   const coverImage = article.coverImage?.assetUrl || article.coverImage?.ar?.assetUrl
 
-  const authorName =
-    article.author?.name ||
-    (isAr ? 'فريق التحرير - شركة منافذ التوريد' : 'Editorial Team - Mnaveth ALTourid')
+  // Task P5: Organization by default for corporate/editorial authors, Person only for verified expert individual
+  const isIndividualExpert = Boolean(article.author?.isPerson || article.author?.jobTitle)
+  const author = isIndividualExpert
+    ? compact({
+        '@type': 'Person',
+        name: article.author?.name || (isAr ? 'خبير التموين الغذائي' : 'Foodservice Procurement Specialist'),
+        jobTitle: article.author?.jobTitle,
+      })
+    : {
+        '@type': 'Organization',
+        '@id': `${base}/#organization`,
+        name: isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.',
+        url: base,
+      }
 
   return compact({
     '@type': 'Article',
@@ -20,10 +31,7 @@ export function buildArticleSchema(article: any, locale: Locale, base: string) {
     datePublished: article.publishedAt || article._createdAt,
     dateModified: article._updatedAt || article.publishedAt,
     image: coverImage ? [absoluteUrl(coverImage, base)] : undefined,
-    author: {
-      '@type': 'Person',
-      name: authorName,
-    },
+    author,
     publisher: {
       '@type': 'Organization',
       '@id': `${base}/#organization`,

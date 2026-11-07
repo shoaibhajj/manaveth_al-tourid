@@ -122,6 +122,7 @@ export const structure: StructureResolver = (S) =>
               singleton(S, 'seoBranches', 'صفحة الفروع والمستودعات'),
               S.divider(),
               S.documentTypeListItem('redirect').title('روابط إعادة التوجيه (301 Redirects)'),
+              S.documentTypeListItem('keywordCluster').title('مجموعات الكلمات المفتاحية (Keyword Clusters)'),
             ]),
         ),
     ])

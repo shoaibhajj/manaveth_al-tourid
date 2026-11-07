@@ -6,6 +6,7 @@ import { customSection } from './documents/customSection'
 import { place, product, productCategory, sector, service, stat } from './documents/cards'
 import { brand, certificate, city, country } from './documents/taxonomy'
 import { redirect } from './documents/redirect'
+import { keywordCluster } from './documents/keywordCluster'
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
   contactSettings,
@@ -42,10 +43,10 @@ export const singletonTypes = [
   'seoHome',
   'seoProducts',
   'seoBranches',
-] as const
+]
 
 export const schemaTypes: SchemaTypeDefinition[] = [
-  // Singleton documents
+  // Singletons
   siteSettings,
   homePage,
   catalogPage,
@@ -54,7 +55,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   seoHome,
   seoProducts,
   seoBranches,
-  // Repeatable documents
+  // Documents
   article,
   companyPost,
   customSection,
@@ -69,6 +70,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   certificate,
   place,
   redirect,
+  keywordCluster,
   galleryCategory,
   galleryItem,
   // Objects

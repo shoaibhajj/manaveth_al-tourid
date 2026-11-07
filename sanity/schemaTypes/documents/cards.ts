@@ -95,6 +95,31 @@ export const productCategory = defineType({
   type: 'document',
   fields: [
     defineField({ name: 'name', title: 'الاسم', type: 'localizedString', validation: requiredTranslation }),
+    defineField({
+      name: 'slug',
+      title: 'المعرّف في الرابط (Slug)',
+      description: 'يُنشأ من الاسم الإنجليزي ويُستخدم في رابط صفحة التصنيف /products/category/[slug]',
+      type: 'slug',
+      options: { source: 'name.en', maxLength: 96 },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'وصف التصنيف',
+      description: 'وصف تعريفي يظهر في صفحة التصنيف ولأرشفة محركات البحث',
+      type: 'localizedText',
+    }),
+    defineField({
+      name: 'image',
+      title: 'صورة غلاف التصنيف',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'seo',
+      title: 'بيانات محركات البحث الخاصة بالتصنيف',
+      type: 'seo',
+    }),
     orderField,
     visibleField,
   ],
@@ -107,8 +132,12 @@ export const product = defineType({
   title: 'منتج',
   type: 'document',
   groups: [
-    { name: 'content', title: 'المحتوى', default: true },
-    { name: 'pricing', title: 'الأسعار' },
+    { name: 'content', title: 'البيانات الأساسية', default: true },
+    { name: 'specs', title: 'المواصفات والعبوات' },
+    { name: 'taxonomy', title: 'التصنيف والروابط' },
+    { name: 'trust', title: 'الثقة والاعتمادات' },
+    { name: 'pricing', title: 'الأسعار والتوفر' },
+    { name: 'seo', title: 'بيانات البحث (SEO)' },
     { name: 'display', title: 'العرض' },
   ],
   fields: [
@@ -116,48 +145,219 @@ export const product = defineType({
     defineField({
       name: 'slug',
       title: 'المعرّف في الرابط (Slug)',
-      description: 'يُستخدم في عنوان المنتج عند إضافة صفحات تفاصيل لاحقًا. يُنشأ من الاسم الإنجليزي؛ اكتب الاسم الإنجليزي أولًا.',
+      description: 'يُستخدم في عنوان رابط صفحة تفاصيل المنتج /products/[slug]. يُنشأ من الاسم الإنجليزي.',
       type: 'slug',
       group: 'content',
       options: { source: 'name.en', maxLength: 96 },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'sku',
+      title: 'رمز الصنف الفريد (SKU)',
+      description: 'رمز تعريفي فريد للصنف يُستخدم في الجرد والمطابقة مع ملفات الإكسل وبيانات Schema المنظمة.',
+      type: 'string',
+      group: 'content',
+    }),
+    defineField({
+      name: 'productType',
+      title: 'نوع وفئة المنتج (Product Type)',
+      description: 'يحدد قالب العرض التلقائي، والمواصفات المقترحة، وقوالب SEO.',
+      type: 'string',
+      group: 'content',
+      options: {
+        list: [
+          { title: 'لحوم حمراء ومجمدة (Meat)', value: 'meat' },
+          { title: 'دواجن وطيور (Poultry)', value: 'poultry' },
+          { title: 'أرز وحبوب وبقوليات (Rice & Grains)', value: 'rice' },
+          { title: 'زيوت طعام ودهون تموينية (Cooking Oil)', value: 'oil' },
+          { title: 'تمور وضيافة فاخرة (Dates & Hospitality)', value: 'dates' },
+          { title: 'معلبات وصلصات (Canned Food)', value: 'canned' },
+          { title: 'خضروات وبطاطس مجمدة (Frozen Veg)', value: 'frozenVeg' },
+          { title: 'مواد تعبئة وتغليف وسفرة (Packaging)', value: 'packaging' },
+        ],
+      },
     }),
     defineField({
       name: 'description',
-      title: 'الوصف',
+      title: 'الوصف المختصر',
       type: 'localizedText',
       group: 'content',
       validation: requiredTranslation,
     }),
     defineField({
       name: 'image',
-      title: 'الصورة',
-      description: 'صورة المنتج. الأبعاد الموصى بها: 1200×900 بكسل (نسبة 4:3) أو 1000×1000 بكسل (مربع)، ويفضل خلفية بيضاء أو شفافة أو استوديو.',
+      title: 'الصورة الرئيسية',
+      description: 'صورة المنتج الأساسية. الأبعاد الموصى بها: 1200×900 بكسل أو 1000×1000 بكسل بخلفية نظيفة.',
       type: 'localizedImage',
       group: 'content',
     }),
-    defineField({ name: 'longDescription', title: 'التفاصيل الكاملة', type: 'localizedText', group: 'content' }),
-    defineField({ name: 'seo', title: 'بيانات محركات البحث', type: 'seo', group: 'content' }),
-    defineField({ name: 'origin', title: 'بلد المنشأ', type: 'localizedString', group: 'content' }),
-    defineField({ name: 'aging', title: 'مدة ودرجة التعتيق', description: 'خاص بالأرز والمنتجات المعتقة (مثل: معتق لمدة سنتين).', type: 'localizedString', group: 'content' }),
-    defineField({ name: 'grainType', title: 'نوع الحبة / القطعيات', description: 'مثل: حبة طويلة 1121 سيلا، أو قطعيات عجل وبقر منزوعة العظم.', type: 'localizedString', group: 'content' }),
-    defineField({ name: 'packaging', title: 'التعبئة والأحجام والأوزان', type: 'localizedString', group: 'content' }),
-    defineField({ name: 'storage', title: 'تعليمات ودرجات التخزين', type: 'localizedText', group: 'content' }),
-    defineField({ name: 'certifications', title: 'الشهادات والاعتمادات الرسمية', description: 'مثل: شهادات ذبح حلال، مطابقة الغذاء والدواء SFDA، شهادات الفحص المخبري.', type: 'localizedText', group: 'content' }),
-    defineField({ name: 'usage', title: 'الاستخدامات الموصى بها', type: 'localizedText', group: 'content' }),
     defineField({
-      name: 'targetPhrases',
-      title: 'عبارات البحث المستهدفة',
-      description: 'عبارات تساعد المحرر على تضمين نية البحث في وصف المنتج ومقالاته. لا تكتب قائمة كلمات مكررة داخل الصفحة.',
+      name: 'gallery',
+      title: 'معرض صور المنتج الإضافية',
+      description: 'صور توضيحية إضافية للمنتج وزوايا التعبئة مع نصوص بديلة (Alt Text).',
       type: 'array',
-      of: [defineArrayMember({ type: 'localizedString' })],
       group: 'content',
+      of: [
+        defineArrayMember({
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({ name: 'alt', title: 'النص البديل (Alt Text)', type: 'localizedString' }),
+          ],
+        }),
+      ],
+    }),
+    defineField({ name: 'longDescription', title: 'التفاصيل والشرح الكامل', type: 'localizedText', group: 'content' }),
+
+    // Specs group
+    defineField({
+      name: 'cuts',
+      title: 'جدول القطعيات والأجزاء (Cuts)',
+      description: 'خاص باللحوم والدواجن: اسم القطعية، المواصفات، والاستخدام المناسب.',
+      type: 'array',
+      group: 'specs',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'name', title: 'اسم القطعية', type: 'localizedString' }),
+            defineField({ name: 'description', title: 'الوصف والمواصفات', type: 'localizedText' }),
+            defineField({ name: 'usage', title: 'أنسب الاستخدامات والطهي', type: 'localizedString' }),
+          ],
+          preview: {
+            select: { ar: 'name.ar', en: 'name.en' },
+            prepare: ({ ar, en }) => ({ title: ar || en || 'قطعيه' }),
+          },
+        }),
+      ],
     }),
     defineField({
+      name: 'packSizes',
+      title: 'أحجام العبوات والتعبئة (Pack Sizes)',
+      description: 'أوزان وعبوات التوريد بالجملة (كرتون، شوال، جالون، كجم).',
+      type: 'array',
+      group: 'specs',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'weight', title: 'الوزن أو السعة', type: 'number' }),
+            defineField({ name: 'unit', title: 'الوحدة (كجم، لتر، جرام)', type: 'localizedString' }),
+            defineField({ name: 'packageType', title: 'نوع العبوة (كرتون، شوال، تنكة)', type: 'localizedString' }),
+          ],
+          preview: {
+            select: { weight: 'weight', unit: 'unit.ar', pkg: 'packageType.ar' },
+            prepare: ({ weight, unit, pkg }) => ({
+              title: `${weight ?? ''} ${unit ?? ''} · ${pkg ?? 'عبوة'}`,
+            }),
+          },
+        }),
+      ],
+    }),
+    defineField({
+      name: 'storageState',
+      title: 'حالة التخزين والتبريد',
+      type: 'string',
+      group: 'specs',
+      options: {
+        list: [
+          { title: 'مجمد (-18°C تحت الصفر)', value: 'frozen' },
+          { title: 'مبرد (0°C إلى 4°C)', value: 'chilled' },
+          { title: 'جاف / حرارة الغرفة (Ambient)', value: 'ambient' },
+        ],
+        layout: 'radio',
+      },
+    }),
+    defineField({
+      name: 'moq',
+      title: 'الحد الأدنى للطلب (MOQ)',
+      description: 'أقل كمية توريد بالجملة يقبلها المورد.',
+      type: 'object',
+      group: 'specs',
+      fields: [
+        defineField({ name: 'amount', title: 'الكمية', type: 'number' }),
+        defineField({ name: 'unit', title: 'الوحدة (كرتون، طن، شوال)', type: 'localizedString' }),
+      ],
+    }),
+
+    // Legacy fields for backward compatibility
+    defineField({ name: 'origin', title: 'بلد المنشأ (نصي سابق)', type: 'localizedString', group: 'specs' }),
+    defineField({ name: 'aging', title: 'مدة ودرجة التعتيق', description: 'خاص بالأرز والمنتجات المعتقة (مثل: معتق لمدة سنتين).', type: 'localizedString', group: 'specs' }),
+    defineField({ name: 'grainType', title: 'نوع الحبة / القطعيات (نصي سابق)', description: 'مثل: حبة طويلة 1121 سيلا.', type: 'localizedString', group: 'specs' }),
+    defineField({ name: 'packaging', title: 'التعبئة والأحجام والأوزان (نصي سابق)', type: 'localizedString', group: 'specs' }),
+    defineField({ name: 'storage', title: 'تعليمات ودرجات التخزين (نصي سابق)', type: 'localizedText', group: 'specs' }),
+    defineField({ name: 'usage', title: 'الاستخدامات الموصى بها', type: 'localizedText', group: 'specs' }),
+
+    // Taxonomy group
+    defineField({
       name: 'category',
-      title: 'التصنيف',
+      title: 'التصنيف الرئيسي',
       type: 'reference',
       to: [{ type: 'productCategory' }],
-      group: 'content',
+      group: 'taxonomy',
+    }),
+    defineField({
+      name: 'brand',
+      title: 'العلامة التجارية / الماركة',
+      type: 'reference',
+      to: [{ type: 'brand' }],
+      group: 'taxonomy',
+    }),
+    defineField({
+      name: 'originCountries',
+      title: 'دول المنشأ',
+      type: 'array',
+      group: 'taxonomy',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'country' }] })],
+    }),
+    defineField({
+      name: 'serviceAreas',
+      title: 'مناطق ومدن التوريد والتسليم',
+      description: 'المدن التي يشملها توريد هذا الصنف (مثل: الرياض، جدة، مكة، الدمام).',
+      type: 'array',
+      group: 'taxonomy',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'city' }] })],
+    }),
+    defineField({
+      name: 'sectors',
+      title: 'القطاعات المستهدفة',
+      description: 'المطاعم، الفنادق، مطابخ الإعاشة، الكافيهات...',
+      type: 'array',
+      group: 'taxonomy',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'sector' }] })],
+    }),
+
+    // Trust group
+    defineField({
+      name: 'certificates',
+      title: 'الشهادات والاعتمادات الرسمية المرفقة',
+      description: 'شهادات حلال، اعتماد هيئة الغذاء والدواء SFDA، شهادات الجودة والمطابقة.',
+      type: 'array',
+      group: 'trust',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'certificate' }] })],
+    }),
+    defineField({ name: 'certifications', title: 'الشهادات والاعتمادات الرسمية (نصي سابق)', type: 'localizedText', group: 'trust' }),
+
+    // Pricing group
+    defineField({
+      name: 'availability',
+      title: 'حالة التوفر (Availability)',
+      type: 'string',
+      group: 'pricing',
+      options: {
+        list: [
+          { title: 'متوفر وجاهز للتوريد الفوري (In Stock)', value: 'InStock' },
+          { title: 'طلب مسبق وحجز كميات (Pre Order)', value: 'PreOrder' },
+          { title: 'نفد من المستودعات مؤقتاً (Out Of Stock)', value: 'OutOfStock' },
+        ],
+      },
+      initialValue: 'InStock',
+    }),
+    defineField({
+      name: 'priceValidUntil',
+      title: 'صلاحية السعر حتى تاريخ',
+      type: 'date',
+      group: 'pricing',
     }),
     defineField({
       name: 'showPrice',
@@ -182,6 +382,45 @@ export const product = defineType({
       of: [defineArrayMember({ type: 'priceTier' })],
       group: 'pricing',
     }),
+
+    // SEO group
+    defineField({
+      name: 'seo',
+      title: 'تجاوز يدوي لبيانات محركات البحث (SEO Override)',
+      description: 'اختياري. اتركه فارغاً ليعمل محرك SEO التلقائي بتوليد العنوان والوصف وقوالب الميتا.',
+      type: 'seo',
+      group: 'seo',
+    }),
+    defineField({
+      name: 'targetPhrases',
+      title: 'عبارات البحث المستهدفة',
+      description: 'عبارات تساعد المحرر على تضمين نية البحث في وصف المنتج ومقالاته.',
+      type: 'array',
+      of: [defineArrayMember({ type: 'localizedString' })],
+      group: 'seo',
+    }),
+    defineField({
+      name: 'faqs',
+      title: 'الأسئلة الشائعة الخاصة بالمنتج (Product FAQs)',
+      description: 'أسئلة خاصة بالصنف تظهر في صفحته وتساعد المشتري (الحد الأدنى، مواعيد التوريد، التعبئة).',
+      type: 'array',
+      group: 'seo',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'question', title: 'السؤال', type: 'localizedString' }),
+            defineField({ name: 'answer', title: 'الإجابة', type: 'localizedText' }),
+          ],
+          preview: {
+            select: { q: 'question.ar' },
+            prepare: ({ q }) => ({ title: q || 'سؤال' }),
+          },
+        }),
+      ],
+    }),
+
+    // Display group
     defineField({
       name: 'featured',
       title: 'منتج مميز',

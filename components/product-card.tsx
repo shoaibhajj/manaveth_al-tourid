@@ -59,6 +59,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   const productSlug = product.slug || product.id
   const detailHref = productSlug ? localize(`/products/${productSlug}`) : null
+  const imageAlt = t(product.alt) || `${t(product.name)} - ${t({ ar: 'توريد جملة للمطاعم والفنادق', en: 'Wholesale foodservice supply' })}`
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-[border-color,box-shadow] duration-500 hover:border-gold hover:shadow-xl hover:shadow-gold/10">
@@ -66,7 +67,7 @@ export function ProductCard({ product }: { product: Product }) {
         <Link href={detailHref} className="relative aspect-[4/3] overflow-hidden" aria-label={t(product.name)}>
           <Image
             src={product.image}
-            alt={t(product.alt)}
+            alt={imageAlt}
             fill
             sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 92vw"
             quality={80}
@@ -77,7 +78,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
             src={product.image}
-            alt={t(product.alt)}
+            alt={imageAlt}
             fill
             sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 92vw"
             quality={80}

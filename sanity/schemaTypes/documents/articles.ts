@@ -42,6 +42,22 @@ export const article = defineType({
     { ...orderField, group: 'publishing' },
     defineField({ name: 'visible', title: 'ظاهر في الموقع', type: 'boolean', initialValue: true, group: 'publishing' }),
     defineField({ name: 'seo', title: 'بيانات SEO مخصصة', type: 'seo', group: 'seo' }),
+    defineField({
+      name: 'aboutEntities',
+      title: 'الكيانات الرئيسية للمقال (About Entities)',
+      description: 'المفاهيم والكيانات الأساسية لمخطط Schema (مثال: تجارة الجملة، لحوم مجمدة، الأرز البسمتي).',
+      type: 'array',
+      group: 'seo',
+      of: [defineArrayMember({ type: 'string' })],
+    }),
+    defineField({
+      name: 'mentionedEntities',
+      title: 'الكيانات المذكورة (Mentioned Entities)',
+      description: 'المدن والمناطق والمفاهيم الإضافية المذكورة في المقال لربط الرسم البياني.',
+      type: 'array',
+      group: 'seo',
+      of: [defineArrayMember({ type: 'string' })],
+    }),
   ],
   orderings: [
     { title: 'الأحدث أولًا', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] },

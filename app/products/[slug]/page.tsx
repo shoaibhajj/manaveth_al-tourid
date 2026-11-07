@@ -11,26 +11,30 @@ import { imageUrl } from '@/lib/sanity/image'
 import { productDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
 
+import { buildMetadata } from '@/lib/seo/build-metadata'
+
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
 const labelFor = (locale: 'ar' | 'en', ar: string, en: string) => locale === 'ar' ? ar : en
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const [{ slug }, locale, base, draft] = await Promise.all([params, getLocale(), getSiteUrl(), draftMode()])
+  const [{ slug }, locale] = await Promise.all([params, getLocale()])
   const product = await getProductBySlug(slug)
   if (!product) return { title: 'Product', robots: { index: false, follow: false } }
-  const title = textFor(product.seo?.title, locale) || (locale === 'ar' ? `${textFor(product.name, locale)} بالجملة للشركات والمطاعم في الرياض وجدة | منافذ التوريد` : `${textFor(product.name, locale)} Wholesale for Restaurants in Saudi Arabia | Mnaveeh`)
+  const title = textFor(product.seo?.title, locale) || (locale === 'ar' ? `${textFor(product.name, locale)} بالجملة للشركات والمطاعم في الرياض وجدة | منافذ التوريد` : `${textFor(product.name, locale)} Wholesale for Restaurants in Saudi Arabia | Mnaveth ALTourid`)
   const description = textFor(product.seo?.description, locale) || textFor(product.longDescription, locale) || textFor(product.description, locale)
   const path = `/products/${slug}`
   const image = imageUrl(product.seo?.shareImage, 1200) || imageUrl(product.image, 1200) || (typeof product.image === 'string' ? product.image : undefined)
   const keywords = (product.targetPhrases ?? []).map((item: any) => textFor(item, locale)).filter(Boolean)
-  return {
+
+  return buildMetadata({
+    path,
+    locale,
     title,
     description,
-    keywords: keywords.length ? keywords : undefined,
-    alternates: { canonical: `${base}${localePath(path, locale)}`, languages: { ar: `${base}${path}`, en: `${base}/en${path}`, 'x-default': `${base}${path}` } },
-    openGraph: { type: 'website', title, description, url: `${base}${localePath(path, locale)}`, images: image ? [image] : undefined },
-    robots: draft.isEnabled ? { index: false, follow: false } : undefined,
-  }
+    image,
+    keywords,
+    isIndexable: Boolean(product.visible !== false),
+  })
 }
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {

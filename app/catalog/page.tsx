@@ -7,62 +7,29 @@ import { CatalogView } from '@/components/catalog/catalog-view'
 import { defaultCatalogProducts, catalogCategories } from '@/lib/content/catalog-data'
 import { isSanityConfigured } from '@/sanity/env'
 import { JsonLd } from '@/components/json-ld'
+import { buildMetadata } from '@/lib/seo/build-metadata'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [locale, base] = await Promise.all([getLocale(), getSiteUrl()])
+  const locale = await getLocale()
   const isAr = locale === 'ar'
-  const path = '/catalog'
-  const canonicalUrl = `${base}${localePath(path, locale)}`
-  const arUrl = `${base}${path}`
-  const enUrl = `${base}/en${path}`
-  const shareImage = `${base}/images/hero.png`
 
-  return {
-    title: isAr
-      ? 'كتالوج وقائمة الأصناف التموينية | شركة منافذ التوريد'
-      : 'Wholesale Foodservice Product Catalog | Mnaveth ALTourid',
-    description: isAr
-      ? 'تصفح قائمة الأصناف التموينية والغذائية المعتمدة لشركة منافذ التوريد: لحوم مجمدة، أرز بسمتي هندي، زيوت طعام فندقية، معلبات، وتمور للمطاعم والفنادق.'
-      : 'Browse the certified wholesale food products menu of Mnaveth ALTourid: frozen meats, basmati rice, frying oils, canned goods, and dates for restaurants.',
-    alternates: {
-      canonical: canonicalUrl,
-      languages: {
-        ar: arUrl,
-        en: enUrl,
-        'x-default': arUrl,
-      },
-    },
-    openGraph: {
-      title: isAr
-        ? 'كتالوج الأصناف والمنتجات التموينية | منافذ التوريد'
-        : 'Wholesale Product Catalog | Mnaveth ALTourid',
-      description: isAr
-        ? 'دليل الأصناف التموينية المعتمدة لكبرى المطاعم والفنادق وشركات الإعاشة في المملكة العربية السعودية.'
-        : 'Official catalog of wholesale foodservice ingredients for restaurants and hotels across Saudi Arabia.',
-      url: canonicalUrl,
-      images: [
-        {
-          url: shareImage,
-          width: 1200,
-          height: 630,
-          alt: isAr ? 'كتالوج شركة منافذ التوريد' : 'Mnaveth ALTourid Product Catalog',
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: isAr
-        ? 'كتالوج وقائمة الأصناف التموينية | شركة منافذ التوريد'
-        : 'Wholesale Foodservice Product Catalog | Mnaveth ALTourid',
-      description: isAr
-        ? 'دليل الأصناف التموينية المعتمدة لكبرى المطاعم والفنادق وشركات الإعاشة في السعودية.'
-        : 'Official wholesale food product catalog of Mnaveth ALTourid.',
-      images: [shareImage],
-    },
-  }
+  const title = isAr
+    ? 'كتالوج وقائمة الأصناف التموينية | شركة منافذ التوريد'
+    : 'Wholesale Foodservice Product Catalog | Mnaveth ALTourid'
+
+  const description = isAr
+    ? 'تصفح قائمة الأصناف التموينية والغذائية المعتمدة لشركة منافذ التوريد: لحوم مجمدة، أرز بسمتي هندي، زيوت طعام فندقية، معلبات، وتمور للمطاعم والفنادق.'
+    : 'Browse the certified wholesale food products menu of Mnaveth ALTourid: frozen meats, basmati rice, frying oils, canned goods, and dates for restaurants.'
+
+  return buildMetadata({
+    path: '/catalog',
+    locale,
+    title,
+    description,
+  })
 }
 
 export default async function CatalogPage() {

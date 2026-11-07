@@ -1,91 +1,179 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
-import { MessageCircle, Phone, ArrowLeft, ArrowRight } from 'lucide-react'
+import { MessageCircle, Phone } from 'lucide-react'
 import { JsonLd } from '@/components/json-ld'
 import { ShareActions } from '@/components/share-actions'
 import { getLocale } from '@/lib/locale-server'
-import { localePath } from '@/lib/i18n'
+import { localePath, type Locale } from '@/lib/i18n'
 import { getArticleBySlug } from '@/lib/sanity/details'
 import { imageUrl } from '@/lib/sanity/image'
 import { articleDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
 import { whatsappUrl, telUrl } from '@/lib/content/contact'
+import { buildMetadata } from '@/lib/seo/build-metadata'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const [{ slug }, locale, base, draft] = await Promise.all([params, getLocale(), getSiteUrl(), draftMode()])
+  const [{ slug }, locale] = await Promise.all([params, getLocale()])
   const article = await getArticleBySlug(slug)
   if (!article) return { title: 'Article', robots: { index: false, follow: false } }
+
   const title = textFor(article.seo?.title, locale) || textFor(article.title, locale)
   const description = textFor(article.seo?.description, locale) || textFor(article.excerpt, locale)
   const path = `/blog/${slug}`
-  const image = imageUrl(article.seo?.shareImage, 1200) || imageUrl(article.coverImage, 1200) || `${base}/images/logo.png`
-  return {
+  const image = imageUrl(article.seo?.shareImage, 1200) || imageUrl(article.coverImage, 1200)
+
+  return buildMetadata({
+    path,
+    locale,
     title,
     description,
-    alternates: {
-      canonical: `${base}${localePath(path, locale)}`,
-      languages: { ar: `${base}${path}`, en: `${base}/en${path}`, 'x-default': `${base}${path}` },
-    },
-    openGraph: {
-      type: 'article',
-      title,
-      description,
-      url: `${base}${localePath(path, locale)}`,
-      images: [image],
-      publishedTime: article.publishedAt,
-    },
-    robots: draft.isEnabled ? { index: false, follow: false } : undefined,
-  }
+    image,
+    type: 'article',
+    publishedTime: article.publishedAt,
+    isIndexable: Boolean(article.visible !== false),
+  })
 }
 
-function renderBlock(block: any, index: number) {
-  if (block._type !== 'block') return null
-  const children = (block.children ?? []).map((child: any, childIndex: number) => {
-    let node: React.ReactNode = child.text
-    for (const mark of child.marks ?? []) {
-      const definition = (block.markDefs ?? []).find((item: any) => item._key === mark)
-      if (mark === 'strong') node = <strong key={childIndex} className="font-bold text-forest">{node}</strong>
-      else if (mark === 'em') node = <em key={childIndex}>{node}</em>
-      else if (definition?._type === 'link' && /^https?:\/\//.test(definition.href ?? ''))
-        node = (
-          <a
-            key={childIndex}
-            href={definition.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gold underline hover:text-gold-light"
-          >
-            {node}
-          </a>
+// F6: Robust rich block and portable text renderer supporting internal links, lists, and images
+function renderBlocks(blocks: any[], locale: Locale) {
+  if (!blocks || !Array.isArray(blocks)) return null
+
+  const elements: React.ReactNode[] = []
+  let currentList: { type: 'bullet' | 'number'; items: React.ReactNode[] } | null = null
+
+  const flushList = (keySuffix: number | string) => {
+    if (!currentList) return
+    const ListTag = currentList.type === 'number' ? 'ol' : 'ul'
+    const listClass =
+      currentList.type === 'number'
+        ? 'my-6 list-decimal ps-6 space-y-2 text-forest-deep text-lg leading-relaxed'
+        : 'my-6 list-disc ps-6 space-y-2 text-forest-deep text-lg leading-relaxed'
+
+    elements.push(
+      <ListTag key={`list-${keySuffix}`} className={listClass}>
+        {currentList.items.map((item, i) => (
+          <li key={i} className="leading-relaxed">
+            {item}
+          </li>
+        ))}
+      </ListTag>
+    )
+    currentList = null
+  }
+
+  blocks.forEach((block, index) => {
+    if (block._type === 'image') {
+      flushList(index)
+      const src = imageUrl(block, 1200)
+      if (src) {
+        elements.push(
+          <figure key={block._key ?? index} className="my-8 overflow-hidden rounded-2xl border border-forest/10">
+            <img src={src} alt={block.alt || ''} className="w-full object-cover max-h-[480px]" />
+            {block.caption && (
+              <figcaption className="p-3 text-center text-xs text-muted-foreground bg-forest/5">
+                {block.caption}
+              </figcaption>
+            )}
+          </figure>
         )
+      }
+      return
     }
-    return <span key={child._key ?? childIndex}>{node}</span>
+
+    if (block._type !== 'block') {
+      flushList(index)
+      return
+    }
+
+    const children = (block.children ?? []).map((child: any, childIndex: number) => {
+      let node: React.ReactNode = child.text
+      for (const mark of child.marks ?? []) {
+        const definition = (block.markDefs ?? []).find((item: any) => item._key === mark)
+        if (mark === 'strong') {
+          node = <strong key={childIndex} className="font-bold text-forest">{node}</strong>
+        } else if (mark === 'em') {
+          node = <em key={childIndex}>{node}</em>
+        } else if (definition?._type === 'link') {
+          const href = String(definition.href || '')
+          // Internal relative link
+          if (href.startsWith('/')) {
+            node = (
+              <Link
+                key={childIndex}
+                href={localePath(href, locale)}
+                className="text-gold font-bold underline hover:text-gold-light transition-colors"
+              >
+                {node}
+              </Link>
+            )
+          } else if (/^https?:\/\//.test(href)) {
+            // External link
+            node = (
+              <a
+                key={childIndex}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold font-bold underline hover:text-gold-light transition-colors"
+              >
+                {node}
+              </a>
+            )
+          }
+        }
+      }
+      return <span key={child._key ?? childIndex}>{node}</span>
+    })
+
+    const key = block._key ?? index
+
+    // Handle lists
+    if (block.listItem === 'bullet' || block.listItem === 'number') {
+      const listType = block.listItem === 'number' ? 'number' : 'bullet'
+      if (!currentList || currentList.type !== listType) {
+        flushList(index)
+        currentList = { type: listType, items: [children] }
+      } else {
+        currentList.items.push(children)
+      }
+      return
+    }
+
+    flushList(index)
+
+    if (block.style === 'h2') {
+      elements.push(
+        <h2 key={key} className="mt-10 mb-4 text-2xl font-extrabold text-forest md:text-3xl border-b border-gold/20 pb-3">
+          {children}
+        </h2>
+      )
+    } else if (block.style === 'h3') {
+      elements.push(
+        <h3 key={key} className="mt-8 mb-3 text-xl font-bold text-forest md:text-2xl">
+          {children}
+        </h3>
+      )
+    } else if (block.style === 'blockquote') {
+      elements.push(
+        <blockquote key={key} className="my-8 rounded-2xl border-s-4 border-gold bg-forest-deep/5 p-6 italic text-forest-deep text-lg leading-relaxed shadow-sm">
+          {children}
+        </blockquote>
+      )
+    } else {
+      elements.push(
+        <p key={key} className="my-4 text-lg leading-relaxed text-muted-foreground">
+          {children}
+        </p>
+      )
+    }
   })
-  const key = block._key ?? index
-  if (block.style === 'h2')
-    return (
-      <h2 key={key} className="mt-10 mb-4 text-2xl font-extrabold text-forest md:text-3xl border-b border-gold/20 pb-3">
-        {children}
-      </h2>
-    )
-  if (block.style === 'h3')
-    return (
-      <h3 key={key} className="mt-8 mb-3 text-xl font-bold text-forest md:text-2xl">
-        {children}
-      </h3>
-    )
-  if (block.style === 'blockquote')
-    return (
-      <blockquote key={key} className="my-8 rounded-2xl border-s-4 border-gold bg-forest-deep/5 p-6 italic text-forest-deep text-lg leading-relaxed shadow-sm">
-        {children}
-      </blockquote>
-    )
-  return <p key={key} className="my-4 text-lg leading-relaxed text-muted-foreground">{children}</p>
+
+  flushList('final')
+  return elements
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -100,14 +188,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const shareUrl = `${base}${localePath(`/blog/${slug}`, locale)}`
   const dateFormatted = article.publishedAt
     ? new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : 'en-US', { dateStyle: 'long' }).format(
-        new Date(article.publishedAt),
+        new Date(article.publishedAt)
       )
     : null
 
   const whatsappMessage =
     locale === 'ar'
       ? `مرحباً منافذ التوريد، قرأت مقال "${title}" وأرغب في الاستفسار عن عروض أسعار التوريد للمطاعم والشركات.`
-      : `Hello Mnaveeh, I read your article "${title}" and would like to inquire about commercial food supply pricing.`
+      : `Hello Mnaveth ALTourid, I read your article "${title}" and would like to inquire about commercial food supply pricing.`
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-16 md:px-8">
@@ -157,7 +245,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </div>
         )}
 
-        <div className="mt-4">{body.map(renderBlock)}</div>
+        <div className="mt-4">{renderBlocks(body, locale)}</div>
 
         {/* Commercial Conversion Card */}
         <section className="my-10 rounded-3xl border border-gold/30 bg-forest-deep p-8 text-cream shadow-xl">
@@ -172,7 +260,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <p className="mt-3 text-sm leading-relaxed text-cream/80 max-w-2xl">
             {locale === 'ar'
               ? 'تؤمن شركة منافذ التوريد للمطاعم والمطابخ المركزية والفنادق احتياجاتها الدورية من الأرز البسمتي الفاخر، اللحوم والكبدة المجمدة، الزيوت، والمعلبات بأسعار جملة تنافسية وعقود توريد سنوية تضمن استقرار الأسعار.'
-              : 'Mnaveeh ALTourid supplies commercial kitchens, cloud commissaries, and restaurants with basmati rice, frozen meats, oils, and canned staples under reliable annual agreements.'}
+              : 'Mnaveth ALTourid supplies commercial kitchens, cloud commissaries, and restaurants with basmati rice, frozen meats, oils, and canned staples under reliable annual agreements.'}
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
             <a

@@ -8,6 +8,8 @@ import { getContent } from './sanity/get-content'
 import { imageUrl } from './sanity/image'
 import { getSiteUrl, isIndexableEnvironment } from './site-url'
 
+import { buildMetadata } from './seo/build-metadata'
+
 export type SeoPage = 'home' | 'products' | 'branches'
 
 const pagePaths: Record<SeoPage, string> = { home: '/', products: '/products', branches: '/branches' }
@@ -16,31 +18,20 @@ const absolute = (value: string | undefined, base: string) => (value ? new URL(v
 
 /** Title, description, canonical, language alternates and share image for one public page, read from the SEO documents. */
 export async function pageMetadata(page: SeoPage): Promise<Metadata> {
-  const [locale, content, base, draft] = await Promise.all([getLocale(), getContent(), getSiteUrl(), draftMode()])
+  const [locale, content, base] = await Promise.all([getLocale(), getContent(), getSiteUrl()])
   const entry = content.seo[page]
   const path = pagePaths[page]
-  const urlFor = (target: Locale) => `${base}${localePath(path, target)}`
   const title = entry.title[locale]
   const description = entry.description[locale]
   const image = absolute(entry.shareImage, base)
 
-  return {
+  return buildMetadata({
+    path,
+    locale,
     title,
     description,
-    alternates: {
-      canonical: urlFor(locale),
-      languages: { ar: urlFor('ar'), en: urlFor('en'), 'x-default': urlFor('ar') },
-    },
-    openGraph: {
-      type: 'website',
-      title,
-      description,
-      url: urlFor(locale),
-      siteName: content.site.brand.name[locale],
-      images: image ? [image] : undefined,
-    },
-    robots: draft.isEnabled || !isIndexableEnvironment() ? { index: false, follow: false } : undefined,
-  }
+    image,
+  })
 }
 
 const compact = <T extends Record<string, unknown>>(value: T) =>

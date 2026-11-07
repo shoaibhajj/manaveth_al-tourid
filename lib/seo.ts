@@ -6,7 +6,6 @@ import { getLocale } from './locale-server'
 import { getContent } from './sanity/get-content'
 import { imageUrl } from './sanity/image'
 import { getSiteUrl, isIndexableEnvironment } from './site-url'
-
 import { buildMetadata } from './seo/build-metadata'
 
 export type SeoPage = 'home' | 'products' | 'branches'
@@ -153,30 +152,66 @@ export function productsGraph(content: SiteContent, locale: Locale, base: string
     )
 }
 
-/** Single product detail schema */
+/** Single product detail schema with Brand, SKU, Offer and Breadcrumbs */
 export function productDetailGraph(product: Record<string, any>, locale: Locale, base: string, siteName = 'منافذ التوريد') {
   const name = product.name?.[locale] || product.name?.ar || product.name?.en || ''
   const description = product.longDescription?.[locale] || product.description?.[locale] || ''
   const path = `/products/${product.slug}`
-  const image = imageUrl(product.image, 1200)
+  const image = imageUrl(product.image, 1200) || (typeof product.image === 'string' ? product.image : undefined)
   const price = product.showPrice !== false && typeof product.price?.amount === 'number' ? product.price.amount : undefined
+  const brandName = product.brand?.name?.[locale] || product.brand?.name?.ar || product.brand?.name?.en || siteName
+  const availability =
+    product.availability === 'OutOfStock'
+      ? 'https://schema.org/OutOfStock'
+      : product.availability === 'PreOrder'
+        ? 'https://schema.org/PreOrder'
+        : 'https://schema.org/InStock'
+
+  const productUrl = `${base}${localePath(path, locale)}`
 
   return [
     compact({
       '@type': 'Product',
+      '@id': `${productUrl}#product`,
       name,
       description,
+      sku: product.sku || undefined,
       image: image ? absolute(image, base) : undefined,
-      url: `${base}${localePath(path, locale)}`,
-      brand: { '@type': 'Brand', name: siteName },
+      url: productUrl,
+      brand: { '@type': 'Brand', name: brandName },
       offers: price
         ? {
             '@type': 'Offer',
             price,
             priceCurrency: 'SAR',
-            availability: 'https://schema.org/InStock',
+            availability,
+            url: productUrl,
           }
         : undefined,
+    }),
+    compact({
+      '@type': 'BreadcrumbList',
+      '@id': `${productUrl}#breadcrumbs`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: locale === 'ar' ? 'الرئيسية' : 'Home',
+          item: `${base}${localePath('/', locale)}`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: locale === 'ar' ? 'المنتجات' : 'Products',
+          item: `${base}${localePath('/products', locale)}`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name,
+          item: productUrl,
+        },
+      ],
     }),
   ]
 }

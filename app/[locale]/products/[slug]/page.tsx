@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { JsonLd } from '@/components/json-ld'
 import { ProductDetailActions } from '@/components/product-detail-actions'
@@ -11,6 +12,7 @@ import { imageUrl } from '@/lib/sanity/image'
 import { productDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
 import { buildMetadata } from '@/lib/seo/build-metadata'
+import { buildProductSeo } from '@/lib/seo/engine'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
 const labelFor = (locale: 'ar' | 'en', ar: string, en: string) => (locale === 'ar' ? ar : en)
@@ -37,19 +39,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug, locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
-  const product = await getProductBySlug(slug)
+  const [product, base] = await Promise.all([getProductBySlug(slug), getSiteUrl()])
   if (!product) return { title: 'Product', robots: { index: false, follow: false } }
 
-  const title =
-    textFor(product.seo?.title, locale) ||
-    (locale === 'ar'
-      ? `${textFor(product.name, locale)} بالجملة للشركات والمطاعم في الرياض وجدة | منافذ التوريد`
-      : `${textFor(product.name, locale)} Wholesale for Restaurants in Saudi Arabia | Mnaveth ALTourid`)
-  const description =
-    textFor(product.seo?.description, locale) ||
-    textFor(product.longDescription, locale) ||
-    textFor(product.description, locale)
-  const path = `/products/${slug}`
+  const seo = buildProductSeo(product as any, locale, {
+    baseUrl: base,
+    brandName: { ar: 'منافذ التوريد', en: 'Mnaveth ALTourid' },
+  })
+
   const image =
     imageUrl(product.seo?.shareImage, 1200) ||
     imageUrl(product.image, 1200) ||
@@ -57,13 +54,13 @@ export async function generateMetadata({
   const keywords = (product.targetPhrases ?? []).map((item: any) => textFor(item, locale)).filter(Boolean)
 
   return buildMetadata({
-    path,
+    path: `/products/${slug}`,
     locale,
-    title,
-    description,
+    title: seo.title,
+    description: seo.description,
     image,
     keywords,
-    isIndexable: Boolean(product.visible !== false),
+    isIndexable: seo.robots.index,
   })
 }
 
@@ -77,7 +74,12 @@ export default async function ProductDetailPage({
   const [product, base] = await Promise.all([getProductBySlug(slug), getSiteUrl()])
   if (!product) return notFound()
 
-  const title = textFor(product.name, locale)
+  const seo = buildProductSeo(product as any, locale, {
+    baseUrl: base,
+    brandName: { ar: 'منافذ التوريد', en: 'Mnaveth ALTourid' },
+  })
+
+  const title = seo.h1
   const description = textFor(product.description, locale)
   const longDescription = textFor(product.longDescription, locale)
   const image =
@@ -87,15 +89,7 @@ export default async function ProductDetailPage({
     undefined
   const productPath = `/products/${slug}`
   const shareUrl = `${base}${localePath(productPath, locale)}`
-  const sections = [
-    ['origin', labelFor(locale, 'بلد المنشأ', 'Country of origin')],
-    ['aging', labelFor(locale, 'درجة ومدة التعتيق', 'Aging duration')],
-    ['grainType', labelFor(locale, 'نوع الحبة / القطعيات والمواصفات', 'Grain type & cuts')],
-    ['packaging', labelFor(locale, 'التعبئة والأوزان', 'Packaging & sizes')],
-    ['storage', labelFor(locale, 'درجات الحفظ والتخزين', 'Storage instructions')],
-    ['certifications', labelFor(locale, 'الشهادات والاعتمادات الرسمية', 'Certifications & compliance')],
-    ['usage', labelFor(locale, 'الاستخدامات الموصى بها', 'Suggested commercial uses')],
-  ] as const
+
   const showPrice = product.showPrice !== false
   const tierRows = (product.priceTiers ?? []).filter((tier: any) => typeof tier.price === 'number')
   const singlePrice = showPrice && typeof product.price?.amount === 'number' ? product.price : null
@@ -104,6 +98,25 @@ export default async function ProductDetailPage({
   return (
     <main className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
       <JsonLd graph={productDetailGraph(product, locale, base)} />
+
+      {/* Breadcrumbs Navigation */}
+      <nav aria-label="Breadcrumb" className="mb-8">
+        <ol className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+          {seo.breadcrumbs.map((b, idx) => (
+            <li key={b.url} className="flex items-center gap-2">
+              {idx > 0 && <span className="text-muted-foreground/40">/</span>}
+              {idx === seo.breadcrumbs.length - 1 ? (
+                <span className="font-semibold text-foreground">{b.name}</span>
+              ) : (
+                <Link href={b.url} className="hover:text-gold transition-colors">
+                  {b.name}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
         {image ? (
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-forest/5 shadow-md">
@@ -125,36 +138,12 @@ export default async function ProductDetailPage({
         )}
         <article className="flex flex-col gap-5">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
-            {labelFor(locale, 'منتج', 'Product')}
+            {labelFor(locale, 'منتج معتمد', 'Certified Product')}
           </p>
           <h1 className="text-4xl font-bold tracking-tight text-foreground">{title}</h1>
           {description ? <p className="text-lg leading-8 text-muted-foreground">{description}</p> : null}
           {longDescription ? <p className="leading-8 text-muted-foreground">{longDescription}</p> : null}
-          {product.origin ? (
-            <p>
-              <strong>{labelFor(locale, 'بلد المنشأ:', 'Country of origin:')}</strong> {textFor(product.origin, locale)}
-            </p>
-          ) : null}
-          {product.aging ? (
-            <p>
-              <strong>{labelFor(locale, 'التعتيق:', 'Aging:')}</strong> {textFor(product.aging, locale)}
-            </p>
-          ) : null}
-          {product.grainType ? (
-            <p>
-              <strong>{labelFor(locale, 'المواصفات:', 'Type & Specs:')}</strong> {textFor(product.grainType, locale)}
-            </p>
-          ) : null}
-          {product.packaging ? (
-            <p>
-              <strong>{labelFor(locale, 'التعبئة:', 'Packaging:')}</strong> {textFor(product.packaging, locale)}
-            </p>
-          ) : null}
-          {product.certifications ? (
-            <p>
-              <strong>{labelFor(locale, 'الاعتمادات:', 'Certifications:')}</strong> {textFor(product.certifications, locale)}
-            </p>
-          ) : null}
+
           {showPrice && tierRows.length ? (
             <section className="rounded-2xl bg-secondary/70 p-5">
               <h2 className="mb-3 font-bold">{labelFor(locale, 'السعر حسب الكمية', 'Price by quantity')}</h2>
@@ -176,23 +165,48 @@ export default async function ProductDetailPage({
               {labelFor(locale, 'السعر:', 'Price:')} {amountText(singlePrice.amount)} {textFor(singlePrice.unit, locale)}
             </p>
           ) : (
-            <p className="rounded-xl bg-secondary/70 p-4">{labelFor(locale, 'السعر عند الطلب', 'Price on request')}</p>
+            <p className="rounded-xl bg-secondary/70 p-4">{labelFor(locale, 'السعر عند الطلب - تواصل للتسعير الفوري', 'Price on request - inquire for instant quote')}</p>
           )}
+
           <ProductDetailActions productName={product.name} />
         </article>
       </div>
-      <div className="mt-12 grid gap-6 md:grid-cols-2">
-        {sections.map(([key, label]) => {
-          const value = textFor(product[key], locale)
-          return value ? (
-            <section key={key} className="rounded-2xl border border-border p-5">
-              <h2 className="mb-2 font-bold">{label}</h2>
-              <p className="leading-7 text-muted-foreground">{value}</p>
-            </section>
-          ) : null
-        })}
-      </div>
-      <div className="mt-10 border-t border-border pt-6">
+
+      {/* Specifications Table */}
+      {seo.specRows.length > 0 && (
+        <section className="mt-14 rounded-2xl border border-border p-6 bg-card/60">
+          <h2 className="text-xl font-bold mb-4 text-forest">
+            {labelFor(locale, 'المواصفات الفنية وبيانات التوريد', 'Specifications & Supply Details')}
+          </h2>
+          <div className="grid divide-y divide-border">
+            {seo.specRows.map((row, idx) => (
+              <div key={idx} className="flex flex-col sm:flex-row justify-between py-3 gap-2">
+                <span className="font-semibold text-muted-foreground text-sm">{row.label}</span>
+                <span className="font-medium text-foreground text-sm">{row.value}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Auto FAQs Section */}
+      {seo.autoFaqs.length > 0 && (
+        <section className="mt-10 rounded-2xl border border-border p-6 bg-secondary/30">
+          <h2 className="text-xl font-bold mb-4 text-forest">
+            {labelFor(locale, 'الأسئلة الشائعة حول الصنف', 'Frequently Asked Questions')}
+          </h2>
+          <div className="space-y-4">
+            {seo.autoFaqs.map((faq, idx) => (
+              <div key={idx} className="rounded-xl border border-border bg-card p-4">
+                <h3 className="font-bold text-foreground text-base mb-1.5">{faq.question}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div className="mt-12 border-t border-border pt-6">
         <ShareActions url={shareUrl} title={title} locale={locale} />
       </div>
     </main>

@@ -5,9 +5,9 @@ import { notFound } from 'next/navigation'
 import { MessageCircle, Phone } from 'lucide-react'
 import { JsonLd } from '@/components/json-ld'
 import { ShareActions } from '@/components/share-actions'
-import { getLocale } from '@/lib/locale-server'
-import { localePath, type Locale } from '@/lib/i18n'
+import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { getArticleBySlug } from '@/lib/sanity/details'
+import { getDetailSlugs } from '@/lib/sanity/articles'
 import { imageUrl } from '@/lib/sanity/image'
 import { articleDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
@@ -16,8 +16,28 @@ import { buildMetadata } from '@/lib/seo/build-metadata'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const [{ slug }, locale] = await Promise.all([params, getLocale()])
+export const dynamicParams = true
+
+export async function generateStaticParams() {
+  const details = await getDetailSlugs()
+  const articles = Array.isArray(details?.articles) ? details.articles : []
+  const params: { locale: string; slug: string }[] = []
+  for (const a of articles) {
+    if (a?.slug && a.slug !== 'oli1') {
+      params.push({ locale: 'ar', slug: a.slug })
+      params.push({ locale: 'en', slug: a.slug })
+    }
+  }
+  return params
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}): Promise<Metadata> {
+  const { slug, locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const article = await getArticleBySlug(slug)
   if (!article) return { title: 'Article', robots: { index: false, follow: false } }
 
@@ -50,8 +70,8 @@ function renderBlocks(blocks: any[], locale: Locale) {
     const ListTag = currentList.type === 'number' ? 'ol' : 'ul'
     const listClass =
       currentList.type === 'number'
-        ? 'my-6 list-decimal ps-6 space-y-2 text-forest-deep text-lg leading-relaxed'
-        : 'my-6 list-disc ps-6 space-y-2 text-forest-deep text-lg leading-relaxed'
+        ? 'my-6 list-decimal space-y-2 ps-6 text-foreground/90'
+        : 'my-6 list-disc space-y-2 ps-6 text-foreground/90'
 
     elements.push(
       <ListTag key={`list-${keySuffix}`} className={listClass}>
@@ -184,9 +204,14 @@ function renderBlocks(blocks: any[], locale: Locale) {
   return elements
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-  const [{ slug }, locale, base] = await Promise.all([params, getLocale(), getSiteUrl()])
-  const article = await getArticleBySlug(slug)
+export default async function ArticlePage({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}) {
+  const { slug, locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
+  const [article, base] = await Promise.all([getArticleBySlug(slug), getSiteUrl()])
   if (!article) return notFound()
 
   const title = textFor(article.title, locale)
@@ -227,7 +252,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <span className="rounded-full bg-forest/10 px-3 py-1 text-xs font-bold text-forest">
               {locale === 'ar' ? 'سلاسل الإمداد الغذائي' : 'Food Supply Chain'}
             </span>
-            {dateFormatted && <time dateTime={article.publishedAt} className="text-xs text-muted-foreground">{dateFormatted}</time>}
+            {dateFormatted && (
+              <time dateTime={article.publishedAt} className="text-xs text-muted-foreground">
+                {dateFormatted}
+              </time>
+            )}
             {article.author && <span className="text-xs text-muted-foreground">· {article.author}</span>}
           </div>
 

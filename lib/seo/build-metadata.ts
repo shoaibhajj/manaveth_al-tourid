@@ -1,6 +1,5 @@
 import 'server-only'
 import type { Metadata } from 'next'
-import { draftMode } from 'next/headers'
 import { localePath, type Locale } from '@/lib/i18n'
 import { getSiteUrl, isIndexableEnvironment } from '@/lib/site-url'
 
@@ -39,7 +38,7 @@ export async function buildMetadata({
   modifiedTime,
   authors,
 }: BuildMetadataParams): Promise<Metadata> {
-  const [base, draft] = await Promise.all([getSiteUrl(), draftMode()])
+  const base = await getSiteUrl()
   const isAr = locale === 'ar'
   const cleanPath = path.startsWith('/') ? path : `/${path}`
 
@@ -51,7 +50,7 @@ export async function buildMetadata({
   const shareImageUrl = image || `${base}/images/hero.png`
   const brandName = isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.'
 
-  const allowIndexing = isIndexable && isIndexableEnvironment() && !draft.isEnabled
+  const allowIndexing = isIndexable && isIndexableEnvironment()
 
   const metadata: Metadata = {
     title,

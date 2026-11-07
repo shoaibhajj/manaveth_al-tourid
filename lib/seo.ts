@@ -1,6 +1,5 @@
 import 'server-only'
 import type { Metadata } from 'next'
-import { draftMode } from 'next/headers'
 import { localePath, locales, type Locale } from './i18n'
 import type { SiteContent } from './content/model'
 import { getLocale } from './locale-server'
@@ -17,8 +16,8 @@ const pagePaths: Record<SeoPage, string> = { home: '/', products: '/products', b
 const absolute = (value: string | undefined, base: string) => (value ? new URL(value, base).toString() : undefined)
 
 /** Title, description, canonical, language alternates and share image for one public page, read from the SEO documents. */
-export async function pageMetadata(page: SeoPage): Promise<Metadata> {
-  const [locale, content, base] = await Promise.all([getLocale(), getContent(), getSiteUrl()])
+export async function pageMetadata(page: SeoPage, locale: Locale = 'ar'): Promise<Metadata> {
+  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
   const entry = content.seo[page]
   const path = pagePaths[page]
   const title = entry.title[locale]

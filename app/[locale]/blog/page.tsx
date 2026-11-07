@@ -1,15 +1,23 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getLocale } from '@/lib/locale-server'
-import { localePath } from '@/lib/i18n'
+import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { getArticles } from '@/lib/sanity/articles'
 import { imageUrl } from '@/lib/sanity/image'
 import { getSiteUrl } from '@/lib/site-url'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
+export function generateStaticParams() {
+  return [{ locale: 'ar' }, { locale: 'en' }]
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const title =
     locale === 'ar'
       ? 'المقالات والأدلة التجارية لتوريد الأغذية | منافذ التوريد'
@@ -27,9 +35,14 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-export default async function BlogPage() {
-  const [locale, base] = await Promise.all([getLocale(), getSiteUrl()])
-  const articles = await getArticles()
+export default async function BlogPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
+  const [base, articles] = await Promise.all([getSiteUrl(), getArticles()])
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-16 md:px-6">
@@ -49,7 +62,8 @@ export default async function BlogPage() {
           const title = article.title?.[locale] || article.title?.ar
           const excerpt = article.excerpt?.[locale] || article.excerpt?.ar
           const image = imageUrl(article.coverImage, 800) || `${base}/images/logo.png`
-          const href = localePath(`/blog/${article.slug.current}`, locale)
+          const slug = article.slug?.current || article.slug
+          const href = localePath(`/blog/${slug}`, locale)
 
           return (
             <article

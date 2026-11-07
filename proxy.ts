@@ -2,24 +2,36 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { LOCALE_HEADER } from '@/lib/i18n'
 
 /**
- * English pages are served from /en and Arabic from the root. The /en prefix is stripped here so both
- * languages share the same routes; the requested language travels in a request header.
+ * Proxy Middleware (D1):
+ * - Direct requests to /ar or /ar/... are permanently redirected (301) to the clean canonical path without /ar.
+ * - Arabic is the default locale served at / and /*: internally rewritten to /ar/* so Next.js matches app/[locale] with params.locale = 'ar'.
+ * - English is served at /en and /en/*: passed through to Next.js matching app/[locale] with params.locale = 'en'.
  */
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const requestHeaders = new Headers(request.headers)
 
-  if (pathname === '/en' || pathname.startsWith('/en/')) {
-    const stripped = pathname.slice(3) || '/'
-
-    requestHeaders.set(LOCALE_HEADER, 'en')
-    const url = request.nextUrl.clone()
-    url.pathname = stripped
-    return NextResponse.rewrite(url, { request: { headers: requestHeaders } })
+  // 1. Permanent redirect (301) for direct /ar requests
+  if (pathname === '/ar' || pathname.startsWith('/ar/')) {
+    const stripped = pathname.replace(/^\/ar(\/|$)/, '$1') || '/'
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = stripped
+    return NextResponse.redirect(redirectUrl, 301)
   }
 
+  // 2. English requests (/en or /en/*)
+  if (pathname === '/en' || pathname.startsWith('/en/')) {
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set(LOCALE_HEADER, 'en')
+    return NextResponse.next({ request: { headers: requestHeaders } })
+  }
+
+  // 3. Arabic default routes (/, /catalog, /products, etc.)
+  // Internally rewrite to /ar... so it executes app/[locale]/... with locale='ar'
+  const requestHeaders = new Headers(request.headers)
   requestHeaders.set(LOCALE_HEADER, 'ar')
-  return NextResponse.next({ request: { headers: requestHeaders } })
+  const rewriteUrl = request.nextUrl.clone()
+  rewriteUrl.pathname = `/ar${pathname === '/' ? '' : pathname}`
+  return NextResponse.rewrite(rewriteUrl, { request: { headers: requestHeaders } })
 }
 
 export const config = {

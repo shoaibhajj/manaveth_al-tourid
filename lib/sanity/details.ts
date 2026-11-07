@@ -1,5 +1,4 @@
 import 'server-only'
-import { draftMode } from 'next/headers'
 import { allArticles } from '../content/articles-data'
 import { products as fallbackProducts } from '../content/products'
 import { isSanityConfigured } from '@/sanity/env'
@@ -18,13 +17,10 @@ export type DetailDocument = Record<string, any> | null
 async function fetchDetail(query: string, draftQuery: string, slug: string): Promise<DetailDocument> {
   if (!sanityFetch) return null
   try {
-    const { isEnabled } = await draftMode()
-    const targetQuery = isEnabled ? draftQuery : query
-    const { data } = await sanityFetch({ query: targetQuery, params: { slug } })
-    return (data as DetailDocument) ?? null
-  } catch {
     const { data } = await sanityFetch({ query, params: { slug } })
     return (data as DetailDocument) ?? null
+  } catch {
+    return null
   }
 }
 

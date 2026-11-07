@@ -1,19 +1,24 @@
 import type { Metadata } from 'next'
 import { getContent } from '@/lib/sanity/get-content'
-import { getLocale } from '@/lib/locale-server'
 import { getSiteUrl } from '@/lib/site-url'
-import { localePath } from '@/lib/i18n'
+import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { CatalogView } from '@/components/catalog/catalog-view'
 import { defaultCatalogProducts, catalogCategories } from '@/lib/content/catalog-data'
 import { isSanityConfigured } from '@/sanity/env'
 import { JsonLd } from '@/components/json-ld'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export function generateStaticParams() {
+  return [{ locale: 'ar' }, { locale: 'en' }]
+}
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
 
   const title = isAr
@@ -32,8 +37,14 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-export default async function CatalogPage() {
-  const [content, locale, base] = await Promise.all([getContent(), getLocale(), getSiteUrl()])
+export default async function CatalogPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
+  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
   const sanityProducts = content?.products || []
   const isAr = locale === 'ar'
 
@@ -98,8 +109,9 @@ export default async function CatalogPage() {
     <div className="pt-16 md:pt-20">
       <JsonLd graph={itemListSchema} />
       <CatalogView
-        initialProducts={productsToUse}
-        catalogConfig={content?.catalogPage}
+        products={productsToUse}
+        categories={catalogCategories}
+        catalogMeta={content.catalogPage}
       />
     </div>
   )

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getContent } from '@/lib/sanity/get-content'
 import { pageMetadata } from '@/lib/seo'
+import { defaultLocale, isLocale, type Locale } from '@/lib/i18n'
 import { Hero } from '@/components/hero'
 import { About } from '@/components/about'
 import { CompanyNews } from '@/components/company-news'
@@ -13,13 +14,22 @@ import { BranchesSection } from '@/components/branches-section'
 import { ContactCta } from '@/components/contact-cta'
 import { CustomSection } from '@/components/custom-section'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export function generateStaticParams() {
+  return [{ locale: 'ar' }, { locale: 'en' }]
+}
 
-export const generateMetadata = (): Promise<Metadata> => pageMetadata('home')
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
+  return pageMetadata('home', locale)
+}
 
 export default async function Home() {
-  const { orderedSections, sections, customSections } = await getContent()
+  const { orderedSections, customSections } = await getContent()
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const customMap = new Map((customSections || []).map((cs: any) => [cs.id, cs]))

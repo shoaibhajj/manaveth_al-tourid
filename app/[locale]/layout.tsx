@@ -2,18 +2,18 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { Tajawal } from 'next/font/google'
+import { Suspense } from 'react'
 import { LocaleProvider } from '@/components/locale-provider'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { WhatsappWidget } from '@/components/whatsapp-widget'
-import { directionOf } from '@/lib/i18n'
-import { getLocale } from '@/lib/locale-server'
+import { defaultLocale, directionOf, isLocale, type Locale } from '@/lib/i18n'
 import { getContent } from '@/lib/sanity/get-content'
 import { SanityRuntime } from '@/components/sanity-runtime'
 import { JsonLd } from '@/components/json-ld'
 import { organizationGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
-import './globals.css'
+import '../globals.css'
 
 const tajawal = Tajawal({
   subsets: ['arabic', 'latin'],
@@ -22,8 +22,18 @@ const tajawal = Tajawal({
   display: 'swap',
 })
 
-export async function generateMetadata(): Promise<Metadata> {
-  const [locale, content, base] = await Promise.all([getLocale(), getContent(), getSiteUrl()])
+export function generateStaticParams() {
+  return [{ locale: 'ar' }, { locale: 'en' }]
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
+  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
   const { home } = content.seo
   const icon = content.favicon ?? '/images/logo.png'
   return {
@@ -34,7 +44,9 @@ export async function generateMetadata(): Promise<Metadata> {
     verification: {
       google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
       yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || undefined,
-      other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } : undefined,
+      other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+        ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+        : undefined,
     },
   }
 }
@@ -44,12 +56,16 @@ export const viewport: Viewport = {
   colorScheme: 'light',
 }
 
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode
+  params: Promise<{ locale: string }>
 }>) {
-  const [locale, content, base] = await Promise.all([getLocale(), getContent(), getSiteUrl()])
+  const { locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
+  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
 
   return (
     <html lang={locale} dir={directionOf(locale)} className={tajawal.variable}>
@@ -61,9 +77,11 @@ export default async function RootLayout({
           <SiteFooter />
           <WhatsappWidget />
         </LocaleProvider>
-        <SanityRuntime />
+        <Suspense fallback={null}>
+          <SanityRuntime />
+        </Suspense>
         {process.env.NODE_ENV === 'production' && <Analytics />}
-              <Script id="microsoft-clarity" strategy="afterInteractive">
+        <Script id="microsoft-clarity" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

@@ -1,7 +1,10 @@
-import { headers } from 'next/headers'
-import { defaultLocale, isLocale, LOCALE_HEADER, type Locale } from './i18n'
+import { defaultLocale, type Locale } from './i18n'
 
+/**
+ * Returns the default locale ('ar').
+ * D1: Locale is now passed directly via route params in app/[locale]/...
+ * This helper avoids calling headers() so routes remain fully static.
+ */
 export async function getLocale(): Promise<Locale> {
-  const requested = (await headers()).get(LOCALE_HEADER)
-  return isLocale(requested) ? requested : defaultLocale
+  return defaultLocale
 }

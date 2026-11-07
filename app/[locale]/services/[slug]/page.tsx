@@ -3,9 +3,9 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { JsonLd } from '@/components/json-ld'
 import { ShareActions } from '@/components/share-actions'
-import { getLocale } from '@/lib/locale-server'
-import { localePath } from '@/lib/i18n'
+import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { getServiceBySlug } from '@/lib/sanity/details'
+import { getDetailSlugs } from '@/lib/sanity/articles'
 import { imageUrl } from '@/lib/sanity/image'
 import { serviceDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
@@ -13,8 +13,28 @@ import { buildMetadata } from '@/lib/seo/build-metadata'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const [{ slug }, locale] = await Promise.all([params, getLocale()])
+export const dynamicParams = true
+
+export async function generateStaticParams() {
+  const details = await getDetailSlugs()
+  const services = Array.isArray(details?.services) ? details.services : []
+  const params: { locale: string; slug: string }[] = []
+  for (const s of services) {
+    if (s?.slug) {
+      params.push({ locale: 'ar', slug: s.slug })
+      params.push({ locale: 'en', slug: s.slug })
+    }
+  }
+  return params
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}): Promise<Metadata> {
+  const { slug, locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const service = await getServiceBySlug(slug)
   if (!service) return { title: 'Service', robots: { index: false, follow: false } }
 
@@ -42,9 +62,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   })
 }
 
-export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const [{ slug }, locale, base] = await Promise.all([params, getLocale(), getSiteUrl()])
-  const service = await getServiceBySlug(slug)
+export default async function ServiceDetailPage({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}) {
+  const { slug, locale: rawLocale } = await params
+  const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
+  const [service, base] = await Promise.all([getServiceBySlug(slug), getSiteUrl()])
   if (!service) return notFound()
 
   const title = textFor(service.name, locale)
@@ -58,7 +83,9 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
     <main className="mx-auto max-w-4xl px-6 py-16 lg:px-8">
       <JsonLd graph={serviceDetailGraph(service, locale, base)} />
       <article className="flex flex-col gap-6">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">{locale === 'ar' ? 'خدمة تموينية' : 'Service'}</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+          {locale === 'ar' ? 'خدمة تموينية' : 'Service'}
+        </p>
         <h1 className="text-4xl font-bold tracking-tight text-foreground">{title}</h1>
         {description ? <p className="text-xl leading-8 text-muted-foreground">{description}</p> : null}
         {image ? (

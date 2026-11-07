@@ -209,9 +209,9 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
         <div className="border-b-2 border-gray-800 pb-3 mb-3">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-lg font-black text-black">
-                {isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveeh ALTourid Trading Co.'}
-              </h1>
+              <div role="heading" aria-level={1} className="text-lg font-black text-black">
+                {isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.'}
+              </div>
               <p className="text-[10px] text-gray-700 mt-0.5 font-medium">
                 {isAr
                   ? 'سجل تجاري: 1116011768 | هاتف ومبيعات: +966509971699 | الرياض - المملكة العربية السعودية'
@@ -450,20 +450,15 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                             />
                           </Link>
 
-                          {/* 3. Product Name */}
+                          {/* 3. Product Name: Strictly in active page locale */}
                           <Link
                             href={productHref}
                             className="min-w-0 flex-1 text-start group cursor-pointer"
                             title={isAr ? 'عرض تفاصيل المنتج' : 'View product details'}
                           >
                             <p className="text-[11px] sm:text-xs font-bold text-forest-deep group-hover:text-gold transition-colors truncate leading-tight">
-                              {product.name.ar}
+                              {isAr ? product.name.ar : product.name.en || product.name.ar}
                             </p>
-                            {product.name.en && (
-                              <p className="text-[9px] text-forest/45 truncate leading-none mt-0.5">
-                                {product.name.en}
-                              </p>
-                            )}
                           </Link>
                         </div>
 

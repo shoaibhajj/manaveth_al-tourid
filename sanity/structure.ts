@@ -120,6 +120,8 @@ export const structure: StructureResolver = (S) =>
               singleton(S, 'seoHome', 'الصفحة الرئيسية'),
               singleton(S, 'seoProducts', 'صفحة المنتجات'),
               singleton(S, 'seoBranches', 'صفحة الفروع والمستودعات'),
+              S.divider(),
+              S.documentTypeListItem('redirect').title('روابط إعادة التوجيه (301 Redirects)'),
             ]),
         ),
     ])

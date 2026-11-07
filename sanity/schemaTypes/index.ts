@@ -5,6 +5,7 @@ import { companyPost } from './documents/companyPost'
 import { customSection } from './documents/customSection'
 import { place, product, productCategory, sector, service, stat } from './documents/cards'
 import { brand, certificate, city, country } from './documents/taxonomy'
+import { redirect } from './documents/redirect'
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
   contactSettings,
@@ -67,6 +68,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   city,
   certificate,
   place,
+  redirect,
   galleryCategory,
   galleryItem,
   // Objects

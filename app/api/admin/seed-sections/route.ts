@@ -1,81 +1,11 @@
 import { NextResponse } from 'next/server'
 import { createClient } from 'next-sanity'
 import { isSanityConfigured, sanityEnv } from '@/sanity/env'
+import { defaultSectionsList } from '@/lib/content/default-sections'
 
 export const dynamic = 'force-dynamic'
 
-export const defaultSectionsList = [
-  {
-    _key: 'sec-hero',
-    _type: 'homeSectionConfig',
-    key: 'hero',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'الواجهة الرئيسية (Hero)', en: 'Hero Section' },
-  },
-  {
-    _key: 'sec-about',
-    _type: 'homeSectionConfig',
-    key: 'about',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'من نحن (About)', en: 'About Us' },
-  },
-  {
-    _key: 'sec-news',
-    _type: 'homeSectionConfig',
-    key: 'news',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'نبض الشركة وآخر الأخبار (Company News)', en: 'Company News & Milestones' },
-  },
-  {
-    _key: 'sec-services',
-    _type: 'homeSectionConfig',
-    key: 'services',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'الخدمات واللوجستيات (Services)', en: 'Supply & Logistics Services' },
-  },
-  {
-    _key: 'sec-featured',
-    _type: 'homeSectionConfig',
-    key: 'featuredProducts',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'المنتجات المميزة (Featured Products)', en: 'Featured Products' },
-  },
-  {
-    _key: 'sec-gallery',
-    _type: 'homeSectionConfig',
-    key: 'gallery',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'معرض الأعمال التفاعلي (Gallery)', en: 'Interactive Gallery' },
-  },
-  {
-    _key: 'sec-stats',
-    _type: 'homeSectionConfig',
-    key: 'stats',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'الإحصائيات والأرقام (Stats)', en: 'Key Figures & Statistics' },
-  },
-  {
-    _key: 'sec-sectors',
-    _type: 'homeSectionConfig',
-    key: 'sectors',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'القطاعات المستهدفة (Sectors)', en: 'Target Sectors' },
-  },
-  {
-    _key: 'sec-branches',
-    _type: 'homeSectionConfig',
-    key: 'branches',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'الفروع والمستودعات (Branches)', en: 'Branches & Warehouses' },
-  },
-  {
-    _key: 'sec-contact',
-    _type: 'homeSectionConfig',
-    key: 'contact',
-    enabled: true,
-    title: { _type: 'localizedString', ar: 'تواصل معنا وطلب التوريد (Contact)', en: 'Contact & Procurement' },
-  },
-]
+export { defaultSectionsList }
 
 export async function GET(request: Request) {
   const url = new URL(request.url)

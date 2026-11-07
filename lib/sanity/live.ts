@@ -15,7 +15,7 @@ const client = isSanityConfigured
       projectId: sanityEnv.projectId,
       dataset: sanityEnv.dataset,
       apiVersion: sanityEnv.apiVersion,
-      useCdn: true,
+      useCdn: false,
       perspective: 'published',
       stega: { studioUrl: '/studio' },
     })

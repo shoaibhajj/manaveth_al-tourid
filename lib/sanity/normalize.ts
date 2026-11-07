@@ -348,16 +348,6 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
       customSectionRef: clean(item.customSectionRef?._ref),
       customSection: item.customSection ? toCustomSection(item.customSection) : undefined,
     }))
-
-    const existingKeys = new Set(orderedSections.map((s) => s.key))
-    for (const dKey of defaultKeys) {
-      if (!existingKeys.has(dKey)) {
-        orderedSections.push({
-          key: dKey,
-          enabled: dKey === 'hero' ? true : sectionFlags[dKey as SectionKey] !== false,
-        })
-      }
-    }
   } else {
     orderedSections = defaultKeys.map((dKey) => ({
       key: dKey,

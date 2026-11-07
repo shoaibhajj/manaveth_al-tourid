@@ -13,6 +13,9 @@ import { BranchesSection } from '@/components/branches-section'
 import { ContactCta } from '@/components/contact-cta'
 import { CustomSection } from '@/components/custom-section'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const generateMetadata = (): Promise<Metadata> => pageMetadata('home')
 
 export default async function Home() {

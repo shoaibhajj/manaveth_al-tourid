@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { MessageCircle } from 'lucide-react'
 import { whatsappUrl, type WhatsappChannel } from '@/lib/content/contact'
+import { stripLocalePrefix } from '@/lib/i18n'
 import { ActionLink } from './action-link'
 import { useContent, useLocale } from './locale-provider'
 
@@ -34,9 +36,15 @@ function WidgetButton({
 }
 
 export function WhatsappWidget() {
+  const pathname = stripLocalePrefix(usePathname() || '')
   const { contact } = useContent()
   const { orders, quote } = contact.whatsapp
   const [isElevated, setIsElevated] = useState(false)
+
+  // Hide WhatsApp side widgets on catalog / menu pages
+  if (pathname === '/catalog' || pathname === '/menu') {
+    return null
+  }
 
   useEffect(() => {
     const handleCheck = () => {

@@ -12,12 +12,8 @@ import {
   Trash2,
   ChevronDown,
   ChevronUp,
-  Building2,
-  MapPin,
   FileDown,
   Clock,
-  Printer,
-  ExternalLink,
 } from 'lucide-react'
 import { useLocale } from '@/components/locale-provider'
 import {
@@ -57,9 +53,8 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
 
   // Selected products & quantities
   const [selectedItems, setSelectedItems] = useState<Record<string, SelectedItem>>({})
-  const [clientName, setClientName] = useState('')
-  const [clientCity, setClientCity] = useState('')
-  const [showSummaryDrawer, setShowSummaryDrawer] = useState(false)
+  // Open review drawer by default as requested
+  const [showSummaryDrawer, setShowSummaryDrawer] = useState(true)
 
   const phone = catalogConfig?.inquiryWhatsApp || '966509971699'
 
@@ -121,8 +116,12 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
       const next = { ...prev }
       if (next[product.id]) {
         delete next[product.id]
+        if (Object.keys(next).length === 0) {
+          setShowSummaryDrawer(false)
+        }
       } else {
         next[product.id] = { product, quantity: 1 }
+        setShowSummaryDrawer(true) // Immediately open review drawer when product is added
       }
       return next
     })
@@ -133,6 +132,9 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
       setSelectedItems((prev) => {
         const next = { ...prev }
         delete next[productId]
+        if (Object.keys(next).length === 0) {
+          setShowSummaryDrawer(false)
+        }
         return next
       })
       return
@@ -161,7 +163,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
     [selectedList]
   )
 
-  // Construct WhatsApp Request Message
+  // Direct, Frictionless WhatsApp Request Message
   const generateWhatsAppQuoteUrl = () => {
     if (selectedList.length === 0) return '#'
 
@@ -177,22 +179,11 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
       })
       .join('\n')
 
-    const clientInfoLines: string[] = []
-    if (clientName.trim()) {
-      clientInfoLines.push(`${isAr ? 'اسم المنشأة / العميل' : 'Company/Client'}: ${clientName.trim()}`)
-    }
-    if (clientCity.trim()) {
-      clientInfoLines.push(`${isAr ? 'المدينة' : 'City'}: ${clientCity.trim()}`)
-    }
-
-    const clientInfoText =
-      clientInfoLines.length > 0 ? `\n\n${clientInfoLines.join('\n')}` : ''
-
     const footer = isAr
       ? `\n\nيرجى تزويدنا بأفضل أسعار التوريد وعروض الكميات.\nشاكرين ومقدرين حسن تعاونكم.`
       : `\n\nPlease provide us with your best volume pricing.\nThank you.`
 
-    const fullMessage = `${header}\n${itemsText}${clientInfoText}${footer}`
+    const fullMessage = `${header}\n${itemsText}${footer}`
     return `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(fullMessage)}`
   }
 
@@ -201,7 +192,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
     return localize(`/products/${slug}`)
   }
 
-  // Handle PDF Download (Print to PDF or open Sanity PDF)
+  // Handle PDF Download (Triggers native print dialog optimized for A4 PDF saving)
   const handleDownloadPdf = () => {
     if (typeof window !== 'undefined') {
       window.print()
@@ -211,47 +202,107 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
   return (
     <div className="min-h-screen bg-[#FBF8F2] text-forest-deep pb-28 print:bg-white print:pb-0 print:text-black">
       {/* =========================================================================
-          PRINT ONLY HEADER (يظهر في ملف الـ PDF فقط مع زر لفتح وتحديث الموقع)
+          PRINT ONLY VIEW (يظهر فقط عند تصدير الـ PDF - قائمتين جنب بعض بدون تقطيع)
           ========================================================================= */}
-      <div className="hidden print:block mb-4 border-b-2 border-forest pb-3 text-start">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-black text-black">
-              {isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveeh ALTourid Trading Co.'}
-            </h1>
-            <p className="text-xs text-gray-700 mt-0.5">
-              {isAr
-                ? 'سجل تجاري: 1116011768 | هاتف ومبيعات: +966509971699 | الرياض - المملكة العربية السعودية'
-                : 'CR: 1116011768 | Sales: +966509971699 | Riyadh, Saudi Arabia'}
-            </p>
+      <div className="hidden print:block w-full text-start py-2">
+        {/* Print Header */}
+        <div className="border-b-2 border-gray-800 pb-3 mb-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-black text-black">
+                {isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveeh ALTourid Trading Co.'}
+              </h1>
+              <p className="text-[10px] text-gray-700 mt-0.5 font-medium">
+                {isAr
+                  ? 'سجل تجاري: 1116011768 | هاتف ومبيعات: +966509971699 | الرياض - المملكة العربية السعودية'
+                  : 'CR: 1116011768 | Sales: +966509971699 | Riyadh, Saudi Arabia'}
+              </p>
+            </div>
+            <div className="text-end">
+              <span className="inline-block px-2 py-0.5 rounded border border-gray-400 bg-gray-100 text-[10px] font-bold text-gray-800">
+                {isAr ? `تاريخ آخر تحديث: ${latestDateFormatted}` : `Last Updated: ${latestDateFormatted}`}
+              </span>
+            </div>
           </div>
-          <div className="text-end">
-            <span className="inline-block px-2.5 py-1 rounded border border-gray-400 bg-gray-100 text-xs font-bold text-gray-800">
-              {isAr ? `تاريخ آخر تحديث: ${latestDateFormatted}` : `Last Updated: ${latestDateFormatted}`}
-            </span>
+
+          {/* زر ورابط مباشر لفتح وتحديث الكتالوج عبر الموقع الإلكتروني */}
+          <div className="mt-2.5 p-2 rounded-lg border-2 border-dashed border-[#B8860B] bg-[#FFFDF9] text-center">
+            <p className="text-[10px] font-bold text-gray-900">
+              {isAr
+                ? '📌 للتحقق من أحدث نسخة محدثة من الكتالوج أو طلب عروض الأسعار والكميات فورياً عبر الموقع الإلكتروني:'
+                : '📌 To check the latest updated catalog or request instant quotations via our website:'}
+            </p>
+            <a
+              href="https://www.mnaveth-altourid.com/catalog"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-0.5 text-[11px] font-black text-[#1A3326] underline"
+            >
+              🌐 www.mnaveth-altourid.com/catalog ({isAr ? 'انقر هنا لفتح وتحديث الكتالوج' : 'Click to Open & Update Catalog'})
+            </a>
           </div>
         </div>
 
-        {/* زر ورابط مباشر لفتح وتحديث الكتالوج عبر الموقع الإلكتروني */}
-        <div className="mt-3 p-2.5 rounded-lg border-2 border-dashed border-[#B8860B] bg-[#FFFDF9] text-center">
-          <p className="text-[11px] font-bold text-gray-800">
-            {isAr
-              ? '📌 للتحقق من أحدث نسخة محدثة من الكتالوج أو طلب عروض الأسعار والكميات فورياً عبر الموقع:'
-              : '📌 To check the latest updated catalog or request instant quotations via our website:'}
-          </p>
-          <a
-            href="https://www.mnaveth-altourid.com/catalog"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-1 px-4 py-1.5 bg-[#1A3326] text-[#FBF8F2] text-xs font-black rounded shadow-xs"
-          >
-            🌐 www.mnaveth-altourid.com/catalog ({isAr ? 'انقر هنا لفتح وتحديث الكتالوج' : 'Click to Open & Update Catalog'})
-          </a>
+        {/* 2 COLUMNS PRINT GRID (قائمتين جنب بعض كحد أقصى والباقي يلتف للأسفل) */}
+        <div className="grid grid-cols-2 gap-3.5 items-start w-full">
+          {productsGrouped.map((group) => (
+            <div
+              key={`print-${group.category.id}`}
+              className="break-inside-avoid rounded-lg border border-gray-400 bg-white p-2.5 shadow-none mb-3"
+              style={{ pageBreakInside: 'avoid' }}
+            >
+              {/* Category Header */}
+              <div className="bg-gray-100 border-b border-gray-300 -mx-2.5 -mt-2.5 px-2.5 py-1 rounded-t-lg flex items-center justify-between mb-2">
+                <span className="text-xs font-black text-black">
+                  {t(group.category.name)}
+                </span>
+                <span className="text-[10px] bg-white border border-gray-300 px-1.5 py-0.2 rounded font-bold text-gray-700">
+                  {group.items.length} {isAr ? 'صنف' : 'items'}
+                </span>
+              </div>
+
+              {/* Product Items Table */}
+              <table className="w-full text-start border-collapse">
+                <tbody>
+                  {group.items.map((product, pIdx) => (
+                    <tr
+                      key={`print-item-${product.id}`}
+                      className="border-b border-gray-200 last:border-b-0 text-[10px]"
+                    >
+                      <td className="py-1 pe-1 w-5 text-gray-500 font-bold align-top">
+                        {pIdx + 1}.
+                      </td>
+                      <td className="py-1 align-top">
+                        <span className="font-bold text-black block leading-tight">
+                          {product.name.ar}
+                        </span>
+                        {product.name.en && (
+                          <span className="text-[9px] text-gray-600 block leading-tight mt-0.5">
+                            {product.name.en}
+                          </span>
+                        )}
+                      </td>
+                      {product.sku && (
+                        <td className="py-1 text-end text-[9px] text-gray-500 font-mono whitespace-nowrap ps-2 align-top">
+                          {product.sku}
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+
+        {/* Print Footer */}
+        <div className="mt-4 pt-2 border-t border-gray-400 text-[9px] text-gray-600 text-center">
+          <span>شركة منافذ التوريد للتجارة | سجل تجاري: 1116011768 | مبيعات: +966509971699 | www.mnaveth-altourid.com/catalog</span>
         </div>
       </div>
 
       {/* =========================================================================
-          1. CLEAN COMPACT WEB HEADER (شريط أنيق مع زر تنزيل PDF وتاريخ آخر تحديث)
+          SCREEN ONLY: 1. CLEAN COMPACT WEB HEADER
           ========================================================================= */}
       <header className="border-b border-forest/10 bg-white px-4 py-4 md:py-5 print:hidden">
         <div className="mx-auto max-w-7xl">
@@ -312,11 +363,11 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
       </header>
 
       {/* =========================================================================
-          2. DENSE SIDE-BY-SIDE CATEGORY LISTS (قوائم أصغر وجنب بعضها وتلتف للأسفل)
+          SCREEN ONLY: 2. DENSE SIDE-BY-SIDE CATEGORY LISTS (أعمدة متراصة وجنب بعضها)
           ========================================================================= */}
-      <main className="mx-auto max-w-7xl px-3 sm:px-4 py-4 md:py-6 print:px-0 print:py-0">
+      <main className="mx-auto max-w-7xl px-3 sm:px-4 py-4 md:py-6 print:hidden">
         {filteredProducts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-forest/20 bg-white p-8 text-center print:hidden">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-forest/20 bg-white p-8 text-center">
             <Search className="size-8 text-forest/30 mb-2" />
             <p className="text-sm font-bold text-forest">
               {isAr ? 'لم يتم العثور على أي صنف مطابق للبحث' : 'No matching products found'}
@@ -329,28 +380,27 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
             </button>
           </div>
         ) : (
-          /* Multi-column layout: side by side, wrapping down naturally without excessive scrolling */
-          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-3 space-y-3 print:columns-2 print:gap-3 print:space-y-3">
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-3 space-y-3">
             {productsGrouped.map((group) => (
               <div
                 key={group.category.id}
-                className="break-inside-avoid mb-3 rounded-xl border border-forest/15 bg-white shadow-xs overflow-hidden transition-all hover:border-gold/50 print:border-gray-300 print:shadow-none"
+                className="break-inside-avoid mb-3 rounded-xl border border-forest/15 bg-white shadow-xs overflow-hidden transition-all hover:border-gold/50"
               >
                 {/* Category Header Bar */}
-                <div className="bg-forest-deep px-2.5 py-1.5 text-cream flex items-center justify-between border-b border-forest/20 print:bg-gray-100 print:text-black print:border-gray-400">
+                <div className="bg-forest-deep px-2.5 py-1.5 text-cream flex items-center justify-between border-b border-forest/20">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="size-1.5 rounded-full bg-gold shrink-0 print:bg-black" />
+                    <span className="size-1.5 rounded-full bg-gold shrink-0" />
                     <h2 className="text-xs sm:text-[13px] font-black truncate">
                       {t(group.category.name)}
                     </h2>
                   </div>
-                  <span className="text-[10px] bg-white/10 px-1.5 py-0.2 rounded text-gold font-bold shrink-0 print:bg-gray-200 print:text-black">
+                  <span className="text-[10px] bg-white/10 px-1.5 py-0.2 rounded text-gold font-bold shrink-0">
                     {group.items.length} {isAr ? 'صنف' : 'items'}
                   </span>
                 </div>
 
                 {/* Micro Product Rows */}
-                <div className="divide-y divide-forest/5 print:divide-gray-200">
+                <div className="divide-y divide-forest/5">
                   {group.items.map((product) => {
                     const productHref = getProductHref(product)
                     const isSelected = Boolean(selectedItems[product.id])
@@ -359,7 +409,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                     return (
                       <div
                         key={product.id}
-                        className={`flex items-center justify-between gap-1.5 px-2 py-1.5 transition-colors print:py-1 ${
+                        className={`flex items-center justify-between gap-1.5 px-2 py-1.5 transition-colors ${
                           isSelected
                             ? 'bg-emerald-50/70 border-s-2 border-emerald-600'
                             : 'hover:bg-[#FBF8F2]'
@@ -367,16 +417,16 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                       >
                         {/* Checkbox + Image + Name */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1">
-                          {/* 1. Micro Checkbox (hidden in print) */}
+                          {/* 1. Micro Checkbox */}
                           <button
                             type="button"
                             onClick={() => toggleSelectItem(product)}
-                            className={`size-4.5 shrink-0 rounded border flex items-center justify-center transition-all print:hidden ${
+                            className={`size-4.5 shrink-0 rounded border flex items-center justify-center transition-all ${
                               isSelected
                                 ? 'bg-emerald-600 border-emerald-600 text-white shadow-2xs'
                                 : 'border-forest/25 bg-white hover:border-emerald-600'
                             }`}
-                            title={isSelected ? (isAr ? 'إلغاء التحديد' : 'Deselect') : (isAr ? 'تحديد' : 'Select')}
+                            title={isSelected ? (isAr ? 'إلغاء التحديد' : 'Deselect') : (isAr ? 'تحديد الصنف' : 'Select')}
                           >
                             <Check
                               className={`size-3 stroke-[3] ${
@@ -384,9 +434,6 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                               }`}
                             />
                           </button>
-
-                          {/* Print bullet indicator */}
-                          <span className="hidden print:inline-block size-1.5 rounded-full bg-gray-400 shrink-0" />
 
                           {/* 2. Tiny Thumbnail (32x32px) */}
                           <Link
@@ -409,11 +456,11 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                             className="min-w-0 flex-1 text-start group cursor-pointer"
                             title={isAr ? 'عرض تفاصيل المنتج' : 'View product details'}
                           >
-                            <p className="text-[11px] sm:text-xs font-bold text-forest-deep group-hover:text-gold transition-colors truncate leading-tight print:text-black">
+                            <p className="text-[11px] sm:text-xs font-bold text-forest-deep group-hover:text-gold transition-colors truncate leading-tight">
                               {product.name.ar}
                             </p>
                             {product.name.en && (
-                              <p className="text-[9px] text-forest/45 truncate leading-none mt-0.5 print:text-gray-600">
+                              <p className="text-[9px] text-forest/45 truncate leading-none mt-0.5">
                                 {product.name.en}
                               </p>
                             )}
@@ -421,7 +468,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                         </div>
 
                         {/* Quantity Stepper (if checked) or Quick Select */}
-                        <div className="shrink-0 flex items-center gap-1 print:hidden">
+                        <div className="shrink-0 flex items-center gap-1">
                           {isSelected ? (
                             <div className="flex items-center gap-0.5 bg-white border border-emerald-300 rounded p-0.5 shadow-2xs">
                               <button
@@ -473,26 +520,19 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
       </main>
 
       {/* =========================================================================
-          PRINT ONLY FOOTER
-          ========================================================================= */}
-      <div className="hidden print:block mt-4 pt-2 border-t text-[9px] text-gray-600 text-center">
-        <span>شركة منافذ التوريد للتجارة | سجل تجاري: 1116011768 | مبيعات: +966509971699 | www.mnaveth-altourid.com/catalog</span>
-      </div>
-
-      {/* =========================================================================
-          3. FLOATING WHATSAPP RFQ BAR (شريط طلب عرض السعر المباشر بالأسفل)
+          SCREEN ONLY: 3. FLOATING WHATSAPP RFQ BAR (مفتوح فورا وبدون حقول معقدة)
           ========================================================================= */}
       {totalSelectedCount > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-50 p-2 sm:p-3 bg-gradient-to-t from-black/20 to-transparent pointer-events-none print:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-50 p-2 sm:p-3 bg-gradient-to-t from-black/25 to-transparent pointer-events-none print:hidden">
           <div className="mx-auto max-w-4xl pointer-events-auto">
-            {/* Expanded Review Drawer */}
+            {/* Expanded Review Drawer (مفتوح تلقائياً ومباشر) */}
             {showSummaryDrawer && (
-              <div className="mb-2 rounded-2xl border border-forest/15 bg-white p-3.5 shadow-2xl space-y-3 animate-in fade-in slide-in-from-bottom-3 duration-200">
+              <div className="mb-2 rounded-2xl border border-forest/15 bg-white p-3 shadow-2xl space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
                 <div className="flex items-center justify-between border-b border-forest/10 pb-2">
                   <div className="flex items-center gap-2">
                     <ShoppingBag className="size-4 text-emerald-600" />
                     <span className="text-xs font-black text-forest-deep">
-                      {isAr ? 'مراجعة قائمة الأصناف المطلوبة' : 'Review Selected Items'}
+                      {isAr ? 'قائمة الأصناف المختارة للتسعير' : 'Selected Products for Quote'}
                     </span>
                     <span className="text-[11px] rounded-full bg-emerald-100 px-2 py-0.2 text-emerald-800 font-bold">
                       {totalSelectedCount} {isAr ? 'صنف' : 'items'} ({totalUnits} {isAr ? 'وحدة' : 'units'})
@@ -503,12 +543,12 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                     className="text-[11px] text-red-600 hover:text-red-700 flex items-center gap-1 font-semibold"
                   >
                     <Trash2 className="size-3" />
-                    <span>{isAr ? 'تفريغ القائمة' : 'Clear all'}</span>
+                    <span>{isAr ? 'مسح الكل' : 'Clear all'}</span>
                   </button>
                 </div>
 
                 {/* Selected Items Scroll Area */}
-                <div className="max-h-48 overflow-y-auto divide-y divide-forest/5 pe-1 space-y-1">
+                <div className="max-h-44 overflow-y-auto divide-y divide-forest/5 pe-1 space-y-1">
                   {selectedList.map(({ product, quantity }) => (
                     <div
                       key={product.id}
@@ -521,52 +561,33 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                         </span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <div className="flex items-center gap-1 bg-emerald-50 border border-emerald-300 rounded px-1 py-0.5">
-                          <span className="text-[10px] text-emerald-800 font-bold">{quantity}</span>
+                        <div className="flex items-center gap-1 bg-emerald-50 border border-emerald-300 rounded px-1.5 py-0.5">
+                          <button
+                            type="button"
+                            onClick={() => updateItemQuantity(product.id, quantity - 1)}
+                            className="text-emerald-800 font-bold px-1 hover:text-black"
+                          >
+                            -
+                          </button>
+                          <span className="text-xs text-emerald-800 font-black min-w-4 text-center">{quantity}</span>
+                          <button
+                            type="button"
+                            onClick={() => updateItemQuantity(product.id, quantity + 1)}
+                            className="text-emerald-800 font-bold px-1 hover:text-black"
+                          >
+                            +
+                          </button>
                         </div>
                         <button
                           onClick={() => updateItemQuantity(product.id, 0)}
-                          className="text-forest/30 hover:text-red-600"
+                          className="text-forest/30 hover:text-red-600 p-0.5"
+                          title={isAr ? 'حذف' : 'Remove'}
                         >
                           <X className="size-3.5" />
                         </button>
                       </div>
                     </div>
                   ))}
-                </div>
-
-                {/* Optional Client Details for Quotation */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-t border-forest/10 pt-2">
-                  <div>
-                    <label className="block text-[10px] font-bold text-forest/70 mb-0.5">
-                      {isAr ? 'اسم المنشأة / الفندق / المطعم (اختياري):' : 'Company/Establishment Name:'}
-                    </label>
-                    <div className="relative">
-                      <Building2 className="absolute inset-y-0 start-2 my-auto size-3 text-forest/40" />
-                      <input
-                        type="text"
-                        value={clientName}
-                        onChange={(e) => setClientName(e.target.value)}
-                        placeholder={isAr ? 'مثال: فندق قصر الرياض' : 'e.g. Riyadh Palace Hotel'}
-                        className="w-full rounded-lg border border-forest/15 bg-[#FBF8F2] py-1 ps-7 pe-2 text-[11px] focus:border-gold focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-forest/70 mb-0.5">
-                      {isAr ? 'المدينة / فرع التوريد (اختياري):' : 'Delivery City:'}
-                    </label>
-                    <div className="relative">
-                      <MapPin className="absolute inset-y-0 start-2 my-auto size-3 text-forest/40" />
-                      <input
-                        type="text"
-                        value={clientCity}
-                        onChange={(e) => setClientCity(e.target.value)}
-                        placeholder={isAr ? 'مثال: الرياض - حي السلي' : 'e.g. Riyadh'}
-                        className="w-full rounded-lg border border-forest/15 bg-[#FBF8F2] py-1 ps-7 pe-2 text-[11px] focus:border-gold focus:outline-none"
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
             )}
@@ -579,7 +600,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                 </span>
                 <div>
                   <p className="text-xs font-bold leading-tight">
-                    {isAr ? 'الأصناف المحددة للتسعير' : 'Selected Products'}
+                    {isAr ? 'الأصناف المحددة' : 'Selected Products'}
                   </p>
                   <p className="text-[10px] text-cream/70">
                     {totalUnits} {isAr ? 'إجمالي الكميات المطلوبة' : 'Total quantity'}
@@ -590,17 +611,17 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                   onClick={() => setShowSummaryDrawer((prev) => !prev)}
                   className="ms-1 inline-flex items-center gap-1 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold text-cream hover:bg-white/20 transition-colors"
                 >
-                  <span>{showSummaryDrawer ? (isAr ? 'إخفاء' : 'Hide') : (isAr ? 'مراجعة' : 'Review')}</span>
+                  <span>{showSummaryDrawer ? (isAr ? 'تصغير' : 'Collapse') : (isAr ? 'عرض القائمة' : 'Review')}</span>
                   {showSummaryDrawer ? <ChevronDown className="size-3" /> : <ChevronUp className="size-3" />}
                 </button>
               </div>
 
-              {/* Big WhatsApp RFQ Button */}
+              {/* Instant WhatsApp RFQ Button */}
               <a
                 href={generateWhatsAppQuoteUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 px-3.5 py-1.5 text-xs font-black text-white hover:bg-emerald-600 transition-transform active:scale-95 shadow-md shadow-emerald-900/30"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-black text-white hover:bg-emerald-600 transition-transform active:scale-95 shadow-md shadow-emerald-900/30"
               >
                 <MessageCircle className="size-4" />
                 <span>{isAr ? 'إرسال طلب التسعير عبر واتساب' : 'Send RFQ via WhatsApp'}</span>

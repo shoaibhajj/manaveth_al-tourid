@@ -1,0 +1,44 @@
+{
+  "userAgent": "MnavethSEOAnalyzer/1.0 (+https://mnaveth.com/bot; compliance-check)",
+  "timeoutMs": 8000,
+  "delayBetweenRequestsMs": 500,
+  "competitors": [
+    {
+      "name": "Taiba Farms",
+      "domain": "taibafarms.com",
+      "sitemapUrl": "https://taibafarms.com/sitemap.xml",
+      "sampleUrls": [
+        "https://taibafarms.com/",
+        "https://taibafarms.com/products",
+        "https://taibafarms.com/services"
+      ]
+    },
+    {
+      "name": "Meat and More",
+      "domain": "meats.com.sa",
+      "sitemapUrl": "https://meats.com.sa/sitemap.xml",
+      "sampleUrls": [
+        "https://meats.com.sa/",
+        "https://meats.com.sa/pages/b2b",
+        "https://meats.com.sa/collections/all"
+      ]
+    },
+    {
+      "name": "Platraw",
+      "domain": "platraw.com",
+      "sitemapUrl": "https://platraw.com/sitemap.xml",
+      "sampleUrls": [
+        "https://platraw.com/ar/category/meat",
+        "https://platraw.com/ar/category/poultry"
+      ]
+    },
+    {
+      "name": "Forsan Foods",
+      "domain": "forsan.com.sa",
+      "sitemapUrl": "https://forsan.com.sa/sitemap.xml",
+      "sampleUrls": [
+        "https://forsan.com.sa/"
+      ]
+    }
+  ]
+}

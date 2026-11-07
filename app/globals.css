@@ -129,3 +129,29 @@
     scroll-behavior: auto !important;
   }
 }
+
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 11pt;
+  }
+  header, footer, nav, [data-floating-action], [aria-label*="whatsapp"], [aria-label*="واتساب"] {
+    display: none !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+  .print\:block {
+    display: block !important;
+  }
+  article, tr, .print\:break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  @page {
+    margin: 12mm 10mm;
+    size: A4 portrait;
+  }
+}

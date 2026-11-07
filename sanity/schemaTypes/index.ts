@@ -1,5 +1,6 @@
 import type { SchemaTypeDefinition } from 'sanity'
 import { article } from './documents/articles'
+import { catalogPage } from './documents/catalogPage'
 import { companyPost } from './documents/companyPost'
 import { customSection } from './documents/customSection'
 import { place, product, productCategory, sector, service, stat } from './documents/cards'
@@ -33,6 +34,7 @@ import { contactPerson, ctaButton, link, priceTier, seo, socialLink, unitPrice, 
 export const singletonTypes = [
   'siteSettings',
   'homePage',
+  'catalogPage',
   'contactSettings',
   'visitorCounter',
   'seoHome',
@@ -44,6 +46,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   // Singleton documents
   siteSettings,
   homePage,
+  catalogPage,
   contactSettings,
   visitorCounter,
   seoHome,

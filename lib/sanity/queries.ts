@@ -4,6 +4,10 @@ import { defineQuery } from 'next-sanity'
 export const siteContentQuery = defineQuery(`{
   "settings": *[_type == "siteSettings"][0],
   "contact": *[_type == "contactSettings"][0],
+  "catalogPage": *[_type == "catalogPage"][0]{
+    ...,
+    "pdfFileUrl": pdfFile.asset->url
+  },
   "home": *[_type == "homePage"][0]{
     ...,
     "hero": hero{..., "videoFileUrl": videoFile.asset->url},
@@ -25,7 +29,7 @@ export const siteContentQuery = defineQuery(`{
   "services": *[_type == "service"] | order(order asc),
   "sectors": *[_type == "sector"] | order(order asc),
   "stats": *[_type == "stat"] | order(order asc),
-  "products": *[_type == "product"] | order(order asc){..., "slug": slug.current, "categoryId": category._ref},
+  "products": *[_type == "product"] | order(order asc){..., "slug": slug.current, "categoryId": category._ref, "category": category->{ _id, name }},
   "productCategories": *[_type == "productCategory"] | order(order asc),
   "places": *[_type == "place"] | order(order asc){
     ...,
@@ -43,6 +47,25 @@ export const siteContentQuery = defineQuery(`{
     "coverImage": coverImage{..., "assetUrl": ar.asset->url},
     "seo": seo{...}
   }
+}`)
+
+export const catalogPageQuery = defineQuery(`{
+  "catalogPage": *[_type == "catalogPage"][0]{
+    ...,
+    "pdfFileUrl": pdfFile.asset->url
+  },
+  "products": *[_type == "product" && (visible != false)] | order(order asc){
+    ...,
+    "slug": slug.current,
+    "categoryId": category._ref,
+    "category": category->{ _id, name }
+  },
+  "productCategories": *[_type == "productCategory" && (visible != false)] | order(order asc){
+    ...,
+    "name": name
+  },
+  "settings": *[_type == "siteSettings"][0],
+  "contact": *[_type == "contactSettings"][0]
 }`)
 
 export const productBySlugQuery = defineQuery(`*[_type == "product" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "category": category->{name}, "image": image{...}}`)

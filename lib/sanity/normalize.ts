@@ -212,6 +212,9 @@ function toProduct(doc: Doc, index: number, featuredIds: Set<string>): Product {
         : filled(doc._id)
           ? clean(doc._id)
           : undefined,
+    sku: clean(doc.sku) || undefined,
+    categoryId: clean(doc.categoryId) || clean(doc.category?._ref) || undefined,
+    categoryName: doc.category?.name ? localized(doc.category.name, { ar: '', en: '' }) : undefined,
     name,
     description: localized(doc.description, { ar: '', en: '' }),
     longDescription: optionalLocalized(doc.longDescription),
@@ -570,5 +573,24 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
       branches: seo(data.seoBranches, base.seo.branches),
     },
     favicon: imageUrl(settings.favicon, 256),
+    catalogPage: data.catalogPage
+      ? {
+          title: localized(data.catalogPage.title, {
+            ar: 'كتالوج الأصناف والمنتجات التموينية',
+            en: 'Wholesale Foodservice Product Catalog',
+          }),
+          subtitle: localized(data.catalogPage.subtitle, {
+            ar: 'الدليل المعتمد للأصناف والمواد الغذائية التموينية لكبرى المطاعم، الفنادق، ومطابخ الإعاشة في المملكة العربية السعودية.',
+            en: 'Official certified catalog of wholesale foodservice ingredients and staples for restaurants, hotels, and central catering kitchens across Saudi Arabia.',
+          }),
+          catalogVersion: clean(data.catalogPage.catalogVersion) || '2025.1',
+          lastUpdated: clean(data.catalogPage.lastUpdated) || '2025-03-01',
+          pdfFileUrl: clean(data.catalogPage.pdfFileUrl) || undefined,
+          externalPdfUrl: clean(data.catalogPage.externalPdfUrl) || undefined,
+          bannerAlert: optionalLocalized(data.catalogPage.bannerAlert),
+          downloadNote: optionalLocalized(data.catalogPage.downloadNote),
+          inquiryWhatsApp: clean(data.catalogPage.inquiryWhatsApp) || '966509971699',
+        }
+      : undefined,
   }
 }

@@ -30,6 +30,7 @@ export const site = {
     { id: 'home', href: '/#home', label: { ar: 'الرئيسية', en: 'Home' } },
     { id: 'about', href: '/#about', label: { ar: 'من نحن', en: 'About' } },
     { id: 'services', href: '/#services', label: { ar: 'خدماتنا', en: 'Services' } },
+    { id: 'catalog', href: '/catalog', label: { ar: 'كتالوج الأصناف', en: 'Catalog' } },
     { id: 'products', href: '/products', label: { ar: 'المنتجات', en: 'Products' } },
     { id: 'gallery', href: '/#gallery', label: { ar: 'المعرض', en: 'Gallery' } },
     { id: 'sectors', href: '/#sectors', label: { ar: 'القطاعات', en: 'Sectors' } },

@@ -11,6 +11,9 @@ export type Product = {
   name: Localized
   description: Localized
   slug?: string
+  sku?: string
+  categoryId?: string
+  categoryName?: Localized
   longDescription?: Localized
   origin?: Localized
   aging?: Localized

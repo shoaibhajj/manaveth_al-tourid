@@ -98,6 +98,17 @@ export type SiteContent = {
   sectors: Card[]
   seo: { home: PageSeo; products: PageSeo; branches: PageSeo }
   favicon?: string
+  catalogPage?: {
+    title: Localized
+    subtitle: Localized
+    catalogVersion?: string
+    lastUpdated?: string
+    pdfFileUrl?: string
+    externalPdfUrl?: string
+    bannerAlert?: Localized
+    downloadNote?: Localized
+    inquiryWhatsApp?: string
+  }
   /** Where the content came from. "fallback" means the built-in copy is in use. */
   source: 'sanity' | 'fallback'
 }

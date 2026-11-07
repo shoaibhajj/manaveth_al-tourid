@@ -22,6 +22,13 @@ const nextConfig = {
       ],
     },
   ],
+  redirects: async () => [
+    {
+      source: '/menu',
+      destination: '/catalog',
+      permanent: true,
+    },
+  ],
 }
 
 export default nextConfig

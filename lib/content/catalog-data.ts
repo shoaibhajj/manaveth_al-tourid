@@ -108,6 +108,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   // 1. Meat & Poultry
   {
     id: 'cat-beef-topside',
+    slug: 'frozen-brazilian-beef-topside',
     sku: 'MNV-BF-01',
     name: { ar: 'لحم بقري برازيلي مجمد (توب سايد منزوع العظم)', en: 'Frozen Brazilian Beef Topside (Boneless)' },
     categoryId: 'meat-poultry',
@@ -128,6 +129,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-beef-silver',
+    slug: 'frozen-beef-silverside',
     sku: 'MNV-BF-02',
     name: { ar: 'لحم بقري مجمد مكعبات وطهي (سيلفر سايد)', en: 'Frozen Beef Silverside (Catering Cuts)' },
     categoryId: 'meat-poultry',
@@ -147,6 +149,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-beef-liver',
+    slug: 'frozen-liver',
     sku: 'MNV-BF-03',
     name: { ar: 'كبدة بقرية برازيلية مجمدة فاخرة', en: 'Premium Brazilian Frozen Beef Liver' },
     categoryId: 'meat-poultry',
@@ -167,6 +170,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-chicken-breast',
+    slug: 'frozen-boneless-chicken-breast',
     sku: 'MNV-CK-01',
     name: { ar: 'صدور دجاج مجمدة منزوعة العظم والجلد (فردية IQF)', en: 'IQF Frozen Boneless Skinless Chicken Breast' },
     categoryId: 'meat-poultry',
@@ -187,6 +191,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-whole-chicken',
+    slug: 'frozen-whole-chicken-griller',
     sku: 'MNV-CK-02',
     name: { ar: 'دجاج مجمد كامل أوزان تجارية (1000غ - 1100غ)', en: 'Frozen Whole Chicken Griller (1000g - 1100g)' },
     categoryId: 'meat-poultry',
@@ -208,6 +213,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   // 2. Rice, Grains & Pulses
   {
     id: 'cat-basmati-1121',
+    slug: 'basmati-rice',
     sku: 'MNV-RC-1121',
     name: { ar: 'أرز بسمتي هندي مزة 1121 فاخر (معتق سنتين)', en: 'Premium Indian 1121 Sella Basmati Rice (2-Year Aged)' },
     categoryId: 'rice-grains',
@@ -228,6 +234,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-white-sella',
+    slug: 'long-grain-white-sella-rice',
     sku: 'MNV-RC-W02',
     name: { ar: 'أرز سيلا أبيض حبة طويلة للتشغيل التجاري', en: 'Long Grain White Sella Rice (Commercial)' },
     categoryId: 'rice-grains',
@@ -249,6 +256,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   // 3. Oils & Fats
   {
     id: 'cat-palm-olein',
+    slug: 'commercial-palm-olein-frying-oil',
     sku: 'MNV-OL-PL18',
     name: { ar: 'زيت أولين النخيل للقلي التجاري (صفيحة 18 لتر)', en: 'Commercial Palm Olein Frying Oil (18L Tin)' },
     categoryId: 'oils-fats',
@@ -269,6 +277,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-sunflower-oil',
+    slug: 'pure-sunflower-cooking-oil',
     sku: 'MNV-OL-SN18',
     name: { ar: 'زيت دوار الشمس النقي للطهي (18 لتر / كرتون 4×5 لتر)', en: 'Pure Sunflower Cooking Oil (18L Tin / 4x5L Carton)' },
     categoryId: 'oils-fats',
@@ -290,6 +299,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   // 4. Canned Food & Tomato Paste
   {
     id: 'cat-tomato-paste-a10',
+    slug: 'tomato-paste-canned-a10',
     sku: 'MNV-CN-TM10',
     name: { ar: 'معجون طماطم نقي تركيز بريكس 28-30% عبوة فندقية A10', en: 'Pure Tomato Paste Brix 28-30% Catering Tin A10' },
     categoryId: 'canned-pastes',
@@ -310,6 +320,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-chickpeas-a10',
+    slug: 'canned-chickpeas-catering',
     sku: 'MNV-CN-CP10',
     name: { ar: 'حمص حب معلب درجة أولى عبوة تموينية ضخمة', en: 'Canned Premium Chickpeas Catering Tin A10' },
     categoryId: 'canned-pastes',
@@ -329,6 +340,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-fava-beans-a10',
+    slug: 'canned-fava-beans-catering',
     sku: 'MNV-CN-FB10',
     name: { ar: 'فول مدمس درجة أولى حبّة ممتلئة عبوة فندقية', en: 'Canned Fava Beans Catering Tin A10' },
     categoryId: 'canned-pastes',
@@ -350,6 +362,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   // 5. Frozen Vegetables & Fries
   {
     id: 'cat-french-fries-9mm',
+    slug: 'frozen-french-fries-9x9',
     sku: 'MNV-FZ-FF09',
     name: { ar: 'بطاطس نصف مقلية مجمدة 9×9 ملم (كرتون 10 كجم)', en: 'Frozen French Fries 9x9mm (Carton 4x2.5kg)' },
     categoryId: 'frozen-veg',
@@ -370,6 +383,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-mixed-veg',
+    slug: 'frozen-mixed-vegetables',
     sku: 'MNV-FZ-VG10',
     name: { ar: 'خضار مشكل مجمد وبازلاء حبات ممتازة (كرتون 10 كجم)', en: 'Frozen Mixed Vegetables & Green Peas (10kg Carton)' },
     categoryId: 'frozen-veg',
@@ -391,6 +405,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   // 6. Dates & Hospitality
   {
     id: 'cat-dates-sukkari',
+    slug: 'royal-sukkari-dates',
     sku: 'MNV-DT-SK03',
     name: { ar: 'تمر سكري مفتل ملكي لضيافة الفنادق (تغليف فردي معقم)', en: 'Royal Sukkari Dates (Hygienic Individual Flow-Wrap)' },
     categoryId: 'dates-hospitality',
@@ -411,6 +426,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-dates-khalas',
+    slug: 'khalas-al-qassim-dates',
     sku: 'MNV-DT-KH08',
     name: { ar: 'تمر خلاص الأحساء فاخر مكنوز (كرتون 8 كجم)', en: 'Premium Khalas Al-Ahsa Dates (8kg Master Carton)' },
     categoryId: 'dates-hospitality',
@@ -432,6 +448,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   // 7. Packaging Supplies
   {
     id: 'cat-food-containers',
+    slug: 'microwave-meal-containers-500',
     sku: 'MNV-PK-MC01',
     name: { ar: 'علب وحافظات وجبات ميكرويف سوداء بغطاء محكم (كرتون 500 حبة)', en: 'Heavy-Duty Black Microwave Meal Containers & Lids (500 Pcs)' },
     categoryId: 'packaging-supplies',
@@ -451,6 +468,7 @@ export const defaultCatalogProducts: CatalogProduct[] = [
   },
   {
     id: 'cat-thermal-rolls',
+    slug: 'heavy-duty-aluminum-foil-catering',
     sku: 'MNV-PK-TR02',
     name: { ar: 'رولات تغليف حراري وألمنيوم فندقي ثقيل للمطابخ', en: 'Heavy-Duty Commercial Aluminum Foil & Cling Film Rolls' },
     categoryId: 'packaging-supplies',

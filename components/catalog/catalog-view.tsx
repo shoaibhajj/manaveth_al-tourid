@@ -6,39 +6,22 @@ import Link from 'next/link'
 import {
   Download,
   Printer,
-  Share2,
   Search,
   FileSpreadsheet,
-  Layers,
-  LayoutGrid,
-  Table as TableIcon,
   Check,
   Copy,
-  ExternalLink,
-  MessageCircle,
-  ShieldCheck,
-  ThermometerSnowflake,
-  Truck,
-  Award,
+  ArrowUpLeft,
+  ArrowUpRight,
   Sparkles,
-  RefreshCw,
-  FileText,
   X,
   UploadCloud,
-  ChevronDown,
-  Info,
-  Clock,
-  PhoneCall,
-  CheckCircle2,
-  Building2,
+  FileText,
 } from 'lucide-react'
-import { useLocale, useContent } from '@/components/locale-provider'
+import { useLocale } from '@/components/locale-provider'
 import {
   type CatalogProduct,
-  type CatalogCategory,
   catalogCategories,
   defaultCatalogProducts,
-  type TempType,
 } from '@/lib/content/catalog-data'
 
 type Props = {
@@ -57,8 +40,7 @@ type Props = {
 }
 
 export function CatalogView({ initialProducts, catalogConfig }: Props) {
-  const { locale, t } = useLocale()
-  const content = useContent()
+  const { locale, localize, t } = useLocale()
   const isAr = locale === 'ar'
 
   const productsList = useMemo(() => {
@@ -69,10 +51,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
   // Filters & State
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [selectedTemp, setSelectedTemp] = useState<string>('all')
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid')
   const [copiedLink, setCopiedLink] = useState(false)
-  const [activeProduct, setActiveProduct] = useState<CatalogProduct | null>(null)
 
   // Admin Import Modal state
   const [showImportModal, setShowImportModal] = useState(false)
@@ -88,10 +67,6 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
       if (selectedCategory !== 'all' && item.categoryId !== selectedCategory) {
         return false
       }
-      // Temperature filter
-      if (selectedTemp !== 'all' && item.tempType !== selectedTemp) {
-        return false
-      }
       // Search query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim()
@@ -99,17 +74,11 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
           (item.name.ar && item.name.ar.toLowerCase().includes(q)) ||
           (item.name.en && item.name.en.toLowerCase().includes(q))
         const matchSku = item.sku && item.sku.toLowerCase().includes(q)
-        const matchOrigin =
-          (item.origin.ar && item.origin.ar.toLowerCase().includes(q)) ||
-          (item.origin.en && item.origin.en.toLowerCase().includes(q))
-        const matchDesc =
-          (item.description.ar && item.description.ar.toLowerCase().includes(q)) ||
-          (item.description.en && item.description.en.toLowerCase().includes(q))
-        return matchName || matchSku || matchOrigin || matchDesc
+        return matchName || matchSku
       }
       return true
     })
-  }, [productsList, selectedCategory, selectedTemp, searchQuery])
+  }, [productsList, selectedCategory, searchQuery])
 
   // Categories with live count
   const categoriesWithCounts = useMemo(() => {
@@ -123,9 +92,14 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
     }))
   }, [productsList])
 
-  // Products grouped by category for Table of Contents layout
+  // Grouped products by category for sections
   const productsGrouped = useMemo(() => {
-    const groups: { category: CatalogCategory; items: CatalogProduct[] }[] = []
+    if (selectedCategory !== 'all') {
+      const cat = catalogCategories.find((c) => c.id === selectedCategory)
+      if (cat) return [{ category: cat, items: filteredProducts }]
+      return []
+    }
+    const groups: { category: (typeof catalogCategories)[0]; items: CatalogProduct[] }[] = []
     catalogCategories.forEach((cat) => {
       const items = filteredProducts.filter((p) => p.categoryId === cat.id)
       if (items.length > 0) {
@@ -133,7 +107,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
       }
     })
     return groups
-  }, [filteredProducts])
+  }, [filteredProducts, selectedCategory])
 
   const copyLiveLink = () => {
     const url = typeof window !== 'undefined' ? `${window.location.origin}/catalog` : 'https://www.mnaveth-altourid.com/catalog'
@@ -156,31 +130,22 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
     } else if (catalogConfig?.externalPdfUrl) {
       window.open(catalogConfig.externalPdfUrl, '_blank')
     } else {
-      // Fallback: trigger print dialog formatted as PDF brochure
       handlePrint()
     }
   }
 
   const catalogTitle =
-    catalogConfig?.title ? t(catalogConfig.title) : isAr ? 'كتالوج الأصناف والمنتجات التموينية' : 'Wholesale Foodservice Product Catalog'
+    catalogConfig?.title ? t(catalogConfig.title) : isAr ? 'كتالوج وقائمة الأصناف التموينية' : 'Wholesale Product Menu'
 
   const catalogSubtitle =
     catalogConfig?.subtitle
       ? t(catalogConfig.subtitle)
       : isAr
-      ? 'الدليل المعتمد للأصناف والمواد الغذائية التموينية لكبرى المطاعم، الفنادق، ومطابخ الإعاشة في المملكة العربية السعودية.'
-      : 'Official certified catalog of wholesale foodservice ingredients and staples for restaurants, hotels, and central catering kitchens across Saudi Arabia.'
+      ? 'دليل الأصناف التموينية المعتمدة. اضغط على أي منتج للاطلاع على كافة تفاصيله ومواصفاته الفنية.'
+      : 'Official certified catalog menu. Click any product to view its complete specifications and compliance details.'
 
   const versionText = catalogConfig?.catalogVersion || '2025.1'
   const lastUpdated = catalogConfig?.lastUpdated || '2025-03-01'
-  const phone = catalogConfig?.inquiryWhatsApp || '966509971699'
-
-  const getWhatsAppItemUrl = (product: CatalogProduct) => {
-    const msg = isAr
-      ? `السلام عليكم، نود الاستفسار وطلب تسعير صنف: ${product.name.ar} (كود: ${product.sku}) - شركة منافذ التوريد.`
-      : `Hello, we would like to inquire about wholesale pricing for: ${product.name.en} (SKU: ${product.sku}) - Mnaveeh ALTourid.`
-    return `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`
-  }
 
   const handleSeedDefaults = async () => {
     setImportStatus(isAr ? 'جاري تهيئة الأصناف التلقائية...' : 'Seeding default products...')
@@ -198,12 +163,12 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
     }
   }
 
-  const handleUploadExcel = async () => {
+  const handleUploadCsv = async () => {
     if (!uploadFile) {
-      setImportStatus(isAr ? 'يرجى اختيار ملف إكسل أولاً' : 'Please select an Excel file first')
+      setImportStatus(isAr ? 'يرجى اختيار ملف إكسل أو CSV أولاً' : 'Please select a file first')
       return
     }
-    setImportStatus(isAr ? 'جاري معالجة ورفع الملف...' : 'Processing and uploading file...')
+    setImportStatus(isAr ? 'جاري رفع ومعالجة الأصناف...' : 'Processing and uploading...')
     startTransition(async () => {
       try {
         const formData = new FormData()
@@ -218,12 +183,12 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
         if (res.ok && data.success) {
           setImportStatus(
             isAr
-              ? `✅ تم الاستيراد بنجاح! تم قراءة ${data.totalRows} صنفاً وربط ${data.categoriesCount} تصنيفاً.`
-              : `✅ Successfully imported ${data.totalRows} items and mapped ${data.categoriesCount} categories.`
+              ? `✅ تم بنجاح! تم إدراج ${data.totalRows} صنفاً في Sanity.`
+              : `✅ Success! Imported ${data.totalRows} products into Sanity.`
           )
           setTimeout(() => window.location.reload(), 2000)
         } else {
-          setImportStatus(`❌ فشل الاستيراد: ${data.error || 'حدث خطأ'}`)
+          setImportStatus(`❌ فشل: ${data.error || 'حدث خطأ'}`)
         }
       } catch (err: any) {
         setImportStatus(`❌ خطأ: ${err.message}`)
@@ -231,304 +196,153 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
     })
   }
 
+  const getProductHref = (product: CatalogProduct) => {
+    const slug = product.slug || product.sku || product.id
+    return localize(`/products/${slug}`)
+  }
+
   return (
     <div className="min-h-screen bg-[#FBF8F2] text-forest-deep">
-      {/* 1. TOP ANNOUNCEMENT BANNER */}
-      <div className="border-b border-gold/25 bg-forest-deep px-4 py-2.5 text-xs text-cream md:text-sm print:hidden">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="flex size-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold text-gold-light">
-              {isAr ? 'تنويه التوريد التجاري:' : 'B2B Notice:'}
-            </span>
-            <span className="text-cream/90">
-              {catalogConfig?.bannerAlert
-                ? t(catalogConfig.bannerAlert)
-                : isAr
-                ? 'الأسعار خاضعة لحجم التوريد وعقود التوريد الدورية · إمكانية إرسال عينات فحص مخبري للمطابخ المركزية'
-                : 'Prices vary by volume and supply contracts · Laboratory testing samples available for commissaries'}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4 text-xs">
-            <span className="rounded bg-gold/20 px-2.5 py-0.5 text-gold-light font-medium">
-              {isAr ? `الإصدار: ${versionText}` : `Version: ${versionText}`}
-            </span>
-            <span className="text-cream/70">
-              {isAr ? `تحديث: ${lastUpdated}` : `Updated: ${lastUpdated}`}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-forest-deep via-[#123830] to-forest-deep px-4 pt-12 pb-16 text-cream md:pt-16 md:pb-20 print:bg-white print:p-4 print:text-black">
-        {/* Subtle decorative background pattern */}
+      {/* 1. HEADER SECTION (COMPACT & MODERN) */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-forest-deep via-[#123830] to-forest-deep px-4 pt-10 pb-12 text-cream md:pt-14 md:pb-16 print:bg-white print:p-4 print:text-black">
         <div className="pointer-events-none absolute inset-0 opacity-10 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:24px_24px] print:hidden" />
 
-        <div className="relative mx-auto max-w-7xl">
-          <div className="flex flex-col items-center text-center">
-            {/* Badge */}
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-gold-light backdrop-blur-sm md:text-sm print:hidden">
-              <Sparkles className="size-4 text-gold" />
-              <span>{isAr ? 'كتالوج الأصناف والمنتجات التموينية المعتمدة' : 'Official Certified Foodservice Catalog'}</span>
-              <span className="mx-1 text-gold/40">|</span>
-              <span>{isAr ? 'سجل تجاري: 1116011768' : 'CR: 1116011768'}</span>
-            </div>
-
-            {/* Title */}
-            <h1 className="max-w-4xl text-3xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl print:text-3xl print:text-black">
-              {catalogTitle}
-            </h1>
-
-            {/* Subtitle */}
-            <p className="mt-4 max-w-2xl text-base text-cream/80 md:text-lg print:text-sm print:text-gray-700">
-              {catalogSubtitle}
-            </p>
-
-            {/* Quick Action Buttons */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 print:hidden">
-              {/* Download Official PDF */}
-              <button
-                onClick={handleDownloadPdf}
-                className="group inline-flex items-center gap-2.5 rounded-xl bg-gold-gradient px-6 py-3.5 text-sm font-bold text-forest-deep shadow-lg shadow-gold/25 transition-all hover:scale-[1.02] hover:shadow-gold/40 active:scale-[0.98]"
-              >
-                <Download className="size-4.5 transition-transform group-hover:-translate-y-0.5" />
-                <span>{isAr ? 'تحميل الكتالوج المعتمد (PDF)' : 'Download Official PDF Catalog'}</span>
-              </button>
-
-              {/* Print / Save as PDF */}
-              <button
-                onClick={handlePrint}
-                className="inline-flex items-center gap-2.5 rounded-xl border border-gold/40 bg-white/10 px-5 py-3.5 text-sm font-semibold text-cream backdrop-blur-sm transition-all hover:bg-white/20 active:scale-[0.98]"
-              >
-                <Printer className="size-4.5 text-gold-light" />
-                <span>{isAr ? 'طباعة / حفظ كـ PDF فوري' : 'Print / Save as Live PDF'}</span>
-              </button>
-
-              {/* Copy Live Version Link */}
-              <button
-                onClick={copyLiveLink}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 py-3.5 text-sm font-medium text-cream/90 backdrop-blur-sm transition-all hover:bg-white/10"
-                title={isAr ? 'نسخ رابط النسخة المحدثة' : 'Copy live version link'}
-              >
-                {copiedLink ? (
-                  <>
-                    <Check className="size-4 text-emerald-400" />
-                    <span className="text-emerald-300">{isAr ? 'تم نسخ الرابط!' : 'Link Copied!'}</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="size-4 text-gold-light" />
-                    <span>{isAr ? 'نسخ رابط الكتالوج' : 'Share Catalog Link'}</span>
-                  </>
-                )}
-              </button>
-
-              {/* Excel Import button (Admin) */}
-              <button
-                onClick={() => setShowImportModal(true)}
-                className="inline-flex items-center gap-2 rounded-xl border border-gold/30 bg-gold/15 px-4 py-3.5 text-sm font-medium text-gold-light transition-all hover:bg-gold/25"
-                title={isAr ? 'استيراد أصناف من ملف إكسل أو تحديث Sanity' : 'Import from Excel / Seed to Sanity'}
-              >
-                <FileSpreadsheet className="size-4" />
-                <span>{isAr ? 'استيراد من إكسل (Excel)' : 'Excel Import'}</span>
-              </button>
-            </div>
-
-            {/* Version Link Box */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-gold/25 bg-black/30 px-5 py-2.5 text-xs text-cream/80 backdrop-blur-md print:border-gray-300 print:bg-gray-100 print:text-black">
-              <span className="font-semibold text-gold-light">
-                {isAr ? 'رابط النسخة المحدثة الدائمة:' : 'Permanent Live Version URL:'}
-              </span>
-              <a
-                href="https://www.mnaveth-altourid.com/catalog"
-                target="_blank"
-                rel="noreferrer"
-                className="font-mono text-cream underline decoration-gold/60 underline-offset-4 hover:text-gold-light"
-              >
-                https://www.mnaveth-altourid.com/catalog
-              </a>
-              <span className="text-cream/50">·</span>
-              <span className="text-cream/70">
-                {isAr ? 'يتم التحديث تلقائياً عند إضافة أو تعديل الأصناف' : 'Updated automatically upon new item arrivals'}
-              </span>
-            </div>
+        <div className="relative mx-auto max-w-7xl text-center">
+          {/* Badge */}
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1 text-xs font-semibold text-gold-light print:hidden">
+            <Sparkles className="size-3.5 text-gold" />
+            <span>{isAr ? 'قائمة الأصناف التموينية المعتمدة' : 'Official Wholesale Menu'}</span>
+            <span className="mx-1 text-gold/40">|</span>
+            <span>{isAr ? 'سجل تجاري: 1116011768' : 'CR: 1116011768'}</span>
           </div>
 
-          {/* 4 SUPPLY PILLARS */}
-          <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4 print:hidden">
-            <div className="flex items-center gap-3 rounded-xl border border-gold/20 bg-white/5 p-3.5 backdrop-blur-sm">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gold/20 text-gold">
-                <ShieldCheck className="size-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-cream md:text-sm">
-                  {isAr ? 'مطابقة SFDA 100%' : '100% SFDA Compliant'}
-                </p>
-                <p className="text-[11px] text-cream/70">
-                  {isAr ? 'تراخيص وفحص مخبري دوري' : 'Certified food safety'}
-                </p>
-              </div>
-            </div>
+          {/* Title */}
+          <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-5xl print:text-2xl print:text-black">
+            {catalogTitle}
+          </h1>
 
-            <div className="flex items-center gap-3 rounded-xl border border-gold/20 bg-white/5 p-3.5 backdrop-blur-sm">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gold/20 text-gold">
-                <ThermometerSnowflake className="size-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-cream md:text-sm">
-                  {isAr ? 'سلسلة تبريد متصلة' : 'Unbroken Cold Chain'}
-                </p>
-                <p className="text-[11px] text-cream/70">
-                  {isAr ? 'حساسات تتبع حراري -18°C' : 'Continuous temp tracking'}
-                </p>
-              </div>
-            </div>
+          {/* Subtitle */}
+          <p className="mx-auto mt-2.5 max-w-2xl text-xs text-cream/80 sm:text-sm md:text-base print:text-xs print:text-gray-700">
+            {catalogSubtitle}
+          </p>
 
-            <div className="flex items-center gap-3 rounded-xl border border-gold/20 bg-white/5 p-3.5 backdrop-blur-sm">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gold/20 text-gold">
-                <Truck className="size-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-cream md:text-sm">
-                  {isAr ? 'أسطول توريد مباشر' : 'Direct Fleet Delivery'}
-                </p>
-                <p className="text-[11px] text-cream/70">
-                  {isAr ? 'تغطية الرياض وجدة والمناطق' : 'Riyadh, Jeddah & Kingdom-wide'}
-                </p>
-              </div>
-            </div>
+          {/* Action Buttons Bar */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 print:hidden">
+            <button
+              onClick={handleDownloadPdf}
+              className="group inline-flex items-center gap-2 rounded-xl bg-gold-gradient px-4 py-2.5 text-xs font-bold text-forest-deep shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Download className="size-4" />
+              <span>{isAr ? 'تحميل الكتالوج (PDF)' : 'Download PDF'}</span>
+            </button>
 
-            <div className="flex items-center gap-3 rounded-xl border border-gold/20 bg-white/5 p-3.5 backdrop-blur-sm">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gold/20 text-gold">
-                <Building2 className="size-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-cream md:text-sm">
-                  {isAr ? 'عقود إعاشة وفنادق' : 'B2B Wholesale Contracts'}
-                </p>
-                <p className="text-[11px] text-cream/70">
-                  {isAr ? 'ثبات الإمداد وجداول أسبوعية' : 'Reliable scheduled replenishment'}
-                </p>
-              </div>
-            </div>
+            <button
+              onClick={handlePrint}
+              className="inline-flex items-center gap-2 rounded-xl border border-gold/40 bg-white/10 px-4 py-2.5 text-xs font-semibold text-cream transition-all hover:bg-white/20 active:scale-[0.98]"
+            >
+              <Printer className="size-4 text-gold-light" />
+              <span>{isAr ? 'طباعة القائمة' : 'Print Menu'}</span>
+            </button>
+
+            <button
+              onClick={copyLiveLink}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/5 px-3.5 py-2.5 text-xs font-medium text-cream/90 hover:bg-white/10"
+              title={isAr ? 'نسخ رابط النسخة المحدثة' : 'Copy live version link'}
+            >
+              {copiedLink ? (
+                <>
+                  <Check className="size-3.5 text-emerald-400" />
+                  <span className="text-emerald-300">{isAr ? 'تم النسخ!' : 'Copied!'}</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="size-3.5 text-gold-light" />
+                  <span>{isAr ? 'نسخ الرابط المحدث' : 'Share Link'}</span>
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={() => setShowImportModal(true)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-gold/30 bg-gold/15 px-3.5 py-2.5 text-xs font-medium text-gold-light hover:bg-gold/25"
+              title={isAr ? 'استيراد من إكسل' : 'Excel Import'}
+            >
+              <FileSpreadsheet className="size-3.5" />
+              <span>{isAr ? 'إكسل (Excel)' : 'Excel'}</span>
+            </button>
+          </div>
+
+          {/* Version Notice Pill */}
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-gold/20 bg-black/30 px-4 py-1 text-[11px] text-cream/70 backdrop-blur-sm print:hidden">
+            <span className="font-semibold text-gold-light">
+              {isAr ? `الإصدار: ${versionText}` : `Version: ${versionText}`}
+            </span>
+            <span>·</span>
+            <span>{isAr ? `محدث بتاريخ: ${lastUpdated}` : `Updated: ${lastUpdated}`}</span>
+            <span>·</span>
+            <span className="text-emerald-300 font-medium">{isAr ? 'تحديث تلقائي مستمر' : 'Auto-updated'}</span>
           </div>
         </div>
       </section>
 
-      {/* 3. TABLE OF CONTENTS / STICKY INDEX & FILTER BAR */}
-      <section className="sticky top-16 z-30 border-b border-gold/20 bg-white/95 px-4 py-4 shadow-sm backdrop-blur-md md:top-20 print:hidden">
+      {/* 2. PRINT HEADER ONLY */}
+      <div className="hidden print:block print:p-6 print:border-b-2 print:border-black print:mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-black text-black">شركة منافذ التوريد للتجارة</h1>
+            <p className="text-xs text-gray-700">قائمة الأصناف التموينية المعتمدة | س.ت: 1116011768</p>
+          </div>
+          <div className="text-left text-xs text-gray-600">
+            <p>الإصدار: {versionText} | www.mnaveth-altourid.com/catalog</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. STICKY CATEGORY TABS & SEARCH BAR */}
+      <section className="sticky top-16 z-30 border-b border-gold/20 bg-white/95 px-4 py-3 shadow-xs backdrop-blur-md md:top-20 print:hidden">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-2.5 md:flex-row md:items-center md:justify-between">
             {/* Search Input */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute inset-y-0 start-3.5 my-auto size-4.5 text-forest/50" />
+            <div className="relative w-full md:max-w-xs">
+              <Search className="absolute inset-y-0 start-3 my-auto size-4 text-forest/50" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={
-                  isAr
-                    ? 'ابحث باسم الصنف، بلد المنشأ، الكود (SKU)...'
-                    : 'Search by product name, origin, SKU...'
+                  isAr ? 'ابحث باسم الصنف...' : 'Search products by name...'
                 }
-                className="w-full rounded-xl border border-forest/15 bg-[#FBF8F2] py-2.5 ps-10 pe-9 text-sm text-forest-deep placeholder:text-forest/40 focus:border-gold focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold/30"
+                className="w-full rounded-xl border border-forest/15 bg-[#FBF8F2] py-2 ps-9 pe-8 text-xs text-forest-deep placeholder:text-forest/40 focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 end-3 my-auto flex size-5 items-center justify-center rounded-full text-forest/40 hover:text-forest"
+                  className="absolute inset-y-0 end-2.5 my-auto flex size-4 items-center justify-center rounded-full text-forest/40 hover:text-forest"
                 >
-                  <X className="size-3.5" />
+                  <X className="size-3" />
                 </button>
               )}
             </div>
 
-            {/* Temperature filter & View Mode toggles */}
-            <div className="flex flex-wrap items-center gap-2">
-              {/* Temp filter */}
-              <div className="flex items-center rounded-lg border border-forest/15 bg-[#FBF8F2] p-1 text-xs">
-                <button
-                  onClick={() => setSelectedTemp('all')}
-                  className={`rounded-md px-2.5 py-1 font-medium transition-all ${
-                    selectedTemp === 'all'
-                      ? 'bg-forest text-cream shadow-sm'
-                      : 'text-forest/70 hover:text-forest'
-                  }`}
-                >
-                  {isAr ? 'كل درجات الحفظ' : 'All Temperatures'}
-                </button>
-                <button
-                  onClick={() => setSelectedTemp('frozen')}
-                  className={`rounded-md px-2.5 py-1 font-medium transition-all ${
-                    selectedTemp === 'frozen'
-                      ? 'bg-forest text-cream shadow-sm'
-                      : 'text-forest/70 hover:text-forest'
-                  }`}
-                >
-                  ❄️ {isAr ? 'مجمد (-18°)' : 'Frozen'}
-                </button>
-                <button
-                  onClick={() => setSelectedTemp('ambient')}
-                  className={`rounded-md px-2.5 py-1 font-medium transition-all ${
-                    selectedTemp === 'ambient'
-                      ? 'bg-forest text-cream shadow-sm'
-                      : 'text-forest/70 hover:text-forest'
-                  }`}
-                >
-                  📦 {isAr ? 'جاف معتدل' : 'Dry/Ambient'}
-                </button>
-              </div>
-
-              {/* View Switcher: Grid vs Table */}
-              <div className="flex items-center rounded-lg border border-forest/15 bg-[#FBF8F2] p-1 text-xs">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 font-medium transition-all ${
-                    viewMode === 'grid'
-                      ? 'bg-forest text-cream shadow-sm'
-                      : 'text-forest/70 hover:text-forest'
-                  }`}
-                  title={isAr ? 'عرض البطاقات' : 'Grid View'}
-                >
-                  <LayoutGrid className="size-3.5" />
-                  <span className="hidden sm:inline">{isAr ? 'بطاقات' : 'Grid'}</span>
-                </button>
-                <button
-                  onClick={() => setViewMode('table')}
-                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 font-medium transition-all ${
-                    viewMode === 'table'
-                      ? 'bg-forest text-cream shadow-sm'
-                      : 'text-forest/70 hover:text-forest'
-                  }`}
-                  title={isAr ? 'جدول المواصفات' : 'Table View'}
-                >
-                  <TableIcon className="size-3.5" />
-                  <span className="hidden sm:inline">{isAr ? 'جدول المواصفات' : 'Spec Table'}</span>
-                </button>
-              </div>
-
-              {/* Counter */}
-              <div className="rounded-lg bg-gold/15 px-3 py-1.5 text-xs font-semibold text-forest-deep">
-                {isAr
-                  ? `عرض ${filteredProducts.length} من ${productsList.length} صنف`
-                  : `Showing ${filteredProducts.length} of ${productsList.length} items`}
-              </div>
+            {/* Total count badge */}
+            <div className="hidden md:block text-xs font-semibold text-forest/70">
+              {isAr
+                ? `${filteredProducts.length} صنف معتمد`
+                : `${filteredProducts.length} products available`}
             </div>
           </div>
 
-          {/* Category Tabs (فهرس الأصناف) */}
-          <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
+          {/* Category Tabs (فهرس الأصناف السريع) */}
+          <div className="mt-2.5 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-bold transition-all ${
+              className={`shrink-0 rounded-full px-3.5 py-1 text-xs font-bold transition-all ${
                 selectedCategory === 'all'
-                  ? 'bg-forest text-cream shadow-md shadow-forest/20'
-                  : 'border border-forest/15 bg-white text-forest/80 hover:border-gold hover:text-forest'
+                  ? 'bg-forest text-cream shadow-xs font-bold'
+                  : 'border border-forest/15 bg-white text-forest/75 hover:border-gold hover:text-forest'
               }`}
             >
-              {isAr ? 'الكل (جميع الأصناف)' : 'All Products'} ({productsList.length})
+              {isAr ? 'الكل' : 'All'} ({productsList.length})
             </button>
 
             {categoriesWithCounts.map((cat) => {
@@ -537,10 +351,10 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`shrink-0 flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all ${
+                  className={`shrink-0 flex items-center gap-1.5 rounded-full px-3 py-1 text-xs transition-all ${
                     active
-                      ? 'bg-forest text-cream shadow-md shadow-forest/20 font-bold'
-                      : 'border border-forest/15 bg-white text-forest/80 hover:border-gold hover:text-forest'
+                      ? 'bg-forest text-cream shadow-xs font-bold'
+                      : 'border border-forest/15 bg-white text-forest/75 hover:border-gold hover:text-forest'
                   }`}
                 >
                   <span>{t(cat.name)}</span>
@@ -558,409 +372,152 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
         </div>
       </section>
 
-      {/* 4. PRINT ONLY COVER PAGE & HEADER */}
-      <div className="hidden print:block print:p-8 print:border-b-2 print:border-black print:mb-8">
-        <div className="flex items-center justify-between border-b pb-4 mb-4">
-          <div>
-            <h1 className="text-2xl font-black text-black">شركة منافذ التوريد للتجارة</h1>
-            <p className="text-sm text-gray-700">Mnaveeh ALTourid Commercial Co. | Since 2004</p>
-            <p className="text-xs font-mono text-gray-600 mt-1">سجل تجاري: 1116011768 | ترخيص هيئة الغذاء والدواء SFDA</p>
-          </div>
-          <div className="text-left text-xs">
-            <p className="font-bold">كتالوج الأصناف والمنتجات التموينية</p>
-            <p className="text-gray-600">الإصدار: {versionText} | تاريخ: {lastUpdated}</p>
-            <p className="text-gray-600">النسخة الإلكترونية المحدثة: www.mnaveth-altourid.com/catalog</p>
-          </div>
-        </div>
-      </div>
-
-      {/* 5. MAIN CONTENT AREA */}
-      <main className="mx-auto max-w-7xl px-4 py-8 md:py-12">
+      {/* 4. MAIN PRODUCT MENU GRID (COMPACT & FAST SCANNING) */}
+      <main className="mx-auto max-w-7xl px-4 py-6 md:py-10">
         {filteredProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-forest/20 bg-white p-12 text-center">
-            <Search className="size-12 text-forest/30 mb-3" />
-            <h3 className="text-lg font-bold text-forest">
-              {isAr ? 'لم يتم العثور على أصناف مطابقة للبحث' : 'No matching products found'}
+            <Search className="size-10 text-forest/30 mb-2" />
+            <h3 className="text-base font-bold text-forest">
+              {isAr ? 'لم يتم العثور على أصناف مطابقة' : 'No matching products found'}
             </h3>
-            <p className="mt-1 text-sm text-forest/60">
-              {isAr
-                ? 'جرب البحث بكلمة أخرى، أو قم بإلغاء تصفيات الفئات ودرجات التخزين.'
-                : 'Try searching with different keywords or clearing active filters.'}
+            <p className="mt-1 text-xs text-forest/60">
+              {isAr ? 'يرجى كتابة اسم آخر أو اختيار تصنيف مختلف.' : 'Please try another search keyword or category.'}
             </p>
             <button
               onClick={() => {
                 setSearchQuery('')
                 setSelectedCategory('all')
-                setSelectedTemp('all')
               }}
-              className="mt-4 rounded-xl bg-forest px-5 py-2 text-xs font-bold text-cream hover:bg-forest/90"
+              className="mt-3 rounded-lg bg-forest px-4 py-1.5 text-xs font-bold text-cream hover:bg-forest/90"
             >
-              {isAr ? 'إعادة ضبط عوامل التصفية' : 'Reset All Filters'}
+              {isAr ? 'عرض كل الأصناف' : 'Show All Products'}
             </button>
           </div>
-        ) : viewMode === 'grid' ? (
-          /* GRID VIEW */
-          <div className="space-y-12">
+        ) : (
+          <div className="space-y-10">
             {productsGrouped.map((group) => (
-              <section key={group.category.id} id={group.category.id} className="scroll-mt-40">
-                {/* Category Header */}
-                <div className="mb-6 flex flex-wrap items-end justify-between gap-3 border-b border-gold/30 pb-3">
-                  <div>
-                    <div className="inline-flex items-center gap-2 text-xs font-bold tracking-wider uppercase text-gold">
-                      <span>{isAr ? 'فهرس الأصناف' : 'Catalog Section'}</span>
-                      <span>·</span>
-                      <span>{group.items.length} {isAr ? 'أصناف معتمدة' : 'certified items'}</span>
-                    </div>
-                    <h2 className="text-2xl font-extrabold text-forest md:text-3xl">
+              <section key={group.category.id} id={group.category.id} className="scroll-mt-36">
+                {/* Clean Section Divider */}
+                <div className="mb-4 flex items-center justify-between border-b border-forest/10 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="size-2 rounded-full bg-gold" />
+                    <h2 className="text-lg font-black text-forest-deep md:text-xl">
                       {t(group.category.name)}
                     </h2>
-                    {group.category.description && (
-                      <p className="mt-1 text-xs text-forest/70 md:text-sm">
-                        {t(group.category.description)}
-                      </p>
-                    )}
+                    <span className="rounded-md bg-forest/5 px-2 py-0.5 text-xs font-semibold text-forest/60">
+                      {group.items.length} {isAr ? 'صنف' : 'items'}
+                    </span>
                   </div>
-
-                  <a
-                    href={`#${group.category.id}`}
-                    className="text-xs font-medium text-forest/60 hover:text-gold print:hidden"
-                  >
-                    #{group.category.id}
-                  </a>
                 </div>
 
-                {/* Products Grid */}
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {group.items.map((product) => (
-                    <article
-                      key={product.id}
-                      className="group flex flex-col overflow-hidden rounded-2xl border border-forest/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl print:break-inside-avoid print:border-gray-300"
-                    >
-                      {/* Product Image */}
-                      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-forest-deep/5 to-gold/10">
-                        <Image
-                          src={product.image || '/images/hero.png'}
-                          alt={t(product.name)}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        {/* SKU Badge */}
-                        <div className="absolute top-3 start-3 rounded-md bg-forest-deep/85 px-2.5 py-1 text-[11px] font-mono font-bold text-gold-light backdrop-blur-sm">
-                          {product.sku}
-                        </div>
+                {/* COMPACT PRODUCT GRID: 2 cols on mobile, 3 on small, 4 on tablet, 5 on desktop, 6 on xl */}
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-4 print:grid-cols-4 print:gap-3">
+                  {group.items.map((product) => {
+                    const productHref = getProductHref(product)
+                    return (
+                      <Link
+                        key={product.id}
+                        href={productHref}
+                        className="group flex flex-col overflow-hidden rounded-2xl border border-forest/10 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-gold/60 hover:shadow-lg print:break-inside-avoid print:border-gray-200"
+                      >
+                        {/* 1. PRODUCT IMAGE ONLY */}
+                        <div className="relative aspect-square w-full overflow-hidden bg-[#F5F2EA]">
+                          <Image
+                            src={product.image || '/images/hero.png'}
+                            alt={t(product.name)}
+                            fill
+                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-108"
+                          />
+                          {/* Minimal SKU tag */}
+                          {product.sku && (
+                            <div className="absolute top-2 start-2 rounded bg-black/55 px-1.5 py-0.5 text-[9px] font-mono font-semibold text-white/90 backdrop-blur-xs">
+                              {product.sku}
+                            </div>
+                          )}
 
-                        {/* Storage Temp Badge */}
-                        <div className="absolute top-3 end-3 flex items-center gap-1 rounded-md bg-white/90 px-2 py-1 text-[11px] font-medium text-forest-deep shadow-sm backdrop-blur-sm">
-                          {product.tempType === 'frozen' ? '❄️ مجمد' : product.tempType === 'chilled' ? '🧊 مبرد' : '📦 جاف'}
-                        </div>
-                      </div>
-
-                      {/* Product Content */}
-                      <div className="flex flex-1 flex-col p-5">
-                        <div className="mb-2">
-                          <span className="text-[11px] font-semibold text-gold">
-                            {t(product.categoryName)}
-                          </span>
-                          <h3 className="text-lg font-bold text-forest-deep transition-colors group-hover:text-forest">
-                            {t(product.name)}
-                          </h3>
-                        </div>
-
-                        <p className="line-clamp-2 text-xs text-forest/75 mb-4">
-                          {t(product.description)}
-                        </p>
-
-                        {/* Key Specs Pills */}
-                        <div className="mt-auto space-y-2 border-t border-forest/5 pt-3 text-xs">
-                          <div className="flex items-center justify-between">
-                            <span className="text-forest/60">{isAr ? 'بلد المنشأ:' : 'Origin:'}</span>
-                            <span className="font-semibold text-forest-deep">{t(product.origin)}</span>
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <span className="text-forest/60">{isAr ? 'العبوة والتعبئة:' : 'Packaging:'}</span>
-                            <span className="font-medium text-forest-deep text-end max-w-[65%] truncate">
-                              {t(product.packaging)}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <span className="text-forest/60">{isAr ? 'الاعتماد الصحي:' : 'Inspection:'}</span>
-                            <span className="inline-flex items-center gap-1 font-medium text-emerald-700 text-end">
-                              <ShieldCheck className="size-3.5 shrink-0" />
-                              <span className="truncate max-w-[160px]">{t(product.certifications)}</span>
+                          {/* Hover Overlay with arrow */}
+                          <div className="absolute inset-0 flex items-center justify-center bg-forest-deep/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 print:hidden">
+                            <span className="flex size-8 items-center justify-center rounded-full bg-white text-forest shadow-md">
+                              {isAr ? (
+                                <ArrowUpLeft className="size-4.5" />
+                              ) : (
+                                <ArrowUpRight className="size-4.5" />
+                              )}
                             </span>
                           </div>
                         </div>
 
-                        {/* Action Buttons */}
-                        <div className="mt-4 pt-3 border-t border-forest/10 flex items-center gap-2 print:hidden">
-                          <button
-                            onClick={() => setActiveProduct(product)}
-                            className="flex-1 rounded-xl border border-forest/20 bg-[#FBF8F2] py-2.5 text-xs font-bold text-forest-deep transition-colors hover:bg-forest hover:text-cream"
-                          >
-                            {isAr ? 'المواصفات الكاملة' : 'Full Specs'}
-                          </button>
+                        {/* 2. PRODUCT NAME ONLY */}
+                        <div className="flex flex-1 flex-col justify-between p-3 text-center sm:text-start">
+                          <div>
+                            <h3 className="text-xs font-bold text-forest-deep transition-colors group-hover:text-gold sm:text-sm line-clamp-2 leading-snug">
+                              {product.name.ar}
+                            </h3>
+                            {product.name.en && product.name.en !== product.name.ar && (
+                              <p className="mt-0.5 text-[10px] sm:text-[11px] text-forest/50 font-normal truncate">
+                                {product.name.en}
+                              </p>
+                            )}
+                          </div>
 
-                          <a
-                            href={getWhatsAppItemUrl(product)}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-3.5 py-2.5 text-xs font-bold text-white transition-transform hover:scale-105 hover:bg-emerald-700"
-                            title={isAr ? 'طلب تسعير الصنف عبر واتساب' : 'Inquire on WhatsApp'}
-                          >
-                            <MessageCircle className="size-4" />
-                          </a>
+                          <div className="mt-2 flex items-center justify-between text-[11px] text-gold font-medium pt-1 border-t border-forest/5 print:hidden">
+                            <span>{isAr ? 'عرض التفاصيل' : 'View Details'}</span>
+                            <span className="text-forest/30 group-hover:text-gold transition-colors">→</span>
+                          </div>
                         </div>
-                      </div>
-                    </article>
-                  ))}
+                      </Link>
+                    )
+                  })}
                 </div>
               </section>
             ))}
           </div>
-        ) : (
-          /* SPEC SHEET / TABLE VIEW */
-          <div className="overflow-x-auto rounded-2xl border border-forest/15 bg-white shadow-sm">
-            <table className="w-full text-start text-xs md:text-sm">
-              <thead className="border-b border-forest/15 bg-forest-deep text-cream">
-                <tr>
-                  <th className="py-3.5 px-4 text-start font-bold">{isAr ? 'كود الصنف' : 'SKU'}</th>
-                  <th className="py-3.5 px-4 text-start font-bold">{isAr ? 'اسم الصنف والمواصفات' : 'Product & Specs'}</th>
-                  <th className="py-3.5 px-4 text-start font-bold">{isAr ? 'التصنيف' : 'Category'}</th>
-                  <th className="py-3.5 px-4 text-start font-bold">{isAr ? 'بلد المنشأ' : 'Origin'}</th>
-                  <th className="py-3.5 px-4 text-start font-bold">{isAr ? 'التعبئة والوزن' : 'Packaging'}</th>
-                  <th className="py-3.5 px-4 text-start font-bold">{isAr ? 'درجة الحفظ' : 'Storage'}</th>
-                  <th className="py-3.5 px-4 text-start font-bold">{isAr ? 'الاعتمادات' : 'Certifications'}</th>
-                  <th className="py-3.5 px-4 text-center font-bold print:hidden">{isAr ? 'تسعير الصنف' : 'Quote'}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-forest/10">
-                {filteredProducts.map((p) => (
-                  <tr key={p.id} className="hover:bg-gold/5 transition-colors">
-                    <td className="py-3 px-4 font-mono font-bold text-forest text-xs">{p.sku}</td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
-                          <Image src={p.image} alt={t(p.name)} fill className="object-cover" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-forest-deep">{t(p.name)}</p>
-                          <p className="text-xs text-forest/60 line-clamp-1">{t(p.description)}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-forest/80 font-medium">{t(p.categoryName)}</td>
-                    <td className="py-3 px-4 font-medium">{t(p.origin)}</td>
-                    <td className="py-3 px-4 text-xs">{t(p.packaging)}</td>
-                    <td className="py-3 px-4 text-xs font-mono">{t(p.storage)}</td>
-                    <td className="py-3 px-4 text-xs text-emerald-800">
-                      <span className="inline-flex items-center gap-1 font-medium">
-                        <ShieldCheck className="size-3.5" />
-                        {t(p.certifications)}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-center print:hidden">
-                      <a
-                        href={getWhatsAppItemUrl(p)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700"
-                      >
-                        <MessageCircle className="size-3.5" />
-                        <span>{isAr ? 'تسعير' : 'Quote'}</span>
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
         )}
-
-        {/* 6. BOTTOM B2B CONTRACT CALLOUT */}
-        <section className="mt-16 rounded-3xl border border-gold/30 bg-gradient-to-br from-forest-deep to-[#091D18] p-8 text-cream shadow-2xl md:p-12 print:hidden">
-          <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
-            <div className="max-w-2xl text-center md:text-start">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/15 px-3.5 py-1 text-xs font-bold text-gold-light">
-                <Building2 className="size-3.5" />
-                {isAr ? 'إدارة المبيعات وعقود التوريد المؤسسي' : 'Institutional Sales & Supply Contracts'}
-              </span>
-              <h2 className="mt-4 text-2xl font-extrabold text-white md:text-3xl">
-                {isAr ? 'هل تحتاج إلى عرض سعر خاص لكميات أسبوعية أو سنوية؟' : 'Need a custom wholesale quote for recurring supply?'}
-              </h2>
-              <p className="mt-2 text-sm text-cream/80">
-                {isAr
-                  ? 'نوفر حلول إمداد مرنة، عقود توريد مجدولة، وفواتير إلكترونية ضريبية معتمدة مع التزام كامل بسلاسل التبريد والتوصيل المباشر لمستودعاتكم ومطابخكم.'
-                  : 'We offer flexible supply contracts, scheduled delivery schedules, and certified tax invoices with total cold chain compliance Kingdom-wide.'}
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-              <a
-                href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                  isAr
-                    ? 'السلام عليكم، نرغب في طلب تسعير وعقد توريد منتجات غذائية لكبرى الكميات.'
-                    : 'Hello, we would like to request wholesale contract pricing for bulk food supply.'
-                )}`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-gold-gradient px-6 py-3.5 text-sm font-bold text-forest-deep shadow-lg transition-transform hover:scale-105"
-              >
-                <MessageCircle className="size-4.5" />
-                <span>{isAr ? 'محادثة المبيعات المباشرة' : 'Chat with Sales Manager'}</span>
-              </a>
-
-              <button
-                onClick={handlePrint}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-sm font-semibold text-cream hover:bg-white/20"
-              >
-                <Printer className="size-4" />
-                <span>{isAr ? 'طباعة الكتالوج للمراجعة' : 'Print Catalog Sheet'}</span>
-              </button>
-            </div>
-          </div>
-        </section>
       </main>
 
-      {/* 7. PRODUCT SPECIFICATION MODAL */}
-      {activeProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm print:hidden">
-          <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-gold/30 bg-white p-6 shadow-2xl md:p-8">
-            <button
-              onClick={() => setActiveProduct(null)}
-              className="absolute top-5 end-5 flex size-9 items-center justify-center rounded-full bg-forest/5 text-forest/70 hover:bg-forest/10 hover:text-forest"
-            >
-              <X className="size-5" />
-            </button>
-
-            <div className="flex items-center gap-2 text-xs font-mono font-bold text-gold">
-              <span>{activeProduct.sku}</span>
-              <span>·</span>
-              <span>{t(activeProduct.categoryName)}</span>
-            </div>
-
-            <h3 className="mt-1 text-2xl font-black text-forest-deep">
-              {t(activeProduct.name)}
-            </h3>
-
-            <div className="relative mt-4 aspect-video w-full overflow-hidden rounded-2xl bg-gray-100">
-              <Image
-                src={activeProduct.image}
-                alt={t(activeProduct.name)}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <p className="mt-4 text-sm text-forest/80 leading-relaxed">
-              {t(activeProduct.description)}
-            </p>
-
-            {/* Detailed Spec Grid */}
-            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 rounded-2xl bg-[#FBF8F2] p-4 text-xs">
-              <div className="space-y-1">
-                <span className="font-semibold text-forest/60">{isAr ? 'بلد المنشأ والمسلخ:' : 'Origin & Plant:'}</span>
-                <p className="font-bold text-forest-deep">{t(activeProduct.origin)}</p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="font-semibold text-forest/60">{isAr ? 'مواصفة التعبئة والتغليف:' : 'Packaging Specs:'}</span>
-                <p className="font-bold text-forest-deep">{t(activeProduct.packaging)}</p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="font-semibold text-forest/60">{isAr ? 'تعليمات التخزين ودرجة الحرارة:' : 'Storage Instructions:'}</span>
-                <p className="font-bold text-forest-deep">{t(activeProduct.storage)}</p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="font-semibold text-forest/60">{isAr ? 'شهادات الجودة والسلامة:' : 'Certifications:'}</span>
-                <p className="font-bold text-emerald-800">{t(activeProduct.certifications)}</p>
-              </div>
-
-              {activeProduct.usage && (
-                <div className="sm:col-span-2 space-y-1 border-t border-forest/10 pt-2">
-                  <span className="font-semibold text-forest/60">{isAr ? 'الاستخدامات الموصى بها:' : 'Recommended Applications:'}</span>
-                  <p className="font-medium text-forest-deep">{t(activeProduct.usage)}</p>
-                </div>
-              )}
-            </div>
-
-            {/* Modal Actions */}
-            <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-forest/10">
-              <button
-                onClick={() => setActiveProduct(null)}
-                className="rounded-xl border border-forest/20 px-5 py-2.5 text-xs font-bold text-forest hover:bg-forest/5"
-              >
-                {isAr ? 'إغلاق' : 'Close'}
-              </button>
-
-              <a
-                href={getWhatsAppItemUrl(activeProduct)}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-emerald-700"
-              >
-                <MessageCircle className="size-4" />
-                <span>{isAr ? 'طلب تسعير فوري عبر واتساب' : 'Request Quote on WhatsApp'}</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 8. EXCEL IMPORT & SEEDING MODAL (ADMIN TOOL) */}
+      {/* 5. EXCEL IMPORT & SEEDING MODAL (FOR ADMIN) */}
       {showImportModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm print:hidden">
-          <div className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-3xl border border-gold/40 bg-white p-6 shadow-2xl md:p-8">
+          <div className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-gold/40 bg-white p-6 shadow-2xl md:p-8">
             <button
               onClick={() => {
                 setShowImportModal(false)
                 setImportStatus(null)
               }}
-              className="absolute top-5 end-5 flex size-9 items-center justify-center rounded-full bg-forest/5 text-forest/70 hover:bg-forest/10"
+              className="absolute top-5 end-5 flex size-8 items-center justify-center rounded-full bg-forest/5 text-forest/70 hover:bg-forest/10"
             >
-              <X className="size-5" />
+              <X className="size-4" />
             </button>
 
             <div className="flex items-center gap-2 text-xs font-bold uppercase text-gold">
               <FileSpreadsheet className="size-4" />
-              <span>{isAr ? 'أداة استيراد الأصناف التموينية' : 'Product Catalog Bulk Importer'}</span>
+              <span>{isAr ? 'أداة استيراد الأصناف' : 'Product Importer'}</span>
             </div>
 
-            <h3 className="mt-1 text-2xl font-black text-forest-deep">
-              {isAr ? 'استيراد المنتجات من ملف إكسل (Excel / CSV)' : 'Import Products from Excel Sheet'}
+            <h3 className="mt-1 text-xl font-black text-forest-deep">
+              {isAr ? 'استيراد الأصناف من ملف إكسل أو CSV' : 'Bulk Import from Spreadsheet'}
             </h3>
 
-            <p className="mt-2 text-xs text-forest/75 leading-relaxed">
+            <p className="mt-1.5 text-xs text-forest/75 leading-relaxed">
               {isAr
-                ? 'يمكنك تنزيل قالب الإكسل المعتمد، تعبئة بيانات الأصناف، ثم رفع الملف ليتم إدراجها وتحديثها فوراً في Sanity وقاعدة البيانات.'
-                : 'Download our official Excel template, fill your product rows, and upload it here to bulk sync directly into Sanity.'}
+                ? 'يمكنك تنزيل قالب الإكسل المعتمد، تعبئة المنتجات (حتى 100+ صنف)، ثم رفع الملف ليتم إدراجها وتحديثها فوراً في Sanity وقاعدة البيانات.'
+                : 'Download our standard template, fill your items (up to 100+ rows), and upload to sync directly into Sanity.'}
             </p>
 
-            {/* Template Download Button */}
-            <div className="mt-4 rounded-2xl border border-gold/30 bg-[#FBF8F2] p-4">
+            {/* Template Download */}
+            <div className="mt-4 rounded-xl border border-gold/30 bg-[#FBF8F2] p-3.5">
               <p className="text-xs font-bold text-forest-deep">
-                {isAr ? '1. تحميل قالب إكسل المعتمد مع أمثلة جاهزة:' : '1. Download standard template with samples:'}
+                {isAr ? '1. تحميل قالب إكسل معبأ بأمثلة توضيحية:' : '1. Download standard template:'}
               </p>
-              <div className="mt-2 flex gap-2">
+              <div className="mt-2">
                 <a
-                  href="/api/admin/catalog-template?format=xlsx"
+                  href="/api/admin/catalog-template"
                   download
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-forest px-4 py-2 text-xs font-bold text-cream hover:bg-forest/90"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-forest px-3.5 py-1.5 text-xs font-bold text-cream hover:bg-forest/90"
                 >
                   <Download className="size-3.5" />
-                  <span>{isAr ? 'تحميل قالب Excel (.xlsx)' : 'Download Excel (.xlsx)'}</span>
-                </a>
-                <a
-                  href="/api/admin/catalog-template?format=csv"
-                  download
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-forest/30 bg-white px-3.5 py-2 text-xs font-semibold text-forest hover:bg-forest/5"
-                >
-                  <FileText className="size-3.5" />
-                  <span>CSV</span>
+                  <span>{isAr ? 'تنزيل القالب (.csv متوافق مع Excel)' : 'Download Template (.csv)'}</span>
                 </a>
               </div>
             </div>
@@ -968,63 +525,63 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
             {/* Upload File Input */}
             <div className="mt-4 space-y-3">
               <label className="block text-xs font-bold text-forest-deep">
-                {isAr ? '2. اختيار ملف الإكسل المعبأ (.xlsx أو .csv):' : '2. Select completed spreadsheet file:'}
+                {isAr ? '2. اختيار ملف الإكسل المعبأ:' : '2. Select completed spreadsheet:'}
               </label>
 
-              <div className="flex items-center justify-center rounded-2xl border-2 border-dashed border-forest/20 p-6 text-center hover:border-gold">
+              <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-forest/20 p-5 text-center hover:border-gold">
                 <input
                   type="file"
-                  accept=".xlsx, .xls, .csv"
+                  accept=".csv, .xlsx, .xls"
                   id="excel-file-input"
                   onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
                   className="hidden"
                 />
                 <label htmlFor="excel-file-input" className="cursor-pointer flex flex-col items-center">
-                  <UploadCloud className="size-8 text-gold mb-2" />
+                  <UploadCloud className="size-7 text-gold mb-1.5" />
                   <span className="text-xs font-bold text-forest">
-                    {uploadFile ? uploadFile.name : isAr ? 'انقر لاختيار ملف إكسل من جهازك' : 'Click to select Excel file'}
+                    {uploadFile ? uploadFile.name : isAr ? 'انقر لاختيار الملف من جهازك' : 'Click to select file'}
                   </span>
-                  <span className="text-[11px] text-forest/50 mt-1">.xlsx, .xls, .csv</span>
+                  <span className="text-[10px] text-forest/50 mt-0.5">.csv (Excel)</span>
                 </label>
               </div>
 
-              {/* Admin Access Key */}
+              {/* Admin Key */}
               <div>
                 <label className="block text-[11px] font-semibold text-forest/70 mb-1">
-                  {isAr ? 'مفتاح الترخيص الإداري (Security Key):' : 'Admin Security Key:'}
+                  {isAr ? 'مفتاح الأمان (Security Key):' : 'Admin Security Key:'}
                 </label>
                 <input
                   type="password"
                   value={adminKey}
                   onChange={(e) => setAdminKey(e.target.value)}
                   placeholder="mnaveth2026"
-                  className="w-full rounded-xl border border-forest/15 px-3 py-2 text-xs font-mono"
+                  className="w-full rounded-lg border border-forest/15 px-3 py-1.5 text-xs font-mono"
                 />
               </div>
 
               {/* Status Output */}
               {importStatus && (
-                <div className="rounded-xl bg-[#FBF8F2] p-3 text-xs font-medium text-forest-deep border border-forest/10">
+                <div className="rounded-lg bg-[#FBF8F2] p-2.5 text-xs font-medium text-forest-deep border border-forest/10">
                   {importStatus}
                 </div>
               )}
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-2 pt-2">
+              <div className="flex flex-col sm:flex-row gap-2 pt-1">
                 <button
-                  onClick={handleUploadExcel}
+                  onClick={handleUploadCsv}
                   disabled={!uploadFile || isPending}
-                  className="flex-1 rounded-xl bg-forest px-4 py-3 text-xs font-bold text-cream hover:bg-forest/90 disabled:opacity-50"
+                  className="flex-1 rounded-xl bg-forest px-4 py-2.5 text-xs font-bold text-cream hover:bg-forest/90 disabled:opacity-50"
                 >
-                  {isPending ? (isAr ? 'جاري الرفع والمعالجة...' : 'Processing...') : (isAr ? 'بدء استيراد الملف إلى Sanity' : 'Upload & Sync to Sanity')}
+                  {isPending ? (isAr ? 'جاري المعالجة...' : 'Uploading...') : (isAr ? 'بدء استيراد الملف إلى Sanity' : 'Sync to Sanity')}
                 </button>
 
                 <button
                   onClick={handleSeedDefaults}
                   disabled={isPending}
-                  className="rounded-xl border border-gold/40 bg-gold/15 px-4 py-3 text-xs font-bold text-forest-deep hover:bg-gold/25"
+                  className="rounded-xl border border-gold/40 bg-gold/15 px-3.5 py-2.5 text-xs font-bold text-forest-deep hover:bg-gold/25"
                 >
-                  {isAr ? 'تعبئة الـ 18 صنف الافتراضية' : 'Seed Default 18 Items'}
+                  {isAr ? 'تعبئة الـ 18 صنف التلقائية' : 'Seed 18 Items'}
                 </button>
               </div>
             </div>
@@ -1032,11 +589,11 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
         </div>
       )}
 
-      {/* 9. PRINT FOOTER (PRINT MEDIA ONLY) */}
-      <div className="hidden print:block print:mt-12 print:pt-4 print:border-t print:text-[10px] print:text-gray-600">
+      {/* 6. PRINT FOOTER (PRINT MEDIA ONLY) */}
+      <div className="hidden print:block print:mt-8 print:pt-3 print:border-t print:text-[9px] print:text-gray-600">
         <div className="flex justify-between">
           <span>شركة منافذ التوريد للتجارة | سجل تجاري: 1116011768</span>
-          <span>هاتف ومبيعات: +966509971699 | www.mnaveth-altourid.com/catalog</span>
+          <span>مبيعات: +966509971699 | www.mnaveth-altourid.com/catalog</span>
         </div>
       </div>
     </div>

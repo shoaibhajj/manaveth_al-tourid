@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const title = textFor(product.seo?.title, locale) || (locale === 'ar' ? `${textFor(product.name, locale)} بالجملة للشركات والمطاعم في الرياض وجدة | منافذ التوريد` : `${textFor(product.name, locale)} Wholesale for Restaurants in Saudi Arabia | Mnaveeh`)
   const description = textFor(product.seo?.description, locale) || textFor(product.longDescription, locale) || textFor(product.description, locale)
   const path = `/products/${slug}`
-  const image = imageUrl(product.seo?.shareImage, 1200) || imageUrl(product.image, 1200)
+  const image = imageUrl(product.seo?.shareImage, 1200) || imageUrl(product.image, 1200) || (typeof product.image === 'string' ? product.image : undefined)
   const keywords = (product.targetPhrases ?? []).map((item: any) => textFor(item, locale)).filter(Boolean)
   return {
     title,
@@ -41,7 +41,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const title = textFor(product.name, locale)
   const description = textFor(product.description, locale)
   const longDescription = textFor(product.longDescription, locale)
-  const image = imageUrl(product.image, 1400)
+  const image = imageUrl(product.image, 1400) || (typeof product.image === 'string' ? product.image : undefined) || product.image?.asset?.url || '/images/hero.png'
   const productPath = `/products/${slug}`
   const shareUrl = `${base}${localePath(productPath, locale)}`
   const sections = [

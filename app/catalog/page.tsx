@@ -13,11 +13,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: isAr
-      ? 'كتالوج الأصناف والمنتجات التموينية بالجملة للمطاعم والفنادق | منافذ التوريد'
-      : 'Wholesale Foodservice Product Catalog for Restaurants & Hotels | Mnaveeh ALTourid',
+      ? 'كتالوج وقائمة الأصناف التموينية | شركة منافذ التوريد'
+      : 'Wholesale Foodservice Product Catalog | Mnaveeh ALTourid',
     description: isAr
-      ? 'تصفح ونزّل كتالوج الأصناف التموينية والغذائية المعتمدة لشركة منافذ التوريد: لحوم ودواجن مجمدة، أرز بسمتي هندي، زيوت طعام فندقية، معلبات A10، وتمور فاخرة للمطاعم ومطابخ الإعاشة في الرياض وجدة.'
-      : 'Browse and download the official wholesale foodservice catalog of Mnaveeh ALTourid: frozen meats, basmati rice, commercial frying oils, canned goods, and dates for Saudi restaurants and hotels.',
+      ? 'تصفح قائمة الأصناف التموينية والغذائية المعتمدة لشركة منافذ التوريد: لحوم مجمدة، أرز بسمتي هندي، زيوت طعام فندقية، معلبات A10، وتمور للمطاعم والفنادق.'
+      : 'Browse the certified wholesale food products menu of Mnaveeh ALTourid: frozen meats, basmati rice, frying oils, canned goods, and dates for restaurants.',
     alternates: {
       canonical: '/catalog',
     },
@@ -45,6 +45,7 @@ export default async function CatalogPage() {
 
     return {
       id: p.id,
+      slug: p.slug || p.sku || p.id,
       sku: p.sku || `MNV-${idx + 101}`,
       name: p.name,
       categoryId: foundCategory?.id || 'meat-poultry',
@@ -62,9 +63,14 @@ export default async function CatalogPage() {
     }
   })
 
-  // If Sanity has products, use them; otherwise, use defaultCatalogProducts
+  // If Sanity has products, use them; otherwise, use defaultCatalogProducts with slug
+  const defaultsWithSlug = defaultCatalogProducts.map((p) => ({
+    ...p,
+    slug: p.slug || p.sku || p.id,
+  }))
+
   const productsToUse =
-    mappedSanityProducts.length > 5 ? mappedSanityProducts : defaultCatalogProducts
+    mappedSanityProducts.length > 5 ? mappedSanityProducts : defaultsWithSlug
 
   return (
     <div className="pt-16 md:pt-20">

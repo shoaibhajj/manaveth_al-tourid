@@ -11,6 +11,7 @@ export type CatalogCategory = {
 }
 
 export type CatalogProduct = {
+  slug?: string
   id: string
   sku: string
   name: Localized

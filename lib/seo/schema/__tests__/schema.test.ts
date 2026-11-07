@@ -88,7 +88,7 @@ describe('Dynamic Schema & Entities Engine (Tasks G1 & G2)', () => {
     })
   })
 
-  test('buildArticleSchema maps aboutEntities and mentionedEntities into about and mentions', () => {
+  test('buildArticleSchema maps aboutEntities, mentionedEntities, and formats author as Organization by default', () => {
     const articleMock = {
       slug: 'cold-kitchen-food-supply',
       title: { ar: 'سلاسل إمداد المطابخ السحابية', en: 'Cloud Kitchen Food Supply' },
@@ -101,6 +101,8 @@ describe('Dynamic Schema & Entities Engine (Tasks G1 & G2)', () => {
     assert.strictEqual(schema.about?.length, 2)
     assert.strictEqual(schema.mentions?.length, 2)
     assert.strictEqual(schema.about[0].name, 'تجارة الجملة')
+    assert.strictEqual(schema.author['@type'], 'Organization')
+    assert.strictEqual(schema.author['@id'], `${base}/#organization`)
   })
 
   test('buildBreadcrumbSchema outputs correct positional BreadcrumbList', () => {

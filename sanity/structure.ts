@@ -65,6 +65,7 @@ export const structure: StructureResolver = (S) =>
       orderedList(S, 'sector', 'القطاعات', 'sector'),
       orderedList(S, 'stat', 'الإحصائيات', 'stat'),
       orderedList(S, 'article', 'المقالات والبيانات الصحفية', 'article', undefined, [{ field: 'publishedAt', direction: 'desc' }]),
+      S.documentTypeListItem('landingPage').title('صفحات الهبوط والتوريد (Landing Pages)'),
       S.listItem()
         .id('products-group')
         .title('المنتجات والكتالوج')

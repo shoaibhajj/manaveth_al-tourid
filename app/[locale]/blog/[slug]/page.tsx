@@ -159,44 +159,58 @@ function renderBlocks(blocks: any[], locale: Locale) {
 
     const key = block._key ?? index
 
-    // Handle lists
-    if (block.listItem === 'bullet' || block.listItem === 'number') {
-      const listType = block.listItem === 'number' ? 'number' : 'bullet'
-      if (!currentList || currentList.type !== listType) {
+    if (block.listItem) {
+      const type = block.listItem === 'number' ? 'number' : 'bullet'
+      if (!currentList || currentList.type !== type) {
         flushList(index)
-        currentList = { type: listType, items: [children] }
-      } else {
-        currentList.items.push(children)
+        currentList = { type, items: [] }
       }
+      currentList.items.push(children)
       return
     }
 
     flushList(index)
 
-    if (block.style === 'h2') {
-      elements.push(
-        <h2 key={key} className="mt-10 mb-4 text-2xl font-extrabold text-forest md:text-3xl border-b border-gold/20 pb-3">
-          {children}
-        </h2>
-      )
-    } else if (block.style === 'h3') {
-      elements.push(
-        <h3 key={key} className="mt-8 mb-3 text-xl font-bold text-forest md:text-2xl">
-          {children}
-        </h3>
-      )
-    } else if (block.style === 'blockquote') {
-      elements.push(
-        <blockquote key={key} className="my-8 rounded-2xl border-s-4 border-gold bg-forest-deep/5 p-6 italic text-forest-deep text-lg leading-relaxed shadow-sm">
-          {children}
-        </blockquote>
-      )
-    } else {
-      elements.push(
-        <p key={key} className="my-4 text-lg leading-relaxed text-muted-foreground">
-          {children}
-        </p>
-      )
+    switch (block.style) {
+      case 'h2':
+        elements.push(
+          <h2
+            key={key}
+            id={`h2-${index}`}
+            className="my-8 scroll-mt-24 text-2xl font-bold tracking-tight text-forest md:text-3xl border-b border-gold/20 pb-3"
+          >
+            {children}
+          </h2>
+        )
+        break
+      case 'h3':
+        elements.push(
+          <h3
+            key={key}
+            id={`h3-${index}`}
+            className="my-6 scroll-mt-24 text-xl font-bold tracking-tight text-forest-deep md:text-2xl"
+          >
+            {children}
+          </h3>
+        )
+        break
+      case 'blockquote':
+        elements.push(
+          <blockquote
+            key={key}
+            className="my-6 border-s-4 border-gold bg-forest/5 p-4 text-base italic leading-relaxed text-foreground/90 rounded-e-xl"
+          >
+            {children}
+          </blockquote>
+        )
+        break
+      default:
+        elements.push(
+          <p key={key} className="my-4 leading-8 text-foreground/90">
+            {children}
+          </p>
+        )
+        break
     }
   })
 
@@ -299,9 +313,9 @@ export default async function ArticlePage({
               ? 'تؤمن شركة منافذ التوريد للمطاعم والمطابخ المركزية والفنادق احتياجاتها الدورية من الأرز البسمتي الفاخر، اللحوم والكبدة المجمدة، الزيوت، والمعلبات بأسعار جملة تنافسية وعقود توريد سنوية تضمن استقرار الأسعار.'
               : 'Mnaveth ALTourid supplies commercial kitchens, cloud commissaries, and restaurants with basmati rice, frozen meats, oils, and canned staples under reliable annual agreements.'}
           </p>
-          <div className="mt-6 flex flex-wrap gap-4">
+          <div className="mt-6 flex flex-wrap items-center gap-4">
             <a
-              href={whatsappUrl('+966509971699', whatsappMessage)}
+              href={whatsappUrl('+966551065715', whatsappMessage)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl bg-gold-gradient px-6 py-3.5 font-bold text-forest-deep shadow-lg transition-transform hover:-translate-y-0.5"
@@ -309,13 +323,18 @@ export default async function ArticlePage({
               <MessageCircle className="size-5" />
               <span>{locale === 'ar' ? 'طلب عرض أسعار عبر واتساب' : 'Request Quotation on WhatsApp'}</span>
             </a>
-            <a
-              href={telUrl('+966509971699')}
+            <Link
+              href={localePath('/meat-supply', locale)}
+              className="inline-flex items-center gap-2 rounded-xl border border-gold/50 bg-gold/10 px-6 py-3.5 font-bold text-gold transition-colors hover:bg-gold/20"
+            >
+              <span>{locale === 'ar' ? 'قسم توريد اللحوم B2B' : 'B2B Meat Supply Hub'}</span>
+            </Link>
+            <Link
+              href={localePath('/catalog', locale)}
               className="inline-flex items-center gap-2 rounded-xl border border-cream/30 px-6 py-3.5 font-bold text-cream transition-colors hover:border-gold hover:text-gold"
             >
-              <Phone className="size-5" />
-              <span dir="ltr">+966 50 997 1699</span>
-            </a>
+              <span>{locale === 'ar' ? 'كتالوج الأصناف المحدث' : 'Catalog PDF'}</span>
+            </Link>
           </div>
         </section>
 

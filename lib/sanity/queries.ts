@@ -102,3 +102,21 @@ export const serviceBySlugDraftQuery = defineQuery(`*[_type == "service" && slug
 
 export const articleBySlugQuery = defineQuery(`*[_type == "article" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "coverImage": coverImage{...}, "seo": seo{...}}`)
 export const articleBySlugDraftQuery = defineQuery(`*[_type == "article" && slug.current == $slug][0]{..., "slug": slug.current, "coverImage": coverImage{...}, "seo": seo{...}}`)
+
+export const landingPageBySlugQuery = defineQuery(`*[_type == "landingPage" && slug.current == $slug][0]{
+  ...,
+  "slug": slug.current,
+  "sectors": sectors[]->{ _id, name, "slug": slug.current },
+  "certificates": certificates[]->{ _id, name, issuer, validUntil }
+}`)
+
+export const meatSupplyProductsQuery = defineQuery(`*[_type == "product" && (visible != false) && (productType in ['meat', 'poultry'] || category->slug.current == 'meat-poultry' || slug.current in ['frozen-meat', 'frozen-liver'])] | order(order asc){
+  ...,
+  "slug": slug.current,
+  "category": category->{ _id, name, "slug": slug.current }
+}`)
+
+export const confirmedCitiesQuery = defineQuery(`*[_type == "city" && isSupplyConfirmed != false] | order(name.ar asc){
+  ...,
+  "slug": slug.current
+}`)

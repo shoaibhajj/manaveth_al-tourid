@@ -28,6 +28,7 @@ export type CatalogProduct = {
   order: number
   featured?: boolean
   priceNote?: Localized
+  updatedAt?: string
 }
 
 export const catalogCategories: CatalogCategory[] = [

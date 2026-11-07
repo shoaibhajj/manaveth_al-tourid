@@ -21,7 +21,7 @@ export function SiteFooter() {
   const phoneHref = contact.phone ? telUrl(contact.phone) : undefined
 
   return (
-    <footer id="site-footer" className="border-t border-gold/20 bg-forest-deep text-cream/70">
+    <footer id="site-footer" className="border-t border-gold/20 bg-forest-deep text-cream/70 print:hidden">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-2 md:px-6 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
         <div>
           <div className="flex items-center gap-3">

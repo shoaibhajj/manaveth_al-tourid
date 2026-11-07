@@ -55,7 +55,7 @@ export function SiteHeader() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        solid ? 'bg-forest-deep/90 py-2 shadow-lg shadow-black/20 backdrop-blur-md' : 'bg-transparent py-4'
+        solid ? 'bg-forest-deep/90 py-2 shadow-lg shadow-black/20 backdrop-blur-md print:hidden' : 'bg-transparent py-4 print:hidden'
       }`}
     >
       <motion.div

@@ -232,6 +232,7 @@ function toProduct(doc: Doc, index: number, featuredIds: Set<string>): Product {
     tiers,
     featured: featuredIds.has(doc._id) || doc.featured === true,
     order: doc.order ?? index,
+    updatedAt: clean(doc._updatedAt) || clean(doc._createdAt) || undefined,
   }
 }
 

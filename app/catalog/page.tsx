@@ -60,6 +60,7 @@ export default async function CatalogPage() {
       image: p.image || '/images/hero.png',
       order: p.order ?? idx,
       featured: p.featured,
+      updatedAt: p.updatedAt || (p as any)._updatedAt || (p as any)._createdAt,
     }
   })
 
@@ -67,6 +68,7 @@ export default async function CatalogPage() {
   const defaultsWithSlug = defaultCatalogProducts.map((p) => ({
     ...p,
     slug: p.slug || p.sku || p.id,
+    updatedAt: p.updatedAt || '2026-11-07T12:00:00Z',
   }))
 
   const productsToUse =

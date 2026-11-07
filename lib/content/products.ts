@@ -37,6 +37,7 @@ export type Product = {
   featured?: boolean
   order: number
   visible?: boolean
+  updatedAt?: string
 }
 
 export const currency: Localized = { ar: 'ر.س', en: 'SAR' }

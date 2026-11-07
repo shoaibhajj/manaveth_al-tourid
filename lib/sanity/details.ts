@@ -51,6 +51,7 @@ export const getProductBySlug = async (slug: string) => {
 export const getServiceBySlug = (slug: string) => fetchDetail(serviceBySlugQuery, serviceBySlugDraftQuery, slug)
 
 export const getArticleBySlug = async (slug: string) => {
+  if (slug === 'oli1') return null
   const fromSanity = await fetchDetail(articleBySlugQuery, articleBySlugDraftQuery, slug)
   if (fromSanity) return fromSanity
   if (isSanityConfigured) return null

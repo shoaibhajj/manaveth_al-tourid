@@ -44,7 +44,7 @@ const siteOrigin =
 // so empty fallbacks here never reach a real Sanity request.
 export default defineConfig({
   name: 'default',
-  title: 'Mnaveeh ALTourid Content',
+  title: 'Mnaveth ALTourid Content',
   basePath: '/studio',
   projectId: sanityEnv.projectId ?? '',
   dataset: sanityEnv.dataset ?? '',

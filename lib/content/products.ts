@@ -63,7 +63,7 @@ export const products: Product[] = [
     certifications: { ar: 'مطابق للمواصفة القياسية السعودية (SASO)، شهادة فحص الجودة وخلو من الشوائب ومطابقة SFDA.', en: 'SASO compliant, SFDA inspected, non-GMO, zero impurities certification.' },
     usage: { ar: 'مطاعم الكبسة والمندي والبخاري، الفنادق، مطابخ الإعاشة المركزية، وشركات التموين.', en: 'Commercial Kabsa and Mandi restaurants, hotel banquets, and central catering kitchens.' },
     seo: {
-      title: { ar: 'أرز بسمتي هندي فاخر بالجملة للشركات والمطاعم في الرياض وجدة | منافذ التوريد', en: 'Premium Indian Basmati Rice Wholesale for Restaurants & Companies | Mnaveeh' },
+      title: { ar: 'أرز بسمتي هندي فاخر بالجملة للشركات والمطاعم في الرياض وجدة | منافذ التوريد', en: 'Premium Indian Basmati Rice Wholesale for Restaurants & Companies | Mnaveth ALTourid' },
       description: { ar: 'توريد أرز بسمتي هندي مزة 1121 بالجملة للمطاعم ومطابخ الإعاشة في الرياض وجدة: معتق سنتين، حبة طويلة فائقة التمدد، أكياس 40 كجم و 10 كجم بأفضل أسعار التوريد.', en: 'Bulk Indian 1121 Sella Basmati rice supplier in Saudi Arabia: 2-year aged, extra-long grain elongation, 40kg & 10kg bags for commercial restaurants and catering.' },
     },
     image: '/images/p-rice.png',
@@ -92,7 +92,7 @@ export const products: Product[] = [
     certifications: { ar: 'شهادات ذبح حلال إسلامية معتمدة، شهادات صحية بيطرية رسمية، ومطابقة هيئة الغذاء والدواء SFDA.', en: '100% Halal slaughter certificate, official SFDA veterinary import clearance.' },
     usage: { ar: 'محلات الشاورما والبرجر، مطاعم المشاوي، مطابخ الإعاشة للشركات والجهات الحكومية.', en: 'Shawarma and burger chains, grill restaurants, workforce catering, and institutional kitchens.' },
     seo: {
-      title: { ar: 'توريد لحوم مجمدة بالجملة للمطاعم في الرياض وجدة | منافذ التوريد', en: 'Wholesale Frozen Meat Supply for Commercial Restaurants in Riyadh & Jeddah | Mnaveeh' },
+      title: { ar: 'توريد لحوم مجمدة بالجملة للمطاعم في الرياض وجدة | منافذ التوريد', en: 'Wholesale Frozen Meat Supply for Commercial Restaurants in Riyadh & Jeddah | Mnaveth ALTourid' },
       description: { ar: 'مورد لحوم بقرية وضأن مجمدة بالجملة للمطاعم ومطابخ الإعاشة في السعودية: لحوم برازيلية وهندية معتمدة حلال، مجمدة عند -18°م، كراتين 20 كجم بأسعار جملة منافسة.', en: 'Commercial frozen beef and mutton distributor in Saudi Arabia: 100% Halal certified, blast frozen at -18°C, SFDA inspected 20kg cartons for kitchens.' },
     },
     image: '/images/g-produce.png',
@@ -120,7 +120,7 @@ export const products: Product[] = [
     certifications: { ar: 'شهادة فحص مخبري من مختبرات SFDA تثبت خلوها من المتبقيات، وشهادة ذبح حلال رسمية.', en: 'SFDA laboratory inspection clearance, zero chemical residue certification, Halal certificate.' },
     usage: { ar: 'مطاعم وبوفيهات الإفطار، مطاعم الكبدة المقلقلة والصاج، ومحلات السندويشات السريعة.', en: 'Breakfast buffets, traditional liver diners, skillet stations, and quick-service sandwich shops.' },
     seo: {
-      title: { ar: 'جملة الكبدة المجمدة للمطاعم في الرياض وجدة | منافذ التوريد', en: 'Wholesale Frozen Beef Liver Suppliers in Riyadh & Jeddah | Mnaveeh' },
+      title: { ar: 'جملة الكبدة المجمدة للمطاعم في الرياض وجدة | منافذ التوريد', en: 'Wholesale Frozen Beef Liver Suppliers in Riyadh & Jeddah | Mnaveth ALTourid' },
       description: { ar: 'مورد كبدة بقرية مجمدة بالجملة لمطاعم الإفطار والشاورما في السعودية: كبدة برازيلية منزوعة العروق، فحص مخبري معتمد SFDA، كراتين 10 و 20 كجم تسليم فوري.', en: 'Premium wholesale frozen beef liver for Saudi restaurants: Brazilian origin, laboratory tested, SFDA compliant, packaged in 10kg & 20kg master cartons.' },
     },
     image: '/images/p-olive-oil.png',
@@ -147,7 +147,7 @@ export const products: Product[] = [
     certifications: { ar: 'مطابق للمواصفات القياسية السعودية (SASO) وتراخيص الهيئة العامة للغذاء والدواء SFDA.', en: 'SASO quality standard certified and SFDA food facility registered.' },
     usage: { ar: 'المطاعم المركزية، الفنادق، مطابخ الإعاشة، ومحلات المأكولات السريعة والشعبية.', en: 'Central commissary kitchens, hotel banquets, institutional catering, and diners.' },
     seo: {
-      title: { ar: 'معلبات طماطم وبقوليات بالجملة للمطاعم والفنادق | منافذ التوريد', en: 'Wholesale Canned Food & Tomato Paste for Restaurants & Hotels | Mnaveeh' },
+      title: { ar: 'معلبات طماطم وبقوليات بالجملة للمطاعم والفنادق | منافذ التوريد', en: 'Wholesale Canned Food & Tomato Paste for Restaurants & Hotels | Mnaveth ALTourid' },
       description: { ar: 'توريد معجون طماطم وفول وحمص حب معلب بالجملة في الرياض وجدة: عبوات فندقية كبيرة A10 وبرطمانات للمطاعم والمطابخ بأسعار تنافسية.', en: 'Institutional distributor of wholesale canned foods in Saudi Arabia: bulk tomato paste (Brix 28-30%), canned chickpeas, fava beans, and sweet corn.' },
     },
     image: '/images/p-canned.png',
@@ -174,7 +174,7 @@ export const products: Product[] = [
     certifications: { ar: 'شهادة علامة التمور السعودية، مطابقة اشتراطات سلامة الغذاء SFDA.', en: 'Saudi Dates Mark certified, SFDA registered facility inspection.' },
     usage: { ar: 'ضيافة فنادق الـ 5 نجوم، الخطوط الجوية، غرف الاجتماعات بالشركات، والهدايا المؤسسية.', en: '5-star hotel lobbies, executive boardrooms, airline catering, and corporate gifting.' },
     seo: {
-      title: { ar: 'توريد تمور فاخرة جملة للفنادق والشركات في السعودية | منافذ التوريد', en: 'Premium Bulk Dates Wholesale for Saudi Hotels & Corporate | Mnaveeh' },
+      title: { ar: 'توريد تمور فاخرة جملة للفنادق والشركات في السعودية | منافذ التوريد', en: 'Premium Bulk Dates Wholesale for Saudi Hotels & Corporate | Mnaveth ALTourid' },
       description: { ar: 'مورد تمور سكري وخلاص وعجوة فاخرة بالجملة لقطاع الضيافة والفنادق والشركات في الرياض وجدة: تغليف فردي راقٍ وكراتين مبردة بأسعار منافسة.', en: 'Wholesale distributor of premium Saudi dates for luxury hotels, airlines, and corporate events: Sukkari, Khalas, and Ajwa in elegant individual and bulk packaging.' },
     },
     image: '/images/p-dates.png',
@@ -195,7 +195,7 @@ export const products: Product[] = [
     certifications: { ar: 'مطابق للمواصفات القياسية السعودية (SASO) واعتمادات SFDA.', en: 'SASO and SFDA certified food quality.' },
     usage: { ar: 'المطاعم السريعة، المقاهي، محلات التجزئة، ومطابخ التموين.', en: 'Quick service restaurants, cafes, retail, and catering kitchens.' },
     seo: {
-      title: { ar: 'توريد زيوت طعام وقلي بالجملة للمطاعم في الرياض وجدة | منافذ التوريد', en: 'Commercial Cooking & Frying Oil Wholesale Supply Saudi Arabia | Mnaveeh' },
+      title: { ar: 'توريد زيوت طعام وقلي بالجملة للمطاعم في الرياض وجدة | منافذ التوريد', en: 'Commercial Cooking & Frying Oil Wholesale Supply Saudi Arabia | Mnaveth ALTourid' },
       description: { ar: 'أسعار صفائح زيت القلي بالجملة للمطاعم في الرياض وجدة: زيت دوار الشمس وزيت أولين النخيل عبوات 18 لتراً بجودة عالية ونقطة دخان مرتفعة.', en: 'Bulk commercial frying oil distributor in Saudi Arabia: 18L tins of palm olein and sunflower oil for fast food chains and catering kitchens.' },
     },
     image: '/images/g-juice.png',

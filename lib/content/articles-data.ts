@@ -61,7 +61,7 @@ export const batch1Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'توريد المواد الغذائية للمطاعم والفنادق في الرياض - شركة منافذ التوريد',
-        en: 'Food supplies for restaurants and hotels in Riyadh - Mnaveeh ALTourid',
+        en: 'Food supplies for restaurants and hotels in Riyadh - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-63632c9db927ac23d070a0d358a8869be50592d6-1312x816-png',
@@ -77,7 +77,7 @@ export const batch1Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'أفضل شركات توريد مواد غذائية للمطاعم في الرياض | منافذ التوريد',
-        en: 'Best Food Supply Companies for Restaurants in Riyadh | Mnaveeh',
+        en: 'Best Food Supply Companies for Restaurants in Riyadh | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -114,8 +114,8 @@ export const batch1Articles: ArticleData[] = [
       b('Partnering with a full-service food distributor providing basmati rice, cooking oils, proteins, and canned goods reduces logistics overhead by up to 25%.', 'p1en-b3'),
       b('3. Rigorous SFDA and Halal Compliance', 'p1en-h3-3', 'h3'),
       b('Verify that all imported consignments are registered with the Saudi Food and Drug Authority and backed by certified halal and laboratory test documentation.', 'p1en-b4'),
-      b('Why Partner with Mnaveeh ALTourid in Riyadh?', 'p1en-h2-3', 'h2'),
-      b('Serving the Saudi market since 2004, Mnaveeh ALTourid provides end-to-end commercial food supply solutions from its central warehouses in Riyadh.', 'p1en-b5'),
+      b('Why Partner with Mnaveth ALTourid in Riyadh?', 'p1en-h2-3', 'h2'),
+      b('Serving the Saudi market since 2004, Mnaveth ALTourid provides end-to-end commercial food supply solutions from its central warehouses in Riyadh.', 'p1en-b5'),
     ],
   },
   {
@@ -156,7 +156,7 @@ export const batch1Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'توريد المطابخ السحابية والمركزية في السعودية | منافذ التوريد',
-        en: 'Cloud Kitchen Food Supply Solutions in Saudi Arabia | Mnaveeh',
+        en: 'Cloud Kitchen Food Supply Solutions in Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -226,7 +226,7 @@ export const batch1Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'موردين مواد غذائية جملة للمطاعم في جدة | منافذ التوريد',
-        en: 'Wholesale Food Suppliers for Restaurants in Jeddah | Mnaveeh',
+        en: 'Wholesale Food Suppliers for Restaurants in Jeddah | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -280,7 +280,7 @@ export const batch1Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'مستودعات المخزون الغذائي والسلع الأساسية للمطاعم - منافذ التوريد',
-        en: 'Food inventory warehouse and basic staples for restaurants - Mnaveeh',
+        en: 'Food inventory warehouse and basic staples for restaurants - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-1609ad70b2b0b19228ed6b054ce968896c3a5db5-1024x1024-png',
@@ -296,7 +296,7 @@ export const batch1Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'قائمة مستلزمات المطاعم الغذائية بالجملة | منافذ التوريد',
-        en: 'Restaurant Food Supplies Master Checklist | Mnaveeh ALTourid',
+        en: 'Restaurant Food Supplies Master Checklist | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -368,7 +368,7 @@ export const batch1Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'عقود توريد مواد غذائية للمطاعم في السعودية | منافذ التوريد',
-        en: 'Annual Food Supply Agreements for Restaurants in KSA | Mnaveeh',
+        en: 'Annual Food Supply Agreements for Restaurants in KSA | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -426,7 +426,7 @@ export const batch2Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'لحوم مجمدة عالية الجودة بالجملة للمطاعم - منافذ التوريد',
-        en: 'Premium wholesale frozen meat for commercial restaurants - Mnaveeh',
+        en: 'Premium wholesale frozen meat for commercial restaurants - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-dbad52a6b1c48732859010b68eff40edcaf4c60d-1254x1254-png',
@@ -442,7 +442,7 @@ export const batch2Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'شراء لحوم مجمدة بالجملة للمطاعم في السعودية | منافذ التوريد',
-        en: 'Bulk Frozen Meat Procurement Guide in Saudi Arabia | Mnaveeh',
+        en: 'Bulk Frozen Meat Procurement Guide in Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -499,7 +499,7 @@ export const batch2Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'كبدة بقري مجمدة كرتون جملة للمطاعم - منافذ التوريد',
-        en: 'Wholesale frozen beef liver blocks for commercial restaurants - Mnaveeh',
+        en: 'Wholesale frozen beef liver blocks for commercial restaurants - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-6200e7bf56ec75a469c0ef2cc394343d5475996f-1672x941-png',
@@ -515,7 +515,7 @@ export const batch2Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'موردين كبدة مجمدة بالجملة في الرياض وجدة | منافذ التوريد',
-        en: 'Wholesale Frozen Liver Suppliers in Riyadh & Jeddah | Mnaveeh',
+        en: 'Wholesale Frozen Liver Suppliers in Riyadh & Jeddah | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -570,7 +570,7 @@ export const batch2Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'شاحنات النقل المبرد اللوجستي لنقل الأغذية واللحوم المجمدة - منافذ التوريد',
-        en: 'Refrigerated fleet for frozen meat and food supply logistics - Mnaveeh',
+        en: 'Refrigerated fleet for frozen meat and food supply logistics - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-31399ab1420f1da04c406f85aa7768354a2eb9e3-1024x1024-png',
@@ -586,7 +586,7 @@ export const batch2Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'سلسلة التبريد لنقل اللحوم المجمدة في السعودية | منافذ التوريد',
-        en: 'Cold Chain Logistics for Frozen Meat in Saudi Arabia | Mnaveeh',
+        en: 'Cold Chain Logistics for Frozen Meat in Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -641,7 +641,7 @@ export const batch2Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'مطابقة اشتراطات هيئة الغذاء والدواء في استيراد وتخزين اللحوم - منافذ التوريد',
-        en: 'SFDA food safety compliance in meat import and storage - Mnaveeh',
+        en: 'SFDA food safety compliance in meat import and storage - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-4befc15708b0c5ae655e86a842a483facc23cad0-1408x768-png',
@@ -657,7 +657,7 @@ export const batch2Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'اشتراطات الغذاء والدواء لاستيراد اللحوم المجمدة بالسعودية | منافذ التوريد',
-        en: 'SFDA Frozen Meat Importation Regulations & Standards | Mnaveeh',
+        en: 'SFDA Frozen Meat Importation Regulations & Standards | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -712,7 +712,7 @@ export const batch2Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'مقارنة قطعيات اللحوم المستوردة البرازيلية والهندية للمطابخ التجارية',
-        en: 'Brazilian and Indian commercial imported beef cuts comparison - Mnaveeh',
+        en: 'Brazilian and Indian commercial imported beef cuts comparison - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-23e2d63d1bf5f20d65ae548a548b5627a82f59df-1024x1024-png',
@@ -728,7 +728,7 @@ export const batch2Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'مقارنة اللحوم البرازيلية والهندية للمطاعم بالجملة | منافذ التوريد',
-        en: 'Brazilian vs Indian Frozen Meat for Commercial Kitchens | Mnaveeh',
+        en: 'Brazilian vs Indian Frozen Meat for Commercial Kitchens | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -787,7 +787,7 @@ export const batch3Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'توريد مواد غذائية وإعاشة فنادق مكة وجدة والمدينة - منافذ التوريد',
-        en: 'Hotel & Hospitality Food Supply in Makkah and Jeddah - Mnaveeh',
+        en: 'Hotel & Hospitality Food Supply in Makkah and Jeddah - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-b49c59a43c4b161df3b706b262ab2d9590549f19-1200x896-png',
@@ -803,7 +803,7 @@ export const batch3Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'شركات إعاشة وتوريد فنادق مكة والمدينة وجدة بالجملة | منافذ التوريد',
-        en: 'Hotel Food Catering & Bulk Supply in Makkah, Madinah & Jeddah | Mnaveeh',
+        en: 'Hotel Food Catering & Bulk Supply in Makkah, Madinah & Jeddah | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -832,7 +832,7 @@ export const batch3Articles: ArticleData[] = [
       b('Hospitality Food Supply Dynamics in Western Province', 'p11en-h2-1', 'h2'),
       b('Hotels in Makkah, Madinah, and Jeddah operate under unprecedented demand surges during Ramadan, Hajj, and Umrah seasons, necessitating robust food supply lines.', 'p11en-b1'),
       b('Central Zone Logistics & Delivery Precision', 'p11en-h2-2', 'h2'),
-      b('Strict municipal traffic curfews around the Holy Mosques require specialized delivery permits and strategic buffer inventory management, seamlessly executed by Mnaveeh ALTourid.', 'p11en-b2'),
+      b('Strict municipal traffic curfews around the Holy Mosques require specialized delivery permits and strategic buffer inventory management, seamlessly executed by Mnaveth ALTourid.', 'p11en-b2'),
       b('Tailored Menus & Comprehensive Buffet Staples', 'p11en-h2-3', 'h2'),
       b('From premium Basmati rice and Halal certified meats to bulk frying oils and canned provisions, our multi-category wholesale catalog caters to diverse international pilgrim palettes.', 'p11en-b3'),
     ],
@@ -859,7 +859,7 @@ export const batch3Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'عقود ومناقصات توريد المواد الغذائية الحكومية - منافذ التوريد',
-        en: 'Government & Corporate Food Supply Contracts - Mnaveeh',
+        en: 'Government & Corporate Food Supply Contracts - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-fe7f89322bd76cec74c8b4b52c3490705f59cc4a-1200x896-png',
@@ -875,7 +875,7 @@ export const batch3Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'عقود ومناقصات توريد الأغذية الحكومية والمؤسسية | منافذ التوريد',
-        en: 'Government & Mega Corporate Food Procurement Contracts Saudi Arabia | Mnaveeh',
+        en: 'Government & Mega Corporate Food Procurement Contracts Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -901,8 +901,8 @@ export const batch3Articles: ArticleData[] = [
       b('Government catering and food supply tenders for military, healthcare, and educational institutions demand uncompromising standards of quality, financial stability, and SFDA compliance.', 'p12en-b1'),
       b('Key Prerequisites for Etimad Platform Food Tenders', 'p12en-h2-2', 'h2'),
       b('A valid commercial registry, ZATCA tax clearance, Saudization certificates, and rigorous SLA penalty agreements form the bedrock of winning government food contracts.', 'p12en-b2'),
-      b('Corporate Supply Reliability with Mnaveeh', 'p12en-h2-3', 'h2'),
-      b('Mnaveeh ALTourid operates as a vetted, dependable food supply partner with expansive multi-city warehousing, direct import capabilities, and flexible periodic billing.', 'p12en-b3'),
+      b('Corporate Supply Reliability with Mnaveth ALTourid', 'p12en-h2-3', 'h2'),
+      b('Mnaveth ALTourid operates as a vetted, dependable food supply partner with expansive multi-city warehousing, direct import capabilities, and flexible periodic billing.', 'p12en-b3'),
     ],
   },
   {
@@ -927,7 +927,7 @@ export const batch3Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'توريد أغذية مخيمات العمال ومشاريع الإنشاءات في السعودية - منافذ التوريد',
-        en: 'Labor camp food catering and megaproject supply - Mnaveeh',
+        en: 'Labor camp food catering and megaproject supply - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-ffb7231f9d5cc6362d8238d8559a1bc8d6aa69af-1200x896-png',
@@ -943,7 +943,7 @@ export const batch3Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'تموين سكن العمال ومشاريع المقاولات بالجملة في السعودية | منافذ التوريد',
-        en: 'Labor Camp Food Catering & Construction Sites Wholesale Supply | Mnaveeh',
+        en: 'Labor Camp Food Catering & Construction Sites Wholesale Supply | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -970,7 +970,7 @@ export const batch3Articles: ArticleData[] = [
       b('Daily Ration Calculations for High-Energy Field Work', 'p13en-h2-2', 'h2'),
       b('Caloric density hinges on bulk rice, high-yield edible oils, and cost-effective frozen proteins like beef and poultry, delivered in industrial 20kg to 50kg wholesale packings.', 'p13en-b2'),
       b('Remote Site Logistics Across the Kingdom', 'p13en-h2-3', 'h2'),
-      b('Mnaveeh ALTourid guarantees reliable scheduled supply dispatches to remote worker compounds and construction camps, maintaining cold chain integrity throughout transit.', 'p13en-b3'),
+      b('Mnaveth ALTourid guarantees reliable scheduled supply dispatches to remote worker compounds and construction camps, maintaining cold chain integrity throughout transit.', 'p13en-b3'),
     ],
   },
   {
@@ -995,7 +995,7 @@ export const batch3Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'إدارة سلاسل التوريد الغذائي في مواسم الذروة بالسعودية - منافذ التوريد',
-        en: 'Peak season food supply chain management in Saudi Arabia - Mnaveeh',
+        en: 'Peak season food supply chain management in Saudi Arabia - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-99e1addbc325b91a794a660bac22d691c75714b8-1734x907-png',
@@ -1011,7 +1011,7 @@ export const batch3Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'تأمين المخزون الغذائي لمواسم الذروة ورمضان وموسم الرياض بالجملة | منافذ التوريد',
-        en: 'Securing Food Inventory During Peak Seasons (Ramadan & Riyadh Season) | Mnaveeh',
+        en: 'Securing Food Inventory During Peak Seasons (Ramadan & Riyadh Season) | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -1037,8 +1037,8 @@ export const batch3Articles: ArticleData[] = [
       b('Events like the holy month of Ramadan, Hajj, and Riyadh Season trigger unprecedented surges in food consumption, challenging inventory availability and baseline logistics.', 'p14en-b1'),
       b('Four Strategic Pillars for Mitigating Seasonal Food Risks', 'p14en-h2-2', 'h2'),
       b('Proactive demand forecasting 60-90 days in advance, fixed-price supply agreements, diversified sourcing origins, and 24/7 delivery dispatches safeguard business continuity.', 'p14en-b2'),
-      b('Reliable Buffer Inventory Management with Mnaveeh', 'p14en-h2-3', 'h2'),
-      b('Mnaveeh ALTourid operates resilient regional warehouses and dedicated reefer delivery fleets to insulate commercial partners from market shortages during peak trading windows.', 'p14en-b3'),
+      b('Reliable Buffer Inventory Management with Mnaveth ALTourid', 'p14en-h2-3', 'h2'),
+      b('Mnaveth ALTourid operates resilient regional warehouses and dedicated reefer delivery fleets to insulate commercial partners from market shortages during peak trading windows.', 'p14en-b3'),
     ],
   },
   {
@@ -1063,7 +1063,7 @@ export const batch3Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'معايير الجودة وسلامة الغذاء والهاسب في مستودعات الأغذية - منافذ التوريد',
-        en: 'HACCP & ISO Food Safety in Saudi Food Warehouses - Mnaveeh',
+        en: 'HACCP & ISO Food Safety in Saudi Food Warehouses - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-f7afd3780d236ecc816f2b187e71005ea3d9e625-1451x1084-png',
@@ -1079,7 +1079,7 @@ export const batch3Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'معايير الهاسب والآيزو في مستودعات المواد الغذائية بالسعودية | منافذ التوريد',
-        en: 'HACCP & ISO 22000 Standards in Saudi Food Storage Warehouses | Mnaveeh',
+        en: 'HACCP & ISO 22000 Standards in Saudi Food Storage Warehouses | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -1136,7 +1136,7 @@ export const batch4Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'أرز بسمتي هندي فاخر بالجملة للمطاعم - منافذ التوريد',
-        en: 'Premium wholesale Indian Basmati rice for Saudi restaurants - Mnaveeh',
+        en: 'Premium wholesale Indian Basmati rice for Saudi restaurants - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-59490b248b32e2013b3122cc27e0d7f9f9adc15d-1254x1254-png',
@@ -1152,7 +1152,7 @@ export const batch4Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'شراء أرز بسمتي هندي بالجملة للمطاعم في السعودية | منافذ التوريد',
-        en: 'Bulk Indian Basmati Rice Wholesale for Saudi Restaurants | Mnaveeh',
+        en: 'Bulk Indian Basmati Rice Wholesale for Saudi Restaurants | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -1178,8 +1178,8 @@ export const batch4Articles: ArticleData[] = [
       b('In Saudi culinary tradition, long-grain Basmati rice underpins signature dishes like Kabsa and Mandi, making grain yield and texture consistency critical for restaurant profitability.', 'p16en-b1'),
       b('Comparing 1121 Sella Parboiled vs Classic White Basmati', 'p16en-h2-2', 'h2'),
       b('Parboiled 1121 Sella delivers exceptional heat resistance and double grain elongation in high-volume commercial pots, while White Basmati provides unmatched natural aroma for premium hotel banquets.', 'p16en-b2'),
-      b('Direct Indian Mill Import & Bulk Sourcing with Mnaveeh', 'p16en-h2-3', 'h2'),
-      b('Mnaveeh ALTourid supplies aged Basmati rice directly to Saudi restaurateurs in 10kg and 40kg wholesale bags with guaranteed lot consistency across all seasons.', 'p16en-b3'),
+      b('Direct Indian Mill Import & Bulk Sourcing with Mnaveth ALTourid', 'p16en-h2-3', 'h2'),
+      b('Mnaveth ALTourid supplies aged Basmati rice directly to Saudi restaurateurs in 10kg and 40kg wholesale bags with guaranteed lot consistency across all seasons.', 'p16en-b3'),
     ],
   },
   {
@@ -1204,7 +1204,7 @@ export const batch4Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'توريد زيوت طعام وقلي بالجملة للمطاعم والمصانع - منافذ التوريد',
-        en: 'Wholesale cooking oils for commercial restaurants - Mnaveeh',
+        en: 'Wholesale cooking oils for commercial restaurants - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-9e386b13a5e41e6cc5dd811f350dbaa7846006ca-1200x896-png',
@@ -1220,7 +1220,7 @@ export const batch4Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'توريد زيوت طعام وقلي بالجملة للمطاعم في السعودية | منافذ التوريد',
-        en: 'Commercial Cooking & Frying Oil Wholesale Supply Saudi Arabia | Mnaveeh',
+        en: 'Commercial Cooking & Frying Oil Wholesale Supply Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -1246,7 +1246,7 @@ export const batch4Articles: ArticleData[] = [
       b('Commercial fryers in Saudi fast food and catering operations process hundreds of liters weekly; oil thermal stability directly impacts kitchen overhead and food crispiness.', 'p17en-b1'),
       b('Palm Olein vs Sunflower vs Blended Vegetable Oils', 'p17en-h2-2', 'h2'),
       b('Palm olein delivers unmatched longevity with a 235C smoke point for high-turnover deep frying, while pure sunflower oil is optimal for light sauteing and delicate flavor preservation.', 'p17en-b2'),
-      b('Bulk Tins & Regular Delivery from Mnaveeh', 'p17en-h2-3', 'h2'),
+      b('Bulk Tins & Regular Delivery from Mnaveth ALTourid', 'p17en-h2-3', 'h2'),
       b('We distribute certified 17L and 18L industrial tins across Riyadh and Jeddah, supporting restaurant groups with contract supply predictability.', 'p17en-b3'),
     ],
   },
@@ -1272,7 +1272,7 @@ export const batch4Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'معلبات غذائية ومعجون طماطم وبقوليات بالجملة - منافذ التوريد',
-        en: 'Wholesale canned foods and tomato paste - Mnaveeh',
+        en: 'Wholesale canned foods and tomato paste - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-8d0c38aa65a3536935c0ad34ff0e5adf05c9943a-1200x896-png',
@@ -1288,7 +1288,7 @@ export const batch4Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'توريد معلبات غذائية ومعجون طماطم بالجملة في السعودية | منافذ التوريد',
-        en: 'Wholesale Canned Foods & Bulk Tomato Paste Supplier Saudi Arabia | Mnaveeh',
+        en: 'Wholesale Canned Foods & Bulk Tomato Paste Supplier Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -1316,8 +1316,8 @@ export const batch4Articles: ArticleData[] = [
       b('Canned foods guarantee immediate culinary readiness, consistent portion yields, and a 2-3 year ambient shelf life, eliminating pre-soaking and preparation downtime.', 'p18en-b1'),
       b('Tomato Paste Quality Metrics & Brix Concentration', 'p18en-h2-2', 'h2'),
       b('Commercial kitchens rely on Brix 28-30% paste for robust color and rich viscosity; institutional A10 (3kg-4.5kg) tins reduce packaging waste and deliver 35% procurement savings.', 'p18en-b2'),
-      b('Comprehensive Legumes Catalog with Mnaveeh', 'p18en-h2-3', 'h2'),
-      b('From fava beans and chickpeas to mushrooms and sweet corn, Mnaveeh ALTourid distributes certified canned provisions directly to restaurant chains and central kitchens.', 'p18en-b3'),
+      b('Comprehensive Legumes Catalog with Mnaveth ALTourid', 'p18en-h2-3', 'h2'),
+      b('From fava beans and chickpeas to mushrooms and sweet corn, Mnaveth ALTourid distributes certified canned provisions directly to restaurant chains and central kitchens.', 'p18en-b3'),
     ],
   },
   {
@@ -1342,7 +1342,7 @@ export const batch4Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'توريد تمور سعودية فاخرة بالجملة للفنادق والشركات - منافذ التوريد',
-        en: 'Premium Saudi dates wholesale for corporate hospitality - Mnaveeh',
+        en: 'Premium Saudi dates wholesale for corporate hospitality - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-654b7c3d5ab43686e0309e2c1655a9db56ee6527-1200x896-png',
@@ -1358,7 +1358,7 @@ export const batch4Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'توريد تمور فاخرة بالجملة للفنادق والشركات في السعودية | منافذ التوريد',
-        en: 'Premium Saudi Dates Wholesale Supplier for Hospitality & Corporate | Mnaveeh',
+        en: 'Premium Saudi Dates Wholesale Supplier for Hospitality & Corporate | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -1384,8 +1384,8 @@ export const batch4Articles: ArticleData[] = [
       b('Premium Saudi dates represent cultural heritage and premier hospitality across 5-star hotel lobbies, royal lounges, and corporate executive suites.', 'p19en-b1'),
       b('Premier Date Varieties for Corporate Hospitality', 'p19en-h2-2', 'h2'),
       b('Crisp golden Qassim Sukkari is the hallmark pairing for Arabic coffee, rich Al-Ahsa Khalas is perfect for artisan nut fillings, and Madinah Ajwa serves as the ultimate gift of honor.', 'p19en-b2'),
-      b('Hygienic Single-Wrap & Bulk Packaging with Mnaveeh', 'p19en-h2-3', 'h2'),
-      b('Mnaveeh ALTourid distributes individually flow-wrapped hygienic dates and climate-stored wholesale boxes to premier hospitality clients throughout the Kingdom.', 'p19en-b3'),
+      b('Hygienic Single-Wrap & Bulk Packaging with Mnaveth ALTourid', 'p19en-h2-3', 'h2'),
+      b('Mnaveth ALTourid distributes individually flow-wrapped hygienic dates and climate-stored wholesale boxes to premier hospitality clients throughout the Kingdom.', 'p19en-b3'),
     ],
   },
   {
@@ -1410,7 +1410,7 @@ export const batch4Articles: ArticleData[] = [
       alt: {
         _type: 'localizedString',
         ar: 'مستقبل سلاسل الإمداد الغذائي في السعودية ورؤية 2030 - منافذ التوريد',
-        en: 'Future of food supply chains in Saudi Arabia under Vision 2030 - Mnaveeh',
+        en: 'Future of food supply chains in Saudi Arabia under Vision 2030 - Mnaveth ALTourid',
       },
       asset: {
         _ref: 'image-501b2f1789b17aa3d5227d0cf5539dabebcd6b66-1734x907-png',
@@ -1426,7 +1426,7 @@ export const batch4Articles: ArticleData[] = [
       title: {
         _type: 'localizedString',
         ar: 'مستقبل سلاسل الإمداد الغذائي والتجارة في السعودية رؤية 2030 | منافذ التوريد',
-        en: 'Future of Food Supply Chains & B2B Trading in Saudi Arabia Vision 2030 | Mnaveeh',
+        en: 'Future of Food Supply Chains & B2B Trading in Saudi Arabia Vision 2030 | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -1452,8 +1452,8 @@ export const batch4Articles: ArticleData[] = [
       b('Under Saudi Vision 2030, the foodservice and bulk trading sector is evolving into an integrated, digitized ecosystem driven by state-of-the-art cold hubs and dry port corridors.', 'p20en-b1'),
       b('Key Pillars Shaping the Next Decade of Food Procurement', 'p20en-h2-2', 'h2'),
       b('National food security buffers, automated IoT temperature monitoring, FASAH customs integration, and direct rail logistics ensure seamless trade from maritime docks to commercial kitchens.', 'p20en-b2'),
-      b('Leading the B2B Supply Frontier with Mnaveeh ALTourid', 'p20en-h2-3', 'h2'),
-      b('Mnaveeh ALTourid continues to pioneer tech-enabled B2B food distribution across Saudi Arabia, empowering hotels, mega-camps, and restaurant groups with resilient supply chain architectures.', 'p20en-b3'),
+      b('Leading the B2B Supply Frontier with Mnaveth ALTourid', 'p20en-h2-3', 'h2'),
+      b('Mnaveth ALTourid continues to pioneer tech-enabled B2B food distribution across Saudi Arabia, empowering hotels, mega-camps, and restaurant groups with resilient supply chain architectures.', 'p20en-b3'),
     ],
   },
 ]
@@ -1531,24 +1531,24 @@ export const batch5PrArticles: ArticleData[] = [
     _type: 'article',
     title: {
       _type: 'localizedString',
-      ar: 'مسيرة 24 عاماً في قيادة سلاسل التوريد الغذائي: كيف رسخت «منافذ التوريد» معايير الجودة وسلامة الغذاء منذ 2004؟',
-      en: 'A 24-Year Legacy in Food Supply Leadership: How Mnaveth ALTourid Redefined Quality and Cold Chain Standards Since 2004',
+      ar: 'مسيرة 22 عاماً في قيادة سلاسل التوريد الغذائي: كيف رسخت «منافذ التوريد» معايير الجودة وسلامة الغذاء منذ 2004؟',
+      en: 'A 22-Year Legacy in Food Supply Leadership: How Mnaveth ALTourid Redefined Quality and Cold Chain Standards Since 2004',
     },
     slug: {
       _type: 'slug',
-      current: '24-years-excellence-food-supply-saudi-arabia-since-2004',
+      current: '22-years-excellence-food-supply-saudi-arabia-since-2004',
     },
     excerpt: {
       _type: 'localizedText',
       ar: 'تقرير شامل يسلط الضوء على رحلة شركة منافذ التوريد للتجارة منذ انطلاقتها عام 2004، ونجاحها في بناء شبكة إمداد غذائي موثوقة تخدم أكثر من 500 عميل وتدير ما يزيد عن 1,200 شحنة سنوية عبر أرجاء المملكة.',
-      en: 'An in-depth business report chronicling Mnaveth ALTourid Trading Co.’s 24-year journey since 2004, scaling institutional wholesale distribution to over 500 corporate clients with 1,200+ annual shipments across Saudi Arabia.',
+      en: 'An in-depth business report chronicling Mnaveth ALTourid Trading Co.’s 22-year journey since 2004, scaling institutional wholesale distribution to over 500 corporate clients with 1,200+ annual shipments across Saudi Arabia.',
     },
     coverImage: {
       _type: 'localizedImage',
       alt: {
         _type: 'localizedString',
-        ar: 'مستودعات شركة منافذ التوريد للتجارة - 24 عاماً من الخبرة والريادة في التوريد الغذائي',
-        en: 'Mnaveth ALTourid Warehouses - 24 Years of Supply Chain Excellence Since 2004',
+        ar: 'مستودعات شركة منافذ التوريد للتجارة - 22 عاماً من الخبرة والريادة في التوريد الغذائي',
+        en: 'Mnaveth ALTourid Warehouses - 22 Years of Supply Chain Excellence Since 2004',
       },
       asset: {
         _ref: 'image-6b3ae46a1f5a6338a75c86b55c4853c8b3b6e00a-1408x768-png',
@@ -1563,18 +1563,18 @@ export const batch5PrArticles: ArticleData[] = [
       _type: 'seo',
       title: {
         _type: 'localizedString',
-        ar: 'تقرير أعمال: 24 عاماً من الريادة في سلاسل التوريد الغذائي بالمملكة | شركة منافذ التوريد للتجارة',
-        en: 'B2B Report: 24 Years of Food Logistics Excellence in Saudi Arabia | Mnaveth ALTourid',
+        ar: 'تقرير أعمال: 22 عاماً من الريادة في سلاسل التوريد الغذائي بالمملكة | شركة منافذ التوريد للتجارة',
+        en: 'B2B Report: 22 Years of Food Logistics Excellence in Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
         ar: 'قصة نجاح B2B: كيف تمكنت شركة منافذ التوريد للتجارة منذ تأسيسها عام 2004 من كسب ثقة كبرى الفنادق والمطاعم والمطابخ المركزية بالمملكة عبر الالتزام الصارم بسلامة الغذاء وضمان استقرار الأسعار.',
-        en: 'Business feature: Exploring the 24-year heritage of Mnaveth ALTourid Trading Co. since 2004, serving premier restaurants, hotels, and institutional catering groups across the Kingdom.',
+        en: 'Business feature: Exploring the 22-year heritage of Mnaveth ALTourid Trading Co. since 2004, serving premier restaurants, hotels, and institutional catering groups across the Kingdom.',
       },
     },
     body: [
       b('من التأسيس إلى الريادة الوطنية: ربع قرن من الثقة والتميز', 'pr2-h2-1', 'h2'),
-      b('عندما انطلقت شركة منافذ التوريد للتجارة في العاصمة الرياض عام 2004، كان قطاع تجارة الأغذية بالجملة يعتمد على قنوات تقليدية. وعلى مدار أكثر من 24 عاماً، وضعت الشركة نصب أعينها التحول إلى شريك استراتيجي طويل الأمد لقطاع الأعمال، وليس مجرد مورد بضائع عابر.', 'pr2-b1'),
+      b('عندما انطلقت شركة منافذ التوريد للتجارة في العاصمة الرياض عام 2004، كان قطاع تجارة الأغذية بالجملة يعتمد على قنوات تقليدية. وعلى مدار أكثر من عقدين (22 عاماً)، وضعت الشركة نصب أعينها التحول إلى شريك استراتيجي طويل الأمد لقطاع الأعمال، وليس مجرد مورد بضائع عابر.', 'pr2-b1'),
       b('أرقام وإنجازات تعكس حجم الحضور في السوق السعودي', 'pr2-h2-2', 'h2'),
       b('اليوم، تفخر «منافذ التوريد» بسجل حافل يضم أكثر من 500 عميل نشط في قطاعات الفنادق، المستشفيات، سلاسل المطاعم، والجهات الحكومية، مع إدارة وتشغيل ما يزيد عن 1,200 شحنة تجارية سنوياً ترتبط بمصادر توريد معتمدة من أكثر من 20 دولة حول العالم.', 'pr2-b2'),
       b('ثلاث ركائز جعلت «منافذ التوريد» الخيار الأول لمديري المشتريات', 'pr2-h2-3', 'h2'),

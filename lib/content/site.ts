@@ -3,11 +3,16 @@ import type { IconKey } from './types'
 
 export type NavItem = { id: string; href: string; label: Localized }
 
+export const foundingYear = 2004
+export const yearsOfExperience = Math.max(1, new Date().getFullYear() - foundingYear)
+
 export const site = {
   brand: {
-    name: { ar: 'منافذ التوريد', en: 'Mnaveeh ALTourid' } satisfies Localized,
-    subtitle: { ar: 'Mnaveeh ALTourid · since 2004', en: 'Food supply · since 2004' } satisfies Localized,
-    homeLabel: { ar: 'منافذ التوريد - الرئيسية', en: 'Mnaveeh ALTourid - Home' } satisfies Localized,
+    name: { ar: 'منافذ التوريد', en: 'Mnaveth ALTourid' } satisfies Localized,
+    subtitle: { ar: 'Mnaveth ALTourid · since 2004', en: 'Food supply · since 2004' } satisfies Localized,
+    homeLabel: { ar: 'منافذ التوريد - الرئيسية', en: 'Mnaveth ALTourid - Home' } satisfies Localized,
+    commercialRegistration: '1116011768',
+    taxId: undefined as string | undefined,
     // Replace these files with the approved logo and company photos; no code changes are needed.
     logo: '/images/logo.png',
     heroImage: '/images/hero.png',
@@ -17,14 +22,14 @@ export const site = {
   metadata: {
     title: {
       ar: 'منافذ التوريد | شريكك الموثوق في توريد المواد الغذائية منذ 2004',
-      en: 'Mnaveeh ALTourid | Your trusted partner in food supply since 2004',
+      en: 'Mnaveth ALTourid | Your trusted partner in food supply since 2004',
     } satisfies Localized,
     description: {
       ar: 'منافذ التوريد شركة رائدة في استيراد وتوريد وتوزيع المواد الغذائية، من المصدر إلى وجهتك بجودة عالمية وسلاسل إمداد متكاملة للمطاعم والفنادق والقطاعات المختلفة.',
-      en: 'Mnaveeh ALTourid is a leading importer, supplier and distributor of food products, from source to destination with global quality and integrated supply chains for restaurants, hotels and many other sectors.',
+      en: 'Mnaveth ALTourid is a leading importer, supplier and distributor of food products, from source to destination with global quality and integrated supply chains for restaurants, hotels and many other sectors.',
     } satisfies Localized,
-    productsTitle: { ar: 'المنتجات | منافذ التوريد', en: 'Products | Mnaveeh ALTourid' } satisfies Localized,
-    branchesTitle: { ar: 'الفروع | منافذ التوريد', en: 'Branches | Mnaveeh ALTourid' } satisfies Localized,
+    productsTitle: { ar: 'المنتجات | منافذ التوريد', en: 'Products | Mnaveth ALTourid' } satisfies Localized,
+    branchesTitle: { ar: 'الفروع | منافذ التوريد', en: 'Branches | Mnaveth ALTourid' } satisfies Localized,
   },
   nav: [
     { id: 'home', href: '/#home', label: { ar: 'الرئيسية', en: 'Home' } },
@@ -94,7 +99,7 @@ export const site = {
     title: { ar: 'خبرة طويلة في توريد المواد الغذائية', en: 'Long experience in food supply' },
     text: {
       ar: 'منافذ التوريد شركة رائدة في مجال استيراد وتوريد وتوزيع المواد الغذائية. نربط المصدر بالأسواق المحلية والإقليمية من خلال حلول متكاملة وآمنة تضمن أعلى معايير الجودة والكفاءة في سلسلة الإمداد.',
-      en: 'Mnaveeh ALTourid is a leading company in importing, supplying and distributing food products. We connect the source to local and regional markets through integrated, safe solutions that uphold the highest standards of quality and efficiency across the supply chain.',
+      en: 'Mnaveth ALTourid is a leading company in importing, supplying and distributing food products. We connect the source to local and regional markets through integrated, safe solutions that uphold the highest standards of quality and efficiency across the supply chain.',
     },
     cta: { ar: 'المزيد عن الشركة', en: 'More about the company' },
     imageAlt: {
@@ -166,7 +171,7 @@ export const site = {
   stats: {
     label: { ar: 'إحصائيات الشركة', en: 'Company statistics' },
     items: [
-      { icon: 'award', value: 24, label: { ar: 'عام من الخبرة', en: 'Years of experience' } },
+      { icon: 'award', value: yearsOfExperience, label: { ar: 'عام من الخبرة', en: 'Years of experience' } },
       { icon: 'users', value: 500, label: { ar: 'عميل من القطاعات المختلفة', en: 'Clients across sectors' } },
       { icon: 'container', value: 1200, label: { ar: 'شحنة سنويًا', en: 'Shipments per year' } },
       { icon: 'globe', value: 20, label: { ar: 'دولة موردة', en: 'Supplier countries' } },
@@ -215,6 +220,6 @@ export const site = {
     quickLinks: { ar: 'روابط سريعة', en: 'Quick links' },
     services: { ar: 'خدماتنا', en: 'Our services' },
     contact: { ar: 'تواصل معنا', en: 'Contact us' },
-    rights: { ar: 'منافذ التوريد. جميع الحقوق محفوظة.', en: 'Mnaveeh ALTourid. All rights reserved.' },
+    rights: { ar: 'منافذ التوريد. جميع الحقوق محفوظة.', en: 'Mnaveth ALTourid. All rights reserved.' },
   },
 }

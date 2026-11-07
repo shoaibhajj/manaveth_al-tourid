@@ -50,6 +50,20 @@ export const siteSettings = defineType({
       type: 'localizedString',
       group: 'identity',
     }),
+    defineField({
+      name: 'taxId',
+      title: 'الرقم الضريبي (Tax ID / VAT)',
+      description: 'الرقم الضريبي المسجل لدى هيئة الزكاة والضريبة والجمارك (ZATCA). يظهر في بيانات السكيمة ومحركات البحث فقط عند إدخاله.',
+      type: 'string',
+      group: 'identity',
+    }),
+    defineField({
+      name: 'commercialRegistration',
+      title: 'رقم السجل التجاري (CR Number)',
+      description: 'رقم السجل التجاري المعتمد لدى وزارة التجارة (مثال: 1116011768).',
+      type: 'string',
+      group: 'identity',
+    }),
     defineField({ name: 'phone', title: 'الهاتف', type: 'string', group: 'contact' }),
     defineField({
       name: 'email',

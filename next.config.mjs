@@ -72,6 +72,17 @@ const nextConfig = {
     { source: '/en/products/mnv-pk-01', destination: '/en/products/heavy-duty-aluminum-foil-catering', permanent: true },
     { source: '/products/mnv-pk-02', destination: '/products/cling-film-wrap-food-grade', permanent: true },
     { source: '/en/products/mnv-pk-02', destination: '/en/products/cling-film-wrap-food-grade', permanent: true },
+    // F5: 301 Permanent Redirect for updated 22-year legacy article slug
+    {
+      source: '/blog/24-years-excellence-food-supply-saudi-arabia-since-2004',
+      destination: '/blog/22-years-excellence-food-supply-saudi-arabia-since-2004',
+      permanent: true,
+    },
+    {
+      source: '/en/blog/24-years-excellence-food-supply-saudi-arabia-since-2004',
+      destination: '/en/blog/22-years-excellence-food-supply-saudi-arabia-since-2004',
+      permanent: true,
+    },
   ],
 }
 

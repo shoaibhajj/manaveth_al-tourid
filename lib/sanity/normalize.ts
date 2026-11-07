@@ -478,6 +478,8 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
         logo: imageUrl(settings.logo, 600) ?? base.site.brand.logo,
         aboutImage: imageUrl(about.image, 1000) ?? base.site.brand.aboutImage,
         ctaImage: imageUrl(home.contact?.image, 1000) ?? base.site.brand.ctaImage,
+        taxId: clean(settings.taxId) || undefined,
+        commercialRegistration: clean(settings.commercialRegistration) || base.site.brand.commercialRegistration,
       },
       hero: {
         ...base.site.hero,

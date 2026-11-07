@@ -7,7 +7,7 @@
 
 ### 1. تجديد رمز الكتابة في Sanity (Rotate API Write Token)
 1. افتح لوحة تحكم [Sanity Management](https://www.sanity.io/manage).
-2. اختر المشروع: `10ol7pkg` (Mnaveeh ALTourid).
+2. اختر المشروع: `10ol7pkg` (Mnaveth ALTourid).
 3. انتقل إلى تبويب **API** ⟵ **Tokens**.
 4. احذف الرمز القديم (Revoke old write tokens).
 5. أنشئ رمزا جديداً للصلاحيات (Write Token) وسمّه مثلاً `Vercel Production Write Token 2026`.

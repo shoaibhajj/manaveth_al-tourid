@@ -169,7 +169,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
 
     const header = isAr
       ? `السلام عليكم ورحمة الله وبركاته،\nنود طلب عرض سعر رسمي للأصناف والكميات التموينية التالية من شركة منافذ التوريد:\n`
-      : `Hello,\nWe would like to request an official wholesale quotation for the following items from Mnaveeh ALTourid:\n`
+      : `Hello,\nWe would like to request an official wholesale quotation for the following items from Mnaveth ALTourid:\n`
 
     const itemsText = selectedList
       .map((item, idx) => {

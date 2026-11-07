@@ -33,7 +33,11 @@ export type AboutData = Omit<typeof site.about, 'pillars'> & {
 
 export type StatItem = { id: string; icon: IconKey; value: number; prefix?: string; suffix?: string; label: Localized }
 
-export type SiteData = Omit<typeof site, 'hero' | 'about' | 'stats'> & {
+export type SiteData = Omit<typeof site, 'hero' | 'about' | 'stats' | 'brand'> & {
+  brand: typeof site.brand & {
+    taxId?: string
+    commercialRegistration?: string
+  }
   hero: HeroData
   about: AboutData
   stats: { label: Localized; items: StatItem[] }

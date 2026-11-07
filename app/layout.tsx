@@ -30,7 +30,6 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(base),
     title: home.title[locale],
     description: home.description[locale],
-    generator: 'v0.app',
     icons: { icon, apple: icon },
     verification: {
       google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,

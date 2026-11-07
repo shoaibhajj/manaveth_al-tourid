@@ -66,7 +66,7 @@ const enrichedProducts = [
       title: {
         _type: 'localizedString',
         ar: 'أرز بسمتي هندي فاخر بالجملة للشركات والمطاعم في الرياض وجدة | منافذ التوريد',
-        en: 'Premium Indian Basmati Rice Wholesale for Restaurants & Companies | Mnaveeh',
+        en: 'Premium Indian Basmati Rice Wholesale for Restaurants & Companies | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -136,7 +136,7 @@ const enrichedProducts = [
       title: {
         _type: 'localizedString',
         ar: 'توريد لحوم مجمدة بالجملة للمطاعم في الرياض وجدة | منافذ التوريد',
-        en: 'Wholesale Frozen Meat Supply for Commercial Restaurants in Riyadh & Jeddah | Mnaveeh',
+        en: 'Wholesale Frozen Meat Supply for Commercial Restaurants in Riyadh & Jeddah | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -206,7 +206,7 @@ const enrichedProducts = [
       title: {
         _type: 'localizedString',
         ar: 'جملة الكبدة المجمدة للمطاعم في الرياض وجدة | منافذ التوريد',
-        en: 'Wholesale Frozen Beef Liver Suppliers in Riyadh & Jeddah | Mnaveeh',
+        en: 'Wholesale Frozen Beef Liver Suppliers in Riyadh & Jeddah | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -271,7 +271,7 @@ const enrichedProducts = [
       title: {
         _type: 'localizedString',
         ar: 'معلبات طماطم وبقوليات بالجملة للمطاعم والفنادق | منافذ التوريد',
-        en: 'Wholesale Canned Food & Tomato Paste for Restaurants & Hotels | Mnaveeh',
+        en: 'Wholesale Canned Food & Tomato Paste for Restaurants & Hotels | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -336,7 +336,7 @@ const enrichedProducts = [
       title: {
         _type: 'localizedString',
         ar: 'توريد تمور فاخرة جملة للفنادق والشركات في السعودية | منافذ التوريد',
-        en: 'Premium Bulk Dates Wholesale for Saudi Hotels & Corporate | Mnaveeh',
+        en: 'Premium Bulk Dates Wholesale for Saudi Hotels & Corporate | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -355,7 +355,7 @@ const enrichedServices = [
       title: {
         _type: 'localizedString',
         ar: 'توريد مواد غذائية بالجملة للمطاعم والفنادق في الرياض وجدة | منافذ التوريد',
-        en: 'Bulk Food Supply for Restaurants & Hotels in Riyadh & Jeddah | Mnaveeh',
+        en: 'Bulk Food Supply for Restaurants & Hotels in Riyadh & Jeddah | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -375,7 +375,7 @@ const enrichedServices = [
       title: {
         _type: 'localizedString',
         ar: 'إعاشة وتوريد المطاعم والفنادق في السعودية | منافذ التوريد',
-        en: 'Restaurant & Hotel Food Supply and Catering in Saudi Arabia | Mnaveeh',
+        en: 'Restaurant & Hotel Food Supply and Catering in Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -395,7 +395,7 @@ const enrichedServices = [
       title: {
         _type: 'localizedString',
         ar: 'خدمات النقل البري المبرد والجاف للأغذية في السعودية | منافذ التوريد',
-        en: 'Refrigerated & Dry Food Land Transport Logistics Saudi Arabia | Mnaveeh',
+        en: 'Refrigerated & Dry Food Land Transport Logistics Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',
@@ -415,7 +415,7 @@ const enrichedServices = [
       title: {
         _type: 'localizedString',
         ar: 'الاستيراد البحري للمواد الغذائية والمجمدات إلى السعودية | منافذ التوريد',
-        en: 'Maritime Food Import & Cold Storage Logistics in Saudi Arabia | Mnaveeh',
+        en: 'Maritime Food Import & Cold Storage Logistics in Saudi Arabia | Mnaveth ALTourid',
       },
       description: {
         _type: 'localizedText',

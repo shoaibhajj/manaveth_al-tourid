@@ -1,14 +1,24 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { LOCALE_HEADER } from '@/lib/i18n'
+import { resolveRedirect } from '@/lib/redirects'
 
 /**
- * Proxy Middleware (D1):
+ * Proxy Middleware (D1, E8):
+ * - Checks configured 301 redirects and safely routes traffic preserving language prefixes.
  * - Direct requests to /ar or /ar/... are permanently redirected (301) to the clean canonical path without /ar.
  * - Arabic is the default locale served at / and /*: internally rewritten to /ar/* so Next.js matches app/[locale] with params.locale = 'ar'.
  * - English is served at /en and /en/*: passed through to Next.js matching app/[locale] with params.locale = 'en'.
  */
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  // 0. Dynamic 301 Redirects (E8)
+  const matchedRedirect = resolveRedirect(pathname)
+  if (matchedRedirect) {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = matchedRedirect.destination
+    return NextResponse.redirect(redirectUrl, matchedRedirect.status)
+  }
 
   // 1. Permanent redirect (301) for direct /ar requests
   if (pathname === '/ar' || pathname.startsWith('/ar/')) {

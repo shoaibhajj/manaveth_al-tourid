@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from 'next-sanity'
 import { isSanityConfigured, sanityEnv } from '@/sanity/env'
+import { evaluateSeo } from '@/lib/seo/engine/evaluate'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,7 +32,7 @@ function slugify(text: string): string {
 }
 
 function parseCsv(text: string): Record<string, string>[] {
-  if (text.charCodeAt(0) === 0xFEFF) {
+  if (text.charCodeAt(0) === 0xfeff) {
     text = text.slice(1)
   }
   const lines: string[] = []
@@ -96,7 +97,13 @@ function parseCsv(text: string): Record<string, string>[] {
   return result
 }
 
-// POST ONLY: Secure bulk import from spreadsheet requiring environment secret
+/**
+ * E8: Safe SKU-Based Catalog Importer
+ * - Matches existing products by SKU using `*[_type == "product" && sku == $sku][0]`
+ * - Patches existing products without overwriting missing fields
+ * - Creates new products as draft documents (drafts.prod-...)
+ * - Returns structured evaluation report with evaluateSeo indexability status
+ */
 export async function POST(request: Request) {
   try {
     const adminSecret = process.env.ADMIN_API_SECRET
@@ -133,111 +140,194 @@ export async function POST(request: Request) {
       )
     }
 
-    const results: any[] = []
+    const report = {
+      totalRows: rawRows.length,
+      created: [] as any[],
+      updated: [] as any[],
+      errors: [] as any[],
+    }
+
     const categoriesSeen = new Map<string, string>()
 
     for (let index = 0; index < rawRows.length; index++) {
       const row = rawRows[index]
 
-      const sku = String(
-        row['كود الصنف (SKU)'] || row['كود الصنف'] || row['sku'] || row['SKU'] || `MNV-${index + 1}`
-      ).trim()
-      const nameAr = String(
-        row['اسم الصنف بالعربي'] || row['اسم الصنف'] || row['name_ar'] || row['name'] || ''
-      ).trim()
-      const nameEn = String(
-        row['Product Name (EN)'] || row['Product Name'] || row['name_en'] || nameAr
-      ).trim()
+      try {
+        const sku = String(
+          row['كود الصنف (SKU)'] || row['كود الصنف'] || row['sku'] || row['SKU'] || ''
+        ).trim()
+        const nameAr = String(
+          row['اسم الصنف بالعربي'] || row['اسم الصنف'] || row['name_ar'] || row['name'] || ''
+        ).trim()
+        const nameEn = String(
+          row['Product Name (EN)'] || row['Product Name'] || row['name_en'] || nameAr
+        ).trim()
 
-      if (!nameAr) continue
+        if (!sku || !nameAr) {
+          report.errors.push({
+            row: index + 2,
+            sku: sku || 'MISSING',
+            reason: 'Missing mandatory SKU or Arabic product name',
+          })
+          continue
+        }
 
-      const catAr = String(
-        row['التصنيف بالعربي'] || row['التصنيف'] || row['category_ar'] || row['category'] || 'أصناف تموينية عامة'
-      ).trim()
-      const catEn = String(
-        row['Category (EN)'] || row['Category'] || row['category_en'] || catAr
-      ).trim()
+        const productType = String(
+          row['نوع المنتج (Product Type)'] || row['productType'] || 'meat'
+        ).trim()
 
-      const originAr = String(row['بلد المنشأ'] || row['المنشأ'] || row['origin_ar'] || row['origin'] || '').trim()
-      const originEn = String(row['Origin (EN)'] || row['origin_en'] || originAr).trim()
+        const catAr = String(
+          row['التصنيف بالعربي'] || row['التصنيف'] || row['category_ar'] || 'أصناف تموينية عامة'
+        ).trim()
+        const catEn = String(
+          row['Category (EN)'] || row['Category'] || row['category_en'] || catAr
+        ).trim()
 
-      const packagingAr = String(row['التعبئة والتغليف'] || row['التعبئة'] || row['العبوة'] || row['packaging_ar'] || '').trim()
-      const packagingEn = String(row['Packaging (EN)'] || row['packaging_en'] || packagingAr).trim()
+        const brandName = String(row['العلامة التجارية (Brand)'] || row['العلامة التجارية'] || row['brand'] || '').trim()
+        const originAr = String(row['بلد المنشأ'] || row['المنشأ'] || row['origin_ar'] || '').trim()
+        const packagingAr = String(row['التعبئة والتغليف'] || row['التعبئة'] || row['العبوة'] || row['packaging_ar'] || '').trim()
+        const storageAr = String(row['درجة التخزين'] || row['التخزين'] || row['storage_ar'] || '').trim()
+        const moqText = String(row['الحد الأدنى للطلب (MOQ)'] || row['الحد الأدنى'] || row['moq'] || '').trim()
+        const serviceAreasText = String(row['مناطق ومدن الخدمة'] || row['مدن الخدمة'] || '').trim()
+        const certAr = String(row['الشهادات والاعتمادات'] || row['الشهادات'] || row['certifications_ar'] || '').trim()
+        const descAr = String(row['الوصف والمواصفات'] || row['الوصف'] || row['description_ar'] || '').trim()
+        const imageUrl = String(row['رابط الصورة'] || row['image'] || '').trim()
 
-      const storageAr = String(row['درجة التخزين'] || row['التخزين'] || row['storage_ar'] || '').trim()
-      const storageEn = String(row['Storage (EN)'] || row['storage_en'] || storageAr).trim()
+        const priceVal = parseFloat(row['السعر التقديري'] || row['السعر'] || row['price'])
+        const hasPrice = !isNaN(priceVal) && priceVal > 0
 
-      const certAr = String(row['الشهادات والاعتمادات'] || row['الشهادات'] || row['certifications_ar'] || '').trim()
-      const certEn = String(row['Certifications (EN)'] || row['certifications_en'] || certAr).trim()
+        // Resolve or create category
+        let catRefId = categoriesSeen.get(catAr)
+        if (!catRefId) {
+          const catSlug = slugify(catEn || catAr) || `cat-${index + 1}`
+          catRefId = `category-${catSlug}`
+          categoriesSeen.set(catAr, catRefId)
 
-      const descAr = String(row['الوصف والمواصفات'] || row['الوصف'] || row['description_ar'] || '').trim()
-      const descEn = String(row['Description (EN)'] || row['description_en'] || descAr).trim()
+          await client.createIfNotExists({
+            _id: catRefId,
+            _type: 'productCategory',
+            name: { _type: 'localizedString', ar: catAr, en: catEn },
+            order: categoriesSeen.size,
+            visible: true,
+          })
+        }
 
-      const priceVal = parseFloat(row['السعر التقديري'] || row['السعر'] || row['price'])
-      const hasPrice = !isNaN(priceVal) && priceVal > 0
+        // 1. Search for existing product by SKU
+        const existingProduct = await client.fetch(
+          `*[_type == "product" && sku == $sku][0]{_id, slug, name, sku}`,
+          { sku }
+        )
 
-      let catRefId = categoriesSeen.get(catAr)
-      if (!catRefId) {
-        const catSlug = slugify(catEn || catAr) || `cat-${index + 1}`
-        catRefId = `category-${catSlug}`
-        categoriesSeen.set(catAr, catRefId)
-
-        await client.createIfNotExists({
-          _id: catRefId,
-          _type: 'productCategory',
-          name: { _type: 'localizedString', ar: catAr, en: catEn },
-          order: categoriesSeen.size,
+        const fieldsToSet: Record<string, any> = {
+          name: { _type: 'localizedString', ar: nameAr, en: nameEn },
+          category: { _type: 'reference', _ref: catRefId },
+          productType,
           visible: true,
+        }
+
+        if (descAr) {
+          fieldsToSet.description = { _type: 'localizedString', ar: descAr, en: descAr }
+        }
+        if (originAr) {
+          fieldsToSet.origin = { _type: 'localizedString', ar: originAr, en: originAr }
+        }
+        if (packagingAr) {
+          fieldsToSet.packaging = { _type: 'localizedString', ar: packagingAr, en: packagingAr }
+          fieldsToSet.packSizes = [{ size: packagingAr }]
+        }
+        if (storageAr) {
+          fieldsToSet.storage = { _type: 'localizedString', ar: storageAr, en: storageAr }
+          fieldsToSet.storageState = storageAr.includes('مجمد') || storageAr.includes('-18') ? 'frozen' : 'chilled'
+        }
+        if (moqText) {
+          fieldsToSet.moq = { amount: parseInt(moqText.replace(/\D/g, '') || '1', 10), unit: moqText }
+        }
+        if (certAr) {
+          fieldsToSet.certifications = { _type: 'localizedString', ar: certAr, en: certAr }
+        }
+        if (imageUrl) {
+          fieldsToSet.image = imageUrl
+        }
+        if (hasPrice) {
+          fieldsToSet.showPrice = true
+          fieldsToSet.price = {
+            _type: 'productPrice',
+            amount: priceVal,
+            unit: { _type: 'localizedString', ar: 'ر.س', en: 'SAR' },
+          }
+        }
+
+        // SEO evaluation on imported document
+        const evaluation = evaluateSeo({
+          id: sku,
+          sku,
+          name: { ar: nameAr, en: nameEn },
+          description: descAr ? { ar: descAr, en: descAr } : undefined,
+          image: imageUrl || undefined,
+          category: { id: catRefId },
+          productType,
+          origin: originAr ? { ar: originAr, en: originAr } : undefined,
+          packaging: packagingAr ? { ar: packagingAr, en: packagingAr } : undefined,
+          storage: storageAr ? { ar: storageAr, en: storageAr } : undefined,
+          moq: moqText ? { amount: 1, unit: moqText } : undefined,
+        } as any, 'ar')
+
+        if (existingProduct) {
+          // UPDATE existing product without deleting unmapped fields (Safe Patch)
+          await client.patch(existingProduct._id).set(fieldsToSet).commit()
+
+          report.updated.push({
+            id: existingProduct._id,
+            sku,
+            name: nameAr,
+            slug: existingProduct.slug?.current || existingProduct.slug,
+            isIndexable: evaluation.isIndexable,
+            score: evaluation.score,
+          })
+        } else {
+          // CREATE new product as a DRAFT so editors can review and publish
+          const prodSlug = slugify(nameEn) || slugify(sku) || `item-${index + 1}`
+          const draftId = `drafts.prod-${prodSlug}`
+
+          const newDoc = {
+            _id: draftId,
+            _type: 'product',
+            sku,
+            slug: { _type: 'slug', current: prodSlug },
+            order: index + 1,
+            ...fieldsToSet,
+          }
+
+          const created = await client.create(newDoc)
+
+          report.created.push({
+            id: created._id,
+            sku,
+            name: nameAr,
+            slug: prodSlug,
+            isDraft: true,
+            isIndexable: evaluation.isIndexable,
+            score: evaluation.score,
+            missingFields: evaluation.missingFields,
+          })
+        }
+      } catch (rowErr: any) {
+        report.errors.push({
+          row: index + 2,
+          reason: rowErr?.message || 'Processing error',
         })
       }
-
-      // Generate slug from English name as required by F2
-      const prodSlug = slugify(nameEn) || slugify(sku) || `item-${index + 1}`
-      const prodId = `prod-${prodSlug}`
-
-      const productDoc: any = {
-        _id: prodId,
-        _type: 'product',
-        name: { _type: 'localizedString', ar: nameAr, en: nameEn },
-        slug: { _type: 'slug', current: prodSlug },
-        sku,
-        category: { _type: 'reference', _ref: catRefId },
-        order: index + 1,
-        visible: true,
-      }
-
-      if (descAr) {
-        productDoc.description = { _type: 'localizedString', ar: descAr, en: descEn || descAr }
-      }
-      if (originAr) {
-        productDoc.origin = { _type: 'localizedString', ar: originAr, en: originEn || originAr }
-      }
-      if (packagingAr) {
-        productDoc.packaging = { _type: 'localizedString', ar: packagingAr, en: packagingEn || packagingAr }
-      }
-      if (storageAr) {
-        productDoc.storage = { _type: 'localizedString', ar: storageAr, en: storageEn || storageAr }
-      }
-      if (certAr) {
-        productDoc.certifications = { _type: 'localizedString', ar: certAr, en: certEn || certAr }
-      }
-      if (hasPrice) {
-        productDoc.showPrice = true
-        productDoc.price = {
-          _type: 'productPrice',
-          amount: priceVal,
-          unit: { _type: 'localizedString', ar: 'ر.س', en: 'SAR' },
-        }
-      }
-
-      const res = await client.createOrReplace(productDoc)
-      results.push({ id: res._id, name: nameAr, sku })
     }
 
     return NextResponse.json({
       success: true,
-      importedCount: results.length,
-      items: results,
+      summary: {
+        total: report.totalRows,
+        createdCount: report.created.length,
+        updatedCount: report.updated.length,
+        errorCount: report.errors.length,
+      },
+      report,
     })
   } catch (error: any) {
     return NextResponse.json(

@@ -1,4 +1,15 @@
-import type { StructureBuilder, StructureResolver } from 'sanity/structure'
+import type { DefaultDocumentNodeResolver, StructureBuilder, StructureResolver } from 'sanity/structure'
+import { ProductSeoPane } from './components/ProductSeoPane'
+
+export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, { schemaType }) => {
+  if (schemaType === 'product') {
+    return S.document().views([
+      S.view.form().title('محتوى المنتج'),
+      S.view.component(ProductSeoPane).title('معاينة SEO والفهرسة'),
+    ])
+  }
+  return S.document().views([S.view.form()])
+}
 
 const singleton = (S: StructureBuilder, typeName: string, title: string) =>
   S.listItem()
@@ -65,6 +76,11 @@ export const structure: StructureResolver = (S) =>
               singleton(S, 'catalogPage', 'إعدادات الكتالوج والـ PDF'),
               orderedList(S, 'product', 'المنتجات والأصناف', 'product'),
               orderedList(S, 'productCategory', 'التصنيفات', 'productCategory'),
+              S.divider(),
+              S.documentTypeListItem('brand').title('العلامات التجارية (Brands)'),
+              S.documentTypeListItem('country').title('دول المنشأ (Origin Countries)'),
+              S.documentTypeListItem('city').title('مناطق ومدن الخدمة (Service Areas)'),
+              S.documentTypeListItem('certificate').title('الشهادات والاعتمادات (Certificates)'),
             ]),
         ),
       S.listItem()
@@ -104,6 +120,8 @@ export const structure: StructureResolver = (S) =>
               singleton(S, 'seoHome', 'الصفحة الرئيسية'),
               singleton(S, 'seoProducts', 'صفحة المنتجات'),
               singleton(S, 'seoBranches', 'صفحة الفروع والمستودعات'),
+              S.divider(),
+              S.documentTypeListItem('redirect').title('روابط إعادة التوجيه (301 Redirects)'),
             ]),
         ),
     ])

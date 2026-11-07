@@ -13,6 +13,8 @@ import {
   MessageSquare,
   Share2,
   Sparkles,
+  Star,
+  Trash2,
   TrendingUp,
   X,
 } from 'lucide-react'
@@ -41,10 +43,12 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
   const [authorName, setAuthorName] = useState('')
   const [authorRole, setAuthorRole] = useState('')
   const [commentText, setCommentText] = useState('')
+  const [rating, setRating] = useState<number>(5)
+  const [hoverRating, setHoverRating] = useState<number>(0)
   const [commentSuccess, setCommentSuccess] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
 
-  // Initialize from localStorage on mount
+  // Initialize from localStorage and sync with server comments API on mount
   useEffect(() => {
     try {
       const initialLikes: Record<string, { count: number; userLiked: boolean }> = {}
@@ -65,6 +69,28 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
 
       setLikesState(initialLikes)
       setCommentsState(initialComments)
+
+      // Fetch global server-stored comments asynchronously
+      fetch('/api/company-news/comments')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.success && data?.comments) {
+            setCommentsState((prev) => {
+              const updated = { ...prev }
+              const serverData = data.comments as Record<string, PostComment[]>
+              for (const [pId, sList] of Object.entries(serverData)) {
+                const current = updated[pId] || []
+                const existingIds = new Set(current.map((c) => c.id))
+                const uniqueNew = sList.filter((c) => !existingIds.has(c.id))
+                if (uniqueNew.length > 0) {
+                  updated[pId] = [...uniqueNew, ...current]
+                }
+              }
+              return updated
+            })
+          }
+        })
+        .catch(() => {})
     } catch {
       // Fallback
       const defaultLikes: Record<string, { count: number; userLiked: boolean }> = {}
@@ -101,16 +127,17 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
     })
   }
 
-  // Handle Comment Submission
+  // Handle Comment Submission with 5-Star Rating
   const handleAddComment = (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedPost || !authorName.trim() || !commentText.trim()) return
 
     const newComment: PostComment = {
-      id: `comm_${Date.now()}`,
+      id: `comm_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       author: authorName.trim(),
       role: authorRole.trim() || undefined,
       text: commentText.trim(),
+      rating: rating >= 1 && rating <= 5 ? rating : 5,
       date: locale === 'ar' ? 'الآن' : 'Just now',
     }
 
@@ -127,9 +154,59 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
       return { ...prev, [selectedPost.id]: updated }
     })
 
+    // Also persist to server API asynchronously
+    try {
+      fetch('/api/company-news/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          postId: selectedPost.id,
+          author: newComment.author,
+          role: newComment.role,
+          text: newComment.text,
+          rating: newComment.rating,
+        }),
+      }).catch(() => {})
+    } catch {
+      // Ignore network error
+    }
+
     setCommentText('')
+    setRating(5)
     setCommentSuccess(true)
     setTimeout(() => setCommentSuccess(false), 4000)
+  }
+
+  // Handle Delete Comment
+  const handleDeleteComment = (postId: string, commentId: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation()
+    const confirmMsg = locale === 'ar' ? 'هل أنت متأكد من حذف هذا التعليق؟' : 'Are you sure you want to delete this comment?'
+    if (!window.confirm(confirmMsg)) return
+
+    setCommentsState((prev) => {
+      const list = prev[postId] || []
+      const updated = list.filter((c) => c.id !== commentId)
+      try {
+        const storedJson = localStorage.getItem(`mnaveth_comments_${postId}`)
+        if (storedJson) {
+          const userList: PostComment[] = JSON.parse(storedJson)
+          const filtered = userList.filter((c) => c.id !== commentId)
+          localStorage.setItem(`mnaveth_comments_${postId}`, JSON.stringify(filtered))
+        }
+      } catch {
+        // Ignore error
+      }
+      return { ...prev, [postId]: updated }
+    })
+
+    // Delete on server
+    try {
+      fetch(`/api/company-news/comments?postId=${encodeURIComponent(postId)}&commentId=${encodeURIComponent(commentId)}`, {
+        method: 'DELETE',
+      }).catch(() => {})
+    } catch {
+      // Ignore network error
+    }
   }
 
   // Handle Share WhatsApp
@@ -149,41 +226,54 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
     }
   }
 
+  const badgeIcons = {
+    event: Sparkles,
+    partnership: TrendingUp,
+    quality: Award,
+    award: Award,
+    logistics: Clock,
+  }
+
   return (
-    <section id="company-news" className="relative py-20 md:py-28 bg-gradient-to-b from-forest-deep/5 via-card/50 to-transparent border-y border-border/40">
+    <section id="company-news" className="relative overflow-hidden py-20 md:py-28 bg-forest-deep/5">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+        {/* Section Header */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <Reveal>
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3.5 py-1 text-xs font-bold text-gold">
+            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1 text-xs font-bold text-gold mb-3">
               <Sparkles className="size-3.5" />
-              <span>{t({ ar: 'نبض منافذ التوريد', en: 'Mnaveth Pulse' })}</span>
+              <span>{t({ ar: 'جديدنا وأحدث مشاركاتنا', en: 'Latest News & Events' })}</span>
             </div>
-            <h2 className="mt-3 text-balance text-3xl font-extrabold text-forest md:text-4xl">
+            <h2 className="text-balance text-3xl font-extrabold text-forest md:text-4xl">
               {customTitle
                 ? t(customTitle)
-                : t({ ar: 'جديدنا وأحدث مشاركاتنا وإنجازاتنا', en: 'Latest Highlights & Company News' })}
+                : t({
+                    ar: 'نبض «منافذ التوريد» | مستجدات، شراكات، وإنجازات',
+                    en: 'Mnaveth ALTourid Highlights | News, Events & Milestones',
+                  })}
             </h2>
-            <p className="mt-2 text-base md:text-lg text-muted-foreground max-w-2xl">
+            <p className="mt-3 max-w-2xl text-base text-muted-foreground md:text-lg">
               {customSubtitle
                 ? t(customSubtitle)
                 : t({
-                    ar: 'متابعة حية لحضورنا الميداني في المعارض الدولية، الوكالات الحصرية، واعتمادات الجودة لسلاسل التوريد بالمملكة.',
-                    en: 'Live updates on international expos, exclusive agency partnerships, and verified quality milestones in Saudi Arabia.',
+                    ar: 'واكب أحدث مشاركاتنا في المعارض الدولية، الوكالات الحصرية، واعتمادات الجودة التي تعزز ريادتنا في سلاسل الإمداد بالمملكة.',
+                    en: 'Follow our international expos, exclusive import agencies, and ISO quality achievements powering the Saudi food supply chain.',
                   })}
             </p>
           </Reveal>
-
-          <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-muted-foreground bg-forest/5 rounded-xl px-4 py-2 border border-border">
-            <TrendingUp className="size-4 text-gold" />
-            <span>{t({ ar: 'تحديثات مستمرة وتفاعل مباشر', en: 'Live updates & verified milestones' })}</span>
-          </div>
         </div>
 
-        {/* Posts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Stories Grid */}
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post, idx) => {
+            const BadgeIcon = badgeIcons[post.badgeType] || Sparkles
             const likesInfo = likesState[post.id] || { count: post.initialLikes, userLiked: false }
-            const commentsCount = (commentsState[post.id] || post.initialComments).length
+            const postComments = commentsState[post.id] || post.initialComments
+            const commentsCount = postComments.length
+            const avgRating =
+              postComments.length > 0
+                ? (postComments.reduce((acc, c) => acc + (c.rating || 5), 0) / postComments.length).toFixed(1)
+                : '5.0'
 
             return (
               <motion.article
@@ -193,10 +283,10 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.08 }}
                 onClick={() => setSelectedPost(post)}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border/70 bg-card p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/60 hover:shadow-xl cursor-pointer"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/60 hover:shadow-xl cursor-pointer text-start"
               >
                 {/* Media Header */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-forest-deep/10">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
                   <Image
                     src={post.coverImage}
                     alt={t(post.title)}
@@ -204,28 +294,29 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                     sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-transparent to-black/20" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-transparent to-transparent" />
 
-                  {/* Badge */}
-                  <span className="absolute top-3.5 start-3.5 inline-flex items-center gap-1.5 rounded-full bg-forest-deep/90 px-3 py-1 text-xs font-bold text-gold ring-1 ring-gold/30 backdrop-blur-md">
-                    <Award className="size-3" />
-                    <span>{t(post.badge)}</span>
-                  </span>
-
-                  {post.pinned && (
-                    <span className="absolute top-3.5 end-3.5 rounded-full bg-gold px-2.5 py-0.5 text-[11px] font-extrabold text-forest-deep">
-                      {t({ ar: 'مميز', en: 'Featured' })}
+                  {/* Badges on image */}
+                  <div className="absolute inset-x-4 top-4 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-forest-deep/90 px-3 py-1 text-xs font-bold text-gold shadow-md backdrop-blur-md">
+                      <BadgeIcon className="size-3.5" />
+                      <span>{t(post.badge)}</span>
                     </span>
-                  )}
 
-                  {/* Date & Read time */}
-                  <div className="absolute bottom-3 start-3.5 flex items-center gap-3 text-xs text-cream/90 font-medium">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="size-3 text-gold" />
+                    {/* Star Rating Badge */}
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest-deep/90 px-2.5 py-1 text-xs font-bold text-amber-400 shadow-md backdrop-blur-md">
+                      <Star className="size-3 fill-amber-400 text-amber-400" />
+                      <span>{avgRating}</span>
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-3 inset-x-4 flex items-center justify-between text-xs text-cream/90">
+                    <span className="flex items-center gap-1 font-medium">
+                      <Calendar className="size-3.5 text-gold" />
                       <span>{post.publishedAt}</span>
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="size-3 text-gold" />
+                    <span className="flex items-center gap-1 font-medium">
+                      <Clock className="size-3.5 text-gold" />
                       <span>{t(post.readTime)}</span>
                     </span>
                   </div>
@@ -274,7 +365,7 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                     </div>
 
                     <span className="text-xs font-bold text-gold group-hover:underline">
-                      {t({ ar: 'التفاصيل والتعليقات ←', en: 'Details & Discussion →' })}
+                      {t({ ar: 'التفاصيل والتقييمات ←', en: 'Details & Reviews →' })}
                     </span>
                   </div>
                 </div>
@@ -309,56 +400,60 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                 type="button"
                 onClick={() => setSelectedPost(null)}
                 aria-label={t({ ar: 'إغلاق', en: 'Close' })}
-                className="absolute top-4 end-4 z-20 flex size-10 items-center justify-center rounded-full bg-forest-deep/80 text-cream backdrop-blur-md transition-all hover:bg-gold hover:text-forest-deep ring-1 ring-cream/20"
+                className="absolute top-4 end-4 z-20 flex size-9 items-center justify-center rounded-full bg-forest-deep/80 text-cream hover:bg-gold hover:text-forest transition-colors shadow-lg"
               >
                 <X className="size-5" />
               </button>
 
-              {/* Cover Banner */}
-              <div className="relative aspect-[16/9] w-full overflow-hidden bg-forest-deep/20">
-                <Image src={selectedPost.coverImage} alt={t(selectedPost.title)} fill sizes="90vw" className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
-                <div className="absolute bottom-4 start-6 end-6">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest px-3.5 py-1 text-xs font-bold text-gold ring-1 ring-gold/40">
-                    <Award className="size-3.5" />
-                    <span>{t(selectedPost.badge)}</span>
+              {/* Modal Cover Image */}
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted">
+                <Image
+                  src={selectedPost.coverImage}
+                  alt={t(selectedPost.title)}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/90 via-forest-deep/30 to-transparent" />
+                <div className="absolute bottom-4 inset-x-6 flex flex-wrap items-center justify-between gap-3 text-xs text-cream">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3.5 py-1 font-extrabold text-forest-deep">
+                    {t(selectedPost.badge)}
                   </span>
-                  <div className="mt-2 flex items-center gap-4 text-xs text-cream/90 font-medium">
+                  <div className="flex items-center gap-4">
                     <span>{selectedPost.publishedAt}</span>
                     <span>•</span>
                     <span>{t(selectedPost.author)}</span>
-                    <span>•</span>
-                    <span>{t(selectedPost.readTime)}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Post Body Content */}
-              <div className="p-6 md:p-8 space-y-6 max-h-[65vh] overflow-y-auto">
-                <h2 className="text-2xl font-extrabold text-forest md:text-3xl leading-snug">
-                  {t(selectedPost.title)}
-                </h2>
+              {/* Modal Content Body */}
+              <div className="p-6 md:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
+                <div>
+                  <h2 className="text-2xl font-extrabold text-forest md:text-3xl leading-snug">
+                    {t(selectedPost.title)}
+                  </h2>
+                  <p className="mt-3 text-base text-gold font-bold leading-relaxed">
+                    {t(selectedPost.excerpt)}
+                  </p>
+                </div>
 
-                <p className="text-base font-semibold text-gold leading-relaxed border-s-4 border-gold ps-3">
-                  {t(selectedPost.excerpt)}
-                </p>
-
-                <div className="space-y-4 text-base text-foreground/90 leading-relaxed">
-                  {selectedPost.body.map((para, i) => (
-                    <p key={i}>{t(para)}</p>
+                {/* Paragraphs */}
+                <div className="space-y-4 text-sm text-foreground/90 leading-relaxed">
+                  {selectedPost.body.map((p, idx) => (
+                    <p key={idx}>{t(p)}</p>
                   ))}
                 </div>
 
                 {/* Key Highlights */}
                 {selectedPost.highlights && selectedPost.highlights.length > 0 && (
-                  <div className="rounded-xl border border-border bg-forest/5 p-4 space-y-2">
-                    <h4 className="text-xs font-extrabold uppercase tracking-wider text-forest">
-                      {t({ ar: 'أبرز المخرجات والنتائج:', en: 'Key Highlights:' })}
+                  <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 space-y-2.5">
+                    <h4 className="text-xs font-extrabold text-gold uppercase tracking-wider">
+                      {t({ ar: 'أبرز المخرجات والنقاط الرئيسية', en: 'Key Takeaways & Highlights' })}
                     </h4>
-                    <ul className="space-y-1.5 text-sm">
-                      {selectedPost.highlights.map((h, i) => (
-                        <li key={i} className="flex items-center gap-2 text-foreground/90 font-medium">
-                          <CheckCircle2 className="size-4 shrink-0 text-gold" />
+                    <ul className="space-y-2">
+                      {selectedPost.highlights.map((h, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-xs font-semibold text-forest">
+                          <CheckCircle2 className="size-4 text-gold shrink-0 mt-0.5" />
                           <span>{t(h)}</span>
                         </li>
                       ))}
@@ -366,75 +461,101 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                   </div>
                 )}
 
-                {/* Social Share & Interactions Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border">
-                  <div className="flex items-center gap-2">
-                    {/* Like button in modal */}
+                {/* Engagement Bar inside Modal */}
+                <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border">
+                  <div className="flex items-center gap-3">
                     <button
                       type="button"
                       onClick={() => handleLike(selectedPost.id)}
-                      className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 font-bold text-sm transition-all ${
+                      className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
                         likesState[selectedPost.id]?.userLiked
                           ? 'bg-rose-500 text-white shadow-md'
                           : 'bg-muted text-foreground hover:bg-rose-500/10 hover:text-rose-500'
                       }`}
                     >
                       <Heart
-                        className={`size-4.5 ${
+                        className={`size-4 ${
                           likesState[selectedPost.id]?.userLiked ? 'fill-white' : ''
                         }`}
                       />
-                      <span>
-                        {likesState[selectedPost.id]?.userLiked
-                          ? t({ ar: 'أعجبك هذا المنشور', en: 'Liked!' })
-                          : t({ ar: 'أعجبني', en: 'Like' })}
-                      </span>
-                      <span className="opacity-90">({likesState[selectedPost.id]?.count || 0})</span>
+                      <span>{t({ ar: 'أعجبني', en: 'Like' })}</span>
+                      <span className="font-extrabold">({likesState[selectedPost.id]?.count || 0})</span>
                     </button>
 
-                    {/* WhatsApp Share */}
                     <button
                       type="button"
                       onClick={() => handleShareWhatsApp(selectedPost)}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3.5 py-2 text-xs font-bold text-forest hover:bg-forest hover:text-cream transition-colors"
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700 transition shadow-sm"
                     >
-                      <Share2 className="size-3.5 text-gold" />
+                      <Share2 className="size-4" />
                       <span>{t({ ar: 'مشاركة عبر واتساب', en: 'Share on WhatsApp' })}</span>
                     </button>
-
-                    {/* Copy Link */}
-                    <button
-                      type="button"
-                      onClick={handleCopyLink}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-xs font-bold text-muted-foreground hover:border-gold hover:text-forest transition-colors"
-                    >
-                      <Copy className="size-3.5" />
-                      <span>
-                        {copySuccess
-                          ? t({ ar: 'تم النسخ!', en: 'Copied!' })
-                          : t({ ar: 'نسخ الرابط', en: 'Copy Link' })}
-                      </span>
-                    </button>
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={handleCopyLink}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-gold transition"
+                  >
+                    <Copy className="size-3.5" />
+                    <span>
+                      {copySuccess
+                        ? t({ ar: 'تم النسخ!', en: 'Copied!' })
+                        : t({ ar: 'نسخ الرابط', en: 'Copy Link' })}
+                    </span>
+                  </button>
                 </div>
 
-                {/* Interactive Discussion / Comments Area */}
+                {/* Interactive Discussion / Comments Area with Ratings & Deletion */}
                 <div className="pt-6 border-t border-border space-y-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-extrabold text-forest flex items-center gap-2">
                       <MessageSquare className="size-5 text-gold" />
-                      <span>{t({ ar: 'التعليقات والمشاركات', en: 'Community Discussion' })}</span>
+                      <span>{t({ ar: 'التقييمات والتعليقات', en: 'Ratings & Reviews' })}</span>
                       <span className="text-xs font-bold text-muted-foreground rounded-full bg-muted px-2.5 py-0.5">
                         {(commentsState[selectedPost.id] || []).length}
                       </span>
                     </h3>
                   </div>
 
-                  {/* Add Comment Form (Simple: Name + Role + Text, No friction) */}
-                  <form onSubmit={handleAddComment} className="rounded-xl border border-border bg-card p-4 space-y-3">
-                    <p className="text-xs font-bold text-forest">
-                      {t({ ar: 'أضف تعليقك أو استفسارك التجاري حول هذا الحدث:', en: 'Add your comment or trade inquiry:' })}
-                    </p>
+                  {/* Add Comment Form with 5-Star Rating */}
+                  <form onSubmit={handleAddComment} className="rounded-xl border border-border bg-card p-4 space-y-4 shadow-sm">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/50 pb-3">
+                      <p className="text-xs font-bold text-forest">
+                        {t({ ar: 'أضف تقييمك ورأيك حول هذا الخبر / الإنجاز:', en: 'Rate & share your feedback on this milestone:' })}
+                      </p>
+
+                      {/* 5-Star Selector */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-muted-foreground">
+                          {t({ ar: 'التقييم:', en: 'Rating:' })}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                              key={star}
+                              type="button"
+                              onClick={() => setRating(star)}
+                              onMouseEnter={() => setHoverRating(star)}
+                              onMouseLeave={() => setHoverRating(0)}
+                              className="p-1 transition-transform hover:scale-125 focus:outline-none"
+                              aria-label={`${star} stars`}
+                            >
+                              <Star
+                                className={`size-5 transition-colors ${
+                                  star <= (hoverRating || rating)
+                                    ? 'fill-amber-400 text-amber-400'
+                                    : 'text-border'
+                                }`}
+                              />
+                            </button>
+                          ))}
+                        </div>
+                        <span className="text-xs font-bold text-amber-600">
+                          {hoverRating || rating} / 5
+                        </span>
+                      </div>
+                    </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <input
@@ -459,7 +580,7 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                       rows={3}
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
-                      placeholder={t({ ar: 'اكتب مشاركتك هنا...', en: 'Write your thoughts or inquiry...' })}
+                      placeholder={t({ ar: 'اكتب تقييمك أو تعليقك هنا...', en: 'Write your review or comment here...' })}
                       className="w-full rounded-lg border border-border bg-background p-3 text-xs font-medium text-foreground outline-none focus:border-gold focus:ring-1 focus:ring-gold resize-none"
                     />
 
@@ -467,23 +588,26 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                       {commentSuccess ? (
                         <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
                           <CheckCircle2 className="size-3.5" />
-                          <span>{t({ ar: 'تم نشر تعليقك بنجاح!', en: 'Comment posted successfully!' })}</span>
+                          <span>{t({ ar: 'تم نشر تقييمك بنجاح!', en: 'Review posted successfully!' })}</span>
                         </span>
                       ) : <span />}
 
                       <button
                         type="submit"
-                        className="rounded-lg bg-forest px-4 py-2 text-xs font-extrabold text-cream hover:bg-gold hover:text-forest-deep transition-colors shadow-sm"
+                        className="rounded-lg bg-forest px-5 py-2 text-xs font-extrabold text-cream hover:bg-gold hover:text-forest-deep transition-colors shadow-sm"
                       >
-                        {t({ ar: 'نشر التعليق', en: 'Post Comment' })}
+                        {t({ ar: 'نشر التقييم والتعليق', en: 'Post Review' })}
                       </button>
                     </div>
                   </form>
 
-                  {/* Comments List */}
+                  {/* Comments List with Star Ratings & Delete Button */}
                   <div className="space-y-3 pt-2">
                     {(commentsState[selectedPost.id] || []).map((comm) => (
-                      <div key={comm.id} className="rounded-xl border border-border/60 bg-muted/20 p-3.5 space-y-1">
+                      <div
+                        key={comm.id}
+                        className="group relative rounded-xl border border-border/60 bg-muted/20 p-3.5 space-y-1.5 transition hover:border-gold/40"
+                      >
                         <div className="flex items-center justify-between text-xs">
                           <div className="flex items-center gap-2">
                             <span className="font-bold text-forest">{comm.author}</span>
@@ -493,7 +617,33 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                               </span>
                             )}
                           </div>
-                          <span className="text-[11px] text-muted-foreground">{comm.date}</span>
+                          <div className="flex items-center gap-3">
+                            {/* Stars */}
+                            <div className="flex items-center gap-0.5">
+                              {Array.from({ length: 5 }).map((_, idx) => (
+                                <Star
+                                  key={idx}
+                                  className={`size-3.5 ${
+                                    idx < (comm.rating || 5)
+                                      ? 'fill-amber-400 text-amber-400'
+                                      : 'text-border'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                            <span className="text-[11px] text-muted-foreground">{comm.date}</span>
+
+                            {/* Delete Comment Button */}
+                            <button
+                              type="button"
+                              onClick={(e) => handleDeleteComment(selectedPost.id, comm.id, e)}
+                              title={t({ ar: 'حذف هذا التعليق', en: 'Delete this comment' })}
+                              className="rounded p-1 text-muted-foreground opacity-70 transition hover:bg-red-500/10 hover:text-red-600 hover:opacity-100"
+                              aria-label={t({ ar: 'حذف التعليق', en: 'Delete comment' })}
+                            >
+                              <Trash2 className="size-3.5" />
+                            </button>
+                          </div>
                         </div>
                         <p className="text-xs text-foreground/90 leading-relaxed pt-1">{comm.text}</p>
                       </div>

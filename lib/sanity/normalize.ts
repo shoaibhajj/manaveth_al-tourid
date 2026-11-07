@@ -324,27 +324,46 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
   const sanityPosts = list(data.companyPosts).filter(isVisible).map(toCompanyPost)
   const companyPosts = sanityPosts.length > 0 ? sanityPosts : base.companyPosts
 
+  const defaultKeys: string[] = [
+    'hero',
+    'about',
+    'news',
+    'services',
+    'featuredProducts',
+    'gallery',
+    'stats',
+    'sectors',
+    'branches',
+    'contact',
+  ]
+
   const rawSectionsList = list(home.sectionsList)
-  const orderedSections: SectionOrderItem[] = rawSectionsList.length > 0
-    ? rawSectionsList.map((item) => ({
-        key: clean(item.key),
-        enabled: item.enabled !== false,
-        customTitle: optionalLocalized(item.title),
-        customSectionRef: clean(item.customSectionRef?._ref),
-        customSection: item.customSection ? toCustomSection(item.customSection) : undefined,
-      }))
-    : [
-        { key: 'hero', enabled: true },
-        { key: 'about', enabled: sectionFlags.about !== false },
-        { key: 'news', enabled: sectionFlags.news !== false },
-        { key: 'services', enabled: sectionFlags.services !== false },
-        { key: 'featuredProducts', enabled: sectionFlags.featuredProducts !== false },
-        { key: 'gallery', enabled: sectionFlags.gallery !== false },
-        { key: 'stats', enabled: sectionFlags.stats !== false },
-        { key: 'sectors', enabled: sectionFlags.sectors !== false },
-        { key: 'branches', enabled: sectionFlags.branches !== false },
-        { key: 'contact', enabled: sectionFlags.contact !== false },
-      ]
+  let orderedSections: SectionOrderItem[] = []
+
+  if (rawSectionsList.length > 0) {
+    orderedSections = rawSectionsList.map((item) => ({
+      key: clean(item.key),
+      enabled: item.enabled !== false,
+      customTitle: optionalLocalized(item.title),
+      customSectionRef: clean(item.customSectionRef?._ref),
+      customSection: item.customSection ? toCustomSection(item.customSection) : undefined,
+    }))
+
+    const existingKeys = new Set(orderedSections.map((s) => s.key))
+    for (const dKey of defaultKeys) {
+      if (!existingKeys.has(dKey)) {
+        orderedSections.push({
+          key: dKey,
+          enabled: dKey === 'hero' ? true : sectionFlags[dKey as SectionKey] !== false,
+        })
+      }
+    }
+  } else {
+    orderedSections = defaultKeys.map((dKey) => ({
+      key: dKey,
+      enabled: dKey === 'hero' ? true : sectionFlags[dKey as SectionKey] !== false,
+    }))
+  }
 
   // Hero
   const hero: Doc = home.hero ?? {}

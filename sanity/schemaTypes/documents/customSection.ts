@@ -9,6 +9,13 @@ export const customSection = defineType({
   fields: [
     visibleField,
     defineField({
+      name: 'order',
+      title: 'الترتيب',
+      type: 'number',
+      initialValue: 0,
+      hidden: true,
+    }),
+    defineField({
       name: 'internalName',
       title: 'اسم القسم الداخلي (للتعريف)',
       description: 'مثال: عروض خاصة، أو خدمات الشحن الموسمي، إلخ.',

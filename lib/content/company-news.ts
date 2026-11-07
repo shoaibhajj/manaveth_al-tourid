@@ -6,6 +6,7 @@ export type PostComment = {
   role?: string
   text: string
   date: string
+  rating?: number
 }
 
 export type CompanyPost = {
@@ -67,6 +68,7 @@ export const initialCompanyPosts: CompanyPost[] = [
         role: 'مدير مشتريات سلسلة مطاعم سحابية',
         text: 'خطوة ممتازة ومشاركة مشرفة، نفتخر بتعاملنا مع منافذ التوريد والتزامكم الدقيق بمواعيد التوصيل وجودة اللحوم.',
         date: 'منذ يومين',
+        rating: 5,
       },
       {
         id: 'c2',
@@ -74,6 +76,7 @@ export const initialCompanyPosts: CompanyPost[] = [
         role: 'مدير الإعاشة والضيافة - الرياض',
         text: 'جناح مميز واحترافي، التطور الذي تشهده الشركة في سلاسل التبريد يعكس خبرة سنوات طويلة.',
         date: 'منذ 3 أيام',
+        rating: 5,
       },
     ],
     pinned: true,

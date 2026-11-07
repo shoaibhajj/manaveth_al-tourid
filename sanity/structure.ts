@@ -46,11 +46,8 @@ export const structure: StructureResolver = (S) =>
             ]),
         ),
       singleton(S, 'homePage', 'الصفحة الرئيسية وتنسيق الأقسام'),
-      orderedList(S, 'customSection', 'الأقسام المخصصة (قابلة للنسخ والتكرار)', 'customSection'),
-      orderedList(S, 'companyPost', 'نبض الشركة وآخر الأخبار والفعاليات', 'companyPost', undefined, [
-        { field: 'pinned', direction: 'desc' },
-        { field: 'publishedAt', direction: 'desc' },
-      ]),
+      S.documentTypeListItem('customSection').title('الأقسام المخصصة (قابلة للنسخ والتكرار)'),
+      S.documentTypeListItem('companyPost').title('نبض الشركة وآخر الأخبار والفعاليات'),
       S.divider(),
       orderedList(S, 'service', 'الخدمات', 'service'),
       orderedList(S, 'sector', 'القطاعات', 'sector'),

@@ -30,29 +30,29 @@ export default async function Home() {
           case 'hero':
             return <Hero key={`hero-${idx}`} />
           case 'about':
-            return sections.about !== false ? <About key={`about-${idx}`} /> : null
+            return <About key={`about-${idx}`} />
           case 'news':
           case 'newsFeed':
-            return sections.news !== false ? (
+            return (
               <CompanyNews
                 key={`news-${idx}`}
                 customTitle={sec.customTitle?.ar ? sec.customTitle : undefined}
               />
-            ) : null
+            )
           case 'services':
-            return sections.services !== false ? <Services key={`services-${idx}`} /> : null
+            return <Services key={`services-${idx}`} />
           case 'featuredProducts':
-            return sections.featuredProducts !== false ? <FeaturedProducts key={`featured-${idx}`} /> : null
+            return <FeaturedProducts key={`featured-${idx}`} />
           case 'gallery':
-            return sections.gallery !== false ? <Gallery key={`gallery-${idx}`} /> : null
+            return <Gallery key={`gallery-${idx}`} />
           case 'stats':
-            return sections.stats !== false ? <Stats key={`stats-${idx}`} /> : null
+            return <Stats key={`stats-${idx}`} />
           case 'sectors':
-            return sections.sectors !== false ? <Sectors key={`sectors-${idx}`} /> : null
+            return <Sectors key={`sectors-${idx}`} />
           case 'branches':
-            return sections.branches !== false ? <BranchesSection key={`branches-${idx}`} /> : null
+            return <BranchesSection key={`branches-${idx}`} />
           case 'contact':
-            return sections.contact !== false ? <ContactCta key={`contact-${idx}`} /> : null
+            return <ContactCta key={`contact-${idx}`} />
           case 'custom': {
             const customData = sec.customSection || (sec.customSectionRef ? customMap.get(sec.customSectionRef) : null)
             if (!customData) return null

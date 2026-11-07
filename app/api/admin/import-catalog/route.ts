@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { createClient } from 'next-sanity'
-import * as XLSX from 'xlsx'
 import { isSanityConfigured, sanityEnv } from '@/sanity/env'
 import { catalogCategories, defaultCatalogProducts } from '@/lib/content/catalog-data'
 
@@ -30,6 +29,72 @@ function slugify(text: string): string {
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .trim()
+}
+
+function parseCsv(text: string): Record<string, string>[] {
+  if (text.charCodeAt(0) === 0xFEFF) {
+    text = text.slice(1)
+  }
+  const lines: string[] = []
+  let currentLine = ''
+  let inQuotes = false
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i]
+    if (char === '"') {
+      if (inQuotes && text[i + 1] === '"') {
+        currentLine += '"'
+        i++
+      } else {
+        inQuotes = !inQuotes
+      }
+    } else if ((char === '\n' || char === '\r') && !inQuotes) {
+      if (currentLine.trim()) lines.push(currentLine)
+      currentLine = ''
+      if (char === '\r' && text[i + 1] === '\n') i++
+    } else {
+      currentLine += char
+    }
+  }
+  if (currentLine.trim()) lines.push(currentLine)
+  if (lines.length < 2) return []
+
+  const parseRow = (line: string): string[] => {
+    const fields: string[] = []
+    let field = ''
+    let inside = false
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i]
+      if (c === '"') {
+        if (inside && line[i + 1] === '"') {
+          field += '"'
+          i++
+        } else {
+          inside = !inside
+        }
+      } else if (c === ',' && !inside) {
+        fields.push(field.trim())
+        field = ''
+      } else {
+        field += c
+      }
+    }
+    fields.push(field.trim())
+    return fields
+  }
+
+  const headerRow = parseRow(lines[0])
+  const result: Record<string, string>[] = []
+
+  for (let i = 1; i < lines.length; i++) {
+    const values = parseRow(lines[i])
+    const obj: Record<string, string> = {}
+    headerRow.forEach((h, idx) => {
+      obj[h] = values[idx] || ''
+    })
+    result.push(obj)
+  }
+  return result
 }
 
 export async function GET(request: Request) {
@@ -161,7 +226,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     status: 'ready',
-    message: 'Send POST with an Excel (.xlsx) or CSV file to import products, or GET with action=seed-defaults to populate default products.',
+    message: 'Send POST with a CSV file (exported from Excel) to import products, or GET with action=seed-defaults to populate default products.',
   })
 }
 
@@ -179,16 +244,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer())
-    const workbook = XLSX.read(buffer, { type: 'buffer' })
-    const sheetName = workbook.SheetNames[0]
-    if (!sheetName) {
-      return NextResponse.json({ error: 'No sheet found in workbook' }, { status: 400 })
-    }
+    const fileText = await file.text()
+    const rawRows = parseCsv(fileText)
 
-    const rawRows = XLSX.utils.sheet_to_json<Record<string, any>>(workbook.Sheets[sheetName])
     if (!rawRows || rawRows.length === 0) {
-      return NextResponse.json({ error: 'Sheet is empty or has no data rows' }, { status: 400 })
+      return NextResponse.json({ error: 'File is empty or has no data rows' }, { status: 400 })
     }
 
     const client = getSanityClient()
@@ -198,7 +258,6 @@ export async function POST(request: Request) {
     for (let index = 0; index < rawRows.length; index++) {
       const row = rawRows[index]
 
-      // Extract values from various possible column names (Arabic or English)
       const sku = String(row['كود الصنف (SKU)'] || row['كود الصنف'] || row['sku'] || row['SKU'] || `MNV-${index + 1}`).trim()
       const nameAr = String(row['اسم الصنف بالعربي'] || row['اسم الصنف'] || row['name_ar'] || row['name'] || '').trim()
       const nameEn = String(row['Product Name (EN)'] || row['Product Name'] || row['name_en'] || nameAr).trim()
@@ -288,6 +347,6 @@ export async function POST(request: Request) {
       items: results,
     })
   } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Error processing Excel file' }, { status: 500 })
+    return NextResponse.json({ error: err?.message || 'Error processing spreadsheet file' }, { status: 500 })
   }
 }

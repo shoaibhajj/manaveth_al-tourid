@@ -1,14 +1,16 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook'
+import { submitIndexNow } from '@/lib/seo/indexnow'
 
 export const dynamic = 'force-dynamic'
 
 /**
- * Sanity Webhook Revalidation Endpoint (D2):
+ * Sanity Webhook Revalidation Endpoint (D2, E4):
  * Accepts signed POST requests from Sanity on document publish/update/delete.
  * Verifies HMAC signature using SANITY_WEBHOOK_SECRET.
  * Automatically invalidates targeted tags and cached paths across both Arabic and English.
+ * Dispatches non-blocking notifications to IndexNow (Bing, Yandex, etc.) on publish/update.
  */
 export async function POST(request: NextRequest) {
   const secret = process.env.SANITY_WEBHOOK_SECRET
@@ -31,6 +33,7 @@ export async function POST(request: NextRequest) {
     const payload = JSON.parse(body)
     const { _type, slug } = payload
     const slugCurrent = typeof slug === 'string' ? slug : slug?.current
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mnaveth-altourid.com'
 
     const revalidated: string[] = []
 
@@ -40,7 +43,7 @@ export async function POST(request: NextRequest) {
       revalidated.push('tag:site')
     } catch {}
 
-    // 2. Document-specific tag and path revalidation
+    // 2. Document-specific tag, path revalidation, and IndexNow notifications
     if (_type === 'product') {
       try {
         revalidateTag('products')
@@ -74,6 +77,17 @@ export async function POST(request: NextRequest) {
         revalidatePath('/sitemap.xml')
         revalidated.push('paths:home,catalog,products,sitemap')
       } catch {}
+
+      // E4: Non-blocking IndexNow notification
+      if (slugCurrent) {
+        const productUrls = [
+          `${siteUrl}/products/${slugCurrent}`,
+          `${siteUrl}/en/products/${slugCurrent}`,
+        ]
+        submitIndexNow(productUrls).catch((err) => {
+          console.warn('[IndexNow] Product notification failed (non-blocking):', err)
+        })
+      }
     } else if (_type === 'service') {
       try {
         revalidateTag('services')
@@ -96,6 +110,17 @@ export async function POST(request: NextRequest) {
         revalidatePath('/sitemap.xml')
         revalidated.push('paths:home,services,sitemap')
       } catch {}
+
+      // E4: Non-blocking IndexNow notification
+      if (slugCurrent) {
+        const serviceUrls = [
+          `${siteUrl}/services/${slugCurrent}`,
+          `${siteUrl}/en/services/${slugCurrent}`,
+        ]
+        submitIndexNow(serviceUrls).catch((err) => {
+          console.warn('[IndexNow] Service notification failed (non-blocking):', err)
+        })
+      }
     } else if (_type === 'article') {
       try {
         revalidateTag('articles')
@@ -121,6 +146,17 @@ export async function POST(request: NextRequest) {
         revalidatePath('/sitemap.xml')
         revalidated.push('paths:home,blog,sitemap')
       } catch {}
+
+      // E4: Non-blocking IndexNow notification
+      if (slugCurrent) {
+        const articleUrls = [
+          `${siteUrl}/blog/${slugCurrent}`,
+          `${siteUrl}/en/blog/${slugCurrent}`,
+        ]
+        submitIndexNow(articleUrls).catch((err) => {
+          console.warn('[IndexNow] Article notification failed (non-blocking):', err)
+        })
+      }
     } else {
       // General layout / singleton changes
       try {

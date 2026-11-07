@@ -47,6 +47,15 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
   const [hoverRating, setHoverRating] = useState<number>(0)
   const [commentSuccess, setCommentSuccess] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
+  const [myCommentIds, setMyCommentIds] = useState<string[]>([])
+
+  // Load user's own comment IDs from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('mnaveth_my_comment_ids')
+      if (stored) setMyCommentIds(JSON.parse(stored))
+    } catch {}
+  }, [])
 
   // Initialize from localStorage and sync with server comments API on mount
   useEffect(() => {
@@ -152,6 +161,14 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
         // Ignore localStorage error
       }
       return { ...prev, [selectedPost.id]: updated }
+    })
+
+    setMyCommentIds((prev) => {
+      const updated = [...prev, newComment.id]
+      try {
+        localStorage.setItem('mnaveth_my_comment_ids', JSON.stringify(updated))
+      } catch {}
+      return updated
     })
 
     // Also persist to server API asynchronously
@@ -633,16 +650,18 @@ export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
                             </div>
                             <span className="text-[11px] text-muted-foreground">{comm.date}</span>
 
-                            {/* Delete Comment Button */}
-                            <button
-                              type="button"
-                              onClick={(e) => handleDeleteComment(selectedPost.id, comm.id, e)}
-                              title={t({ ar: 'حذف هذا التعليق', en: 'Delete this comment' })}
-                              className="rounded p-1 text-muted-foreground opacity-70 transition hover:bg-red-500/10 hover:text-red-600 hover:opacity-100"
-                              aria-label={t({ ar: 'حذف التعليق', en: 'Delete comment' })}
-                            >
-                              <Trash2 className="size-3.5" />
-                            </button>
+                            {/* Delete Comment Button - Only visible to the comment's original author */}
+                            {myCommentIds.includes(comm.id) && (
+                              <button
+                                type="button"
+                                onClick={(e) => handleDeleteComment(selectedPost.id, comm.id, e)}
+                                title={t({ ar: 'حذف تعليقي', en: 'Delete my comment' })}
+                                className="rounded p-1 text-muted-foreground opacity-70 transition hover:bg-red-500/10 hover:text-red-600 hover:opacity-100"
+                                aria-label={t({ ar: 'حذف تعليقي', en: 'Delete my comment' })}
+                              >
+                                <Trash2 className="size-3.5" />
+                              </button>
+                            )}
                           </div>
                         </div>
                         <p className="text-xs text-foreground/90 leading-relaxed pt-1">{comm.text}</p>

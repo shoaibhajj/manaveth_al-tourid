@@ -91,6 +91,34 @@ export const companyPost = defineType({
       type: 'number',
       initialValue: 120,
     }),
+    defineField({
+      name: 'comments',
+      title: '💬 التعليقات والتقييمات المسجلة للخبر',
+      description: 'كافة تعليقات وتقييمات الزوار. يمكن لمدير المنصة حذف أي تعليق غير لائق أو تعديله.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'postCommentItem',
+          title: 'تعليق',
+          fields: [
+            defineField({ name: 'author', title: 'اسم صاحب التعليق', type: 'string', validation: (r) => r.required() }),
+            defineField({ name: 'role', title: 'الجهة / المنصب (اختياري)', type: 'string' }),
+            defineField({ name: 'text', title: 'نص التعليق', type: 'text', validation: (r) => r.required() }),
+            defineField({ name: 'rating', title: 'التقييم (1 إلى 5 نجوم)', type: 'number', initialValue: 5 }),
+            defineField({ name: 'date', title: 'تاريخ أو وقت التعليق', type: 'string', initialValue: 'الآن' }),
+            defineField({ name: 'commentId', title: 'معرّف التعليق (ID)', type: 'string' }),
+          ],
+          preview: {
+            select: { author: 'author', text: 'text', rating: 'rating', date: 'date' },
+            prepare: ({ author, text, rating, date }) => ({
+              title: `${author || 'زائر'} (${'⭐'.repeat(rating || 5)})`,
+              subtitle: `${date ? `[${date}] ` : ''}${text || ''}`,
+            }),
+          },
+        }),
+      ],
+    }),
     orderField,
   ],
   preview: {

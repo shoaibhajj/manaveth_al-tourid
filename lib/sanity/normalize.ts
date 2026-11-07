@@ -278,6 +278,14 @@ function toCompanyPost(doc: Doc, index: number): CompanyPost {
   const coverImage = doc.coverImage ?? imageUrl(doc.coverImage, 1000) ?? '/images/s-hotel.png'
   const paragraphs = list(doc.body).map((p) => optionalLocalized(p)).filter((p): p is Localized => Boolean(p))
   const highlights = list(doc.highlights).map((h) => optionalLocalized(h)).filter((h): h is Localized => Boolean(h))
+  const rawComments = list(doc.comments).map((c: any, cIdx: number) => ({
+    id: clean(c.commentId) || c._key || `comm_${cIdx}`,
+    author: clean(c.author) || 'زائر',
+    role: filled(c.role) ? clean(c.role) : undefined,
+    text: clean(c.text),
+    date: clean(c.date) || 'مؤخراً',
+    rating: Number(c.rating) || 5,
+  }))
   return {
     id: doc._id || `post-${index}`,
     slug: clean(doc.slug) || `post-${index}`,
@@ -293,7 +301,7 @@ function toCompanyPost(doc: Doc, index: number): CompanyPost {
     body: paragraphs.length > 0 ? paragraphs : [excerpt],
     highlights: highlights.length > 0 ? highlights : undefined,
     initialLikes: Number(doc.initialLikes) || 120,
-    initialComments: [],
+    initialComments: rawComments,
     pinned: Boolean(doc.pinned),
   }
 }

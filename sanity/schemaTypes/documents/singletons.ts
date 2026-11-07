@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
 import { emailMessage, requiredTranslation } from '../../lib/localization'
 import { seoFields } from '../objects/shared'
+import { ResetSectionsButton } from '../../components/ResetSectionsButton'
 
 export const siteSettings = defineType({
   name: 'siteSettings',
@@ -122,6 +123,14 @@ export const homePage = defineType({
   title: 'الصفحة الرئيسية',
   type: 'document',
   fields: [
+    defineField({
+      name: 'sectionsResetTool',
+      title: 'استعادة الأقسام الأصلية',
+      type: 'string',
+      components: {
+        input: ResetSectionsButton,
+      },
+    }),
     defineField({
       name: 'sectionsList',
       title: '📋 ترتيب وإظهار/إخفاء أقسام الصفحة الرئيسية (Drag & Drop)',

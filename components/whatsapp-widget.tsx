@@ -36,13 +36,22 @@ function WidgetButton({
 }
 
 export function WhatsappWidget() {
-  const pathname = stripLocalePrefix(usePathname() || '')
+  const rawPathname = usePathname() || ''
+  const pathname = stripLocalePrefix(rawPathname)
   const { contact } = useContent()
   const { orders, quote } = contact.whatsapp
   const [isElevated, setIsElevated] = useState(false)
 
-  // Hide WhatsApp side widgets on catalog / menu pages
-  if (pathname === '/catalog' || pathname === '/menu') {
+  // Hide WhatsApp side widgets on catalog / menu pages across all locales
+  const isCatalogPage =
+    pathname === '/catalog' ||
+    pathname.startsWith('/catalog/') ||
+    rawPathname.includes('/catalog') ||
+    pathname === '/menu' ||
+    pathname.startsWith('/menu/') ||
+    rawPathname.includes('/menu')
+
+  if (isCatalogPage) {
     return null
   }
 

@@ -22,8 +22,10 @@ export function localePath(path: string, locale: Locale): string {
   return `/en${path}`
 }
 
-/** Removes the /en prefix so a browser pathname can be compared with the language-neutral path. */
+/** Removes locale prefixes (/en, /ar) so a browser pathname can be compared with the language-neutral path. */
 export function stripLocalePrefix(pathname: string): string {
-  if (pathname === '/en') return '/'
-  return pathname.startsWith('/en/') ? pathname.slice(3) : pathname
+  if (pathname === '/en' || pathname === '/ar') return '/'
+  if (pathname.startsWith('/en/')) return pathname.slice(3)
+  if (pathname.startsWith('/ar/')) return pathname.slice(3)
+  return pathname
 }

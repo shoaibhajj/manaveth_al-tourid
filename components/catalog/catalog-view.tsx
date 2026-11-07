@@ -24,7 +24,17 @@ import {
 
 type Props = {
   initialProducts?: CatalogProduct[]
+  products?: CatalogProduct[]
+  categories?: typeof catalogCategories
   catalogConfig?: {
+    title?: { ar: string; en: string }
+    subtitle?: { ar: string; en: string }
+    catalogVersion?: string
+    lastUpdated?: string
+    pdfFileUrl?: string
+    inquiryWhatsApp?: string
+  }
+  catalogMeta?: {
     title?: { ar: string; en: string }
     subtitle?: { ar: string; en: string }
     catalogVersion?: string
@@ -39,14 +49,24 @@ type SelectedItem = {
   quantity: number
 }
 
-export function CatalogView({ initialProducts, catalogConfig }: Props) {
+export function CatalogView({
+  initialProducts,
+  products,
+  categories,
+  catalogConfig,
+  catalogMeta,
+}: Props) {
   const { locale, localize, t } = useLocale()
   const isAr = locale === 'ar'
 
+  const effectiveConfig = catalogConfig || catalogMeta
+  const effectiveCategories = categories && categories.length > 0 ? categories : catalogCategories
+
   const productsList = useMemo(() => {
-    if (initialProducts && initialProducts.length > 0) return initialProducts
+    const list = products || initialProducts
+    if (list && list.length > 0) return list
     return defaultCatalogProducts
-  }, [initialProducts])
+  }, [products, initialProducts])
 
   // Search query
   const [searchQuery, setSearchQuery] = useState('')
@@ -56,7 +76,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
   // Open review drawer by default as requested
   const [showSummaryDrawer, setShowSummaryDrawer] = useState(true)
 
-  const phone = catalogConfig?.inquiryWhatsApp || '966509971699'
+  const phone = effectiveConfig?.inquiryWhatsApp || '966509971699'
 
   // Dynamic "Last Updated" Date Calculation
   const latestDateFormatted = useMemo(() => {
@@ -69,8 +89,8 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
       }
     })
 
-    if (catalogConfig?.lastUpdated) {
-      const t = new Date(catalogConfig.lastUpdated).getTime()
+    if (effectiveConfig?.lastUpdated) {
+      const t = new Date(effectiveConfig.lastUpdated).getTime()
       if (!isNaN(t)) dates.push(t)
     }
 
@@ -83,7 +103,7 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
     } catch {
       return isAr ? '7 نوفمبر 2026' : 'November 7, 2026'
     }
-  }, [productsList, catalogConfig, isAr])
+  }, [productsList, effectiveConfig, isAr])
 
   // Filtered Products by Search
   const filteredProducts = useMemo(() => {
@@ -101,14 +121,14 @@ export function CatalogView({ initialProducts, catalogConfig }: Props) {
   // Grouped products by category
   const productsGrouped = useMemo(() => {
     const groups: { category: (typeof catalogCategories)[0]; items: CatalogProduct[] }[] = []
-    catalogCategories.forEach((cat) => {
+    effectiveCategories.forEach((cat) => {
       const items = filteredProducts.filter((p) => p.categoryId === cat.id)
       if (items.length > 0) {
         groups.push({ category: cat, items })
       }
     })
     return groups
-  }, [filteredProducts])
+  }, [filteredProducts, effectiveCategories])
 
   // Selection handlers
   const toggleSelectItem = (product: CatalogProduct) => {

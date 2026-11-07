@@ -12,7 +12,10 @@ import { siteContentQuery } from './queries'
 export const getContent = cache(async (): Promise<SiteContent> => {
   if (!sanityFetch) return staticContent
   try {
-    const { data } = await sanityFetch({ query: siteContentQuery })
+    const { data } = await sanityFetch({
+      query: siteContentQuery,
+      tags: ['site', 'home', 'sections', 'products', 'services', 'branches'],
+    })
     return normalizeContent(data as Parameters<typeof normalizeContent>[0])
   } catch (error) {
     console.error('Sanity content could not be loaded, using built-in content.', error)

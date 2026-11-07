@@ -14,10 +14,10 @@ import {
 
 export type DetailDocument = Record<string, any> | null
 
-async function fetchDetail(query: string, draftQuery: string, slug: string): Promise<DetailDocument> {
+async function fetchDetail(query: string, draftQuery: string, slug: string, tags: string[] = []): Promise<DetailDocument> {
   if (!sanityFetch) return null
   try {
-    const { data } = await sanityFetch({ query, params: { slug } })
+    const { data } = await sanityFetch({ query, params: { slug }, tags })
     return (data as DetailDocument) ?? null
   } catch {
     return null
@@ -30,7 +30,7 @@ async function fetchDetail(query: string, draftQuery: string, slug: string): Pro
  * Fallback to static files only if Sanity is not configured at all.
  */
 export const getProductBySlug = async (slug: string) => {
-  const fromSanity = await fetchDetail(productBySlugQuery, productBySlugDraftQuery, slug)
+  const fromSanity = await fetchDetail(productBySlugQuery, productBySlugDraftQuery, slug, ['products', `product:${slug}`])
   if (fromSanity) return fromSanity
 
   if (isSanityConfigured) {
@@ -44,11 +44,12 @@ export const getProductBySlug = async (slug: string) => {
   return null
 }
 
-export const getServiceBySlug = (slug: string) => fetchDetail(serviceBySlugQuery, serviceBySlugDraftQuery, slug)
+export const getServiceBySlug = (slug: string) =>
+  fetchDetail(serviceBySlugQuery, serviceBySlugDraftQuery, slug, ['services', `service:${slug}`])
 
 export const getArticleBySlug = async (slug: string) => {
   if (slug === 'oli1') return null
-  const fromSanity = await fetchDetail(articleBySlugQuery, articleBySlugDraftQuery, slug)
+  const fromSanity = await fetchDetail(articleBySlugQuery, articleBySlugDraftQuery, slug, ['articles', `article:${slug}`])
   if (fromSanity) return fromSanity
   if (isSanityConfigured) return null
   const fallback = allArticles.find((a) => a.slug.current === slug)

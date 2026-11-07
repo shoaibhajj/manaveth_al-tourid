@@ -1,4 +1,15 @@
-import type { StructureBuilder, StructureResolver } from 'sanity/structure'
+import type { DefaultDocumentNodeResolver, StructureBuilder, StructureResolver } from 'sanity/structure'
+import { ProductSeoPane } from './components/ProductSeoPane'
+
+export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, { schemaType }) => {
+  if (schemaType === 'product') {
+    return S.document().views([
+      S.view.form().title('محتوى المنتج'),
+      S.view.component(ProductSeoPane).title('معاينة SEO والفهرسة'),
+    ])
+  }
+  return S.document().views([S.view.form()])
+}
 
 const singleton = (S: StructureBuilder, typeName: string, title: string) =>
   S.listItem()

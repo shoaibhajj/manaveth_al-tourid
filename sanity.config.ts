@@ -6,7 +6,7 @@ import { mainDocuments } from './sanity/presentation/resolve'
 import { sanityEnv } from './sanity/env'
 import { arabicBundles, arabicLocale } from './sanity/i18n/arabic'
 import { schemaTypes, singletonTypes } from './sanity/schemaTypes'
-import { structure } from './sanity/structure'
+import { structure, defaultDocumentNode } from './sanity/structure'
 import { defaultSectionsList } from './lib/content/default-sections'
 
 const isSingleton = (type: string | undefined) => singletonTypes.some((name) => name === type)
@@ -72,7 +72,7 @@ export default defineConfig({
       creationContext.type === 'global' ? options.filter((option) => !isSingleton(option.templateId)) : options,
   },
   plugins: [
-    structureTool({ structure }),
+    structureTool({ structure, defaultDocumentNode }),
     presentationTool({
       title: 'معاينة الموقع',
       previewUrl: {

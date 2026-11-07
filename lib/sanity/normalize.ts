@@ -8,8 +8,10 @@ import type { Product } from '../content/products'
 import type { IconKey } from '../content/types'
 import {
   staticContent,
+  staticLayoutContent,
   type CtaButton,
   type GalleryCategory,
+  type LayoutContent,
   type PageSeo,
   type SectionKey,
   type SectionOrderItem,
@@ -595,5 +597,90 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
           inquiryWhatsApp: clean(data.catalogPage.inquiryWhatsApp) || '966509971699',
         }
       : undefined,
+  }
+}
+
+export function normalizeLayoutContent(raw: Doc | null | undefined): LayoutContent {
+  const base = staticLayoutContent
+  if (!raw) return base
+
+  const data = raw as Doc
+  const settings: Doc = data.settings ?? {}
+  const contactDoc: Doc = data.contact ?? {}
+  const home: Doc = data.home ?? {}
+  const placesList = list(data.places).filter(isVisible).map(toPlace)
+  const branches = placesList.filter((p) => p.kind === 'branch')
+  const primary = branches.find((p) => (p as any).isPrimary) ?? branches[0]
+
+  const addressDoc =
+    contactDoc.address?.ar || contactDoc.address?.en
+      ? localized(contactDoc.address, base.contact.address)
+      : undefined
+
+  const productMessage = contactDoc.productOrderMessage
+  const footerLinks: Doc[] = list(settings.footerLinks)
+
+  const sectionFlags = { ...base.sections }
+  if (Array.isArray(home.sectionsList)) {
+    for (const sec of home.sectionsList) {
+      if (sec?.key && typeof sec.enabled === 'boolean') {
+        const k = sec.key as SectionKey
+        if (k in sectionFlags) {
+          sectionFlags[k] = sec.enabled
+        }
+      }
+    }
+  }
+
+  return {
+    sections: sectionFlags,
+    showMaps: home.branches?.showMap !== false,
+    site: {
+      ...base.site,
+      brand: {
+        ...base.site.brand,
+        name: localized(settings.companyName, base.site.brand.name),
+        subtitle: localized(settings.tagline, base.site.brand.subtitle),
+        logo: imageUrl(settings.logo, 600) ?? base.site.brand.logo,
+        ctaImage: imageUrl(home.contact?.image, 1000) ?? base.site.brand.ctaImage,
+        taxId: clean(settings.taxId) || undefined,
+        commercialRegistration: clean(settings.commercialRegistration) || base.site.brand.commercialRegistration,
+      },
+      footer: {
+        ...base.site.footer,
+        description: localized(home.footer?.description, base.site.footer.description),
+        rights: localized(home.footer?.copyright, base.site.footer.rights),
+      },
+      footerLinks: footerLinks.map((link) => ({
+        label: localized(link.label, { ar: '', en: '' }),
+        href: clean(link.href),
+      })),
+    },
+    contact: {
+      phone: clean(settings.phone) || primary?.phone || base.contact.phone,
+      email: clean(settings.email) || base.contact.email,
+      address: addressDoc ?? (primary?.address?.ar ? primary.address : base.contact.address),
+      whatsapp: {
+        quote: whatsapp(contactDoc.whatsappQuote, base.contact.whatsapp.quote),
+        orders: whatsapp(contactDoc.whatsappOrders, base.contact.whatsapp.orders),
+      },
+      productOrderMessage: productMessage
+        ? { ar: clean(productMessage.ar), en: clean(productMessage.en) }
+        : base.contact.productOrderMessage,
+      social: list(settings.socialLinks)
+        .filter((link) => filled(link.url))
+        .map((link) => ({ platform: clean(link.platform), url: clean(link.url) })),
+    },
+    currency: localized(settings.currency, base.currency),
+    services: list(data.services)
+      .filter(isVisible)
+      .map((doc, index) =>
+        toCard(doc, index, base.services, { href: '/#contact', ctaLabel: { ar: 'اطلب الخدمة', en: 'Request this service' } }),
+      ),
+    branches: branches.length ? branches : base.branches,
+    seo: {
+      home: seo(data.seoHome ?? settings.defaultSeo, base.seo.home),
+    },
+    favicon: imageUrl(settings.favicon, 256),
   }
 }

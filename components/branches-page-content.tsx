@@ -24,13 +24,29 @@ function PlaceGroup({ title, places }: { title: Localized; places: Place[] }) {
   )
 }
 
-export function BranchesPageContent() {
-  const { site, branches, warehouses } = useContent()
+export function BranchesPageContent({
+  branches: branchesProp,
+  warehouses: warehousesProp,
+  branchesPage: pageProp,
+}: {
+  branches?: Place[]
+  warehouses?: Place[]
+  branchesPage?: any
+} = {}) {
+  const { site, branches: contextBranches, warehouses: contextWarehouses } = useContent()
+  const branches = branchesProp ?? contextBranches ?? []
+  const warehouses = warehousesProp ?? contextWarehouses ?? []
+  const branchesPage = pageProp ?? site?.branchesPage
+
   return (
     <section className="py-16 md:py-24">
       <div className="mx-auto flex max-w-7xl flex-col gap-14 px-4 md:px-6">
-        <PlaceGroup title={site.branchesPage.branchesTitle} places={branches} />
-        <PlaceGroup title={site.branchesPage.warehousesTitle} places={warehouses} />
+        {branchesPage && (
+          <>
+            <PlaceGroup title={branchesPage.branchesTitle} places={branches} />
+            <PlaceGroup title={branchesPage.warehousesTitle} places={warehouses} />
+          </>
+        )}
       </div>
     </section>
   )

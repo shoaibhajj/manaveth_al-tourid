@@ -1,5 +1,31 @@
 import { defineQuery } from 'next-sanity'
 
+/** Minimal layout query for Header, Footer, and global providers without heavy page payloads */
+export const layoutContentQuery = defineQuery(`{
+  "settings": *[_type == "siteSettings"][0],
+  "contact": *[_type == "contactSettings"][0],
+  "home": *[_type == "homePage"][0]{
+    sectionsList[]{
+      key,
+      enabled
+    }
+  },
+  "services": *[_type == "service" && visible != false] | order(order asc){
+    _id,
+    "id": coalesce(slug.current, _id),
+    title,
+    href,
+    order,
+    visible
+  },
+  "places": *[_type == "place" && visible != false] | order(order asc){
+    _id,
+    "id": coalesce(slug.current, _id),
+    name
+  },
+  "seoHome": *[_type == "seoHome"][0]
+}`)
+
 /** One round trip for everything the public site renders. Images stay as references and are resolved by image-url. */
 export const siteContentQuery = defineQuery(`{
   "settings": *[_type == "siteSettings"][0],

@@ -7,8 +7,9 @@ import { FileText } from 'lucide-react'
 import { DirArrow } from './dir-arrow'
 import { icons } from './icon-map'
 import { useContent, useLocale } from './locale-provider'
+import type { HeroData } from '@/lib/content/model'
 
-export function Hero() {
+export function Hero({ hero: heroProp }: { hero?: HeroData } = {}) {
   const { t } = useLocale()
   const { site } = useContent()
   const ref = useRef<HTMLElement>(null)
@@ -16,7 +17,7 @@ export function Hero() {
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
-  const { hero } = site
+  const hero = heroProp ?? site?.hero
 
   return (
     <section

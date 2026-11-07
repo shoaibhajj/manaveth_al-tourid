@@ -1,0 +1,534 @@
+[
+  {
+    "path": "ar.html",
+    "beforeKb": "238.37",
+    "afterKb": 228.47,
+    "savedKb": 9.9,
+    "percentSaved": 4.2
+  },
+  {
+    "path": "en.html",
+    "beforeKb": "231.64",
+    "afterKb": 221.74,
+    "savedKb": 9.9,
+    "percentSaved": 4.3
+  },
+  {
+    "path": "ar\\blog.html",
+    "beforeKb": "212.13",
+    "afterKb": 169.43,
+    "savedKb": 42.7,
+    "percentSaved": 20.1
+  },
+  {
+    "path": "ar\\catalog.html",
+    "beforeKb": "211.12",
+    "afterKb": 168.42,
+    "savedKb": 42.7,
+    "percentSaved": 20.2
+  },
+  {
+    "path": "en\\catalog.html",
+    "beforeKb": "203.48",
+    "afterKb": 160.78,
+    "savedKb": 42.7,
+    "percentSaved": 21
+  },
+  {
+    "path": "en\\blog.html",
+    "beforeKb": "199.56",
+    "afterKb": 156.86,
+    "savedKb": 42.7,
+    "percentSaved": 21.4
+  },
+  {
+    "path": "ar\\products.html",
+    "beforeKb": "128.69",
+    "afterKb": 104.97,
+    "savedKb": 23.71,
+    "percentSaved": 18.4
+  },
+  {
+    "path": "en\\products.html",
+    "beforeKb": "125.01",
+    "afterKb": 101.3,
+    "savedKb": 23.71,
+    "percentSaved": 19
+  },
+  {
+    "path": "ar\\blog\\food-supply-companies-restaurants-riyadh.html",
+    "beforeKb": "127.40",
+    "afterKb": 84.71,
+    "savedKb": 42.7,
+    "percentSaved": 33.5
+  },
+  {
+    "path": "ar\\blog\\hotel-hospitality-food-supply-makkah-madinah-jeddah.html",
+    "beforeKb": "126.78",
+    "afterKb": 84.08,
+    "savedKb": 42.7,
+    "percentSaved": 33.7
+  },
+  {
+    "path": "ar\\blog\\22-years-excellence-food-supply-saudi-arabia-since-2004.html",
+    "beforeKb": "126.05",
+    "afterKb": 83.35,
+    "savedKb": 42.7,
+    "percentSaved": 33.9
+  },
+  {
+    "path": "ar\\blog\\mnaveth-altourid-food-supply-chain-expansion-vision-2030.html",
+    "beforeKb": "125.85",
+    "afterKb": 83.15,
+    "savedKb": 42.7,
+    "percentSaved": 33.9
+  },
+  {
+    "path": "ar\\blog\\bulk-frozen-meat-procurement-guide-saudi-arabia.html",
+    "beforeKb": "125.74",
+    "afterKb": 83.05,
+    "savedKb": 42.7,
+    "percentSaved": 34
+  },
+  {
+    "path": "ar\\branches.html",
+    "beforeKb": "124.63",
+    "afterKb": 82.95,
+    "savedKb": 41.68,
+    "percentSaved": 33.4
+  },
+  {
+    "path": "ar\\blog\\brazilian-vs-indian-frozen-meat-restaurants-comparison.html",
+    "beforeKb": "125.49",
+    "afterKb": 82.8,
+    "savedKb": 42.7,
+    "percentSaved": 34
+  },
+  {
+    "path": "ar\\blog\\labor-camp-catering-construction-food-supply-saudi.html",
+    "beforeKb": "125.37",
+    "afterKb": 82.68,
+    "savedKb": 42.7,
+    "percentSaved": 34.1
+  },
+  {
+    "path": "ar\\blog\\peak-season-food-supply-risk-management-ramadan-riyadh-season.html",
+    "beforeKb": "125.19",
+    "afterKb": 82.5,
+    "savedKb": 42.7,
+    "percentSaved": 34.1
+  },
+  {
+    "path": "ar\\blog\\haccp-iso-food-safety-standards-dry-cold-storage-saudi.html",
+    "beforeKb": "125.18",
+    "afterKb": 82.48,
+    "savedKb": 42.7,
+    "percentSaved": 34.1
+  },
+  {
+    "path": "ar\\blog\\sfda-regulations-importing-frozen-meat-saudi-arabia.html",
+    "beforeKb": "124.97",
+    "afterKb": 82.28,
+    "savedKb": 42.7,
+    "percentSaved": 34.2
+  },
+  {
+    "path": "ar\\blog\\wholesale-canned-food-tomato-paste-legumes-saudi.html",
+    "beforeKb": "124.95",
+    "afterKb": 82.25,
+    "savedKb": 42.7,
+    "percentSaved": 34.2
+  },
+  {
+    "path": "ar\\blog\\future-saudi-food-trade-supply-chains-vision-2030.html",
+    "beforeKb": "124.92",
+    "afterKb": 82.22,
+    "savedKb": 42.7,
+    "percentSaved": 34.2
+  },
+  {
+    "path": "ar\\blog\\government-corporate-food-supply-contracts-saudi-arabia.html",
+    "beforeKb": "124.85",
+    "afterKb": 82.15,
+    "savedKb": 42.7,
+    "percentSaved": 34.2
+  },
+  {
+    "path": "ar\\blog\\indian-basmati-rice-wholesale-import-guide-saudi.html",
+    "beforeKb": "124.48",
+    "afterKb": 81.78,
+    "savedKb": 42.7,
+    "percentSaved": 34.3
+  },
+  {
+    "path": "ar\\blog\\cold-chain-logistics-frozen-meat-transportation-saudi-arabia.html",
+    "beforeKb": "124.36",
+    "afterKb": 81.67,
+    "savedKb": 42.7,
+    "percentSaved": 34.3
+  },
+  {
+    "path": "ar\\blog\\wholesale-frozen-liver-suppliers-riyadh-jeddah.html",
+    "beforeKb": "124.32",
+    "afterKb": 81.62,
+    "savedKb": 42.7,
+    "percentSaved": 34.3
+  },
+  {
+    "path": "ar\\blog\\essential-food-supplies-checklist-restaurants.html",
+    "beforeKb": "124.27",
+    "afterKb": 81.57,
+    "savedKb": 42.7,
+    "percentSaved": 34.4
+  },
+  {
+    "path": "ar\\blog\\annual-food-supply-contracts-restaurants-saudi-arabia.html",
+    "beforeKb": "124.00",
+    "afterKb": 81.3,
+    "savedKb": 42.7,
+    "percentSaved": 34.4
+  },
+  {
+    "path": "ar\\blog\\cloud-kitchens-food-supply-chains-saudi-arabia.html",
+    "beforeKb": "123.99",
+    "afterKb": 81.29,
+    "savedKb": 42.7,
+    "percentSaved": 34.4
+  },
+  {
+    "path": "ar\\blog\\wholesale-cooking-oil-food-service-factories-saudi.html",
+    "beforeKb": "123.81",
+    "afterKb": 81.12,
+    "savedKb": 42.7,
+    "percentSaved": 34.5
+  },
+  {
+    "path": "ar\\blog\\premium-dates-wholesale-hospitality-corporate-saudi.html",
+    "beforeKb": "123.54",
+    "afterKb": 80.84,
+    "savedKb": 42.7,
+    "percentSaved": 34.6
+  },
+  {
+    "path": "en\\branches.html",
+    "beforeKb": "122.50",
+    "afterKb": 80.82,
+    "savedKb": 41.68,
+    "percentSaved": 34
+  },
+  {
+    "path": "ar\\blog\\wholesale-food-supplies-restaurants-jeddah.html",
+    "beforeKb": "123.45",
+    "afterKb": 80.75,
+    "savedKb": 42.7,
+    "percentSaved": 34.6
+  },
+  {
+    "path": "ar\\products\\frozen-meat.html",
+    "beforeKb": null,
+    "afterKb": 73.58,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "ar\\products\\basmati-rice.html",
+    "beforeKb": null,
+    "afterKb": 73.34,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\blog\\food-supply-companies-restaurants-riyadh.html",
+    "beforeKb": "115.72",
+    "afterKb": 73.02,
+    "savedKb": 42.7,
+    "percentSaved": 36.9
+  },
+  {
+    "path": "ar\\products\\frozen-liver.html",
+    "beforeKb": null,
+    "afterKb": 73.01,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\blog\\mnaveth-altourid-food-supply-chain-expansion-vision-2030.html",
+    "beforeKb": "115.29",
+    "afterKb": 72.59,
+    "savedKb": 42.7,
+    "percentSaved": 37
+  },
+  {
+    "path": "ar\\products\\premium-dates.html",
+    "beforeKb": null,
+    "afterKb": 72.39,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "ar\\products\\canned-goods.html",
+    "beforeKb": null,
+    "afterKb": 72.3,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\blog\\22-years-excellence-food-supply-saudi-arabia-since-2004.html",
+    "beforeKb": "114.95",
+    "afterKb": 72.25,
+    "savedKb": 42.7,
+    "percentSaved": 37.1
+  },
+  {
+    "path": "en\\blog\\bulk-frozen-meat-procurement-guide-saudi-arabia.html",
+    "beforeKb": "114.71",
+    "afterKb": 72.02,
+    "savedKb": 42.7,
+    "percentSaved": 37.2
+  },
+  {
+    "path": "en\\blog\\peak-season-food-supply-risk-management-ramadan-riyadh-season.html",
+    "beforeKb": "114.48",
+    "afterKb": 71.78,
+    "savedKb": 42.7,
+    "percentSaved": 37.3
+  },
+  {
+    "path": "en\\blog\\future-saudi-food-trade-supply-chains-vision-2030.html",
+    "beforeKb": "114.24",
+    "afterKb": 71.54,
+    "savedKb": 42.7,
+    "percentSaved": 37.4
+  },
+  {
+    "path": "en\\blog\\government-corporate-food-supply-contracts-saudi-arabia.html",
+    "beforeKb": "114.17",
+    "afterKb": 71.48,
+    "savedKb": 42.7,
+    "percentSaved": 37.4
+  },
+  {
+    "path": "en\\blog\\labor-camp-catering-construction-food-supply-saudi.html",
+    "beforeKb": "114.11",
+    "afterKb": 71.41,
+    "savedKb": 42.7,
+    "percentSaved": 37.4
+  },
+  {
+    "path": "en\\blog\\brazilian-vs-indian-frozen-meat-restaurants-comparison.html",
+    "beforeKb": "114.05",
+    "afterKb": 71.35,
+    "savedKb": 42.7,
+    "percentSaved": 37.4
+  },
+  {
+    "path": "en\\blog\\premium-dates-wholesale-hospitality-corporate-saudi.html",
+    "beforeKb": "113.99",
+    "afterKb": 71.3,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\wholesale-cooking-oil-food-service-factories-saudi.html",
+    "beforeKb": "113.93",
+    "afterKb": 71.23,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\haccp-iso-food-safety-standards-dry-cold-storage-saudi.html",
+    "beforeKb": "113.92",
+    "afterKb": 71.22,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\indian-basmati-rice-wholesale-import-guide-saudi.html",
+    "beforeKb": "113.91",
+    "afterKb": 71.21,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\sfda-regulations-importing-frozen-meat-saudi-arabia.html",
+    "beforeKb": "113.89",
+    "afterKb": 71.19,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\wholesale-canned-food-tomato-paste-legumes-saudi.html",
+    "beforeKb": "113.88",
+    "afterKb": 71.18,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\hotel-hospitality-food-supply-makkah-madinah-jeddah.html",
+    "beforeKb": "113.85",
+    "afterKb": 71.16,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\cloud-kitchens-food-supply-chains-saudi-arabia.html",
+    "beforeKb": "113.82",
+    "afterKb": 71.12,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\cold-chain-logistics-frozen-meat-transportation-saudi-arabia.html",
+    "beforeKb": "113.79",
+    "afterKb": 71.09,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\wholesale-food-supplies-restaurants-jeddah.html",
+    "beforeKb": "113.71",
+    "afterKb": 71.01,
+    "savedKb": 42.7,
+    "percentSaved": 37.5
+  },
+  {
+    "path": "en\\blog\\annual-food-supply-contracts-restaurants-saudi-arabia.html",
+    "beforeKb": "113.65",
+    "afterKb": 70.95,
+    "savedKb": 42.7,
+    "percentSaved": 37.6
+  },
+  {
+    "path": "en\\blog\\wholesale-frozen-liver-suppliers-riyadh-jeddah.html",
+    "beforeKb": "113.57",
+    "afterKb": 70.88,
+    "savedKb": 42.7,
+    "percentSaved": 37.6
+  },
+  {
+    "path": "en\\blog\\essential-food-supplies-checklist-restaurants.html",
+    "beforeKb": "113.36",
+    "afterKb": 70.66,
+    "savedKb": 42.7,
+    "percentSaved": 37.7
+  },
+  {
+    "path": "ar\\products\\natural-juice.html",
+    "beforeKb": null,
+    "afterKb": 69.26,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\products\\frozen-meat.html",
+    "beforeKb": null,
+    "afterKb": 68.78,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\products\\basmati-rice.html",
+    "beforeKb": null,
+    "afterKb": 68.75,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\products\\frozen-liver.html",
+    "beforeKb": null,
+    "afterKb": 68.72,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\products\\canned-goods.html",
+    "beforeKb": null,
+    "afterKb": 68.24,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\products\\premium-dates.html",
+    "beforeKb": null,
+    "afterKb": 68,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\products\\natural-juice.html",
+    "beforeKb": null,
+    "afterKb": 65.99,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "ar\\services\\food-supply.html",
+    "beforeKb": null,
+    "afterKb": 60.95,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "ar\\services\\restaurants-hotels.html",
+    "beforeKb": null,
+    "afterKb": 60.9,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "ar\\services\\sea-import.html",
+    "beforeKb": null,
+    "afterKb": 60.6,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "ar\\services\\land-transport.html",
+    "beforeKb": null,
+    "afterKb": 60.27,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\services\\restaurants-hotels.html",
+    "beforeKb": null,
+    "afterKb": 58.78,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\services\\land-transport.html",
+    "beforeKb": null,
+    "afterKb": 58.55,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\services\\food-supply.html",
+    "beforeKb": null,
+    "afterKb": 58.42,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "en\\services\\sea-import.html",
+    "beforeKb": null,
+    "afterKb": 58.37,
+    "savedKb": null,
+    "percentSaved": null
+  },
+  {
+    "path": "_global-error.html",
+    "beforeKb": "8.73",
+    "afterKb": 8.73,
+    "savedKb": 0,
+    "percentSaved": 0
+  },
+  {
+    "path": "_not-found.html",
+    "beforeKb": "6.86",
+    "afterKb": 6.86,
+    "savedKb": 0,
+    "percentSaved": 0
+  }
+]

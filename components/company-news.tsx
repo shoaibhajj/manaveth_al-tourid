@@ -23,14 +23,20 @@ import { Reveal } from './reveal'
 import { initialCompanyPosts, type CompanyPost, type PostComment } from '@/lib/content/company-news'
 
 interface CompanyNewsProps {
+  posts?: CompanyPost[]
   customTitle?: { ar: string; en: string }
   customSubtitle?: { ar: string; en: string }
 }
 
-export function CompanyNews({ customTitle, customSubtitle }: CompanyNewsProps) {
+export function CompanyNews({ posts: postsProp, customTitle, customSubtitle }: CompanyNewsProps) {
   const { t, locale } = useLocale()
   const { companyPosts } = useContent()
-  const posts: CompanyPost[] = companyPosts && companyPosts.length > 0 ? companyPosts : initialCompanyPosts
+  const posts: CompanyPost[] =
+    postsProp && postsProp.length > 0
+      ? postsProp
+      : companyPosts && companyPosts.length > 0
+        ? companyPosts
+        : initialCompanyPosts
   const [selectedPost, setSelectedPost] = useState<CompanyPost | null>(null)
 
   // Likes state: record of postId -> { count: number, userLiked: boolean }

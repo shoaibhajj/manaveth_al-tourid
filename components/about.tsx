@@ -6,11 +6,12 @@ import { DirArrow } from './dir-arrow'
 import { icons } from './icon-map'
 import { useContent, useLocale } from './locale-provider'
 import { Reveal, RevealItem } from './reveal'
+import type { AboutData } from '@/lib/content/model'
 
-export function About() {
+export function About({ about: aboutProp }: { about?: AboutData } = {}) {
   const { t } = useLocale()
   const { site } = useContent()
-  const { about } = site
+  const about = aboutProp ?? site?.about
 
   return (
     <section id="about" className="relative overflow-hidden py-20 md:py-28">

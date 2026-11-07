@@ -7,10 +7,19 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { DirArrow } from './dir-arrow'
 import { useContent, useLocale } from './locale-provider'
 import { SectionHeading } from './reveal'
+import type { Card } from '@/lib/content/services'
 
-export function Sectors() {
+export function Sectors({
+  items: itemsProp,
+  sectionHeading: headingProp,
+}: {
+  items?: Card[]
+  sectionHeading?: any
+} = {}) {
   const { t, dir, localize } = useLocale()
-  const { site, sectors } = useContent()
+  const { site, sectors: contextSectors } = useContent()
+  const sectors = itemsProp ?? contextSectors ?? []
+  const sectorsSection = headingProp ?? site?.sectorsSection
   const track = useRef<HTMLUListElement>(null)
   const NextIcon = dir === 'rtl' ? ChevronLeft : ChevronRight
   const PrevIcon = dir === 'rtl' ? ChevronRight : ChevronLeft
@@ -26,11 +35,13 @@ export function Sectors() {
   return (
     <section id="sectors" className="bg-secondary/60 py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionHeading
-          eyebrow={t(site.sectorsSection.eyebrow)}
-          title={t(site.sectorsSection.title)}
-          subtitle={t(site.sectorsSection.subtitle)}
-        />
+        {sectorsSection && (
+          <SectionHeading
+            eyebrow={t(sectorsSection.eyebrow)}
+            title={t(sectorsSection.title)}
+            subtitle={t(sectorsSection.subtitle)}
+          />
+        )}
 
         <div className="relative mt-10">
           <button

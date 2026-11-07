@@ -29,7 +29,7 @@ export default async function ProductsPage({
   const { locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const [content, base] = await Promise.all([getContent(), getSiteUrl()])
-  const { site } = content
+  const { site, products } = content
 
   return (
     <main>
@@ -39,7 +39,7 @@ export default async function ProductsPage({
         title={site.productsPage.title}
         subtitle={site.productsPage.subtitle}
       />
-      <ProductsPageContent />
+      <ProductsPageContent products={products} productsPage={site.productsPage} />
     </main>
   )
 }

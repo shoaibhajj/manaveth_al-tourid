@@ -1,9 +1,27 @@
 import 'server-only'
 import { cache } from 'react'
-import { staticContent, type SiteContent } from '../content/model'
-import { normalizeContent } from './normalize'
+import { staticContent, staticLayoutContent, type LayoutContent, type SiteContent } from '../content/model'
+import { normalizeContent, normalizeLayoutContent } from './normalize'
 import { sanityFetch } from './live'
-import { siteContentQuery } from './queries'
+import { layoutContentQuery, siteContentQuery } from './queries'
+
+/**
+ * Loads minimal layout content (Header, Footer, navigation, brand) for the outer shell.
+ * This keeps the RSC payload across all static pages minimal.
+ */
+export const getLayoutContent = cache(async (): Promise<LayoutContent> => {
+  if (!sanityFetch) return staticLayoutContent
+  try {
+    const { data } = await sanityFetch({
+      query: layoutContentQuery,
+      tags: ['site', 'layout'],
+    })
+    return normalizeLayoutContent(data as Parameters<typeof normalizeLayoutContent>[0])
+  } catch (error) {
+    console.error('Sanity layout content could not be loaded, using built-in layout content.', error)
+    return staticLayoutContent
+  }
+})
 
 /**
  * Loads the public site content once per request. Any problem (missing config, network, empty dataset)

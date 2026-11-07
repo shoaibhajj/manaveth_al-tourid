@@ -20,7 +20,8 @@ export async function generateMetadata({
 }
 
 export default async function BranchesPage() {
-  const { site } = await getContent()
+  const content = await getContent()
+  const { site, branches, warehouses } = content
   return (
     <main>
       <PageHero
@@ -28,7 +29,11 @@ export default async function BranchesPage() {
         title={site.branchesPage.title}
         subtitle={site.branchesPage.subtitle}
       />
-      <BranchesPageContent />
+      <BranchesPageContent
+        branches={branches}
+        warehouses={warehouses}
+        branchesPage={site.branchesPage}
+      />
     </main>
   )
 }

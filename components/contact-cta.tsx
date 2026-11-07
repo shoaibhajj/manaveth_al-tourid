@@ -8,14 +8,26 @@ import { ActionLink } from './action-link'
 import { SocialLinks } from './social-links'
 import { useContent, useLocale } from './locale-provider'
 import { Reveal } from './reveal'
+import type { ContactData } from '@/lib/content/model'
+import type { Place } from '@/lib/content/branches'
 
-export function ContactCta() {
+export function ContactCta({
+  contact: contactProp,
+  branches: branchesProp,
+  labels: labelsProp,
+}: {
+  contact?: ContactData
+  branches?: Place[]
+  labels?: any
+} = {}) {
   const { t, locale } = useLocale()
-  const { site, contact, branches } = useContent()
+  const { site, contact: contextContact, branches: contextBranches } = useContent()
+  const contact = contactProp ?? contextContact
+  const branches = branchesProp ?? contextBranches ?? []
   const primaryBranch = branches[0]
   const quote = contact.whatsapp.quote
   const orders = contact.whatsapp.orders
-  const labels = site.contact
+  const labels = labelsProp ?? site.contact
 
   const infoRows = [
     {

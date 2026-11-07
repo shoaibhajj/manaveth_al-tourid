@@ -1,6 +1,7 @@
 import 'server-only'
 import { allArticles } from '../content/articles-data'
 import { products as fallbackProducts } from '../content/products'
+import { services as fallbackServices } from '../content/services'
 import { isSanityConfigured } from '@/sanity/env'
 import { sanityFetch } from './live'
 import {
@@ -44,8 +45,19 @@ export const getProductBySlug = async (slug: string) => {
   return null
 }
 
-export const getServiceBySlug = (slug: string) =>
-  fetchDetail(serviceBySlugQuery, serviceBySlugDraftQuery, slug, ['services', `service:${slug}`])
+export const getServiceBySlug = async (slug: string) => {
+  const fromSanity = await fetchDetail(serviceBySlugQuery, serviceBySlugDraftQuery, slug, ['services', `service:${slug}`])
+  if (fromSanity) return fromSanity
+  if (isSanityConfigured) return null
+  const fromDefault = fallbackServices.find((s) => s.id === slug)
+  if (!fromDefault) return null
+  return {
+    ...fromDefault,
+    name: fromDefault.title,
+    description: fromDefault.text,
+    longDescription: fromDefault.text,
+  } as unknown as DetailDocument
+}
 
 export const getArticleBySlug = async (slug: string) => {
   if (slug === 'oli1') return null

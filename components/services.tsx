@@ -7,10 +7,20 @@ import { DirArrow } from './dir-arrow'
 import { icons } from './icon-map'
 import { useContent, useLocale } from './locale-provider'
 import { RevealItem, SectionHeading } from './reveal'
+import type { Card } from '@/lib/content/services'
+import type { Localized } from '@/lib/i18n'
 
-export function Services() {
+export function Services({
+  items: itemsProp,
+  sectionHeading: headingProp,
+}: {
+  items?: Card[]
+  sectionHeading?: { eyebrow: Localized; title: Localized }
+} = {}) {
   const { t, localize } = useLocale()
-  const { site, services } = useContent()
+  const { site, services: contextServices } = useContent()
+  const services = itemsProp ?? contextServices
+  const sectionHeading = headingProp ?? site.servicesSection
 
   return (
     <section id="services" className="relative overflow-hidden bg-forest py-20 md:py-28">
@@ -19,7 +29,7 @@ export function Services() {
         aria-hidden="true"
       />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
-        <SectionHeading eyebrow={t(site.servicesSection.eyebrow)} title={t(site.servicesSection.title)} light />
+        <SectionHeading eyebrow={t(sectionHeading.eyebrow)} title={t(sectionHeading.title)} light />
 
         <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service, i) => {

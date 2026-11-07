@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useMemo } from 'react'
-import type { SiteContent } from '@/lib/content/model'
+import type { LayoutContent, SiteContent } from '@/lib/content/model'
 import { directionOf, localePath, type Direction, type Locale, type Localized } from '@/lib/i18n'
 
 type LocaleContextValue = {
@@ -13,7 +13,7 @@ type LocaleContextValue = {
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null)
-const ContentContext = createContext<SiteContent | null>(null)
+const ContentContext = createContext<LayoutContent | SiteContent | null>(null)
 
 export function LocaleProvider({
   locale,
@@ -21,7 +21,7 @@ export function LocaleProvider({
   children,
 }: {
   locale: Locale
-  content: SiteContent
+  content: LayoutContent | SiteContent
   children: React.ReactNode
 }) {
   const value = useMemo<LocaleContextValue>(
@@ -47,8 +47,8 @@ export function useLocale() {
   return ctx
 }
 
-export function useContent() {
+export function useContent(): LayoutContent & Partial<SiteContent> {
   const ctx = useContext(ContentContext)
   if (!ctx) throw new Error('useContent must be used within LocaleProvider')
-  return ctx
+  return ctx as LayoutContent & Partial<SiteContent>
 }

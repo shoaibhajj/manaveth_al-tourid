@@ -8,7 +8,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { WhatsappWidget } from '@/components/whatsapp-widget'
 import { defaultLocale, directionOf, isLocale, type Locale } from '@/lib/i18n'
-import { getContent } from '@/lib/sanity/get-content'
+import { getLayoutContent } from '@/lib/sanity/get-content'
 import { SanityRuntime } from '@/components/sanity-runtime'
 import { JsonLd } from '@/components/json-ld'
 import { organizationGraph } from '@/lib/seo'
@@ -33,7 +33,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
-  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
+  const [content, base] = await Promise.all([getLayoutContent(), getSiteUrl()])
   const { home } = content.seo
   const icon = content.favicon ?? '/images/logo.png'
   return {
@@ -65,13 +65,13 @@ export default async function LocaleLayout({
 }>) {
   const { locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
-  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
+  const [content, base] = await Promise.all([getLayoutContent(), getSiteUrl()])
 
   return (
     <html lang={locale} dir={directionOf(locale)} className={tajawal.variable}>
       <body className="antialiased">
         <LocaleProvider locale={locale} content={content}>
-          <JsonLd graph={organizationGraph(content, locale, base)} />
+          <JsonLd graph={organizationGraph(content as any, locale, base)} />
           <SiteHeader />
           {children}
           <SiteFooter />

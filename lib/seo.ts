@@ -64,13 +64,13 @@ export function organizationGraph(content: SiteContent, locale: Locale, base: st
       priceRange: '$',
       currenciesAccepted: 'SAR',
       paymentAccepted: 'Cash, Credit Card, Bank Transfer',
-      address: {
+      address: branch.address ? {
         '@type': 'PostalAddress',
-        streetAddress: branch.address[locale],
+        streetAddress: branch.address[locale] || branch.address.ar || branch.address.en,
         addressLocality: locale === 'ar' ? cityAr : cityEn,
         addressRegion: isJeddah ? (locale === 'ar' ? 'منطقة مكة المكرمة' : 'Makkah Province') : (locale === 'ar' ? 'منطقة الرياض' : 'Riyadh Province'),
         addressCountry: 'SA',
-      },
+      } : undefined,
       geo,
       areaServed: isJeddah
         ? ['Jeddah', 'Makkah', 'Madinah', 'Saudi Arabia']

@@ -5,29 +5,39 @@ import { DirArrow } from './dir-arrow'
 import { useContent, useLocale } from './locale-provider'
 import { ProductsGrid } from './products-grid'
 import { Reveal, SectionHeading } from './reveal'
+import type { Product } from '@/lib/content/products'
 
-export function FeaturedProducts() {
+export function FeaturedProducts({
+  products: productsProp,
+  productsSection: sectionProp,
+}: {
+  products?: Product[]
+  productsSection?: any
+} = {}) {
   const { t, localize } = useLocale()
   const { site, featuredProducts } = useContent()
-  const { productsSection } = site
+  const products = productsProp ?? featuredProducts ?? []
+  const productsSection = sectionProp ?? site?.productsSection
 
   return (
     <section id="products" className="bg-secondary/60 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionHeading
-          eyebrow={t(productsSection.eyebrow)}
-          title={t(productsSection.title)}
-          subtitle={t(productsSection.subtitle)}
-        />
+        {productsSection && (
+          <SectionHeading
+            eyebrow={t(productsSection.eyebrow)}
+            title={t(productsSection.title)}
+            subtitle={t(productsSection.subtitle)}
+          />
+        )}
         <div className="mt-12">
-          <ProductsGrid products={featuredProducts.slice(0, 3)} />
+          <ProductsGrid products={products.slice(0, 3)} />
         </div>
         <Reveal className="mt-10 flex justify-center">
           <Link
             href={localize('/products')}
             className="group inline-flex items-center gap-2 rounded-lg border-2 border-gold px-7 py-3 font-bold text-forest transition-colors hover:bg-gold"
           >
-            {t(productsSection.cta)}
+            {productsSection ? t(productsSection.cta) : t({ ar: 'عرض جميع المنتجات', en: 'View all products' })}
             <DirArrow />
           </Link>
         </Reveal>

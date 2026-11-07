@@ -1,0 +1,382 @@
+[
+  {
+    "path": "ar.html",
+    "bytes": 233953,
+    "kb": 228.47
+  },
+  {
+    "path": "en.html",
+    "bytes": 227061,
+    "kb": 221.74
+  },
+  {
+    "path": "ar\\blog.html",
+    "bytes": 173497,
+    "kb": 169.43
+  },
+  {
+    "path": "ar\\catalog.html",
+    "bytes": 172462,
+    "kb": 168.42
+  },
+  {
+    "path": "en\\catalog.html",
+    "bytes": 164639,
+    "kb": 160.78
+  },
+  {
+    "path": "en\\blog.html",
+    "bytes": 160626,
+    "kb": 156.86
+  },
+  {
+    "path": "ar\\products.html",
+    "bytes": 107490,
+    "kb": 104.97
+  },
+  {
+    "path": "en\\products.html",
+    "bytes": 103730,
+    "kb": 101.3
+  },
+  {
+    "path": "ar\\blog\\food-supply-companies-restaurants-riyadh.html",
+    "bytes": 86741,
+    "kb": 84.71
+  },
+  {
+    "path": "ar\\blog\\hotel-hospitality-food-supply-makkah-madinah-jeddah.html",
+    "bytes": 86100,
+    "kb": 84.08
+  },
+  {
+    "path": "ar\\blog\\22-years-excellence-food-supply-saudi-arabia-since-2004.html",
+    "bytes": 85353,
+    "kb": 83.35
+  },
+  {
+    "path": "ar\\blog\\mnaveth-altourid-food-supply-chain-expansion-vision-2030.html",
+    "bytes": 85146,
+    "kb": 83.15
+  },
+  {
+    "path": "ar\\blog\\bulk-frozen-meat-procurement-guide-saudi-arabia.html",
+    "bytes": 85039,
+    "kb": 83.05
+  },
+  {
+    "path": "ar\\branches.html",
+    "bytes": 84936,
+    "kb": 82.95
+  },
+  {
+    "path": "ar\\blog\\brazilian-vs-indian-frozen-meat-restaurants-comparison.html",
+    "bytes": 84785,
+    "kb": 82.8
+  },
+  {
+    "path": "ar\\blog\\labor-camp-catering-construction-food-supply-saudi.html",
+    "bytes": 84661,
+    "kb": 82.68
+  },
+  {
+    "path": "ar\\blog\\peak-season-food-supply-risk-management-ramadan-riyadh-season.html",
+    "bytes": 84475,
+    "kb": 82.5
+  },
+  {
+    "path": "ar\\blog\\haccp-iso-food-safety-standards-dry-cold-storage-saudi.html",
+    "bytes": 84460,
+    "kb": 82.48
+  },
+  {
+    "path": "ar\\blog\\sfda-regulations-importing-frozen-meat-saudi-arabia.html",
+    "bytes": 84251,
+    "kb": 82.28
+  },
+  {
+    "path": "ar\\blog\\wholesale-canned-food-tomato-paste-legumes-saudi.html",
+    "bytes": 84225,
+    "kb": 82.25
+  },
+  {
+    "path": "ar\\blog\\future-saudi-food-trade-supply-chains-vision-2030.html",
+    "bytes": 84194,
+    "kb": 82.22
+  },
+  {
+    "path": "ar\\blog\\government-corporate-food-supply-contracts-saudi-arabia.html",
+    "bytes": 84123,
+    "kb": 82.15
+  },
+  {
+    "path": "ar\\blog\\indian-basmati-rice-wholesale-import-guide-saudi.html",
+    "bytes": 83742,
+    "kb": 81.78
+  },
+  {
+    "path": "ar\\blog\\cold-chain-logistics-frozen-meat-transportation-saudi-arabia.html",
+    "bytes": 83628,
+    "kb": 81.67
+  },
+  {
+    "path": "ar\\blog\\wholesale-frozen-liver-suppliers-riyadh-jeddah.html",
+    "bytes": 83582,
+    "kb": 81.62
+  },
+  {
+    "path": "ar\\blog\\essential-food-supplies-checklist-restaurants.html",
+    "bytes": 83527,
+    "kb": 81.57
+  },
+  {
+    "path": "ar\\blog\\annual-food-supply-contracts-restaurants-saudi-arabia.html",
+    "bytes": 83252,
+    "kb": 81.3
+  },
+  {
+    "path": "ar\\blog\\cloud-kitchens-food-supply-chains-saudi-arabia.html",
+    "bytes": 83246,
+    "kb": 81.29
+  },
+  {
+    "path": "ar\\blog\\wholesale-cooking-oil-food-service-factories-saudi.html",
+    "bytes": 83065,
+    "kb": 81.12
+  },
+  {
+    "path": "ar\\blog\\premium-dates-wholesale-hospitality-corporate-saudi.html",
+    "bytes": 82784,
+    "kb": 80.84
+  },
+  {
+    "path": "en\\branches.html",
+    "bytes": 82757,
+    "kb": 80.82
+  },
+  {
+    "path": "ar\\blog\\wholesale-food-supplies-restaurants-jeddah.html",
+    "bytes": 82687,
+    "kb": 80.75
+  },
+  {
+    "path": "ar\\products\\frozen-meat.html",
+    "bytes": 75347,
+    "kb": 73.58
+  },
+  {
+    "path": "ar\\products\\basmati-rice.html",
+    "bytes": 75100,
+    "kb": 73.34
+  },
+  {
+    "path": "en\\blog\\food-supply-companies-restaurants-riyadh.html",
+    "bytes": 74777,
+    "kb": 73.02
+  },
+  {
+    "path": "ar\\products\\frozen-liver.html",
+    "bytes": 74762,
+    "kb": 73.01
+  },
+  {
+    "path": "en\\blog\\mnaveth-altourid-food-supply-chain-expansion-vision-2030.html",
+    "bytes": 74331,
+    "kb": 72.59
+  },
+  {
+    "path": "ar\\products\\premium-dates.html",
+    "bytes": 74130,
+    "kb": 72.39
+  },
+  {
+    "path": "ar\\products\\canned-goods.html",
+    "bytes": 74032,
+    "kb": 72.3
+  },
+  {
+    "path": "en\\blog\\22-years-excellence-food-supply-saudi-arabia-since-2004.html",
+    "bytes": 73983,
+    "kb": 72.25
+  },
+  {
+    "path": "en\\blog\\bulk-frozen-meat-procurement-guide-saudi-arabia.html",
+    "bytes": 73746,
+    "kb": 72.02
+  },
+  {
+    "path": "en\\blog\\peak-season-food-supply-risk-management-ramadan-riyadh-season.html",
+    "bytes": 73504,
+    "kb": 71.78
+  },
+  {
+    "path": "en\\blog\\future-saudi-food-trade-supply-chains-vision-2030.html",
+    "bytes": 73261,
+    "kb": 71.54
+  },
+  {
+    "path": "en\\blog\\government-corporate-food-supply-contracts-saudi-arabia.html",
+    "bytes": 73192,
+    "kb": 71.48
+  },
+  {
+    "path": "en\\blog\\labor-camp-catering-construction-food-supply-saudi.html",
+    "bytes": 73123,
+    "kb": 71.41
+  },
+  {
+    "path": "en\\blog\\brazilian-vs-indian-frozen-meat-restaurants-comparison.html",
+    "bytes": 73064,
+    "kb": 71.35
+  },
+  {
+    "path": "en\\blog\\premium-dates-wholesale-hospitality-corporate-saudi.html",
+    "bytes": 73008,
+    "kb": 71.3
+  },
+  {
+    "path": "en\\blog\\wholesale-cooking-oil-food-service-factories-saudi.html",
+    "bytes": 72939,
+    "kb": 71.23
+  },
+  {
+    "path": "en\\blog\\haccp-iso-food-safety-standards-dry-cold-storage-saudi.html",
+    "bytes": 72929,
+    "kb": 71.22
+  },
+  {
+    "path": "en\\blog\\indian-basmati-rice-wholesale-import-guide-saudi.html",
+    "bytes": 72920,
+    "kb": 71.21
+  },
+  {
+    "path": "en\\blog\\sfda-regulations-importing-frozen-meat-saudi-arabia.html",
+    "bytes": 72899,
+    "kb": 71.19
+  },
+  {
+    "path": "en\\blog\\wholesale-canned-food-tomato-paste-legumes-saudi.html",
+    "bytes": 72889,
+    "kb": 71.18
+  },
+  {
+    "path": "en\\blog\\hotel-hospitality-food-supply-makkah-madinah-jeddah.html",
+    "bytes": 72864,
+    "kb": 71.16
+  },
+  {
+    "path": "en\\blog\\cloud-kitchens-food-supply-chains-saudi-arabia.html",
+    "bytes": 72828,
+    "kb": 71.12
+  },
+  {
+    "path": "en\\blog\\cold-chain-logistics-frozen-meat-transportation-saudi-arabia.html",
+    "bytes": 72796,
+    "kb": 71.09
+  },
+  {
+    "path": "en\\blog\\wholesale-food-supplies-restaurants-jeddah.html",
+    "bytes": 72719,
+    "kb": 71.01
+  },
+  {
+    "path": "en\\blog\\annual-food-supply-contracts-restaurants-saudi-arabia.html",
+    "bytes": 72656,
+    "kb": 70.95
+  },
+  {
+    "path": "en\\blog\\wholesale-frozen-liver-suppliers-riyadh-jeddah.html",
+    "bytes": 72576,
+    "kb": 70.88
+  },
+  {
+    "path": "en\\blog\\essential-food-supplies-checklist-restaurants.html",
+    "bytes": 72357,
+    "kb": 70.66
+  },
+  {
+    "path": "ar\\products\\natural-juice.html",
+    "bytes": 70924,
+    "kb": 69.26
+  },
+  {
+    "path": "en\\products\\frozen-meat.html",
+    "bytes": 70426,
+    "kb": 68.78
+  },
+  {
+    "path": "en\\products\\basmati-rice.html",
+    "bytes": 70405,
+    "kb": 68.75
+  },
+  {
+    "path": "en\\products\\frozen-liver.html",
+    "bytes": 70370,
+    "kb": 68.72
+  },
+  {
+    "path": "en\\products\\canned-goods.html",
+    "bytes": 69878,
+    "kb": 68.24
+  },
+  {
+    "path": "en\\products\\premium-dates.html",
+    "bytes": 69631,
+    "kb": 68
+  },
+  {
+    "path": "en\\products\\natural-juice.html",
+    "bytes": 67577,
+    "kb": 65.99
+  },
+  {
+    "path": "ar\\services\\food-supply.html",
+    "bytes": 62413,
+    "kb": 60.95
+  },
+  {
+    "path": "ar\\services\\restaurants-hotels.html",
+    "bytes": 62361,
+    "kb": 60.9
+  },
+  {
+    "path": "ar\\services\\sea-import.html",
+    "bytes": 62057,
+    "kb": 60.6
+  },
+  {
+    "path": "ar\\services\\land-transport.html",
+    "bytes": 61719,
+    "kb": 60.27
+  },
+  {
+    "path": "en\\services\\restaurants-hotels.html",
+    "bytes": 60187,
+    "kb": 58.78
+  },
+  {
+    "path": "en\\services\\land-transport.html",
+    "bytes": 59954,
+    "kb": 58.55
+  },
+  {
+    "path": "en\\services\\food-supply.html",
+    "bytes": 59822,
+    "kb": 58.42
+  },
+  {
+    "path": "en\\services\\sea-import.html",
+    "bytes": 59766,
+    "kb": 58.37
+  },
+  {
+    "path": "_global-error.html",
+    "bytes": 8944,
+    "kb": 8.73
+  },
+  {
+    "path": "_not-found.html",
+    "bytes": 7029,
+    "kb": 6.86
+  }
+]

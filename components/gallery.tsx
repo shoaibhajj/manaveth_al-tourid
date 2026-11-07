@@ -12,13 +12,38 @@ type LightboxMedia = Pick<GalleryItem, 'type' | 'src' | 'videoSrc' | 'alt'>
 
 const PAGE_SIZE = 8
 
-export function Gallery() {
+export function Gallery({
+  items: itemsProp,
+  categories: categoriesProp,
+  featured: featuredProp,
+  showCategoryFilter: filterProp,
+  gallerySection: sectionProp,
+  ui: uiProp,
+}: {
+  items?: GalleryItem[]
+  categories?: any[]
+  featured?: any
+  showCategoryFilter?: boolean
+  gallerySection?: any
+  ui?: any
+} = {}) {
   const { t, locale } = useLocale()
-  const { site, galleryItems: items, galleryCategories, galleryFeatured, showCategoryFilter } = useContent()
+  const {
+    site,
+    galleryItems: contextItems,
+    galleryCategories: contextCats,
+    galleryFeatured: contextFeatured,
+    showCategoryFilter: contextFilter,
+  } = useContent()
+  const items = itemsProp ?? contextItems ?? []
+  const galleryCategories = categoriesProp ?? contextCats ?? []
+  const galleryFeatured = featuredProp ?? contextFeatured
+  const showCategoryFilter = filterProp ?? contextFilter ?? true
+  const gallerySection = sectionProp ?? site?.gallerySection
+  const ui = uiProp ?? site?.ui
   const [filter, setFilter] = useState('all')
   const [page, setPage] = useState(0)
   const [lightbox, setLightbox] = useState<LightboxMedia | null>(null)
-  const { gallerySection, ui } = site
 
   const visible = filter === 'all' ? items : items.filter((item) => item.category === filter)
   const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE))

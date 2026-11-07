@@ -117,6 +117,18 @@ export type SiteContent = {
   source: 'sanity' | 'fallback'
 }
 
+export type LayoutContent = {
+  site: SiteData
+  contact: ContactData
+  services: Card[]
+  sections: Record<SectionKey, boolean>
+  currency: Localized
+  showMaps: boolean
+  branches: Place[]
+  seo: { home: PageSeo }
+  favicon?: string
+}
+
 const navItemsToKeep = site.nav
 
 const staticSite: SiteData = {
@@ -198,4 +210,25 @@ export const staticContent: SiteContent = {
     branches: { title: site.metadata.branchesTitle, description: site.branchesPage.subtitle },
   },
   source: 'fallback',
+}
+
+export const staticLayoutContent: LayoutContent = {
+  site: staticSite,
+  contact: {
+    phone: contact.phone,
+    email: contact.email,
+    address: contact.address,
+    whatsapp: contact.whatsapp,
+    productOrderMessage: contact.productOrderMessage,
+    social: [],
+  },
+  services: visibleSorted(services),
+  sections: staticContent.sections,
+  currency,
+  showMaps: true,
+  branches: visibleSorted(places.filter((p) => p.kind === 'branch')),
+  seo: {
+    home: { title: site.metadata.title, description: site.metadata.description },
+  },
+  favicon: '/images/logo.png',
 }

@@ -2,7 +2,7 @@ import 'server-only'
 import { draftMode } from 'next/headers'
 import { allArticles } from '../content/articles-data'
 import { products as fallbackProducts } from '../content/products'
-import { defaultCatalogProducts } from '../content/catalog-data'
+import { isSanityConfigured } from '@/sanity/env'
 import { sanityFetch } from './live'
 import {
   articleBySlugDraftQuery,
@@ -28,42 +28,32 @@ async function fetchDetail(query: string, draftQuery: string, slug: string): Pro
   }
 }
 
+/**
+ * F1: Sanity is the SINGLE source of truth for products.
+ * If a product does not exist in Sanity (or is hidden/deleted), return null -> 404.
+ * Fallback to static files only if Sanity is not configured at all.
+ */
 export const getProductBySlug = async (slug: string) => {
   const fromSanity = await fetchDetail(productBySlugQuery, productBySlugDraftQuery, slug)
   if (fromSanity) return fromSanity
 
+  if (isSanityConfigured) {
+    return null
+  }
+
+  // Local offline development fallback only when no Sanity credentials exist
   const fromDefault = fallbackProducts.find((p) => p.slug === slug || p.id === slug)
   if (fromDefault) return fromDefault
 
-  const cleanSlug = slug.toLowerCase().trim()
-  const fromCatalog = defaultCatalogProducts.find(
-    (p) =>
-      p.id.toLowerCase() === cleanSlug ||
-      (p.sku && p.sku.toLowerCase() === cleanSlug) ||
-      (p.sku && p.sku.toLowerCase().replace(/[^\w]/g, '-') === cleanSlug)
-  )
-  if (fromCatalog) {
-    return {
-      _id: fromCatalog.id,
-      name: fromCatalog.name,
-      slug: { current: fromCatalog.sku || fromCatalog.id },
-      description: fromCatalog.description,
-      longDescription: fromCatalog.description,
-      origin: fromCatalog.origin,
-      packaging: fromCatalog.packaging,
-      storage: fromCatalog.storage,
-      certifications: fromCatalog.certifications,
-      usage: fromCatalog.usage,
-      image: fromCatalog.image,
-    }
-  }
   return null
 }
 
 export const getServiceBySlug = (slug: string) => fetchDetail(serviceBySlugQuery, serviceBySlugDraftQuery, slug)
+
 export const getArticleBySlug = async (slug: string) => {
   const fromSanity = await fetchDetail(articleBySlugQuery, articleBySlugDraftQuery, slug)
   if (fromSanity) return fromSanity
+  if (isSanityConfigured) return null
   const fallback = allArticles.find((a) => a.slug.current === slug)
   return (fallback as unknown as DetailDocument) ?? null
 }

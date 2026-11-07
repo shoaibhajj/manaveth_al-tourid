@@ -41,7 +41,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const title = textFor(product.name, locale)
   const description = textFor(product.description, locale)
   const longDescription = textFor(product.longDescription, locale)
-  const image = imageUrl(product.image, 1400) || (typeof product.image === 'string' ? product.image : undefined) || product.image?.asset?.url || '/images/hero.png'
+  const image = imageUrl(product.image, 1400) || (typeof product.image === 'string' ? product.image : undefined) || product.image?.asset?.url || undefined
   const productPath = `/products/${slug}`
   const shareUrl = `${base}${localePath(productPath, locale)}`
   const sections = [
@@ -62,7 +62,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     <main className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
       <JsonLd graph={productDetailGraph(product, locale, base)} />
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-        {image ? <img src={image} alt={title} className="aspect-[4/3] w-full rounded-3xl object-cover" /> : null}
+        {image ? (
+          <img src={image} alt={title} className="aspect-[4/3] w-full rounded-3xl object-cover" />
+        ) : (
+          <div className="aspect-[4/3] w-full rounded-3xl bg-forest/5 border border-dashed border-forest/20 flex flex-col items-center justify-center text-forest/50 p-6 text-center">
+            <span className="text-sm font-semibold">{labelFor(locale, 'صورة المنتج قيد الاعتماد', 'Product image pending verification')}</span>
+          </div>
+        )}
         <article className="flex flex-col gap-5">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">{labelFor(locale, 'منتج', 'Product')}</p>
           <h1 className="text-4xl font-bold tracking-tight text-foreground">{title}</h1>

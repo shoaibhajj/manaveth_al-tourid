@@ -60,10 +60,10 @@ export const getServiceBySlug = async (slug: string) => {
 }
 
 export const getArticleBySlug = async (slug: string) => {
-  if (slug === 'oli1') return null
+  if (!slug || slug === 'oli1' || slug === 'undefined') return null
   const fromSanity = await fetchDetail(articleBySlugQuery, articleBySlugDraftQuery, slug, ['articles', `article:${slug}`])
   if (fromSanity) return fromSanity
   if (isSanityConfigured) return null
-  const fallback = allArticles.find((a) => a.slug.current === slug)
+  const fallback = allArticles.find((a) => (a.slug?.current || a.slug) === slug)
   return (fallback as unknown as DetailDocument) ?? null
 }

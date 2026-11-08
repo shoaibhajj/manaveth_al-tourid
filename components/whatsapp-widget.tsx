@@ -51,11 +51,9 @@ export function WhatsappWidget() {
     pathname.startsWith('/menu/') ||
     rawPathname.includes('/menu')
 
-  if (isCatalogPage) {
-    return null
-  }
-
   useEffect(() => {
+    if (isCatalogPage) return
+
     const handleCheck = () => {
       const footerBottom = document.getElementById('site-footer-bottom')
       if (footerBottom) {
@@ -103,7 +101,12 @@ export function WhatsappWidget() {
       window.removeEventListener('resize', handleCheck)
       if (observer) observer.disconnect()
     }
-  }, [])
+  }, [isCatalogPage])
+
+  // Rules of Hooks: early returns must only happen AFTER all hooks have executed
+  if (isCatalogPage) {
+    return null
+  }
 
   return (
     <>

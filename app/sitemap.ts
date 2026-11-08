@@ -111,7 +111,7 @@ export default async function sitemap(props?: {
   const buildArticlesSitemap = (): MetadataRoute.Sitemap => {
     const articles = Array.isArray(details?.articles) ? details.articles : []
     return articles
-      .filter((a) => a?.slug)
+      .filter((a) => a?.slug && a.slug !== 'undefined' && a.slug !== 'oli1')
       .flatMap((a) => {
         const path = `/blog/${a.slug}`
         return locales.map((locale) => ({

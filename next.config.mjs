@@ -83,6 +83,17 @@ const nextConfig = {
       destination: '/en/blog/22-years-excellence-food-supply-saudi-arabia-since-2004',
       permanent: true,
     },
+    // Fix: redirect legacy /blog/undefined URLs to /blog
+    {
+      source: '/blog/undefined',
+      destination: '/blog',
+      permanent: false,
+    },
+    {
+      source: '/en/blog/undefined',
+      destination: '/en/blog',
+      permanent: false,
+    },
   ],
 }
 

@@ -23,7 +23,7 @@ export async function generateStaticParams() {
   const articles = Array.isArray(details?.articles) ? details.articles : []
   const params: { locale: string; slug: string }[] = []
   for (const a of articles) {
-    if (a?.slug && a.slug !== 'oli1') {
+    if (a?.slug && a.slug !== 'oli1' && a.slug !== 'undefined') {
       params.push({ locale: 'ar', slug: a.slug })
       params.push({ locale: 'en', slug: a.slug })
     }
@@ -37,6 +37,9 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { slug, locale: rawLocale } = await params
+  if (!slug || slug === 'undefined') {
+    return { title: 'Article', robots: { index: false, follow: false } }
+  }
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const article = await getArticleBySlug(slug)
   if (!article) return { title: 'Article', robots: { index: false, follow: false } }
@@ -224,6 +227,9 @@ export default async function ArticlePage({
   params: Promise<{ locale: string; slug: string }>
 }) {
   const { slug, locale: rawLocale } = await params
+  if (!slug || slug === 'undefined') {
+    return notFound()
+  }
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const [article, base] = await Promise.all([getArticleBySlug(slug), getSiteUrl()])
   if (!article) return notFound()

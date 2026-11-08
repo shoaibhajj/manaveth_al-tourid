@@ -81,7 +81,7 @@ export default async function CatalogPage({
         updatedAt: p.updatedAt,
       }
     })
-  } else if (!isSanityConfigured) {
+  } else {
     productsToUse = defaultCatalogProducts.map((p) => ({
       ...p,
       slug: p.slug || p.sku || p.id,
@@ -107,7 +107,7 @@ export default async function CatalogPage({
 
   return (
     <div className="pt-16 md:pt-20">
-      <JsonLd graph={itemListSchema} />
+      <JsonLd schema={itemListSchema} />
       <CatalogView
         products={productsToUse}
         categories={catalogCategories}

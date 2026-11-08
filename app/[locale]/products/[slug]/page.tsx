@@ -7,7 +7,7 @@ import { ProductDetailActions } from '@/components/product-detail-actions'
 import { ShareActions } from '@/components/share-actions'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { getProductBySlug } from '@/lib/sanity/details'
-import { getDetailSlugs, getArticles } from '@/lib/sanity/articles'
+import { getDetailSlugs, getArticles, resolveArticleSlug } from '@/lib/sanity/articles'
 import { getContent } from '@/lib/sanity/get-content'
 import { imageUrl } from '@/lib/sanity/image'
 import { productDetailGraph } from '@/lib/seo'
@@ -357,7 +357,8 @@ export default async function ProductDetailPage({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {relatedArticles.map((art: any) => {
-              const artSlug = art.slug?.current || art.slug
+              const artSlug = resolveArticleSlug(art)
+              if (!artSlug || artSlug === 'undefined') return null
               const artTitle = isAr ? art.title?.ar || art.title : art.title?.en || art.title
               return (
                 <Link

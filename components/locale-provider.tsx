@@ -7,7 +7,7 @@ import { directionOf, localePath, type Direction, type Locale, type Localized } 
 type LocaleContextValue = {
   locale: Locale
   dir: Direction
-  t: (value: Localized) => string
+  t: (value: Localized | { ar?: string; en?: string } | string | null | undefined) => string
   /** Prefixes internal links with /en when the page is English. */
   localize: (path: string) => string
 }
@@ -28,7 +28,11 @@ export function LocaleProvider({
     () => ({
       locale,
       dir: directionOf(locale),
-      t: (v) => v[locale],
+      t: (v) => {
+        if (!v) return ''
+        if (typeof v === 'string') return v
+        return v[locale] || v.ar || v.en || ''
+      },
       localize: (path) => localePath(path, locale),
     }),
     [locale],

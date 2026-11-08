@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
-import { getArticles } from '@/lib/sanity/articles'
+import { getArticles, resolveArticleSlug } from '@/lib/sanity/articles'
 import { imageUrl } from '@/lib/sanity/image'
 import { getSiteUrl } from '@/lib/site-url'
 import { buildMetadata } from '@/lib/seo/build-metadata'
@@ -59,15 +59,17 @@ export default async function BlogPage({
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {articles.map((article) => {
-          const title = article.title?.[locale] || article.title?.ar
-          const excerpt = article.excerpt?.[locale] || article.excerpt?.ar
+          const title = article.title?.[locale] || article.title?.ar || article.title?.en || ''
+          const excerpt = article.excerpt?.[locale] || article.excerpt?.ar || article.excerpt?.en || ''
           const image = imageUrl(article.coverImage, 800) || `${base}/images/logo.png`
-          const slug = article.slug?.current || article.slug
+          const slug = resolveArticleSlug(article)
+          if (!slug || slug === 'undefined') return null
+
           const href = localePath(`/blog/${slug}`, locale)
 
           return (
             <article
-              key={article._id}
+              key={article._id || slug}
               className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
             >
               <Link href={href} className="relative aspect-[16/10] w-full overflow-hidden bg-muted">

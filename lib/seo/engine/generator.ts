@@ -388,7 +388,7 @@ export function buildProductSeo(
     { name: isAr ? 'المنتجات' : 'Products', url: `${site.baseUrl}${localePath('/products', locale)}` },
   ]
 
-  if (product.category) {
+  if (product.category && typeof product.category === 'object') {
     const catName = getLocalizedText(product.category.name, locale)
     const catSlug = product.category.slug || product.category._id
     if (catName && catSlug) {

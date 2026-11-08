@@ -312,6 +312,21 @@ function toCompanyPost(doc: Doc, index: number): CompanyPost {
   }
 }
 
+function whatsapp(
+  channel: Doc | undefined,
+  fallback: { number: string; label: Localized; shortLabel: Localized; message: Localized }
+) {
+  return {
+    number: filled(channel?.number) ? clean(channel!.number) : fallback.number,
+    label: localized(channel?.name, fallback.label),
+    shortLabel: localized(channel?.shortLabel, fallback.shortLabel),
+    message: (() => {
+      const message = localized(channel?.message, fallback.message)
+      return { ar: clean(message.ar), en: clean(message.en) }
+    })(),
+  }
+}
+
 export function normalizeContent(data: Doc | null | undefined): SiteContent {
   if (!data || (!data.settings && !data.home && !data.products?.length)) return staticContent
 
@@ -437,15 +452,7 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
   const featuredAlt = featuredDoc ? altOf(featuredDoc.image, localized(featuredDoc.alt, base.galleryFeatured.alt)) : undefined
 
   // Contact
-  const whatsapp = (channel: Doc | undefined, fallback: typeof base.contact.whatsapp.quote) => ({
-    number: filled(channel?.number) ? clean(channel!.number) : fallback.number,
-    label: localized(channel?.name, fallback.label),
-    shortLabel: localized(channel?.shortLabel, fallback.shortLabel),
-    message: (() => {
-      const message = localized(channel?.message, fallback.message)
-      return { ar: clean(message.ar), en: clean(message.en) }
-    })(),
-  })
+
   const addressDoc = optionalLocalized(settings.address)
   const productMessage = optionalLocalized(contactDoc.productOrderMessage)
 

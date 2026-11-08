@@ -46,7 +46,7 @@ export function buildProductSchema(product: any, locale: Locale, base: string) {
   const image = typeof product.image === 'string' ? product.image : product.image?.asset?.url
 
   const brandName =
-    typeof product.brand === 'object' && product.brand
+    product.brand && typeof product.brand === 'object' && product.brand.name
       ? t(product.brand.name, locale)
       : typeof product.brand === 'string'
         ? product.brand
@@ -67,9 +67,11 @@ export function buildProductSchema(product: any, locale: Locale, base: string) {
       name: brandName,
     },
     category:
-      typeof product.category === 'object'
+      product.category && typeof product.category === 'object' && product.category.name
         ? t(product.category.name, locale)
-        : product.categoryId || undefined,
+        : typeof product.category === 'string'
+          ? product.category
+          : product.categoryId || undefined,
     offers: buildOffer(product, productUrl, base),
   })
 }

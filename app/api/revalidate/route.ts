@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { revalidatePath, revalidateTag } from 'next/cache'
-import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook'
+import { isValidSignature, SIGNATURE_HEADER_NAME } from '@/lib/sanity/webhook'
 import { submitIndexNow } from '@/lib/seo/indexnow'
 
 export const dynamic = 'force-dynamic'

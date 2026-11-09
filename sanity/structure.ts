@@ -1,5 +1,6 @@
 import type { DefaultDocumentNodeResolver, StructureBuilder, StructureResolver } from 'sanity/structure'
 import { ProductSeoPane } from './components/ProductSeoPane'
+import { ClientGuidePane } from './components/ClientGuidePane'
 
 export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, { schemaType }) => {
   if (schemaType === 'product') {
@@ -118,6 +119,14 @@ export const structure: StructureResolver = (S) =>
             .id('seo-group')
             .title('محركات البحث (SEO)')
             .items([
+              S.listItem()
+                .id('client-guide-item')
+                .title('📖 دليل العميل وإرشادات الفهرسة')
+                .child(
+                  S.component(ClientGuidePane)
+                    .title('دليل العميل وإرشادات الفهرسة')
+                ),
+              S.divider(),
               singleton(S, 'seoHome', 'الصفحة الرئيسية'),
               singleton(S, 'seoProducts', 'صفحة المنتجات'),
               singleton(S, 'seoBranches', 'صفحة الفروع والمستودعات'),

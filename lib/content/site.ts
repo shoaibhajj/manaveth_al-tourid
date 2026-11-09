@@ -40,7 +40,7 @@ export const site = {
     { id: 'products', href: '/products', label: { ar: 'المنتجات', en: 'Products' } },
     { id: 'sectors', href: '/#sectors', label: { ar: 'القطاعات', en: 'Sectors' } },
     { id: 'certifications', href: '/certifications', label: { ar: 'الشهادات', en: 'Certifications' } },
-    { id: 'branches', href: '/branches', label: { ar: 'المستودعات والفروع', en: 'Branches & Hubs' } },
+    { id: 'branches', href: '/branches', label: { ar: 'الفروع', en: 'Branches' } },
     { id: 'blog', href: '/blog', label: { ar: 'المقالات', en: 'Articles' } },
     { id: 'contact', href: '/contact', label: { ar: 'تواصل معنا', en: 'Contact' } },
   ] satisfies NavItem[],

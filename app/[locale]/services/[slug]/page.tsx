@@ -10,6 +10,7 @@ import { getDetailSlugs } from '@/lib/sanity/articles'
 import { imageUrl } from '@/lib/sanity/image'
 import { serviceDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
+import { getLayoutContent } from '@/lib/sanity/get-content'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import {
   Building2,
@@ -85,8 +86,10 @@ export default async function ServiceDetailPage({
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
 
-  const [service, base] = await Promise.all([getServiceBySlug(slug), getSiteUrl()])
+  const [service, base, layout] = await Promise.all([getServiceBySlug(slug), getSiteUrl(), getLayoutContent()])
   if (!service) return notFound()
+
+  const contactWhatsapp = (layout.contact?.whatsapp?.quote?.number || layout.contact?.whatsapp?.orders?.number || layout.contact?.phone || '966509971699').replace(/\D/g, '')
 
   const title = textFor(service.name, locale)
   const description = textFor(service.description, locale)
@@ -100,7 +103,7 @@ export default async function ServiceDetailPage({
       ? `السلام عليكم، أود الاستفسار عن خدمة (${title}) لمنشأتنا.`
       : `Hello, I would like to inquire about the service (${title}) for our business.`
   )
-  const whatsappUrl = `https://wa.me/966551065715?text=${whatsappMsg}`
+  const whatsappUrl = `https://wa.me/${contactWhatsapp}?text=${whatsappMsg}`
 
   // Standardized B2B Service Structure (Task P4)
   const phases = isAr

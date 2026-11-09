@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
+import { getLayoutContent } from '@/lib/sanity/get-content'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import { JsonLd } from '@/components/json-ld'
 import {
@@ -36,7 +37,7 @@ export async function generateMetadata({
 
   const description =
     locale === 'ar'
-      ? 'تواصل مع إدارة مبيعات الجملة بشركة منافذ التوريد للتجارة (سجل تجاري 1116011768): هاتف +966551065715، واتساب فوري، مستودع السلي بالرياض، ومستودع الخمرة بجدة.'
+      ? 'تواصل مع إدارة مبيعات الجملة بشركة منافذ التوريد للتجارة (سجل تجاري 1116011768): هاتف مبيعات مباشر، واتساب فوري، مستودع السلي بالرياض، ومستودع الخمرة بجدة.'
       : 'Connect with Mnaveth ALTourid wholesale desk (CR 1116011768): direct phone, WhatsApp quotes, Al-Sulai Riyadh hub and Al-Khumrah Jeddah facility.'
 
   return buildMetadata({
@@ -63,15 +64,17 @@ export default async function ContactPage({
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
 
-  const phone = '+966551065715'
-  const email = 'info@mnaveth.com'
-  const whatsappNumber = '966551065715'
+  const layout = await getLayoutContent()
+  const phone = layout.contact?.phone || '+966509971699'
+  const email = layout.site?.email || 'info@mnafeth.com'
+  const quotesNumber = (layout.contact?.whatsapp?.quote?.number || layout.contact?.phone || '966509971699').replace(/\D/g, '')
+  const ordersNumber = (layout.contact?.whatsapp?.orders?.number || quotesNumber || '966503000295').replace(/\D/g, '')
   const cr = '1116011768'
 
-  const whatsappOrdersUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+  const whatsappOrdersUrl = `https://wa.me/${ordersNumber}?text=${encodeURIComponent(
     isAr ? 'السلام عليكم، أود التواصل بخصوص طلب توريد أصناف غذائية.' : 'Hello, I want to discuss placing a wholesale order.'
   )}`
-  const whatsappQuotesUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+  const whatsappQuotesUrl = `https://wa.me/${quotesNumber}?text=${encodeURIComponent(
     isAr ? 'السلام عليكم، أود الحصول على عرض سعر وتفاصيل عقود التوريد.' : 'Hello, I would like to request a wholesale contract proposal.'
   )}`
 

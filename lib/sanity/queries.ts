@@ -110,7 +110,7 @@ export const landingPageBySlugQuery = defineQuery(`*[_type == "landingPage" && s
   "certificates": certificates[]->{ _id, name, issuer, validUntil }
 }`)
 
-export const meatSupplyProductsQuery = defineQuery(`*[_type == "product" && (visible != false) && (productType in ['meat', 'poultry'] || category->slug.current == 'meat-poultry' || slug.current in ['frozen-meat', 'frozen-liver'])] | order(order asc){
+export const meatSupplyProductsQuery = defineQuery(`*[_type == "product" && (visible != false) && (category._ref == "category-meat-poultry" || category->_id == "category-meat-poultry" || productType in ['meat', 'poultry'] || category->slug.current == 'meat-poultry' || slug.current match "*bf*" || slug.current match "*ck*" || slug.current in ['frozen-meat', 'frozen-liver'])] | order(_createdAt asc){
   ...,
   "slug": slug.current,
   "category": category->{ _id, name, "slug": slug.current }

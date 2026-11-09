@@ -12,6 +12,7 @@ import { imageUrl } from '@/lib/sanity/image'
 import { articleDetailGraph } from '@/lib/seo'
 import { getSiteUrl } from '@/lib/site-url'
 import { whatsappUrl, telUrl } from '@/lib/content/contact'
+import { getLayoutContent } from '@/lib/sanity/get-content'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
@@ -231,8 +232,9 @@ export default async function ArticlePage({
     return notFound()
   }
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
-  const [article, base] = await Promise.all([getArticleBySlug(slug), getSiteUrl()])
+  const [article, base, layout] = await Promise.all([getArticleBySlug(slug), getSiteUrl(), getLayoutContent()])
   if (!article) return notFound()
+  const contactWhatsApp = layout.contact?.whatsapp?.quote?.number || layout.contact?.whatsapp?.orders?.number || layout.contact?.phone || '+966509971699'
 
   const title = textFor(article.title, locale)
   const excerpt = textFor(article.excerpt, locale)
@@ -321,7 +323,7 @@ export default async function ArticlePage({
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <a
-              href={whatsappUrl('+966551065715', whatsappMessage)}
+              href={whatsappUrl(contactWhatsApp, whatsappMessage)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl bg-gold-gradient px-6 py-3.5 font-bold text-forest-deep shadow-lg transition-transform hover:-translate-y-0.5"

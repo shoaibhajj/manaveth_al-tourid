@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { sanityFetch } from '@/lib/sanity/live'
+import { getLayoutContent } from '@/lib/sanity/get-content'
 import { defineQuery } from 'next-sanity'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import { JsonLd } from '@/components/json-ld'
@@ -177,6 +178,12 @@ export default async function CertificationsPage({
           fileUrl: undefined,
         }))
 
+  const layout = await getLayoutContent()
+  const whatsappNum = (layout.contact?.whatsapp?.quote?.number || layout.contact?.whatsapp?.orders?.number || layout.contact?.phone || '966509971699').replace(/\D/g, '')
+  const whatsappUrl = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(
+    isAr ? 'السلام عليكم، أرغب في طلب ملف التوثيق الرقابي والشهادات المعتمدة.' : 'Hello, I would like to request the regulatory compliance certificate pack.'
+  )}`
+
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
@@ -278,7 +285,7 @@ export default async function CertificationsPage({
               </p>
             </div>
             <a
-              href="https://wa.me/966551065715"
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white shadow transition hover:bg-emerald-500"

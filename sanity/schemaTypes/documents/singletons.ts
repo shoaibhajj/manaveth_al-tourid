@@ -269,6 +269,28 @@ export const certificationsPage = defineType({
   name: 'certificationsPage',
   title: 'إعدادات صفحة الشهادات وتراخيص الجودة',
   type: 'document',
+  initialValue: () => ({
+    title: {
+      _type: 'localizedString',
+      ar: 'الشهادات والاعتمادات الرسمية وسلامة الغذاء | منافذ التوريد',
+      en: 'Official Certifications & Food Safety Accreditations | Mnaveth ALTourid',
+    },
+    h1: {
+      _type: 'localizedString',
+      ar: 'الشهادات والتراخيص الرسمية',
+      en: 'Official Certifications & Accreditations',
+    },
+    badge: {
+      _type: 'localizedString',
+      ar: 'الامتثال الرقابي وسلامة الغذاء',
+      en: 'Regulatory & Quality Compliance',
+    },
+    intro: {
+      _type: 'localizedText',
+      ar: 'تلتزم شركة منافذ التوريد بأعلى معايير الرقابة والتراخيص الحكومية المعتمدة لدى هيئة الغذاء والدواء (SFDA) لضمان جودة وسلامة كل شحنة تموينية تصل لعملائنا في كافة مناطق المملكة.',
+      en: 'Mnaveth ALTourid maintains comprehensive accreditations from food safety authorities (SFDA), ensuring absolute product integrity across Saudi Arabia.',
+    },
+  }),
   groups: [
     { name: 'content', title: 'المحتوى والترويسة', default: true },
     { name: 'seo', title: 'محركات البحث' },

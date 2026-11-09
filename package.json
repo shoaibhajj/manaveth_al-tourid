@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "tsx --test scripts/seo/__tests__/*.test.ts lib/seo/schema/__tests__/*.test.ts lib/seo/engine/__tests__/*.test.ts",
+    "test": "tsx --test scripts/seo/__tests__/*.test.ts lib/seo/schema/__tests__/*.test.ts lib/seo/engine/__tests__/*.test.ts scripts/seed/__tests__/*.test.ts",
     "sanity:import": "tsx scripts/import-sanity-content.ts",
     "seo:keywords": "tsx scripts/seo/keywords.ts",
     "seo:competitors": "tsx scripts/seo/competitors.ts",

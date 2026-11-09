@@ -81,13 +81,13 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label={t(site.ui.mainNav)} className="hidden xl:block">
-          <ul className="flex items-center gap-0.5 2xl:gap-1">
+        <nav aria-label={t(site.ui.mainNav)} className="hidden xl:block shrink-0">
+          <ul className="flex items-center flex-nowrap shrink-0 gap-0.5 2xl:gap-1">
             {navItems.map((item) => (
               <li key={item.id} className="shrink-0">
                 <Link
                   href={localize(item.href)}
-                  className={`relative whitespace-nowrap rounded-md px-2 py-1.5 text-xs 2xl:text-sm font-medium transition-colors ${
+                  className={`relative inline-block whitespace-nowrap rounded-md px-2 py-1.5 text-xs 2xl:text-sm font-medium transition-colors ${
                     activeId === item.id ? 'text-gold' : 'text-cream/85 hover:text-gold'
                   }`}
                 >
@@ -113,7 +113,7 @@ export function SiteHeader() {
               className="pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-shine bg-white/40"
               aria-hidden="true"
             />
-            {t(site.ui.requestQuote)}
+            <span className="whitespace-nowrap">{t(site.ui.requestQuote)}</span>
             <DirArrow />
           </Link>
           <a

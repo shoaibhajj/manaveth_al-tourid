@@ -5,6 +5,42 @@ export const landingPage = defineType({
   name: 'landingPage',
   title: 'صفحات الهبوط المخصصة (Landing Pages)',
   type: 'document',
+  initialValue: () => ({
+    title: {
+      _type: 'localizedString',
+      ar: 'توريد اللحوم المجمدة بالجملة للمطاعم والفنادق | منافذ التوريد',
+      en: 'Wholesale Frozen Meat & Poultry Supply in Saudi Arabia | Mnaveth ALTourid',
+    },
+    slug: {
+      _type: 'slug',
+      current: 'meat-supply',
+    },
+    h1: {
+      _type: 'localizedString',
+      ar: 'توريد اللحوم المجمدة والدواجن بالجملة لكبرى المطاعم والإعاشة',
+      en: 'Wholesale Frozen Meat & Poultry Supply for Catering & Restaurants',
+    },
+    eyebrow: {
+      _type: 'localizedString',
+      ar: 'اعتماد الغذاء والدواء SFDA · ذبح حلال 100% · توريد مبرد ومجمد',
+      en: 'SFDA Approved · 100% Halal Slaughter · Cold Chain Logistics',
+    },
+    intro: {
+      _type: 'localizedText',
+      ar: 'شركة منافذ التوريد للتجارة شريكك المعتمد في استيراد وتوريد اللحوم البقرية ولحوم الضأن والكبدة المجمدة وقطعيات الدواجن الفاخرة مباشرة من كبرى المسالخ المعتمدة في البرازيل والهند، مع الالتزام التام بالمواصفات القياسية السعودية وتأمين الفنادق والمطاعم ومطابخ الإعاشة.',
+      en: 'Mnaveth ALTourid is your certified partner for importing and supplying bulk frozen beef, mutton, beef liver, and poultry cuts directly from SFDA-approved abattoirs in Brazil and India to restaurants, hotels, and institutional caterers.',
+    },
+    minOrderText: {
+      _type: 'localizedString',
+      ar: 'الحد الأدنى للطلب: 50 كرتون أو 1 طن مع عقود توريد دورية ميسرة',
+      en: 'MOQ: 50 Master Cartons or 1 Ton with Scheduled Contract Deliveries',
+    },
+    whatsappButtonText: {
+      _type: 'localizedString',
+      ar: 'طلب تسعير توريد اللحوم الفوري',
+      en: 'Request Instant Meat Supply Quote',
+    },
+  }),
   fields: [
     defineField({
       name: 'title',

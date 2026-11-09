@@ -582,7 +582,7 @@ export default async function MeatSupplyPage({
               className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-bold text-emerald-800 shadow-md transition hover:bg-slate-100"
             >
               <MessageCircle className="h-5 w-5 text-emerald-600" />
-              <span>{isAr ? 'تحدث مع مسؤول مبيعات اللحوم (+966551065715)' : 'WhatsApp Wholesale Desk (+966551065715)'}</span>
+              <span>{isAr ? 'تحدث مع مسؤول مبيعات اللحوم' : 'WhatsApp Wholesale Desk'}</span>
             </a>
           </div>
         </div>

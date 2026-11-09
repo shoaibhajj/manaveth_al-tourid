@@ -25,7 +25,7 @@ const orderedList = (
   title: string,
   id: string,
   filter?: string,
-  defaultOrder: { field: string; direction: 'asc' | 'desc' }[] = [{ field: 'order', direction: 'asc' }],
+  defaultOrder: { field: string; direction: 'asc' | 'desc' }[] = [{ field: '_createdAt', direction: 'desc' }],
 ) =>
   S.listItem()
     .id(id)
@@ -85,32 +85,17 @@ export const structure: StructureResolver = (S) =>
                     .title('صفحة توريد اللحوم الرئيسية (/meat-supply)')
                 ),
               S.divider(),
-              orderedList(S, 'landingPage', '📑 كافة صفحات الهبوط والتوريد المخصصة', 'landingPages-all'),
-              S.listItem()
-                .id('meat-supply-sectors')
-                .title('🏢 قطاعات توريد اللحوم (مطاعم، فنادق، إعاشة)')
-                .child(
-                  S.documentList()
-                    .title('قطاعات توريد اللحوم')
-                    .schemaType('sector')
-                    .filter('_type == "sector"')
-                ),
-              S.listItem()
-                .id('meat-supply-cities')
-                .title('📍 مدن وتغطية توريد اللحوم (الرياض، جدة، مكة...)')
-                .child(
-                  S.documentList()
-                    .title('مدن التوريد والتغطية')
-                    .schemaType('city')
-                    .filter('_type == "city"')
-                ),
+              S.documentTypeListItem('landingPage').title('📑 كافة صفحات الهبوط والتوريد المخصصة'),
+              S.documentTypeListItem('sector').title('🏢 قطاعات توريد اللحوم (مطاعم، فنادق، إعاشة)'),
+              S.documentTypeListItem('city').title('📍 مدن وتغطية توريد اللحوم (الرياض، جدة، مكة...)'),
               S.divider(),
               orderedList(
                 S,
                 'product',
                 '🥩 أصناف اللحوم والدواجن في الكتالوج',
                 'meat-products-filter',
-                '_type == "product" && (productType in ["meat", "poultry"] || category->slug.current == "meat-poultry")'
+                '_type == "product" && (category._ref == "category-meat-poultry" || category->_id == "category-meat-poultry" || productType in ["meat", "poultry"] || slug.current match "*bf*" || slug.current match "*ck*" || slug.current in ["frozen-meat", "frozen-liver"])',
+                [{ field: '_createdAt', direction: 'desc' }]
               ),
             ])
         ),
@@ -126,7 +111,7 @@ export const structure: StructureResolver = (S) =>
             .items([
               singleton(S, 'certificationsPage', '📄 إعدادات صفحة الشهادات (/certifications)'),
               S.divider(),
-              orderedList(S, 'certificate', '📜 كافة وثائق وتراخيص الجودة المعتمدة', 'all-certificates'),
+              S.documentTypeListItem('certificate').title('📜 كافة وثائق وتراخيص الجودة المعتمدة'),
             ])
         ),
       S.listItem()

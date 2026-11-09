@@ -20,6 +20,13 @@ export { SECTORS_CONTENT, VERIFIED_CITIES }
 export async function getMeatSupplyPageData(locale: Locale) {
   let sanityMeatProducts: any[] = []
   let customLandingDoc: any = null
+  let layoutContent: any = null
+
+  try {
+    layoutContent = await getLayoutContent()
+  } catch {
+    // fallback
+  }
 
   if (sanityFetch) {
     try {
@@ -70,8 +77,8 @@ export async function getMeatSupplyPageData(locale: Locale) {
     sectors: ['restaurants', 'hotels', 'catering'] as const,
     cities: Object.keys(VERIFIED_CITIES),
     contacts: {
-      phone: '+966551065715',
-      whatsapp: '966551065715',
+      phone: layoutContent?.contact?.phone || '+966509971699',
+      whatsapp: layoutContent?.contact?.whatsapp?.quote?.number || layoutContent?.contact?.whatsapp?.orders?.number || '966509971699',
       cr: '1116011768',
       legalName: locale === 'ar' ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.',
     },

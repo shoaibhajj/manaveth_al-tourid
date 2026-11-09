@@ -106,7 +106,7 @@ export default async function CatalogPage({
   }
 
   return (
-    <div className="pt-24 md:pt-28">
+    <div className="pt-28 md:pt-36">
       <JsonLd schema={itemListSchema} />
       <CatalogView
         products={productsToUse}

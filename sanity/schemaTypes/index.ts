@@ -10,6 +10,7 @@ import { keywordCluster } from './documents/keywordCluster'
 import { landingPage } from './documents/landingPage'
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
+  certificationsPage,
   contactSettings,
   homePage,
   seoBranches,
@@ -44,6 +45,7 @@ export const singletonTypes = [
   'seoHome',
   'seoProducts',
   'seoBranches',
+  'certificationsPage',
 ]
 
 export const schemaTypes: SchemaTypeDefinition[] = [
@@ -56,6 +58,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   seoHome,
   seoProducts,
   seoBranches,
+  certificationsPage,
   // Documents
   article,
   companyPost,

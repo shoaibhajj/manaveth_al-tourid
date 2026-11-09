@@ -62,7 +62,10 @@ export default async function MeatSupplyPage({
       ? 'السلام عليكم، أود الاستفسار عن عروض وأسعار توريد اللحوم المجمدة للمنشأة (مطعم/فندق/إعاشة).'
       : 'Hello, I would like to inquire about wholesale frozen meat supply for our establishment.'
   )
-  const whatsappUrl = `https://wa.me/${contacts.whatsapp}?text=${defaultWhatsappMsg}`
+  const hasWhatsapp = Boolean(contacts.whatsapp && contacts.whatsapp.replace(/\D/g, '').length >= 7)
+  const whatsappUrl = hasWhatsapp
+    ? `https://wa.me/${contacts.whatsapp.replace(/\D/g, '')}?text=${defaultWhatsappMsg}`
+    : localePath('/contact', locale)
 
   // Schema: WebPage + FAQPage + Service
   const pageSchema = {
@@ -131,7 +134,7 @@ export default async function MeatSupplyPage({
       <JsonLd schema={pageSchema} />
 
       {/* Hero Header */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 py-16 text-white md:py-24">
+      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 pt-28 md:pt-36 pb-16 text-white md:pb-24">
         <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
         <div className="container relative mx-auto px-4 text-center">
           <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 text-xs font-semibold text-amber-300 md:text-sm">
@@ -261,7 +264,9 @@ export default async function MeatSupplyPage({
                       ? `السلام عليكم، أرغب بطلب توريد منتج (${item.name}) لمنشأتنا.`
                       : `Hello, I want to order wholesale product (${item.name}).`
                   )
-                  const itemOrderUrl = `https://wa.me/${contacts.whatsapp}?text=${itemWhatsappMsg}`
+                  const itemOrderUrl = hasWhatsapp
+                    ? `https://wa.me/${contacts.whatsapp.replace(/\D/g, '')}?text=${itemWhatsappMsg}`
+                    : localePath('/contact', locale)
 
                   return (
                     <tr key={item.id} className="hover:bg-slate-50/70 transition">

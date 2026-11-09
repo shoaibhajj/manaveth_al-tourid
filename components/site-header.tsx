@@ -63,31 +63,31 @@ export function SiteHeader() {
         style={{ scaleX: progress }}
         aria-hidden="true"
       />
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 md:px-6">
-        <Link href={localize('/#home')} className="flex items-center gap-3" aria-label={t(site.brand.homeLabel)}>
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-2 px-3 sm:px-4 lg:px-6">
+        <Link href={localize('/#home')} className="flex items-center gap-2.5 shrink-0" aria-label={t(site.brand.homeLabel)}>
           <Image
             src={site.brand.logo}
             alt=""
             width={56}
             height={56}
-            className={`rounded-full ring-1 ring-gold/40 transition-all duration-500 ${solid ? 'size-11' : 'size-14'}`}
+            className={`rounded-full ring-1 ring-gold/40 transition-all duration-500 ${solid ? 'size-10' : 'size-13'}`}
             priority
           />
-          <span className="leading-tight">
-            <span className="block text-lg font-extrabold text-gold-gradient">{t(site.brand.name)}</span>
-            <span className="block text-[11px] font-medium tracking-wider text-cream/70">
+          <span className="leading-tight shrink-0">
+            <span className="block text-base 2xl:text-lg font-extrabold text-gold-gradient whitespace-nowrap">{t(site.brand.name)}</span>
+            <span className="block text-[10px] 2xl:text-[11px] font-medium tracking-wider text-cream/70 whitespace-nowrap">
               {t(site.brand.subtitle)}
             </span>
           </span>
         </Link>
 
         <nav aria-label={t(site.ui.mainNav)} className="hidden xl:block">
-          <ul className="flex items-center gap-0.5">
+          <ul className="flex items-center gap-0.5 2xl:gap-1">
             {navItems.map((item) => (
-              <li key={item.id}>
+              <li key={item.id} className="shrink-0">
                 <Link
                   href={localize(item.href)}
-                  className={`relative rounded-md px-2.5 py-2 text-sm font-medium transition-colors ${
+                  className={`relative whitespace-nowrap rounded-md px-2 py-1.5 text-xs 2xl:text-sm font-medium transition-colors ${
                     activeId === item.id ? 'text-gold' : 'text-cream/85 hover:text-gold'
                   }`}
                 >
@@ -95,7 +95,7 @@ export function SiteHeader() {
                   {activeId === item.id && (
                     <motion.span
                       layoutId="nav-underline"
-                      className="absolute inset-x-2.5 -bottom-0.5 h-0.5 rounded-full bg-gold"
+                      className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-gold"
                     />
                   )}
                 </Link>
@@ -104,10 +104,10 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 shrink-0">
           <Link
             href={localize('/#contact')}
-            className="group relative hidden items-center gap-2 overflow-hidden rounded-lg bg-gold-gradient px-5 py-2.5 text-sm font-bold text-forest-deep shadow-md shadow-gold/20 transition-transform hover:-translate-y-0.5 sm:inline-flex"
+            className="group relative hidden shrink-0 whitespace-nowrap items-center gap-1.5 overflow-hidden rounded-lg bg-gold-gradient px-3.5 py-2 text-xs 2xl:text-sm font-bold text-forest-deep shadow-md shadow-gold/20 transition-transform hover:-translate-y-0.5 sm:inline-flex"
           >
             <span
               className="pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-shine bg-white/40"
@@ -119,17 +119,17 @@ export function SiteHeader() {
           <a
             href={localePath(pathname, otherLocale)}
             hrefLang={otherLocale}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-cream/20 px-3 py-2 text-sm font-bold text-cream/85 transition-colors hover:border-gold hover:text-gold"
+            className="inline-flex shrink-0 whitespace-nowrap items-center gap-1 rounded-lg border border-cream/20 px-2.5 py-1.5 text-xs 2xl:text-sm font-bold text-cream/85 transition-colors hover:border-gold hover:text-gold"
             aria-label={t(site.ui.switchLanguage)}
             lang={otherLocale}
           >
-            <Globe className="size-4" aria-hidden="true" />
+            <Globe className="size-3.5 2xl:size-4" aria-hidden="true" />
             {t(site.ui.languageButton)}
           </a>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex size-10 items-center justify-center rounded-lg border border-cream/20 text-cream xl:hidden"
+            className="inline-flex size-9 items-center justify-center rounded-lg border border-cream/20 text-cream xl:hidden shrink-0"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={t(open ? site.ui.closeMenu : site.ui.openMenu)}

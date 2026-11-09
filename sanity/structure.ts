@@ -66,7 +66,69 @@ export const structure: StructureResolver = (S) =>
       orderedList(S, 'sector', 'القطاعات', 'sector'),
       orderedList(S, 'stat', 'الإحصائيات', 'stat'),
       orderedList(S, 'article', 'المقالات والبيانات الصحفية', 'article', undefined, [{ field: 'publishedAt', direction: 'desc' }]),
-      S.documentTypeListItem('landingPage').title('صفحات الهبوط والتوريد (Landing Pages)'),
+      // قسم توريد اللحوم المخصص
+      S.listItem()
+        .id('meat-supply-group')
+        .title('🥩 قسم وتوريد اللحوم (Meat Supply Hub)')
+        .child(
+          S.list()
+            .id('meat-supply-group')
+            .title('🥩 قسم وتوريد اللحوم')
+            .items([
+              S.listItem()
+                .id('meat-supply-main')
+                .title('📄 صفحة توريد اللحوم الرئيسية (/meat-supply)')
+                .child(
+                  S.document()
+                    .schemaType('landingPage')
+                    .documentId('meat-supply')
+                    .title('صفحة توريد اللحوم الرئيسية (/meat-supply)')
+                ),
+              S.divider(),
+              orderedList(S, 'landingPage', '📑 كافة صفحات الهبوط والتوريد المخصصة', 'landingPages-all'),
+              S.listItem()
+                .id('meat-supply-sectors')
+                .title('🏢 قطاعات توريد اللحوم (مطاعم، فنادق، إعاشة)')
+                .child(
+                  S.documentList()
+                    .title('قطاعات توريد اللحوم')
+                    .schemaType('sector')
+                    .filter('_type == "sector"')
+                ),
+              S.listItem()
+                .id('meat-supply-cities')
+                .title('📍 مدن وتغطية توريد اللحوم (الرياض، جدة، مكة...)')
+                .child(
+                  S.documentList()
+                    .title('مدن التوريد والتغطية')
+                    .schemaType('city')
+                    .filter('_type == "city"')
+                ),
+              S.divider(),
+              orderedList(
+                S,
+                'product',
+                '🥩 أصناف اللحوم والدواجن في الكتالوج',
+                'meat-products-filter',
+                '_type == "product" && (productType in ["meat", "poultry"] || category->slug.current == "meat-poultry")'
+              ),
+            ])
+        ),
+
+      // قسم الشهادات والاعتمادات
+      S.listItem()
+        .id('certifications-group')
+        .title('🎖️ الشهادات والاعتمادات (Certifications)')
+        .child(
+          S.list()
+            .id('certifications-group')
+            .title('الشهادات والاعتمادات الرسمية')
+            .items([
+              singleton(S, 'certificationsPage', '📄 إعدادات صفحة الشهادات (/certifications)'),
+              S.divider(),
+              orderedList(S, 'certificate', '📜 كافة وثائق وتراخيص الجودة المعتمدة', 'all-certificates'),
+            ])
+        ),
       S.listItem()
         .id('products-group')
         .title('المنتجات والكتالوج')

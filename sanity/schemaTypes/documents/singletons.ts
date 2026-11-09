@@ -264,3 +264,48 @@ function defineSeoPage(name: string, title: string) {
 export const seoHome = defineSeoPage('seoHome', 'محركات البحث: الصفحة الرئيسية')
 export const seoProducts = defineSeoPage('seoProducts', 'محركات البحث: صفحة المنتجات')
 export const seoBranches = defineSeoPage('seoBranches', 'محركات البحث: صفحة الفروع والمستودعات')
+
+export const certificationsPage = defineType({
+  name: 'certificationsPage',
+  title: 'إعدادات صفحة الشهادات وتراخيص الجودة',
+  type: 'document',
+  groups: [
+    { name: 'content', title: 'المحتوى والترويسة', default: true },
+    { name: 'seo', title: 'محركات البحث' },
+  ],
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'عنوان الصفحة (SEO Title)',
+      type: 'localizedString',
+      group: 'content',
+    }),
+    defineField({
+      name: 'h1',
+      title: 'الترويسة الرئيسية (H1)',
+      type: 'localizedString',
+      group: 'content',
+    }),
+    defineField({
+      name: 'badge',
+      title: 'نص الشارة العلوية',
+      description: 'مثال: الامتثال الرقابي وسلامة الغذاء',
+      type: 'localizedString',
+      group: 'content',
+    }),
+    defineField({
+      name: 'intro',
+      title: 'المقدمة التعريفية',
+      description: 'توضيح التزام الشركة بالتراخيص الرسمية والرقابة الصحية',
+      type: 'localizedText',
+      group: 'content',
+    }),
+    defineField({
+      name: 'seo',
+      title: 'محركات البحث',
+      type: 'seo',
+      group: 'seo',
+    }),
+  ],
+  preview: { prepare: () => ({ title: 'صفحة الشهادات وتراخيص الجودة' }) },
+})

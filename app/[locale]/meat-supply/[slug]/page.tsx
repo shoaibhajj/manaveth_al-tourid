@@ -95,7 +95,10 @@ export default async function MeatSupplySubPage({
       ? `السلام عليكم، أود الاستفسار عن عروض توريد اللحوم المجمدة بخصوص (${sector ? sector.h1 : city?.name}).`
       : `Hello, I want to inquire about frozen meat supply regarding (${sector ? sector.h1 : city?.name}).`
   )
-  const whatsappUrl = `https://wa.me/${contacts.whatsapp}?text=${defaultWhatsappMsg}`
+  const hasWhatsapp = Boolean(contacts.whatsapp && contacts.whatsapp.replace(/\D/g, '').length >= 7)
+  const whatsappUrl = hasWhatsapp
+    ? `https://wa.me/${contacts.whatsapp.replace(/\D/g, '')}?text=${defaultWhatsappMsg}`
+    : localePath('/contact', locale)
 
   // Render Sector Sub-Page (P3)
   if (sector) {
@@ -125,7 +128,7 @@ export default async function MeatSupplySubPage({
         <JsonLd schema={sectorSchema} />
 
         {/* Hero */}
-        <section className="bg-slate-900 py-16 text-white md:py-20">
+        <section className="bg-slate-900 pt-28 md:pt-36 pb-16 text-white md:pb-20">
           <div className="container mx-auto px-4 text-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 text-xs font-semibold text-amber-300">
               <ShieldCheck className="h-4 w-4" />
@@ -268,7 +271,7 @@ export default async function MeatSupplySubPage({
         <JsonLd schema={citySchema} />
 
         {/* Hero */}
-        <section className="bg-slate-900 py-16 text-white md:py-20">
+        <section className="bg-slate-900 pt-28 md:pt-36 pb-16 text-white md:pb-20">
           <div className="container mx-auto px-4 text-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-semibold text-emerald-300">
               <MapPin className="h-4 w-4" />

@@ -251,7 +251,7 @@ export default async function ArticlePage({
       : `Hello Mnaveth ALTourid, I read your article "${title}" and would like to inquire about commercial food supply pricing.`
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-16 md:px-8">
+    <main className="mx-auto max-w-4xl px-4 pt-28 md:pt-36 pb-16 md:px-8">
       <JsonLd graph={articleDetailGraph(article, locale, base)} />
 
       <nav className="mb-8 flex items-center gap-2 text-sm text-muted-foreground">

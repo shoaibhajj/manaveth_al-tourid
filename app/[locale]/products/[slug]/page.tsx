@@ -130,7 +130,7 @@ export default async function ProductDetailPage({
   const amountText = (amount: number) => new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-US').format(amount)
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
+    <main className="mx-auto max-w-6xl px-6 pt-28 md:pt-36 pb-16 lg:px-8">
       <JsonLd graph={productDetailGraph(product, locale, base)} />
 
       {/* Breadcrumbs Navigation with Category Link */}

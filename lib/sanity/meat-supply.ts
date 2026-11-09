@@ -1,3 +1,4 @@
+import { getLayoutContent } from './get-content'
 import { sanityFetch } from './live'
 import {
   landingPageBySlugQuery,

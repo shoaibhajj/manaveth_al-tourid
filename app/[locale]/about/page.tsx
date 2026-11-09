@@ -72,7 +72,7 @@ export default async function AboutPage({
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+    <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-16 md:pb-20">
       <JsonLd graph={[orgSchema, aboutPageSchema]} />
 
       {/* Hero Header */}

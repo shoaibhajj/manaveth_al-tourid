@@ -13,10 +13,20 @@ export function generateStaticParams() {
   return [{ locale: 'ar' }, { locale: 'en' }]
 }
 
+export const certificationsPageQuery = defineQuery(`*[_type == "certificationsPage"][0]{
+  title,
+  h1,
+  badge,
+  intro,
+  seo
+}`)
+
 export const certificatesQuery = defineQuery(`*[_type == "certificate"] | order(validUntil desc){
   _id,
   name,
   issuer,
+  description,
+  category,
   validUntil,
   "fileUrl": file.asset->url
 }`)
@@ -134,12 +144,17 @@ export default async function CertificationsPage({
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
 
+  let customCertPage: any = null
   let sanityCertificates: any[] = []
   if (sanityFetch) {
     try {
-      const res = await sanityFetch({ query: certificatesQuery, tags: ['certificates'] })
-      if (Array.isArray(res?.data) && res.data.length > 0) {
-        sanityCertificates = res.data
+      const [pageRes, certsRes] = await Promise.all([
+        sanityFetch({ query: certificationsPageQuery, tags: ['certificationsPage'] }),
+        sanityFetch({ query: certificatesQuery, tags: ['certificates'] }),
+      ])
+      if (pageRes?.data) customCertPage = pageRes.data
+      if (Array.isArray(certsRes?.data) && certsRes.data.length > 0) {
+        sanityCertificates = certsRes.data
       }
     } catch {}
   }
@@ -175,15 +190,15 @@ export default async function CertificationsPage({
       <JsonLd schema={schema} />
 
       {/* Header */}
-      <section className="bg-slate-900 py-16 text-white md:py-20">
+      <section className="bg-slate-900 pt-28 md:pt-36 pb-16 text-white md:pb-20">
         <div className="container mx-auto px-4 max-w-5xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 text-xs font-semibold text-amber-300">
             <ShieldCheck className="h-4 w-4" />
-            <span>{isAr ? 'الامتثال الرقابي وسلامة الغذاء' : 'Regulatory & Quality Compliance'}</span>
+            <span>{customCertPage?.badge?.[locale] || (isAr ? 'الامتثال الرقابي وسلامة الغذاء' : 'Regulatory & Quality Compliance')}</span>
           </div>
 
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl text-white">
-            {isAr ? 'الشهادات والتراخيص الرسمية' : 'Official Certifications & Accreditations'}
+            {customCertPage?.h1?.[locale] || (isAr ? 'الشهادات والتراخيص الرسمية' : 'Official Certifications & Accreditations')}
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-base text-slate-300 sm:text-lg">

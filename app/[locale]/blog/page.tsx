@@ -45,7 +45,7 @@ export default async function BlogPage({
   const [base, articles] = await Promise.all([getSiteUrl(), getArticles()])
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+    <main className="mx-auto max-w-7xl px-4 pt-28 md:pt-36 pb-16 md:px-6">
       <header className="mb-12 text-center">
         <h1 className="text-3xl font-extrabold text-forest md:text-5xl">
           {locale === 'ar' ? 'المقالات وسلاسل الإمداد' : 'Supply Chain Articles'}

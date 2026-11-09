@@ -119,7 +119,7 @@ export default async function ContactPage({
       <JsonLd schema={contactSchema} />
 
       {/* Hero Header */}
-      <section className="bg-slate-900 py-16 text-white md:py-20">
+      <section className="bg-slate-900 pt-28 md:pt-36 pb-16 text-white md:pb-20">
         <div className="container mx-auto px-4 max-w-5xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-semibold text-emerald-300">
             <Building2 className="h-4 w-4" />

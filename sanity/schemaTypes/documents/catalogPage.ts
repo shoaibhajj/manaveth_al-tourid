@@ -62,6 +62,39 @@ export const catalogPage = defineType({
       },
     }),
     defineField({
+      name: 'coreSpecialtiesHeading',
+      title: 'عنوان قسم أصناف اللحوم الرئيسية',
+      description: 'عنوان القسم البارز للأصناف التخصصية (كبدة، مخ، لسان، ريش).',
+      type: 'localizedString',
+      group: 'general',
+      initialValue: {
+        ar: 'أصناف اللحوم التخصصية الرئيسية للمطاعم',
+        en: 'Core Specialty Meats for Foodservice',
+      },
+    }),
+    defineField({
+      name: 'supportingCommoditiesHeading',
+      title: 'عنوان قسم السلع التموينية المساندة',
+      description: 'عنوان القسم المعمم للسلع الإضافية (أرز، زيوت، طحين، بلاستيك وتغليف).',
+      type: 'localizedString',
+      group: 'general',
+      initialValue: {
+        ar: 'السلع والمستلزمات التموينية المساندة للمطابخ والمطاعم',
+        en: 'Supporting Wholesale Foodservice Commodities & Packaging',
+      },
+    }),
+    defineField({
+      name: 'supportingCommoditiesNote',
+      title: 'شرح وتوضيح السلع التموينية المساندة',
+      description: 'نص يشرح أن الشركة توفر كافة الأصناف التموينية الداعمة كخدمة شاملة مع التركيز الأساسي على اللحوم.',
+      type: 'localizedText',
+      group: 'general',
+      initialValue: {
+        ar: 'إلى جانب تركيزنا التخصصي الرائد في توريد أصناف اللحوم، توفر شركة منافذ التوريد كافة السلع التموينية والمواد الاستهلاكية الأساسية لتشغيل المطابخ المركزية والمطاعم لتلبية احتياجاتكم من مورد واحد معتمد.',
+        en: 'Alongside our specialized focus on wholesale meat cuts, Mnaveth ALTourid supplies supporting catering commodities and food packaging to ensure seamless single-source foodservice fulfillment.',
+      },
+    }),
+    defineField({
       name: 'pdfFile',
       title: 'ملف الكتالوج الرسمي المعتمد (PDF)',
       description: 'ارفع هنا ملف الكتالوج المطبوع بصيغة PDF. عند رفعه، سيتمكن زوار الموقع من تنزيله مباشرة بنقرة زر واحدة.',

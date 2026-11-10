@@ -15,6 +15,7 @@ import { getSiteUrl } from '@/lib/site-url'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import { buildProductSeo } from '@/lib/seo/engine'
 import { catalogCategories } from '@/lib/content/catalog-data'
+import { ProductGallery } from '@/components/product-gallery'
 import { ArrowLeft, ArrowRight, BookOpen, Layers, Sparkles, Truck } from 'lucide-react'
 
 const textFor = (value: any, locale: 'ar' | 'en') => value?.[locale] || value?.ar || value?.en || ''
@@ -166,24 +167,33 @@ export default async function ProductDetailPage({
       </nav>
 
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-        {image ? (
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-forest/5 shadow-md">
-            <Image
-              src={image}
-              alt={title}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
-          </div>
-        ) : (
-          <div className="aspect-[4/3] w-full rounded-3xl bg-forest/5 border border-dashed border-forest/20 flex flex-col items-center justify-center text-forest/50 p-6 text-center">
-            <span className="text-sm font-semibold">
-              {labelFor(locale, 'صورة المنتج قيد الاعتماد', 'Product image pending verification')}
-            </span>
-          </div>
-        )}
+        {(() => {
+          const primaryImage =
+            imageUrl(product.image, 1400) ||
+            (typeof product.image === 'string' ? product.image : undefined)
+
+          const galleryImages: { url: string; alt?: string }[] = []
+          if (primaryImage) {
+            galleryImages.push({
+              url: primaryImage,
+              alt: title,
+            })
+          }
+
+          if (Array.isArray(product.gallery)) {
+            product.gallery.forEach((g: any, idx: number) => {
+              const gUrl = imageUrl(g, 1400) || g?.assetUrl || (typeof g === 'string' ? g : undefined)
+              if (gUrl && gUrl !== primaryImage && !galleryImages.some((item) => item.url === gUrl)) {
+                galleryImages.push({
+                  url: gUrl,
+                  alt: textFor(g?.alt, locale) || `${title} - ${idx + 1}`,
+                })
+              }
+            })
+          }
+
+          return <ProductGallery images={galleryImages} title={title} locale={locale} />
+        })()}
         <article className="flex flex-col gap-5">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-primary">

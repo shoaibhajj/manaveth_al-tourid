@@ -137,25 +137,25 @@ export const site = {
     title: { ar: 'حلول متكاملة لسلسلة الإمداد الغذائية', en: 'Integrated food supply chain solutions' },
   },
   productsSection: {
-    eyebrow: { ar: 'منتجاتنا', en: 'Our products' },
-    title: { ar: 'منتجات مختارة بجودة موثوقة', en: 'Selected products of trusted quality' },
+    eyebrow: { ar: 'أصناف التوريد الرئيسية', en: 'Core Supply Products' },
+    title: { ar: 'توريد اللحوم المجمدة المتخصصة للمطاعم', en: 'Specialized Wholesale Meat Supply for Foodservice' },
     subtitle: {
-      ar: 'اطلع على بعض منتجاتنا واطلبها مباشرة عبر واتساب.',
-      en: 'Browse some of our products and order them directly on WhatsApp.',
+      ar: 'توريد كبدة كلاسيك وجوني جولد، ريش ضأن واجستاف، مخ ولسان مجمد بأعلى معايير الجودة والتبريد للمطاعم والفنادق.',
+      en: 'Wholesale supplier of Classic & Johny Gold liver, Wagstaff ribs, brain and tongue under certified cold chain logistics.',
     },
-    cta: { ar: 'عرض جميع المنتجات', en: 'View all products' },
+    cta: { ar: 'عرض جميع الأصناف والكتالوج', en: 'View All Products & Catalog' },
   },
   productsPage: {
-    eyebrow: { ar: 'المنتجات', en: 'Products' },
-    title: { ar: 'منتجاتنا الغذائية', en: 'Our food products' },
+    eyebrow: { ar: 'قائمة الأصناف والتوريد', en: 'Products & Supply Lines' },
+    title: { ar: 'أصناف اللحوم المجمدة المتخصصة والسلع التموينية', en: 'Specialized Frozen Meats & Supporting Wholesale Commodities' },
     subtitle: {
-      ar: 'تشكيلة متنوعة من المواد الغذائية بأسعار واضحة، مع أسعار خاصة للكميات الكبيرة.',
-      en: 'A varied range of food products with clear prices and special rates for larger quantities.',
+      ar: 'التركيز الأساسي على توريد أصناف الكبدة والريش والمخ واللسان للمطاعم، مع توفير كافة السلع التموينية المساندة (أرز، زيوت، طحين، ومواد تغليف).',
+      en: 'Primary focus on wholesale frozen meats (liver, ribs, brain, tongue) alongside essential supporting food service commodities.',
     },
-    ctaTitle: { ar: 'لم تجد ما تبحث عنه؟', en: 'Can’t find what you need?' },
+    ctaTitle: { ar: 'هل تحتاج توريد كميات تجارية أو عقود دورية؟', en: 'Need Commercial Contract Supply?' },
     ctaText: {
-      ar: 'اطلب عرض سعر مخصصًا لاحتياجات شركتك وسنرد عليك في أقرب وقت.',
-      en: 'Request a tailored quote for your company’s needs and we will get back to you shortly.',
+      ar: 'تواصل مباشرة مع إدارة المبيعات للحصول على عروض أسعار تنافسية وجدولة توريد مبرد لمطعمك.',
+      en: 'Contact our commercial sales department for tailored quotations and scheduled refrigerated delivery.',
     },
   },
   gallerySection: {

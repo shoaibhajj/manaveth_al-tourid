@@ -25,11 +25,95 @@ export type CatalogProduct = {
   usage?: Localized
   tempType: TempType
   image: string
+  gallery?: string[]
+  isCoreSpecialty?: boolean
   order: number
   featured?: boolean
   priceNote?: Localized
   updatedAt?: string
 }
+
+export type SupportingCommodity = {
+  id: string
+  name: Localized
+  description: Localized
+  icon: string
+  packagingSummary: Localized
+  sampleItems: { ar: string[]; en: string[] }
+}
+
+export const supportingCommodities: SupportingCommodity[] = [
+  {
+    id: 'comm-rice',
+    name: { ar: 'الأرز وحبوب الطهي التموينية', en: 'Basmati Rice & Foodservice Grains' },
+    description: {
+      ar: 'توريد أرز بسمتي هندي معتق (مزة وسيلا وعنبر) وحبوب متنوعة بشكائر جملة (40 كجم و 10 كجم) لكبرى المطابخ والمطاعم.',
+      en: 'Wholesale aged Indian basmati rice and cooking grains in 40kg & 10kg master sacks for commercial kitchens.',
+    },
+    icon: 'wheat',
+    packagingSummary: { ar: 'شكائر خيش وبولي بروبلين 40 كجم / 10 كجم', en: '40kg & 10kg bulk catering sacks' },
+    sampleItems: {
+      ar: ['أرز بسمتي سيلا هندي معتق', 'أرز مزة درجة أولى', 'جريش وحبوب طهي تموينية'],
+      en: ['Aged Indian Sella Basmati', 'Premium Mazza Rice', 'Commercial Cooking Grains'],
+    },
+  },
+  {
+    id: 'comm-flour',
+    name: { ar: 'الدقيق والطحين ومستلزمات العجين', en: 'Flour & Bakery Essentials' },
+    description: {
+      ar: 'توريد طحين فاخر، طحين كويتي، سميد، ونشا بعبوات تجارية مخصصة للمخابز والمطاعم ومصنعي المعجنات.',
+      en: 'Premium white flour, baking flours, semolina, and dough ingredients for bakeries and restaurant chains.',
+    },
+    icon: 'utensils',
+    packagingSummary: { ar: 'أكياس ورقية ومحبوكة 25 كجم و 45 كجم', en: '25kg & 45kg commercial bags' },
+    sampleItems: {
+      ar: ['طحين فاخر درجة أولى 45 كجم', 'طحين مخابز وفطائر', 'سميد ومستلزمات عجين'],
+      en: ['Grade 1 Wheat Flour 45kg', 'Bakery Flour', 'Semolina & Dough Mix'],
+    },
+  },
+  {
+    id: 'comm-oils',
+    name: { ar: 'زيوت القلي والدهون النباتية', en: 'Cooking Oils & Frying Shortening' },
+    description: {
+      ar: 'زيوت نباتية مكررة مخصصة للقلي العميق والتشغيل المطعمي المكثف: زيت نخيل، زيت ذرة، وزيت دوار الشمس بنقطة دخان مرتفعة.',
+      en: 'Refined vegetable oils engineered for commercial deep-frying: palm olein, corn oil, and sunflower oil.',
+    },
+    icon: 'droplet',
+    packagingSummary: { ar: 'صفائح حديد 18 لتر / جوالين بلاستيك 10 لتر و 17 لتر', en: '18L steel tins & 10L/17L commercial jerrycans' },
+    sampleItems: {
+      ar: ['زيت نخيل للقلي المكثف 18 لتر', 'زيت دوار الشمس نقي فندقي', 'زيت ذرة تجاري للمطابخ'],
+      en: ['Palm Olein Deep-Frying Oil 18L', 'Pure Sunflower Oil', 'Commercial Corn Oil'],
+    },
+  },
+  {
+    id: 'comm-plastic',
+    name: { ar: 'البلاستيك ومواد التعبئة والتغليف وسفرة المطاعم', en: 'Food Packaging, Plastic & Disposables' },
+    description: {
+      ar: 'كافة مستلزمات التعبئة والتغليف: علب حفظ المايكروويف، صحون قصدير، رول حراري ونايلون تغليف، أكياس تسليم الطلبات، ومفارش سفرة عالية السماكة.',
+      en: 'Comprehensive disposable packaging: microwave containers, aluminum foil pans, cling film, delivery bags, and dining rolls.',
+    },
+    icon: 'package',
+    packagingSummary: { ar: 'كراتين تجارية متكاملة لحجم المطاعم', en: 'Master wholesale cartons and bulk bundles' },
+    sampleItems: {
+      ar: ['علب مايكروويف سوداء وشفافة بكافة المقاسات', 'صحون قصدير وسلوفان حراري ومعدني', 'مفارش سفرة عالية السماكة وأكياس سفري'],
+      en: ['Microwave Containers (All Sizes)', 'Aluminum Trays & Cling Wrap', 'Heavy-Duty Dining Rolls & Delivery Bags'],
+    },
+  },
+  {
+    id: 'comm-canned',
+    name: { ar: 'المعلبات وصلصات الطماطم التموينية', en: 'Canned Foods, Pastes & Condiments' },
+    description: {
+      ar: 'معجون طماطم مركز، بقوليات معلبة (فول، حمص، بازلاء)، خضار وذرة معلبة بعبوات مطاعم كبيرة A10 لتقليل الهدر وتسريع التحضير.',
+      en: 'Commercial A10 tomato paste, canned legumes (beans, chickpeas), and foodservice condiments.',
+    },
+    icon: 'container',
+    packagingSummary: { ar: 'علب حديدية فندقية A10 (3 كجم) في كراتين جملة', en: 'A10 (3kg) foodservice cans in master cartons' },
+    sampleItems: {
+      ar: ['معجون طماطم مركز عبوة فندقية A10', 'فول وحمص حب معلب عبوة مطاعم', 'ذرة حلوة وخضار مشكل عبوة كبرى'],
+      en: ['A10 Foodservice Tomato Paste', 'Canned Chickpeas & Fava Beans', 'Catering Sweet Corn & Vegetables'],
+    },
+  },
+]
 
 export const catalogCategories: CatalogCategory[] = [
   {
@@ -105,68 +189,132 @@ export const catalogCategories: CatalogCategory[] = [
 ]
 
 export const defaultCatalogProducts: CatalogProduct[] = [
-  // 1. Meat & Poultry
+  // 1. Meat & Poultry - Core Specialties First
   {
-    id: 'cat-beef-topside',
-    slug: 'frozen-brazilian-beef-topside',
-    sku: 'MNV-BF-01',
-    name: { ar: 'لحم بقري برازيلي مجمد (توب سايد منزوع العظم)', en: 'Frozen Brazilian Beef Topside (Boneless)' },
+    id: 'cat-liver-classic',
+    slug: 'frozen-liver',
+    sku: 'MNV-LV-01',
+    name: { ar: 'كبدة ضأن مجمدة - كلاسيك توماس فودز أسترالي', en: 'Thomas Foods Classic Australian Frozen Ovine Liver' },
     categoryId: 'meat-poultry',
     categoryName: { ar: 'اللحوم والدواجن المجمدة', en: 'Frozen Meat & Poultry' },
     description: {
-      ar: 'قطعيات توب سايد بقرية ممتازة منزوعة الشحوم والعظم، نسيج ناعم متجانس مثالي لمطاعم الشاورما والإسكالوب وكباب اللحم الفاخر.',
-      en: 'Premium lean boneless topside beef, ideal for shawarma cones, escalope, and gourmet steaks.',
+      ar: 'كبدة ضأن أسترالية مجمدة ومفرغة من الهواء (Thomas Foods Classic)، نسيج متماسك ونكهة طبيعية، مذبوحة حلال 100% ومطابقة لاشتراطات SFDA.',
+      en: 'Premium Australian vacuum-packed frozen ovine liver (Thomas Foods Classic), firm texture, Halal certified, and SFDA compliant.',
     },
-    origin: { ar: 'البرازيل (مسالخ معتمدة S.I.F)', en: 'Brazil (SIF Approved)' },
-    packaging: { ar: 'كرتون رئيسي 25 كجم (قوالب مفرغة 4-6 كجم)', en: '25kg Master Carton (4-6kg vacuum packs)' },
-    storage: { ar: 'تجميد صدمي عند -18° مئوية أو أقل', en: 'Deep frozen at -18°C or below' },
-    certifications: { ar: '100% ذبح حلال معتمد · فحص هيئة الغذاء والدواء SFDA', en: '100% Halal Slaughtered · SFDA Inspected' },
-    usage: { ar: 'مطاعم الشاورما، محلات البرجر، الفنادق، ومطابخ الإعاشة الكبرى.', en: 'Shawarma chains, burger joints, hotels, and central kitchens.' },
+    origin: { ar: 'أستراليا (Thomas Foods International - Est 53)', en: 'Australia (Thomas Foods International - Est 53)' },
+    packaging: { ar: 'كرتون أصلية مبطنة بعازل أزرق تحتوي قطع مغلفة فردياً', en: 'Master carton with blue liner and individual vacuum packs' },
+    storage: { ar: 'يُحفظ مجمداً عند -18° مئوية بسلسلة تبريد متصلة', en: 'Keep frozen at -18°C under continuous cold chain' },
+    certifications: { ar: 'ذبح حلال إسلامي 100% · معتمد هيئة الغذاء والدواء SFDA', en: '100% Halal Slaughter · SFDA Approved' },
+    usage: { ar: 'مطاعم الكبدة، بوفيهات الإفطار، محلات السندويشات والمطابخ التجارية.', en: 'Liver restaurants, breakfast buffets, and commercial kitchens.' },
     tempType: 'frozen',
-    image: '/images/g-produce.png',
+    image: '/images/products/thomas-classic-liver-box.jpg',
+    gallery: [
+      '/images/products/thomas-classic-liver-box.jpg',
+      '/images/products/thomas-classic-liver-pack.jpg',
+      '/images/products/thomas-classic-liver-carton.jpg',
+    ],
     order: 1,
     featured: true,
+    isCoreSpecialty: true,
   },
   {
-    id: 'cat-beef-silver',
-    slug: 'frozen-beef-silverside',
-    sku: 'MNV-BF-02',
-    name: { ar: 'لحم بقري مجمد مكعبات وطهي (سيلفر سايد)', en: 'Frozen Beef Silverside (Catering Cuts)' },
+    id: 'cat-ribs-wagstaff',
+    slug: 'frozen-ribs-wagstaff',
+    sku: 'MNV-RB-01',
+    name: { ar: 'ريش ضأن بالعظم مجمدة - واجستاف أسترالي (O-Rack Ribs)', en: 'Wagstaff Australian Bone-in Ovine Rack Ribs' },
     categoryId: 'meat-poultry',
     categoryName: { ar: 'اللحوم والدواجن المجمدة', en: 'Frozen Meat & Poultry' },
     description: {
-      ar: 'قطع سيلفر سايد عالية الجودة خالية من العروق الزائدة، مخصصة للطبخ واليخنات ومطاعم المندي والمضغوط والوجبات الجماعية.',
-      en: 'Silverside boneless beef cuts with optimal grain structure for stews, Mandi, and bulk catering.',
+      ar: 'أضلاع وريش لحم ضأن أسترالي بالعظم عالية الجودة من مسالخ واجستاف المعتمدة، مغلفة بالفاكيوم ومجمدة عند -18°م.',
+      en: 'Premium Australian bone-in ovine rack cuts from Wagstaff abattoirs (Est 46), vacuum packed and frozen at -18°C.',
     },
-    origin: { ar: 'البرازيل / الهند', en: 'Brazil / India' },
-    packaging: { ar: 'كرتون 20 كجم و 25 كجم مفرغ من الهواء', en: '20kg & 25kg vacuum sealed cartons' },
-    storage: { ar: 'يُحفظ مجمداً عند -18° مئوية مع رقابة حرارية', en: 'Stored at -18°C under continuous monitoring' },
-    certifications: { ar: 'شهادة ذبح إسلامي رسمية · ترخيص واردات SFDA', en: 'Official Halal Certificate · SFDA Import License' },
-    usage: { ar: 'مطابخ الإعاشة، مطاعم الكبسة والمندي، وشركات التموين.', en: 'Catering kitchens, Kabsa & Mandi restaurants.' },
+    origin: { ar: 'أستراليا (Wagstaff Australia - Est 46)', en: 'Australia (Wagstaff Australia - Est 46)' },
+    packaging: { ar: 'كرتون واجستاف أصلية بأربطة محكمة وقطع مفرغة من الهواء', en: 'Strapped master cartons with vacuum-sealed racks' },
+    storage: { ar: 'يُحفظ مجمداً عند -18° مئوية مع رقابة حرارية', en: 'Keep frozen at -18°C under continuous temperature control' },
+    certifications: { ar: 'ذبح طبقاً للشريعة الإسلامية حلال 100% · معتمد SFDA', en: '100% Halal Certified Slaughter · SFDA Approved' },
+    usage: { ar: 'مطاعم المشاوي، مطاعم اللحوم الفاخرة، الفنادق، ومطابخ الولائم.', en: 'Fine dining grills, barbecue restaurants, and hotels.' },
     tempType: 'frozen',
-    image: '/images/g-boxes.png',
+    image: '/images/products/wagstaff-ribs-label.jpg',
+    gallery: [
+      '/images/products/wagstaff-ribs-label.jpg',
+      '/images/products/wagstaff-ribs-carton.jpg',
+      '/images/products/wagstaff-box-australia.jpg',
+    ],
     order: 2,
+    featured: true,
+    isCoreSpecialty: true,
   },
   {
-    id: 'cat-beef-liver',
-    slug: 'frozen-liver',
-    sku: 'MNV-BF-03',
-    name: { ar: 'كبدة بقرية برازيلية مجمدة فاخرة', en: 'Premium Brazilian Frozen Beef Liver' },
+    id: 'cat-liver-johny-gold',
+    slug: 'frozen-liver-johny-gold',
+    sku: 'MNV-LV-02',
+    name: { ar: 'كبدة مجمدة - جوني جولد (Johny Gold)', en: 'Johny Gold Premium Frozen Liver' },
     categoryId: 'meat-poultry',
     categoryName: { ar: 'اللحوم والدواجن المجمدة', en: 'Frozen Meat & Poultry' },
     description: {
-      ar: 'كبدة بقرية مجمدة سريعة الصدم خالية من المرارة والعروق، لون طبيعي متماسك دون فاقد سوائل عند التقطيع.',
-      en: 'Blast-frozen beef liver, vein-free, consistent slicing texture with minimal thawing loss.',
+      ar: 'كبدة ضأن مجمدة درجة أولى علامة جوني جولد الشهيرة، نسيج طازج ومذاق ممتاز تلبي تطلعات أرقى مطاعم الكبدة المقلقلة.',
+      en: 'Premium Grade-A frozen ovine liver under the renowned Johny Gold brand, tender texture and superior taste.',
     },
-    origin: { ar: 'البرازيل (أكبر المسالخ المعتمدة)', en: 'Brazil (Certified S.I.F Plants)' },
-    packaging: { ar: 'كرتون 10 كجم و 20 كجم (قوالب مغلفة)', en: '10kg & 20kg cartons (poly-wrapped blocks)' },
-    storage: { ar: 'مستودعات تبريد مجمدة عند -18°م إلى -20°م', en: 'Cold storage at -18°C to -20°C' },
-    certifications: { ar: 'شهادة فحص مخبري SFDA · شهادة ذبح حلال', en: 'SFDA Laboratory Tested · Halal Certified' },
-    usage: { ar: 'مطاعم الكبدة المقلقلة، بوفيهات الإفطار، ومحلات السندويشات السريعة.', en: 'Breakfast diners, skillet stations, quick-service eateries.' },
+    origin: { ar: 'أستراليا / نيوزيلندا', en: 'Australia / New Zealand' },
+    packaging: { ar: 'كراتين تجارية معتمدة وقطع فاكيوم مفرغة من الهواء', en: 'Commercial master cartons with vacuum pouches' },
+    storage: { ar: 'يُحفظ مجمداً عند -18° مئوية', en: 'Deep frozen at -18°C' },
+    certifications: { ar: 'ذبح إسلامي حلال 100% · مطابقة اشتراطات SFDA', en: '100% Halal Slaughter · SFDA Compliant' },
+    usage: { ar: 'مطاعم الكبدة والوجبات الشعبية ومحلات السندويشات السريعة.', en: 'Breakfast diners, sandwich shops, and catering.' },
     tempType: 'frozen',
-    image: '/images/p-olive-oil.png',
+    image: '/images/products/thomas-classic-liver-pack.jpg',
+    gallery: [
+      '/images/products/thomas-classic-liver-pack.jpg',
+      '/images/products/thomas-classic-liver-box.jpg',
+    ],
     order: 3,
     featured: true,
+    isCoreSpecialty: true,
+  },
+  {
+    id: 'cat-brain',
+    slug: 'frozen-brain',
+    sku: 'MNV-BR-01',
+    name: { ar: 'مخ مجمد بالجملة للمطاعم (عجل / ضأن)', en: 'Wholesale Frozen Brain (Veal & Ovine)' },
+    categoryId: 'meat-poultry',
+    categoryName: { ar: 'اللحوم والدواجن المجمدة', en: 'Frozen Meat & Poultry' },
+    description: {
+      ar: 'مخ عجل وضأن مجمد ومفرز بعناية بأعلى معايير النظافة والتعقيم، نسيج متماسك مثالي للمطاعم وبوفيهات المأكولات الشعبية.',
+      en: 'Carefully sorted and blast-frozen veal and ovine brain for commercial restaurants and traditional eateries.',
+    },
+    origin: { ar: 'أستراليا / البرازيل / نيوزيلندا', en: 'Australia / Brazil / New Zealand' },
+    packaging: { ar: 'كراتين مبردة مجمدة مبطنة بحماية مضاعفة', en: 'Secure insulated master cartons' },
+    storage: { ar: 'يُحفظ مجمداً عند -18° مئوية أو أقل', en: 'Keep deep frozen at -18°C or below' },
+    certifications: { ar: 'ذبح حلال 100% · تراخيص استيراد وتخزين SFDA', en: '100% Halal Certified · SFDA Licensed' },
+    usage: { ar: 'مطاعم السندويشات والمقلقل ومحلات الإفطار والفنادق.', en: 'Breakfast diners, sandwich eateries, and hotel commissaries.' },
+    tempType: 'frozen',
+    image: '/images/products/thomas-classic-liver-carton.jpg',
+    gallery: ['/images/products/thomas-classic-liver-carton.jpg'],
+    order: 4,
+    featured: true,
+    isCoreSpecialty: true,
+  },
+  {
+    id: 'cat-tongue',
+    slug: 'frozen-tongue',
+    sku: 'MNV-TG-01',
+    name: { ar: 'لسان بقري / عجل مجمد بالجملة', en: 'Wholesale Frozen Beef & Veal Tongue' },
+    categoryId: 'meat-poultry',
+    categoryName: { ar: 'اللحوم والدواجن المجمدة', en: 'Frozen Meat & Poultry' },
+    description: {
+      ar: 'ألسنة بقر وعجل مجمدة عالية الجودة منزوعة الزوائد، نسيج لحمي ممتاز ومذاق غني للمطاعم والمطابخ التجارية.',
+      en: 'Premium frozen beef and veal tongues trimmed of excess fat, rich flavor and tender texture for foodservice.',
+    },
+    origin: { ar: 'البرازيل / أستراليا', en: 'Brazil / Australia' },
+    packaging: { ar: 'كراتين جملة 15 كجم و 20 كجم مفرغة من الهواء', en: '15kg & 20kg master cartons with vacuum packs' },
+    storage: { ar: 'يُحفظ مجمداً عند -18° مئوية', en: 'Store frozen at -18°C' },
+    certifications: { ar: 'شهادة ذبح حلال 100% · فحص مخبري SFDA', en: '100% Halal Slaughter · SFDA Inspected' },
+    usage: { ar: 'مطاعم اللحوم، الفنادق، مطابخ الإعاشة، ومحلات السندويشات.', en: 'Specialty meat restaurants, hotels, and institutional caterers.' },
+    tempType: 'frozen',
+    image: '/images/products/wagstaff-ribs-carton.jpg',
+    gallery: ['/images/products/wagstaff-ribs-carton.jpg', '/images/products/wagstaff-box-australia.jpg'],
+    order: 5,
+    featured: true,
+    isCoreSpecialty: true,
   },
   {
     id: 'cat-chicken-breast',

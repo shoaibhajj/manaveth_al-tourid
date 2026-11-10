@@ -604,6 +604,9 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
           pdfFileUrl: clean(data.catalogPage.pdfFileUrl) || undefined,
           externalPdfUrl: clean(data.catalogPage.externalPdfUrl) || undefined,
           bannerAlert: optionalLocalized(data.catalogPage.bannerAlert),
+          coreSpecialtiesHeading: optionalLocalized(data.catalogPage.coreSpecialtiesHeading),
+          supportingCommoditiesHeading: optionalLocalized(data.catalogPage.supportingCommoditiesHeading),
+          supportingCommoditiesNote: optionalLocalized(data.catalogPage.supportingCommoditiesNote),
           downloadNote: optionalLocalized(data.catalogPage.downloadNote),
           inquiryWhatsApp: clean(data.catalogPage.inquiryWhatsApp) || '966509971699',
         }

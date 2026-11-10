@@ -301,6 +301,123 @@ export const SEED_DATA = {
       centralWarehouseAddress: 'خط رحلات التوريد المجدولة لمنطقة وسط وغرب الرياض',
     },
   ],
+  coreMeatProducts: [
+    {
+      _id: 'product-frozen-liver-classic',
+      _type: 'product',
+      name: {
+        _type: 'localizedString',
+        ar: 'كبدة ضأن مجمدة - كلاسيك توماس فودز أسترالي',
+        en: 'Thomas Foods Classic Australian Frozen Ovine Liver',
+      },
+      slug: { _type: 'slug', current: 'frozen-liver' },
+      sku: 'MNV-LV-01',
+      productType: 'meat',
+      description: {
+        _type: 'localizedText',
+        ar: 'كبدة ضأن أسترالية مجمدة ومفرغة من الهواء (Thomas Foods Classic)، نسيج متماسك ونكهة طبيعية، مذبوحة حلال 100% ومطابقة لاشتراطات SFDA.',
+        en: 'Premium Australian vacuum-packed frozen ovine liver (Thomas Foods Classic), firm texture, Halal certified, and SFDA compliant.',
+      },
+      longDescription: {
+        _type: 'localizedText',
+        ar: 'الصنف الأول المفضل لمطاعم الإفطار ومحلات الكبدة المقلقلة والصاج في السعودية. كبدة ضأن أسترالية أصلية من مسالخ توماس فودز (Est 53) بتغليف فاكيوم محكم يحمي النسيج من حروق التجميد ويمنع فقدان السوائل عند التقطيع.',
+        en: 'The top choice for breakfast diners and traditional skillet liver restaurants across Saudi Arabia. Authentic Australian ovine liver from Thomas Foods International (Est 53) in vacuum packaging.',
+      },
+      storageState: 'frozen',
+      featured: true,
+      order: 1,
+      visible: true,
+    },
+    {
+      _id: 'product-frozen-ribs-wagstaff',
+      _type: 'product',
+      name: {
+        _type: 'localizedString',
+        ar: 'ريش ضأن بالعظم مجمدة - واجستاف أسترالي (O-Rack Ribs)',
+        en: 'Wagstaff Australian Bone-in Ovine Rack Ribs',
+      },
+      slug: { _type: 'slug', current: 'frozen-ribs-wagstaff' },
+      sku: 'MNV-RB-01',
+      productType: 'meat',
+      description: {
+        _type: 'localizedText',
+        ar: 'أضلاع وريش لحم ضأن أسترالي بالعظم عالية الجودة من مسالخ واجستاف المعتمدة، مغلفة بالفاكيوم ومجمدة عند -18°م.',
+        en: 'Premium Australian bone-in ovine rack cuts from Wagstaff abattoirs (Est 46), vacuum packed and frozen at -18°C.',
+      },
+      longDescription: {
+        _type: 'localizedText',
+        ar: 'ريش ضأن بالعظم (Bone in Ovine "O-RCK" Rack) مستوردة مباشرة من أستراليا من شركة واجستاف (Wagstaff - Est 46). مثالية لمطاعم المشاوي الفاخرة، الفنادق، ومطابخ الولائم، مع تتبيل متجانس وطراوة فائقة بعد الطهي.',
+        en: 'Authentic Australian bone-in ovine rack cuts from Wagstaff (Est 46 Cranbourne, Victoria). Ideal for upscale barbecue dining, hotels, and banquet operations.',
+      },
+      storageState: 'frozen',
+      featured: true,
+      order: 2,
+      visible: true,
+    },
+    {
+      _id: 'product-frozen-liver-johny-gold',
+      _type: 'product',
+      name: {
+        _type: 'localizedString',
+        ar: 'كبدة مجمدة - جوني جولد (Johny Gold)',
+        en: 'Johny Gold Premium Frozen Liver',
+      },
+      slug: { _type: 'slug', current: 'frozen-liver-johny-gold' },
+      sku: 'MNV-LV-02',
+      productType: 'meat',
+      description: {
+        _type: 'localizedText',
+        ar: 'كبدة ضأن مجمدة درجة أولى علامة جوني جولد الشهيرة، نسيج طازج ومذاق ممتاز تلبي تطلعات أرقى مطاعم الكبدة المقلقلة.',
+        en: 'Premium Grade-A frozen ovine liver under the renowned Johny Gold brand, tender texture and superior taste.',
+      },
+      storageState: 'frozen',
+      featured: true,
+      order: 3,
+      visible: true,
+    },
+    {
+      _id: 'product-frozen-brain',
+      _type: 'product',
+      name: {
+        _type: 'localizedString',
+        ar: 'مخ مجمد بالجملة للمطاعم (عجل / ضأن)',
+        en: 'Wholesale Frozen Brain (Veal & Ovine)',
+      },
+      slug: { _type: 'slug', current: 'frozen-brain' },
+      sku: 'MNV-BR-01',
+      productType: 'meat',
+      description: {
+        _type: 'localizedText',
+        ar: 'مخ عجل وضأن مجمد ومفرز بعناية بأعلى معايير النظافة والتعقيم، نسيج متماسك مثالي للمطاعم وبوفيهات المأكولات الشعبية.',
+        en: 'Carefully sorted and blast-frozen veal and ovine brain for commercial restaurants and traditional eateries.',
+      },
+      storageState: 'frozen',
+      featured: true,
+      order: 4,
+      visible: true,
+    },
+    {
+      _id: 'product-frozen-tongue',
+      _type: 'product',
+      name: {
+        _type: 'localizedString',
+        ar: 'لسان بقري / عجل مجمد بالجملة',
+        en: 'Wholesale Frozen Beef & Veal Tongue',
+      },
+      slug: { _type: 'slug', current: 'frozen-tongue' },
+      sku: 'MNV-TG-01',
+      productType: 'meat',
+      description: {
+        _type: 'localizedText',
+        ar: 'ألسنة بقر وعجل مجمدة عالية الجودة منزوعة الزوائد، نسيج لحمي ممتاز ومذاق غني للمطاعم والمطابخ التجارية.',
+        en: 'Premium frozen beef and veal tongues trimmed of excess fat, rich flavor and tender texture for foodservice.',
+      },
+      storageState: 'frozen',
+      featured: true,
+      order: 5,
+      visible: true,
+    },
+  ],
 }
 
 async function seed() {
@@ -333,6 +450,12 @@ async function seed() {
   for (const city of SEED_DATA.cities) {
     console.log('Creating city:', city._id)
     await client.createOrReplace(city)
+  }
+
+  // 4.5 Core Meat Products
+  for (const prod of SEED_DATA.coreMeatProducts) {
+    console.log('Creating core meat product:', prod._id)
+    await client.createOrReplace(prod)
   }
 
   // 5. Update meat products with productType

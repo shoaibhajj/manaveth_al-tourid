@@ -43,7 +43,14 @@ export function buildOffer(product: any, productUrl: string, base: string) {
 export function buildProductSchema(product: any, locale: Locale, base: string) {
   const slug = product.slug || product.id
   const productUrl = `${base}${locale === 'ar' ? '' : '/en'}/products/${slug}`
-  const image = typeof product.image === 'string' ? product.image : product.image?.asset?.url
+  const mainImage = typeof product.image === 'string' ? product.image : product.image?.asset?.url
+  const galleryImages = Array.isArray(product.gallery)
+    ? product.gallery
+        .map((g: any) => (typeof g === 'string' ? g : g?.assetUrl || g?.asset?.url))
+        .filter(Boolean)
+    : []
+  const allImages = [mainImage, ...galleryImages].filter(Boolean).map((img) => absoluteUrl(img, base))
+  const uniqueImages = Array.from(new Set(allImages))
 
   const brandName =
     product.brand && typeof product.brand === 'object' && product.brand.name
@@ -61,7 +68,7 @@ export function buildProductSchema(product: any, locale: Locale, base: string) {
     name: t(product.name, locale),
     description: t(product.description, locale),
     sku: product.sku || undefined,
-    image: image ? [absoluteUrl(image, base)] : undefined,
+    image: uniqueImages.length > 0 ? uniqueImages : undefined,
     brand: {
       '@type': 'Brand',
       name: brandName,

@@ -95,8 +95,8 @@ export const catalogPageQuery = defineQuery(`{
   "contact": *[_type == "contactSettings"][0]
 }`)
 
-export const productBySlugQuery = defineQuery(`*[_type == "product" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "category": category->{name}, "image": image{...}}`)
-export const productBySlugDraftQuery = defineQuery(`*[_type == "product" && slug.current == $slug][0]{..., "slug": slug.current, "category": category->{name}, "image": image{...}}`)
+export const productBySlugQuery = defineQuery(`*[_type == "product" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "category": category->{ _id, name, "slug": slug.current }, "brand": brand->{ _id, name }, "image": image{..., "assetUrl": asset->url}, "gallery": gallery[]{ ..., "assetUrl": asset->url }}`)
+export const productBySlugDraftQuery = defineQuery(`*[_type == "product" && slug.current == $slug][0]{..., "slug": slug.current, "category": category->{ _id, name, "slug": slug.current }, "brand": brand->{ _id, name }, "image": image{..., "assetUrl": asset->url}, "gallery": gallery[]{ ..., "assetUrl": asset->url }}`)
 
 export const serviceBySlugQuery = defineQuery(`*[_type == "service" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "image": image{...}}`)
 export const serviceBySlugDraftQuery = defineQuery(`*[_type == "service" && slug.current == $slug][0]{..., "slug": slug.current, "image": image{...}}`)

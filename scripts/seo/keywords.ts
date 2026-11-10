@@ -43,12 +43,44 @@ const PREFIXES = [
 
 const PRODUCTS_MATRIX = [
   {
+    cluster: 'كبدة ضأن مجمدة كلاسيك وجوني جولد',
+    targetUrl: '/products/frozen-liver',
+    categoryUrl: '/products/category/meat-poultry',
+    items: ['كبدة ضأن', 'كبدة كلاسيك', 'كبدة توماس فودز', 'كبدة جوني جولد', 'كبدة مجمدة'],
+    states: ['مجمدة', 'فاكيوم', 'كرتون 20 كجم'],
+    origins: ['أسترالي', 'نيوزيلندي'],
+  },
+  {
+    cluster: 'ريش ضأن واجستاف بالعظم',
+    targetUrl: '/products/frozen-ribs-wagstaff',
+    categoryUrl: '/products/category/meat-poultry',
+    items: ['ريش ضأن', 'ريش بالعظم', 'اضلاع غنم', 'ريش واجستاف', 'O-Rack'],
+    states: ['مجمدة', 'فاكيوم'],
+    origins: ['أسترالي'],
+  },
+  {
+    cluster: 'مخ مجمد بالجملة للمطاعم',
+    targetUrl: '/products/frozen-brain',
+    categoryUrl: '/products/category/meat-poultry',
+    items: ['مخ عجل', 'مخ ضأن', 'مخ مجمد للمطاعم'],
+    states: ['مجمد صدمي', 'كراتين جملة'],
+    origins: ['أسترالي', 'برازيلي'],
+  },
+  {
+    cluster: 'لسان بقري وعجل مجمد',
+    targetUrl: '/products/frozen-tongue',
+    categoryUrl: '/products/category/meat-poultry',
+    items: ['لسان بقري', 'لسان عجل', 'ألسنة مجمدة'],
+    states: ['مجمد', 'منظف فاكيوم'],
+    origins: ['برازيلي', 'أسترالي'],
+  },
+  {
     cluster: 'اللحوم والدواجن المجمدة',
     targetUrl: '/products/frozen-meat',
     categoryUrl: '/products/category/meat-poultry',
     items: ['لحوم', 'لحم بقري', 'لحم ضأن', 'كبدة مجمدة', 'توب سايد', 'دواجن'],
     states: ['مجمدة', 'مقطعة'],
-    origins: ['برازيلي', 'هندي'],
+    origins: ['برازيلي', 'هندي', 'أسترالي'],
   },
   {
     cluster: 'الأرز والحبوب التموينية',

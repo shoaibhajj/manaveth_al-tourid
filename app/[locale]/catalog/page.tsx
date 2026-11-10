@@ -76,6 +76,8 @@ export default async function CatalogPage({
             ? 'chilled'
             : 'ambient') as any,
         image: p.image || undefined,
+        gallery: p.gallery || undefined,
+        isCoreSpecialty: p.isCoreSpecialty ?? (p.order <= 5 || p.featured),
         order: p.order ?? idx,
         featured: p.featured,
         updatedAt: p.updatedAt,

@@ -30,7 +30,7 @@ export function FeaturedProducts({
           />
         )}
         <div className="mt-12">
-          <ProductsGrid products={products.slice(0, 3)} />
+          <ProductsGrid products={products.slice(0, 6)} />
         </div>
         <Reveal className="mt-10 flex justify-center">
           <Link

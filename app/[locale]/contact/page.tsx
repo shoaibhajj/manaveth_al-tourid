@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { getLayoutContent } from '@/lib/sanity/get-content'
+import { getSiteUrl } from '@/lib/site-url'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import { JsonLd } from '@/components/json-ld'
 import {
@@ -64,12 +65,12 @@ export default async function ContactPage({
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
 
-  const layout = await getLayoutContent()
-  const phone = layout.contact?.phone || '+966509971699'
-  const email = layout.site?.email || 'info@mnafeth.com'
+  const [layout, base] = await Promise.all([getLayoutContent(), getSiteUrl()])
+  const phone = layout.contact?.directPhone || layout.contact?.phone || '+966509971699'
+  const email = layout.contact?.supportEmail || layout.site?.email || 'info@mnafeth.com'
   const quotesNumber = (layout.contact?.whatsapp?.quote?.number || layout.contact?.phone || '966509971699').replace(/\D/g, '')
   const ordersNumber = (layout.contact?.whatsapp?.orders?.number || quotesNumber || '966503000295').replace(/\D/g, '')
-  const cr = '1116011768'
+  const cr = layout.site?.brand?.commercialRegistration || '1116011768'
 
   const whatsappOrdersUrl = `https://wa.me/${ordersNumber}?text=${encodeURIComponent(
     isAr ? 'السلام عليكم، أود التواصل بخصوص طلب توريد أصناف غذائية.' : 'Hello, I want to discuss placing a wholesale order.'
@@ -78,19 +79,21 @@ export default async function ContactPage({
     isAr ? 'السلام عليكم، أود الحصول على عرض سعر وتفاصيل عقود التوريد.' : 'Hello, I would like to request a wholesale contract proposal.'
   )}`
 
+  const customHours = isAr ? layout.contact?.workingHours?.ar : layout.contact?.workingHours?.en
+
   const hubs = [
     {
       name: isAr ? 'المستودع المركزي ومنطقة الرياض' : 'Central Logistics Hub (Riyadh)',
       district: isAr ? 'حي السلي الصناعي، الرياض' : 'Al-Sulai Industrial District, Riyadh',
       type: isAr ? 'مستودع تبريد وتجميد مرخص SFDA' : 'SFDA-Licensed Cold & Ambient Facility',
-      hours: isAr ? 'السبت - الخميس: 7:00 ص - 6:00 م' : 'Sat - Thu: 7:00 AM - 6:00 PM',
+      hours: customHours || (isAr ? 'السبت - الخميس: 7:00 ص - 6:00 م' : 'Sat - Thu: 7:00 AM - 6:00 PM'),
       mapUrl: 'https://maps.google.com/?q=24.6333,46.8167',
     },
     {
       name: isAr ? 'مركز توزيع المنطقة الغربية (جدة)' : 'Western Province Distribution Hub (Jeddah)',
       district: isAr ? 'منطقة الخمرة اللوجستية، جدة' : 'Al-Khumrah Logistics Zone, Jeddah',
       type: isAr ? 'مركز توزيع وشحن مبرد لمطاعم وفنادق الغربية' : 'Refrigerated Transshipment Center',
-      hours: isAr ? 'السبت - الخميس: 7:30 ص - 5:30 م' : 'Sat - Thu: 7:30 AM - 5:30 PM',
+      hours: customHours || (isAr ? 'السبت - الخميس: 7:30 ص - 5:30 م' : 'Sat - Thu: 7:30 AM - 5:30 PM'),
       mapUrl: 'https://maps.google.com/?q=21.3167,39.2667',
     },
   ]
@@ -99,13 +102,13 @@ export default async function ContactPage({
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
     name: isAr ? 'صفحة التواصل والمستودعات' : 'Contact & Distribution Hubs',
-    url: 'https://mnaveth.com/contact',
+    url: `${base}${localePath('/contact', locale)}`,
     mainEntity: {
       '@type': 'WholesaleStore',
       name: isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.',
       telephone: phone,
       email,
-      parentOrganization: { '@id': 'https://mnaveth.com/#organization' },
+      parentOrganization: { '@id': `${base}/#organization` },
       openingHoursSpecification: [
         {
           '@type': 'OpeningHoursSpecification',

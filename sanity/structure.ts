@@ -5,11 +5,11 @@ import { ClientGuidePane } from './components/ClientGuidePane'
 export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, { schemaType }) => {
   if (schemaType === 'product') {
     return S.document().views([
-      S.view.form().title('محتوى المنتج'),
-      S.view.component(ProductSeoPane).title('معاينة SEO والفهرسة'),
+      S.view.form().id('editor').title('محتوى المنتج'),
+      S.view.component(ProductSeoPane).id('seo-preview').title('معاينة SEO والفهرسة'),
     ])
   }
-  return S.document().views([S.view.form()])
+  return S.document().views([S.view.form().id('editor').title('المحتوى')])
 }
 
 const singleton = (S: StructureBuilder, typeName: string, title: string) =>
@@ -53,7 +53,8 @@ export const structure: StructureResolver = (S) =>
             .title('الشركة')
             .items([
               singleton(S, 'siteSettings', 'إعدادات الموقع والهوية'),
-              singleton(S, 'contactSettings', 'واتساب ورسائل التواصل'),
+              singleton(S, 'aboutPage', 'صفحة عن الشركة والاعتمادات (/about)'),
+              singleton(S, 'contactSettings', 'واتساب ورسائل التواصل ومواعيد العمل'),
               singleton(S, 'visitorCounter', 'عداد الزيارات'),
             ]),
         ),
@@ -171,6 +172,7 @@ export const structure: StructureResolver = (S) =>
                 .title('📖 دليل العميل وإرشادات الفهرسة')
                 .child(
                   S.component(ClientGuidePane)
+                    .id('client-guide-pane')
                     .title('دليل العميل وإرشادات الفهرسة')
                 ),
               S.divider(),

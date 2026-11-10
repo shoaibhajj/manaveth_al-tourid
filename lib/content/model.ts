@@ -54,6 +54,10 @@ export type ContactData = {
   whatsapp: typeof contact.whatsapp
   productOrderMessage: Localized
   social: SocialLink[]
+  directPhone?: string
+  supportEmail?: string
+  workingHours?: Localized
+  hubsSummary?: Localized
 }
 
 export type GalleryCategory = { id: string; label: Localized }
@@ -112,6 +116,21 @@ export type SiteContent = {
     bannerAlert?: Localized
     downloadNote?: Localized
     inquiryWhatsApp?: string
+  }
+  aboutPage?: {
+    badge?: Localized
+    title?: Localized
+    subtitle?: Localized
+    legalName?: Localized
+    crNumber?: string
+    headquarters?: Localized
+    activity?: Localized
+    foodSafety?: Localized
+    coldChain?: Localized
+    pillars?: Array<{ title: Localized; description: Localized; icon?: string }>
+    ctaTitle?: Localized
+    ctaSubtitle?: Localized
+    seo?: PageSeo
   }
   /** Where the content came from. "fallback" means the built-in copy is in use. */
   source: 'sanity' | 'fallback'

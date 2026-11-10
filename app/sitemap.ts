@@ -9,25 +9,16 @@ import { catalogCategories } from '@/lib/content/catalog-data'
 export const dynamic = 'force-static'
 
 /**
- * E4: Sitemaps generator with clean separation by section:
- * - /sitemap/pages.xml (Static public routes and service detail pages)
- * - /sitemap/products.xml (Only eligible, high-quality products passing evaluateSeo)
- * - /sitemap/categories.xml (Foodservice product categories)
- * - /sitemap/articles.xml (Published blog and industry articles)
+ * Unified Root XML Sitemap (/sitemap.xml):
+ * Generates an authoritative sitemap covering:
+ * - Static public routes and service detail pages
+ * - Eligible products strictly passing evaluateSeo
+ * - Foodservice product categories
+ * - Published blog and industry articles
+ *
+ * Designed specifically for Google Search Console to read /sitemap.xml with 100% compliance.
  */
-export async function generateSitemaps() {
-  return [
-    { id: 'pages' },
-    { id: 'products' },
-    { id: 'categories' },
-    { id: 'articles' },
-  ]
-}
-
-export default async function sitemap(props?: {
-  id?: string | Promise<string>
-}): Promise<MetadataRoute.Sitemap> {
-  const resolvedId = props?.id ? await Promise.resolve(props.id) : undefined
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [base, details, content] = await Promise.all([
     getSiteUrl(),
     getDetailSlugs(),
@@ -122,12 +113,6 @@ export default async function sitemap(props?: {
       })
   }
 
-  if (resolvedId === 'pages') return buildPagesSitemap()
-  if (resolvedId === 'products') return buildProductsSitemap()
-  if (resolvedId === 'categories') return buildCategoriesSitemap()
-  if (resolvedId === 'articles') return buildArticlesSitemap()
-
-  // Fallback for default request without id: combine all sections
   return [
     ...buildPagesSitemap(),
     ...buildProductsSitemap(),

@@ -81,6 +81,61 @@ export const SEED_DATA = {
       en: 'Mnaveth ALTourid maintains comprehensive accreditations from food safety authorities (SFDA), ensuring absolute product integrity across Saudi Arabia.',
     },
   },
+  aboutPage: {
+    _id: 'aboutPage',
+    _type: 'aboutPage',
+    badge: {
+      _type: 'localizedString',
+      ar: 'سجل تجاري معتمد: 1116011768',
+      en: 'Commercial Registration: 1116011768',
+    },
+    title: {
+      _type: 'localizedString',
+      ar: 'شركة منافذ التوريد للتجارة',
+      en: 'Mnaveth ALTourid Trading Co.',
+    },
+    subtitle: {
+      _type: 'localizedText',
+      ar: 'رواد تجارة الجملة والتوريد التمويني المتخصص للمطاعم، الفنادق، ومطابخ الإعاشة الكبرى في المملكة العربية السعودية منذ عام 2004.',
+      en: 'Leading foodservice wholesale distributor supplying premium meats, basmati rice, frying oils, and dry goods to commercial hospitality kitchens across Saudi Arabia since 2004.',
+    },
+    legalName: {
+      _type: 'localizedString',
+      ar: 'شركة منافذ التوريد للتجارة',
+      en: 'Mnaveth ALTourid Trading Co.',
+    },
+    crNumber: '1116011768',
+    headquarters: {
+      _type: 'localizedString',
+      ar: 'الرياض - المملكة العربية السعودية',
+      en: 'Riyadh, Kingdom of Saudi Arabia',
+    },
+    activity: {
+      _type: 'localizedString',
+      ar: 'تجارة الجملة في المواد الغذائية واللحوم والإعاشة',
+      en: 'Wholesale Foodservice Supply & Meats',
+    },
+    foodSafety: {
+      _type: 'localizedString',
+      ar: 'مستودعات مرخصة ومطابقة لاشتراطات SFDA',
+      en: 'SFDA Licensed & Inspected Facilities',
+    },
+    coldChain: {
+      _type: 'localizedString',
+      ar: 'أسطول شاحنات مبردة ومجمدة (-18° إلى +4°)',
+      en: 'Dedicated Temperature-Controlled Fleet',
+    },
+    ctaTitle: {
+      _type: 'localizedString',
+      ar: 'هل تود استعراض أصنافنا أو طلب عرض سعر رسمي؟',
+      en: 'Ready to explore our catalog or request a quote?',
+    },
+    ctaSubtitle: {
+      _type: 'localizedText',
+      ar: 'تصفح قائمة الأصناف المعتمدة أو تواصل مباشرة مع فريق المبيعات والتعاقدات.',
+      en: 'Browse certified products or get in touch with our commercial sales department.',
+    },
+  },
   certificates: [
     {
       _id: 'cert-sfda',
@@ -263,6 +318,10 @@ async function seed() {
   // 2. Certifications Page
   console.log('Creating certificationsPage...')
   await client.createOrReplace(SEED_DATA.certificationsPage)
+
+  // 2.5 About Page
+  console.log('Creating aboutPage...')
+  await client.createOrReplace(SEED_DATA.aboutPage)
 
   // 3. Certificates
   for (const cert of SEED_DATA.certificates) {

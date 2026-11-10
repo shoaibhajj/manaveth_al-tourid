@@ -31,14 +31,16 @@ export async function generateMetadata({
   const { locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
+  const content = await getContent()
+  const customSeo = content.aboutPage?.seo
 
-  const title = isAr
+  const title = (isAr ? customSeo?.title?.ar : customSeo?.title?.en) || (isAr
     ? 'عن الشركة والاعتمادات | شركة منافذ التوريد للتجارة (سجل: 1116011768)'
-    : 'About Us & Certifications | Mnaveth ALTourid Trading Co. (CR: 1116011768)'
+    : 'About Us & Certifications | Mnaveth ALTourid Trading Co. (CR: 1116011768)')
 
-  const description = isAr
+  const description = (isAr ? customSeo?.description?.ar : customSeo?.description?.en) || (isAr
     ? 'تعرف على شركة منافذ التوريد للتجارة: المورد المعتمد للمواد الغذائية والتموينية، اللحوم المجمدة، والأرز لكبرى المطاعم والفنادق بالمملكة بسجل تجاري 1116011768.'
-    : 'Learn about Mnaveth ALTourid Trading Co.: certified food supply, frozen meats, and catering staples for hotels and restaurants in Saudi Arabia (CR: 1116011768).'
+    : 'Learn about Mnaveth ALTourid Trading Co.: certified food supply, frozen meats, and catering staples for hotels and restaurants in Saudi Arabia (CR: 1116011768).')
 
   return buildMetadata({
     path: '/about',
@@ -59,6 +61,19 @@ export default async function AboutPage({
   const isAr = locale === 'ar'
 
   const [content, base] = await Promise.all([getContent(), getSiteUrl()])
+  const aboutDoc = content.aboutPage
+  const badgeText = (isAr ? aboutDoc?.badge?.ar : aboutDoc?.badge?.en) || (isAr ? 'سجل تجاري معتمد: 1116011768' : 'Commercial Registration: 1116011768')
+  const heroTitle = (isAr ? aboutDoc?.title?.ar : aboutDoc?.title?.en) || (isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.')
+  const heroSubtitle = (isAr ? aboutDoc?.subtitle?.ar : aboutDoc?.subtitle?.en) || (isAr ? 'رواد تجارة الجملة والتوريد التمويني المتخصص للمطاعم، الفنادق، ومطابخ الإعاشة الكبرى في المملكة العربية السعودية منذ عام 2004.' : 'Leading foodservice wholesale distributor supplying premium meats, basmati rice, frying oils, and dry goods to commercial hospitality kitchens across Saudi Arabia since 2004.')
+  const legalName = (isAr ? aboutDoc?.legalName?.ar : aboutDoc?.legalName?.en) || (isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.')
+  const crNumber = aboutDoc?.crNumber || content.site.brand.commercialRegistration || '1116011768'
+  const headquarters = (isAr ? aboutDoc?.headquarters?.ar : aboutDoc?.headquarters?.en) || (isAr ? 'الرياض - المملكة العربية السعودية' : 'Riyadh, Kingdom of Saudi Arabia')
+  const activity = (isAr ? aboutDoc?.activity?.ar : aboutDoc?.activity?.en) || (isAr ? 'تجارة الجملة في المواد الغذائية واللحوم والإعاشة' : 'Wholesale Foodservice Supply & Meats')
+  const foodSafety = (isAr ? aboutDoc?.foodSafety?.ar : aboutDoc?.foodSafety?.en) || (isAr ? 'مستودعات مرخصة ومطابقة لاشتراطات SFDA' : 'SFDA Licensed & Inspected Facilities')
+  const coldChain = (isAr ? aboutDoc?.coldChain?.ar : aboutDoc?.coldChain?.en) || (isAr ? 'أسطول شاحنات مبردة ومجمدة (-18° إلى +4°)' : 'Dedicated Temperature-Controlled Fleet')
+  const ctaTitle = (isAr ? aboutDoc?.ctaTitle?.ar : aboutDoc?.ctaTitle?.en) || (isAr ? 'هل تود استعراض أصنافنا أو طلب عرض سعر رسمي؟' : 'Ready to explore our catalog or request a quote?')
+  const ctaSubtitle = (isAr ? aboutDoc?.ctaSubtitle?.ar : aboutDoc?.ctaSubtitle?.en) || (isAr ? 'تصفح قائمة الأصناف المعتمدة أو تواصل مباشرة مع فريق المبيعات والتعاقدات.' : 'Browse certified products or get in touch with our commercial sales department.')
+
   const orgSchema = buildOrganizationSchema(content.site, locale, base)
 
   const aboutPageSchema = {
@@ -66,7 +81,7 @@ export default async function AboutPage({
     '@type': 'AboutPage',
     '@id': `${base}${localePath('/about', locale)}#webpage`,
     url: `${base}${localePath('/about', locale)}`,
-    name: isAr ? 'عن شركة منافذ التوريد للتجارة' : 'About Mnaveth ALTourid Trading Co.',
+    name: heroTitle,
     about: { '@id': `${base}/#organization` },
     publisher: { '@id': `${base}/#organization` },
   }
@@ -79,19 +94,15 @@ export default async function AboutPage({
       <div className="rounded-3xl bg-forest-deep px-6 py-12 sm:px-12 sm:py-16 text-cream shadow-2xl text-center">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/20 border border-gold/40 px-4 py-1 text-xs font-bold text-gold mb-4">
           <ShieldCheck className="size-4" />
-          <span>{isAr ? 'سجل تجاري معتمد: 1116011768' : 'Commercial Registration: 1116011768'}</span>
+          <span>{badgeText}</span>
         </span>
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-cream tracking-tight max-w-4xl mx-auto leading-tight">
-          {isAr
-            ? 'شركة منافذ التوريد للتجارة'
-            : 'Mnaveth ALTourid Trading Co.'}
+          {heroTitle}
         </h1>
 
         <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-cream/80 leading-relaxed">
-          {isAr
-            ? 'رواد تجارة الجملة والتوريد التمويني المتخصص للمطاعم، الفنادق، ومطابخ الإعاشة الكبرى في المملكة العربية السعودية منذ عام 2004.'
-            : 'Leading foodservice wholesale distributor supplying premium meats, basmati rice, frying oils, and dry goods to commercial hospitality kitchens across Saudi Arabia since 2004.'}
+          {heroSubtitle}
         </p>
       </div>
 
@@ -110,7 +121,7 @@ export default async function AboutPage({
               {isAr ? 'الاسم القانوني الكامل' : 'Legal Corporate Name'}
             </span>
             <strong className="text-forest-deep font-bold text-base block">
-              {isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.'}
+              {legalName}
             </strong>
           </div>
 
@@ -119,7 +130,7 @@ export default async function AboutPage({
               {isAr ? 'رقم السجل التجاري' : 'Commercial Registration (CR)'}
             </span>
             <strong className="text-forest-deep font-mono font-bold text-base block">
-              1116011768
+              {crNumber}
             </strong>
           </div>
 
@@ -128,7 +139,7 @@ export default async function AboutPage({
               {isAr ? 'المقر الرئيسي' : 'Headquarters'}
             </span>
             <strong className="text-forest-deep font-bold text-base block">
-              {isAr ? 'الرياض - المملكة العربية السعودية' : 'Riyadh, Kingdom of Saudi Arabia'}
+              {headquarters}
             </strong>
           </div>
 
@@ -137,7 +148,7 @@ export default async function AboutPage({
               {isAr ? 'النشاط الرئيسي' : 'Core Business Activity'}
             </span>
             <strong className="text-forest-deep font-bold block">
-              {isAr ? 'تجارة الجملة في المواد الغذائية واللحوم والإعاشة' : 'Wholesale Foodservice Supply & Meats'}
+              {activity}
             </strong>
           </div>
 
@@ -146,7 +157,7 @@ export default async function AboutPage({
               {isAr ? 'مطابقة سلامة الغذاء' : 'Food Safety Standard'}
             </span>
             <strong className="text-emerald-700 font-bold block">
-              {isAr ? 'مستودعات مرخصة ومطابقة لاشتراطات SFDA' : 'SFDA Licensed & Inspected Facilities'}
+              {foodSafety}
             </strong>
           </div>
 
@@ -155,7 +166,7 @@ export default async function AboutPage({
               {isAr ? 'سلسلة التبريد (Cold Chain)' : 'Cold Chain Logistics'}
             </span>
             <strong className="text-forest-deep font-bold block">
-              {isAr ? 'أسطول شاحنات مبردة ومجمدة (-18° إلى +4°)' : 'Dedicated Temperature-Controlled Fleet'}
+              {coldChain}
             </strong>
           </div>
         </div>
@@ -204,12 +215,10 @@ export default async function AboutPage({
       <section className="mt-14 rounded-2xl bg-forest px-8 py-10 text-cream flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold">
-            {isAr ? 'هل تود استعراض أصنافنا أو طلب عرض سعر رسمي؟' : 'Ready to explore our catalog or request a quote?'}
+            {ctaTitle}
           </h2>
           <p className="text-xs sm:text-sm text-cream/75 mt-1">
-            {isAr
-              ? 'تصفح قائمة الأصناف المعتمدة أو تواصل مباشرة مع فريق المبيعات والتعاقدات.'
-              : 'Browse certified products or get in touch with our commercial sales department.'}
+            {ctaSubtitle}
           </p>
         </div>
 

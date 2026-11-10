@@ -30,6 +30,7 @@ export const layoutContentQuery = defineQuery(`{
 export const siteContentQuery = defineQuery(`{
   "settings": *[_type == "siteSettings"][0],
   "contact": *[_type == "contactSettings"][0],
+  "aboutPage": *[_type == "aboutPage"][0]{...},
   "catalogPage": *[_type == "catalogPage"][0]{
     ...,
     "pdfFileUrl": pdfFile.asset->url

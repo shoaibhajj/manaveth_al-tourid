@@ -541,8 +541,12 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
       })),
     },
     contact: {
-      phone: clean(settings.phone) || primary?.phone || base.contact.phone,
-      email: clean(settings.email) || base.contact.email,
+      phone: clean(contactDoc.directPhone) || clean(settings.phone) || primary?.phone || base.contact.phone,
+      email: clean(contactDoc.supportEmail) || clean(settings.email) || base.contact.email,
+      directPhone: clean(contactDoc.directPhone) || clean(settings.phone) || primary?.phone || '+966509971699',
+      supportEmail: clean(contactDoc.supportEmail) || clean(settings.email) || 'info@mnafeth.com',
+      workingHours: optionalLocalized(contactDoc.workingHours),
+      hubsSummary: optionalLocalized(contactDoc.hubsSummary),
       address: addressDoc ?? (primary?.address.ar ? primary.address : base.contact.address),
       whatsapp: {
         quote: whatsapp(contactDoc.whatsappQuote, base.contact.whatsapp.quote),
@@ -602,6 +606,27 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
           bannerAlert: optionalLocalized(data.catalogPage.bannerAlert),
           downloadNote: optionalLocalized(data.catalogPage.downloadNote),
           inquiryWhatsApp: clean(data.catalogPage.inquiryWhatsApp) || '966509971699',
+        }
+      : undefined,
+    aboutPage: data.aboutPage
+      ? {
+          badge: optionalLocalized(data.aboutPage.badge),
+          title: optionalLocalized(data.aboutPage.title),
+          subtitle: optionalLocalized(data.aboutPage.subtitle),
+          legalName: optionalLocalized(data.aboutPage.legalName),
+          crNumber: clean(data.aboutPage.crNumber) || clean(settings.commercialRegistration) || '1116011768',
+          headquarters: optionalLocalized(data.aboutPage.headquarters),
+          activity: optionalLocalized(data.aboutPage.activity),
+          foodSafety: optionalLocalized(data.aboutPage.foodSafety),
+          coldChain: optionalLocalized(data.aboutPage.coldChain),
+          pillars: list(data.aboutPage.pillars).map((p) => ({
+            title: localized(p.title, { ar: '', en: '' }),
+            description: localized(p.description, { ar: '', en: '' }),
+            icon: clean(p.icon),
+          })),
+          ctaTitle: optionalLocalized(data.aboutPage.ctaTitle),
+          ctaSubtitle: optionalLocalized(data.aboutPage.ctaSubtitle),
+          seo: data.aboutPage.seo ? seo(data.aboutPage.seo, base.seo.home) : undefined,
         }
       : undefined,
   }
@@ -664,8 +689,12 @@ export function normalizeLayoutContent(raw: Doc | null | undefined): LayoutConte
       })),
     },
     contact: {
-      phone: clean(settings.phone) || primary?.phone || base.contact.phone,
-      email: clean(settings.email) || base.contact.email,
+      phone: clean(contactDoc.directPhone) || clean(settings.phone) || primary?.phone || base.contact.phone,
+      email: clean(contactDoc.supportEmail) || clean(settings.email) || base.contact.email,
+      directPhone: clean(contactDoc.directPhone) || clean(settings.phone) || primary?.phone || '+966509971699',
+      supportEmail: clean(contactDoc.supportEmail) || clean(settings.email) || 'info@mnafeth.com',
+      workingHours: optionalLocalized(contactDoc.workingHours),
+      hubsSummary: optionalLocalized(contactDoc.hubsSummary),
       address: addressDoc ?? (primary?.address?.ar ? primary.address : base.contact.address),
       whatsapp: {
         quote: whatsapp(contactDoc.whatsappQuote, base.contact.whatsapp.quote),

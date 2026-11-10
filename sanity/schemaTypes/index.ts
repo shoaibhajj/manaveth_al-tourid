@@ -10,6 +10,7 @@ import { keywordCluster } from './documents/keywordCluster'
 import { landingPage } from './documents/landingPage'
 import { galleryCategory, galleryItem } from './documents/gallery'
 import {
+  aboutPage,
   certificationsPage,
   contactSettings,
   homePage,
@@ -38,6 +39,7 @@ import { contactPerson, ctaButton, link, priceTier, seo, socialLink, unitPrice, 
 /** Documents that exist exactly once. The Studio hides "create" and "delete" for them. */
 export const singletonTypes = [
   'siteSettings',
+  'aboutPage',
   'homePage',
   'catalogPage',
   'contactSettings',
@@ -51,6 +53,7 @@ export const singletonTypes = [
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Singletons
   siteSettings,
+  aboutPage,
   homePage,
   catalogPage,
   contactSettings,

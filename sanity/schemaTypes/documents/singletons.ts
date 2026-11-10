@@ -64,6 +64,13 @@ export const siteSettings = defineType({
       type: 'string',
       group: 'identity',
     }),
+    defineField({
+      name: 'foundingYear',
+      title: 'سنة التأسيس',
+      description: 'سنة تأسيس الشركة (مثال: 2004) لحساب سنوات الخبرة بدقة.',
+      type: 'number',
+      group: 'identity',
+    }),
     defineField({ name: 'phone', title: 'الهاتف', type: 'string', group: 'contact' }),
     defineField({
       name: 'email',
@@ -99,9 +106,33 @@ export const visitorCounter = defineType({
 
 export const contactSettings = defineType({
   name: 'contactSettings',
-  title: 'واتساب ورسائل التواصل',
+  title: 'واتساب ورسائل التواصل ومواعيد العمل',
   type: 'document',
   fields: [
+    defineField({
+      name: 'directPhone',
+      title: 'هاتف المبيعات المباشر',
+      description: 'هاتف مبيعات الجملة المباشر الظاهر في صفحة اتصل بنا (مثال: +966509971699).',
+      type: 'string',
+    }),
+    defineField({
+      name: 'supportEmail',
+      title: 'البريد الإلكتروني للطلبات',
+      description: 'البريد المعتمد للمراسلات الرسمية وعروض الأسعار (مثال: info@mnafeth.com).',
+      type: 'string',
+    }),
+    defineField({
+      name: 'workingHours',
+      title: 'أوقات وساعات العمل',
+      description: 'مواعيد عمل إدارة المبيعات والمستودعات (مثال: السبت إلى الخميس: 7:00 ص - 10:00 م).',
+      type: 'localizedString',
+    }),
+    defineField({
+      name: 'hubsSummary',
+      title: 'ملخص مراكز التوزيع والمستودعات',
+      description: 'ملخص الفروع والمستودعات في الرياض وجدة.',
+      type: 'localizedText',
+    }),
     defineField({
       name: 'whatsappQuote',
       title: 'واتساب: طلب عرض سعر',
@@ -330,4 +361,105 @@ export const certificationsPage = defineType({
     }),
   ],
   preview: { prepare: () => ({ title: 'صفحة الشهادات وتراخيص الجودة' }) },
+})
+
+export const aboutPage = defineType({
+  name: 'aboutPage',
+  title: 'صفحة عن الشركة والاعتمادات (/about)',
+  type: 'document',
+  initialValue: () => ({
+    badge: {
+      _type: 'localizedString',
+      ar: 'سجل تجاري معتمد: 1116011768',
+      en: 'Commercial Registration: 1116011768',
+    },
+    title: {
+      _type: 'localizedString',
+      ar: 'شركة منافذ التوريد للتجارة',
+      en: 'Mnaveth ALTourid Trading Co.',
+    },
+    subtitle: {
+      _type: 'localizedText',
+      ar: 'رواد تجارة الجملة والتوريد التمويني المتخصص للمطاعم، الفنادق، ومطابخ الإعاشة الكبرى في المملكة العربية السعودية منذ عام 2004.',
+      en: 'Leading foodservice wholesale distributor supplying premium meats, basmati rice, frying oils, and dry goods to commercial hospitality kitchens across Saudi Arabia since 2004.',
+    },
+    legalName: {
+      _type: 'localizedString',
+      ar: 'شركة منافذ التوريد للتجارة',
+      en: 'Mnaveth ALTourid Trading Co.',
+    },
+    crNumber: '1116011768',
+    headquarters: {
+      _type: 'localizedString',
+      ar: 'الرياض - المملكة العربية السعودية',
+      en: 'Riyadh, Kingdom of Saudi Arabia',
+    },
+    activity: {
+      _type: 'localizedString',
+      ar: 'تجارة الجملة في المواد الغذائية واللحوم والإعاشة',
+      en: 'Wholesale Foodservice Supply & Meats',
+    },
+    foodSafety: {
+      _type: 'localizedString',
+      ar: 'مستودعات مرخصة ومطابقة لاشتراطات SFDA',
+      en: 'SFDA Licensed & Inspected Facilities',
+    },
+    coldChain: {
+      _type: 'localizedString',
+      ar: 'أسطول شاحنات مبردة ومجمدة (-18° إلى +4°)',
+      en: 'Dedicated Temperature-Controlled Fleet',
+    },
+    ctaTitle: {
+      _type: 'localizedString',
+      ar: 'هل تود استعراض أصنافنا أو طلب عرض سعر رسمي؟',
+      en: 'Ready to explore our catalog or request a quote?',
+    },
+    ctaSubtitle: {
+      _type: 'localizedText',
+      ar: 'تصفح قائمة الأصناف المعتمدة أو تواصل مباشرة مع فريق المبيعات والتعاقدات.',
+      en: 'Browse certified products or get in touch with our commercial sales department.',
+    },
+  }),
+  groups: [
+    { name: 'hero', title: 'الترويسة الرئيسية', default: true },
+    { name: 'credentials', title: 'بيانات الكيان والاعتمادات' },
+    { name: 'pillars', title: 'ركائز العمل والجودة' },
+    { name: 'cta', title: 'دعوة للتواصل (CTA)' },
+    { name: 'seo', title: 'محركات البحث' },
+  ],
+  fields: [
+    defineField({ name: 'badge', title: 'الشارة العلوية', type: 'localizedString', group: 'hero' }),
+    defineField({ name: 'title', title: 'العنوان الرئيسي (H1)', type: 'localizedString', group: 'hero', validation: requiredTranslation }),
+    defineField({ name: 'subtitle', title: 'الوصف والنبذة', type: 'localizedText', group: 'hero', validation: requiredTranslation }),
+    defineField({ name: 'legalName', title: 'الاسم القانوني الكامل', type: 'localizedString', group: 'credentials' }),
+    defineField({ name: 'crNumber', title: 'رقم السجل التجاري', type: 'string', group: 'credentials' }),
+    defineField({ name: 'headquarters', title: 'المقر الرئيسي', type: 'localizedString', group: 'credentials' }),
+    defineField({ name: 'activity', title: 'النشاط الرئيسي', type: 'localizedString', group: 'credentials' }),
+    defineField({ name: 'foodSafety', title: 'معيار سلامة الغذاء (SFDA)', type: 'localizedString', group: 'credentials' }),
+    defineField({ name: 'coldChain', title: 'سلسلة التبريد والأسطول', type: 'localizedString', group: 'credentials' }),
+    defineField({
+      name: 'pillars',
+      title: 'ركائز العمل والتوريد',
+      type: 'array',
+      group: 'pillars',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'title', title: 'عنوان الركيزة', type: 'localizedString' }),
+            defineField({ name: 'description', title: 'الوصف', type: 'localizedText' }),
+            defineField({ name: 'icon', title: 'نوع الأيقونة (award / truck / fileCheck)', type: 'string' }),
+          ],
+          preview: {
+            select: { ar: 'title.ar', en: 'title.en' },
+            prepare: ({ ar, en }) => ({ title: ar || en || 'ركيزة' }),
+          },
+        }),
+      ],
+    }),
+    defineField({ name: 'ctaTitle', title: 'عنوان صندوق الدعوة', type: 'localizedString', group: 'cta' }),
+    defineField({ name: 'ctaSubtitle', title: 'وصف صندوق الدعوة', type: 'localizedText', group: 'cta' }),
+    defineField({ name: 'seo', title: 'محركات البحث', type: 'seo', group: 'seo' }),
+  ],
+  preview: { prepare: () => ({ title: 'صفحة عن الشركة والاعتمادات (/about)' }) },
 })

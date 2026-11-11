@@ -282,8 +282,8 @@ function generateAutoFaqs(product: ProductDoc, locale: Locale): AutoFaqItem[] {
         ? `ما هو الحد الأدنى لطلب ${name} بالجملة؟`
         : `What is the minimum order quantity (MOQ) for ${name}?`,
       answer: isAr
-        ? `الحد الأدنى لطلب وتوريد ${name} هو ${moqStr}، مع إمكانية توفير خصومات إضافية للكميات الكبيرة وعقود التوريد السنوية.`
-        : `The minimum order quantity for ${name} is ${moqStr}. Additional tiered discounts are available for bulk orders and annual supply contracts.`,
+        ? `الحد الأدنى المسجل لطلب ${name} هو ${moqStr}. يُرجى تأكيد التوفر وشروط التوريد عند التواصل مع الشركة.`
+        : `The recorded minimum order for ${name} is ${moqStr}. Please confirm availability and supply terms with the company.`,
     })
   }
 
@@ -291,16 +291,16 @@ function generateAutoFaqs(product: ProductDoc, locale: Locale): AutoFaqItem[] {
   if (product.storageState) {
     const storageDesc =
       product.storageState === 'frozen'
-        ? isAr
-          ? 'في مستودعات التجميد بدرجة حرارة لا تتجاوز -18°C تحت الصفر، مع نقله عبر أسطول سيارات مجهزة بنظام التبريد المستمر لضمان الحفاظ على السلسلة الباردة.'
-          : 'in deep-freeze warehouses at -18°C or below, transported in temperature-controlled reefer trucks to maintain an unbroken cold chain.'
+          ? isAr
+            ? 'مجمد وفق حالة التخزين المسجلة للصنف.'
+            : 'frozen, as recorded for this product.'
         : product.storageState === 'chilled'
           ? isAr
-            ? 'في مستودعات مبردة بدرجة حرارة بين 0°C و 4°C لضمان أقصى درجات الطزاجة والسلامة الغذائية.'
-            : 'in chilled facilities between 0°C and 4°C to preserve optimal freshness and safety standards.'
+              ? 'مبرد وفق حالة التخزين المسجلة للصنف.'
+              : 'chilled, as recorded for this product.'
           : isAr
-            ? 'في مستودعات جافة ومكيفة بدرجة حرارة ورطوبة مضبوطة ومعتمدة من هيئة الغذاء والدواء.'
-            : 'in dry, climate-controlled facilities conforming to official SFDA storage guidelines.'
+              ? 'يحفظ في درجة الحرارة المناسبة للصنف.'
+              : 'stored at a temperature suitable for the product.'
 
     faqs.push({
       question: isAr
@@ -320,8 +320,8 @@ function generateAutoFaqs(product: ProductDoc, locale: Locale): AutoFaqItem[] {
         ? `ما هي المدن والمناطق المشمولة بتوريد ${name}؟`
         : `Which cities are covered for delivery of ${name}?`,
       answer: isAr
-        ? `يشمل التوريد والتوصيل المباشر للمطاعم والفنادق في: ${cities.join('، ')}، بالإضافة لإمكانية التنسيق للشحن لباقي مناطق المملكة.`
-        : `Direct delivery for food establishments is available in: ${cities.join(', ')}, with dispatch options across other Saudi regions.`,
+        ? `يتوفر التوريد في: ${cities.join('، ')}. للمناطق البعيدة يُنسق للطلبات أو الكميات الكبيرة.`
+        : `Supply is available in: ${cities.join(', ')}. For distant areas, arrangements are made for large orders or quantities.`,
     })
   }
 

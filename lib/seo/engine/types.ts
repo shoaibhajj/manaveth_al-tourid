@@ -43,6 +43,7 @@ export type ProductDoc = {
   storage?: Localized
   certifications?: Localized
   usage?: Localized
+  faqs?: Array<{ question?: Localized; answer?: Localized }>
   seo?: {
     title?: Localized
     description?: Localized

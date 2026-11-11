@@ -18,7 +18,6 @@ export function ProductSeoPane(props: ProductSeoPaneProps) {
 
   const productDoc = useMemo((): ProductDoc => {
     return {
-      id: displayed._id || 'preview',
       slug: displayed.slug?.current || displayed.slug || '',
       sku: displayed.sku || '',
       name: displayed.name || { ar: '', en: '' },
@@ -50,15 +49,14 @@ export function ProductSeoPane(props: ProductSeoPaneProps) {
 
   const siteContext = useMemo((): SiteSeoContext => {
     return {
-      siteUrl:
+      baseUrl:
         typeof window !== 'undefined'
           ? window.location.origin
           : process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mnaveth-altourid.com',
-      companyName: {
+      brandName: {
         ar: 'شركة منافذ التوريد',
         en: 'Mnaveth ALTourid Trading Co.',
       },
-      defaultKeywords: ['توريد لحوم', 'تموين مطاعم', 'أرز بالجملة', 'إعاشة فنادق'],
     }
   }, [])
 
@@ -69,12 +67,12 @@ export function ProductSeoPane(props: ProductSeoPaneProps) {
 
   // 2. Generate SEO preview
   const seoResult = useMemo(() => {
-    return buildProductSeo(productDoc, siteContext, activeLang)
+    return buildProductSeo(productDoc, activeLang, siteContext)
   }, [productDoc, siteContext, activeLang])
 
   const slug = productDoc.slug || 'product-slug'
   const isAr = activeLang === 'ar'
-  const pageUrl = `${siteContext.siteUrl}${isAr ? '' : '/en'}/products/${slug}`
+  const pageUrl = `${siteContext.baseUrl}${isAr ? '' : '/en'}/products/${slug}`
 
   return (
     <div
@@ -321,7 +319,7 @@ export function ProductSeoPane(props: ProductSeoPaneProps) {
             </strong>
           </div>
           <div>
-            {productDoc.seo?.metaTitle?.[activeLang] ? (
+            {productDoc.seo?.title?.[activeLang] ? (
               <span style={{ color: '#2563eb', fontWeight: 700 }}>
                 {isAr ? '⚡ تم تطبيق تجاوز يدوي للعنوان' : '⚡ Manual SEO Title override active'}
               </span>
@@ -370,9 +368,9 @@ export function ProductSeoPane(props: ProductSeoPaneProps) {
                 }}
               >
                 <div style={{ fontSize: '12px', fontWeight: 700, color: '#1e293b', marginBottom: '3px' }}>
-                  {faq.q}
+                  {faq.question}
                 </div>
-                <div style={{ fontSize: '11px', color: '#475569' }}>{faq.a}</div>
+                <div style={{ fontSize: '11px', color: '#475569' }}>{faq.answer}</div>
               </div>
             ))}
           </div>

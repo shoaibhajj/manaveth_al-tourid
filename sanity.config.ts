@@ -1,5 +1,5 @@
 import { visionTool } from '@sanity/vision'
-import { defineConfig, type DocumentActionComponent } from 'sanity'
+import { defineConfig, type DocumentActionComponent, useDocumentOperation } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool } from 'sanity/presentation'
 import { mainDocuments } from './sanity/presentation/resolve'
@@ -13,6 +13,7 @@ const isSingleton = (type: string | undefined) => singletonTypes.some((name) => 
 const blockedSingletonActions = ['unpublish', 'delete', 'duplicate']
 
 const ResetSectionsAction: DocumentActionComponent = (props) => {
+  const { patch } = useDocumentOperation(props.id, props.type)
   if (props.type !== 'homePage') return null
 
   return {
@@ -23,7 +24,7 @@ const ResetSectionsAction: DocumentActionComponent = (props) => {
         'هل تريد بالتأكيد إعادة ضبط كافة أقسام الصفحة الرئيسية الـ 10 إلى ترتيبها وحالتها الافتراضية الأصلية؟',
       )
       if (confirmed) {
-        props.patch.execute([
+        patch.execute([
           {
             set: {
               sectionsList: defaultSectionsList,

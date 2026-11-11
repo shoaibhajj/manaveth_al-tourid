@@ -1,6 +1,6 @@
-# Sanity Studio (phase 2)
+# Sanity Studio (current implementation)
 
-The content Studio is embedded in the site at `/studio`. The website still reads its content from `lib/content/*`; wiring the site to Sanity is phase 3.
+The content Studio is embedded in the site at `/studio`. Public pages read managed content from Sanity with local fallbacks where configured. Catalog pages and specialty products are managed in Sanity; the catalog's page order, visibility, images, headings, and layout are editable there.
 
 ## Setup
 
@@ -12,7 +12,7 @@ The content Studio is embedded in the site at `/studio`. The website still reads
 3. In Sanity, open API, then CORS origins, and add the site origin (the preview URL and the production domain) with "Allow credentials" enabled.
 4. Open `/studio` and sign in.
 
-Until the two required variables exist, `/studio` shows a setup guide instead of the Studio. No tokens are used, and nothing in this phase is secret: the project ID and dataset only identify the project.
+Until the two required variables exist, `/studio` shows a setup guide instead of the Studio. The project ID and dataset identify the project; API tokens must stay server-side and must never be committed or exposed in browser code.
 
 ## Structure
 
@@ -24,6 +24,6 @@ Until the two required variables exist, `/studio` shows a setup guide instead of
 
 ## Content rules
 
-- Arabic is the required language. English is optional and falls back to Arabic in phase 3.
+- Arabic is the required language. English is optional for content fields and falls back to Arabic where the page supports localized fallbacks.
 - Every list document has an `order` number, so the sidebar and the site share one ordering.
 - Repeatable documents have an "active" switch to hide an item without deleting it.

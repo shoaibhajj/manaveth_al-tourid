@@ -9,14 +9,11 @@
 - [ ] **إثبات ملكية النطاق (Domain Verification):**
   - الدخول إلى [Google Search Console](https://search.google.com/search-console).
   - إضافة الخاصية عبر سجل DNS الخاص بالنطاق: `mnaveth-altourid.com` بإضافة سجل TXT من لوحة تحكم النطاق.
-- [ ] **إرسال خرائط الموقع المقسمة (Sitemaps Submission):**
+- [ ] **إرسال خريطة الموقع (Sitemap Submission):**
   - بعد التحقق، انتقل إلى قسم **Sitemaps** وأرسل الروابط التالية:
-    1. `https://www.mnaveth-altourid.com/sitemap/pages.xml` (الصفحات العامة والخدمات)
-    2. `https://www.mnaveth-altourid.com/sitemap/products.xml` (المنتجات المؤهلة)
-    3. `https://www.mnaveth-altourid.com/sitemap/categories.xml` (تصنيفات الكتالوج)
-    4. `https://www.mnaveth-altourid.com/sitemap/articles.xml` (المقالات والأخبار)
+    1. `https://www.mnaveth-altourid.com/sitemap.xml` (الخريطة الموحدة للصفحات والخدمات والمنتجات المؤهلة والتصنيفات والمقالات)
 - [ ] **فحص الروابط (URL Inspection):**
-  - فحص صفحة `/meat-supply` وصفحة `/catalog` وصفحات المنتجات الرئيسية وطلب فهرستها يدوياً لتسريع الظهور.
+  - فحص صفحة `/meat-supply` وصفحة `/catalog` وصفحات المنتجات المنشورة وطلب الفهرسة عند الحاجة. طلب الفهرسة لا يضمن قبول Google أو ترتيباً معيناً.
 
 ---
 

@@ -5,6 +5,9 @@ import { getContent } from '@/lib/sanity/get-content'
 import { getSiteUrl } from '@/lib/site-url'
 import { evaluateSeo } from '@/lib/seo/engine/evaluate'
 import { catalogCategories } from '@/lib/content/catalog-data'
+import { VERIFIED_CITIES } from '@/lib/content/meat-supply-data'
+import { sanityServerClient } from '@/lib/sanity/server-client'
+import { confirmedCitiesQuery } from '@/lib/sanity/queries'
 
 export const dynamic = 'force-static'
 
@@ -19,10 +22,11 @@ export const dynamic = 'force-static'
  * Designed specifically for Google Search Console to read /sitemap.xml with 100% compliance.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [base, details, content] = await Promise.all([
+  const [base, details, content, cityResult] = await Promise.all([
     getSiteUrl(),
     getDetailSlugs(),
     getContent(),
+    sanityServerClient ? sanityServerClient.fetch(confirmedCitiesQuery).catch(() => []) : Promise.resolve([]),
   ])
 
   const urlFor = (path: string, locale: (typeof locales)[number]) =>
@@ -57,7 +61,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }))
       })
 
-    return [...staticEntries, ...serviceEntries]
+    const citySlugs = new Set([
+      ...Object.keys(VERIFIED_CITIES),
+      ...((cityResult ?? []) as any[]).map((city: any) => city.slug).filter(Boolean),
+    ])
+    const meatSupplyEntries = [...citySlugs, 'restaurants', 'hotels', 'catering'].flatMap((slug) => {
+      const path = `/meat-supply/${slug}`
+      return locales.map((locale) => ({ url: urlFor(path, locale), alternates: makeAlternates(path) }))
+    })
+
+    return [...staticEntries, ...serviceEntries, ...meatSupplyEntries]
   }
 
   // 2. Eligible Products Sitemap (E3/E4: strictly excludes deficient/noindex products)
@@ -89,7 +102,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // 3. Product Categories Sitemap
   const buildCategoriesSitemap = (): MetadataRoute.Sitemap => {
-    return catalogCategories.flatMap((category) => {
+    const categories = content.catalogCategories?.length ? content.catalogCategories : catalogCategories
+    return categories.flatMap((category) => {
       const path = `/products/category/${category.id}`
       return locales.map((locale) => ({
         url: urlFor(path, locale),

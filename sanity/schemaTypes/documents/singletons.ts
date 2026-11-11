@@ -303,23 +303,23 @@ export const certificationsPage = defineType({
   initialValue: () => ({
     title: {
       _type: 'localizedString',
-      ar: 'الشهادات والاعتمادات الرسمية وسلامة الغذاء | منافذ التوريد',
-      en: 'Official Certifications & Food Safety Accreditations | Mnaveth ALTourid',
+      ar: 'الشهادات والوثائق المنشورة | منافذ التوريد',
+      en: 'Published Certificates & Documents | Mnaveth ALTourid',
     },
     h1: {
       _type: 'localizedString',
-      ar: 'الشهادات والتراخيص الرسمية',
-      en: 'Official Certifications & Accreditations',
+      ar: 'الشهادات والوثائق الرسمية',
+      en: 'Certificates & Official Documents',
     },
     badge: {
       _type: 'localizedString',
-      ar: 'الامتثال الرقابي وسلامة الغذاء',
-      en: 'Regulatory & Quality Compliance',
+      ar: 'الوثائق التي أضافتها الشركة',
+      en: 'Documents added by the company',
     },
     intro: {
       _type: 'localizedText',
-      ar: 'تلتزم شركة منافذ التوريد بأعلى معايير الرقابة والتراخيص الحكومية المعتمدة لدى هيئة الغذاء والدواء (SFDA) لضمان جودة وسلامة كل شحنة تموينية تصل لعملائنا في كافة مناطق المملكة.',
-      en: 'Mnaveth ALTourid maintains comprehensive accreditations from food safety authorities (SFDA), ensuring absolute product integrity across Saudi Arabia.',
+      ar: 'تعرض هذه الصفحة الوثائق والشهادات التي أضافتها الشركة ونشرتها.',
+      en: 'This page displays documents and certificates added and published by the company.',
     },
   }),
   groups: [
@@ -370,8 +370,8 @@ export const aboutPage = defineType({
   initialValue: () => ({
     badge: {
       _type: 'localizedString',
-      ar: 'سجل تجاري معتمد: 1116011768',
-      en: 'Commercial Registration: 1116011768',
+      ar: 'توريد بالجملة لقطاع الأعمال',
+      en: 'Wholesale supply for businesses',
     },
     title: {
       _type: 'localizedString',
@@ -380,34 +380,18 @@ export const aboutPage = defineType({
     },
     subtitle: {
       _type: 'localizedText',
-      ar: 'رواد تجارة الجملة والتوريد التمويني المتخصص للمطاعم، الفنادق، ومطابخ الإعاشة الكبرى في المملكة العربية السعودية منذ عام 2004.',
-      en: 'Leading foodservice wholesale distributor supplying premium meats, basmati rice, frying oils, and dry goods to commercial hospitality kitchens across Saudi Arabia since 2004.',
+      ar: 'شركة متخصصة في توريد منتجات اللحوم بالجملة لقطاع الأعمال في المملكة العربية السعودية.',
+      en: 'A wholesale supplier focused on meat products for businesses across Saudi Arabia.',
     },
     legalName: {
       _type: 'localizedString',
       ar: 'شركة منافذ التوريد للتجارة',
       en: 'Mnaveth ALTourid Trading Co.',
     },
-    crNumber: '1116011768',
-    headquarters: {
-      _type: 'localizedString',
-      ar: 'الرياض - المملكة العربية السعودية',
-      en: 'Riyadh, Kingdom of Saudi Arabia',
-    },
     activity: {
       _type: 'localizedString',
       ar: 'تجارة الجملة في المواد الغذائية واللحوم والإعاشة',
       en: 'Wholesale Foodservice Supply & Meats',
-    },
-    foodSafety: {
-      _type: 'localizedString',
-      ar: 'مستودعات مرخصة ومطابقة لاشتراطات SFDA',
-      en: 'SFDA Licensed & Inspected Facilities',
-    },
-    coldChain: {
-      _type: 'localizedString',
-      ar: 'أسطول شاحنات مبردة ومجمدة (-18° إلى +4°)',
-      en: 'Dedicated Temperature-Controlled Fleet',
     },
     ctaTitle: {
       _type: 'localizedString',

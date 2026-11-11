@@ -310,7 +310,7 @@ export const SEED_DATA = {
         ar: 'كبدة ضأن مجمدة - كلاسيك توماس فودز أسترالي',
         en: 'Thomas Foods Classic Australian Frozen Ovine Liver',
       },
-      slug: { _type: 'slug', current: 'frozen-liver' },
+      slug: { _type: 'slug', current: 'frozen-liver-classic' },
       sku: 'MNV-LV-01',
       productType: 'meat',
       description: {
@@ -325,6 +325,11 @@ export const SEED_DATA = {
       },
       storageState: 'frozen',
       featured: true,
+      isCoreSpecialty: true,
+      targetPhrases: [
+        { _type: 'localizedString', ar: 'توريد كبدة كلاسيك بالجملة للمطاعم', en: 'Thomas Foods Classic lamb liver wholesale supplier' },
+        { _type: 'localizedString', ar: 'كبدة ضأن أسترالية توماس فودز', en: 'Australian Thomas Foods ovine liver for foodservice' },
+      ],
       order: 1,
       visible: true,
     },
@@ -351,7 +356,12 @@ export const SEED_DATA = {
       },
       storageState: 'frozen',
       featured: true,
-      order: 2,
+      isCoreSpecialty: true,
+      targetPhrases: [
+        { _type: 'localizedString', ar: 'ريش ضأن أسترالي بالجملة للمطاعم', en: 'Australian lamb rack ribs wholesale supplier' },
+        { _type: 'localizedString', ar: 'توريد ريش ضأن للمطاعم والفنادق', en: 'Wholesale frozen lamb ribs for restaurants and hotels' },
+      ],
+      order: 5,
       visible: true,
     },
     {
@@ -372,7 +382,12 @@ export const SEED_DATA = {
       },
       storageState: 'frozen',
       featured: true,
-      order: 3,
+      isCoreSpecialty: true,
+      targetPhrases: [
+        { _type: 'localizedString', ar: 'كبدة جوني جولد بالجملة', en: 'Johny Gold frozen liver wholesale supplier' },
+        { _type: 'localizedString', ar: 'توريد كبدة جوني جولد للمطاعم', en: 'Johny Gold liver for restaurants and foodservice' },
+      ],
+      order: 2,
       visible: true,
     },
     {
@@ -393,7 +408,12 @@ export const SEED_DATA = {
       },
       storageState: 'frozen',
       featured: true,
-      order: 4,
+      isCoreSpecialty: true,
+      targetPhrases: [
+        { _type: 'localizedString', ar: 'مخ عجل وضأن مجمد بالجملة للمطاعم', en: 'Wholesale frozen veal and lamb brain supplier' },
+        { _type: 'localizedString', ar: 'توريد مخ مجمد للمطاعم والفنادق', en: 'Frozen brain for restaurants and hotels' },
+      ],
+      order: 3,
       visible: true,
     },
     {
@@ -414,7 +434,12 @@ export const SEED_DATA = {
       },
       storageState: 'frozen',
       featured: true,
-      order: 5,
+      isCoreSpecialty: true,
+      targetPhrases: [
+        { _type: 'localizedString', ar: 'لسان بقري وعجل مجمد بالجملة', en: 'Wholesale frozen beef and veal tongue supplier' },
+        { _type: 'localizedString', ar: 'توريد لسان بقري للمطاعم', en: 'Frozen beef tongue for restaurants and foodservice' },
+      ],
+      order: 4,
       visible: true,
     },
   ],

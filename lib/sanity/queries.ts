@@ -95,6 +95,11 @@ export const catalogPageQuery = defineQuery(`{
   "contact": *[_type == "contactSettings"][0]
 }`)
 
+export const productCategorySlugsQuery = defineQuery(`*[_type == "productCategory" && visible != false]{
+  _id,
+  "slug": slug.current
+}`)
+
 export const productBySlugQuery = defineQuery(`*[_type == "product" && slug.current == $slug && visible != false][0]{..., "slug": slug.current, "category": category->{ _id, name, "slug": slug.current }, "brand": brand->{ _id, name }, "image": image{..., "assetUrl": asset->url}, "gallery": gallery[]{ ..., "assetUrl": asset->url }}`)
 export const productBySlugDraftQuery = defineQuery(`*[_type == "product" && slug.current == $slug][0]{..., "slug": slug.current, "category": category->{ _id, name, "slug": slug.current }, "brand": brand->{ _id, name }, "image": image{..., "assetUrl": asset->url}, "gallery": gallery[]{ ..., "assetUrl": asset->url }}`)
 
@@ -117,7 +122,7 @@ export const meatSupplyProductsQuery = defineQuery(`*[_type == "product" && (vis
   "category": category->{ _id, name, "slug": slug.current }
 }`)
 
-export const confirmedCitiesQuery = defineQuery(`*[_type == "city" && isSupplyConfirmed != false] | order(name.ar asc){
+export const confirmedCitiesQuery = defineQuery(`*[_type == "city" && isSupplyConfirmed == true && defined(slug.current) && defined(name.ar) && defined(region.ar) && defined(coveredDistricts.ar) && defined(deliveryTime.ar) && defined(minOrder.ar) && defined(pickupPoint.ar) && defined(coldChainFacility.ar)] | order(name.ar asc){
   ...,
   "slug": slug.current
 }`)

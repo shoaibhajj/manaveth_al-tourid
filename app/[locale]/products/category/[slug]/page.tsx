@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { getContent } from '@/lib/sanity/get-content'
+import { sanityServerClient } from '@/lib/sanity/server-client'
+import { productCategorySlugsQuery } from '@/lib/sanity/queries'
 import { getSiteUrl } from '@/lib/site-url'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import { catalogCategories } from '@/lib/content/catalog-data'
@@ -13,11 +15,28 @@ import { ArrowLeft, ArrowRight, CheckCircle2, PackageCheck } from 'lucide-react'
 
 export const dynamicParams = true
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const params: { locale: string; slug: string }[] = []
-  for (const cat of catalogCategories) {
-    params.push({ locale: 'ar', slug: cat.id })
-    params.push({ locale: 'en', slug: cat.id })
+  let categorySlugs: string[] = []
+
+  if (sanityServerClient) {
+    try {
+      const categories = await sanityServerClient.fetch(productCategorySlugsQuery)
+      categorySlugs = ((categories ?? []) as any[])
+        .map((category: any) => category.slug || category._id?.replace(/^category-/, ''))
+        .filter(Boolean)
+    } catch {
+      // Use the built-in category list if Sanity is unavailable during build.
+    }
+  }
+
+  if (!categorySlugs.length) {
+    categorySlugs = catalogCategories.map((category) => category.id)
+  }
+
+  for (const slug of new Set(categorySlugs)) {
+    params.push({ locale: 'ar', slug })
+    params.push({ locale: 'en', slug })
   }
   return params
 }
@@ -30,16 +49,17 @@ export async function generateMetadata({
   const { slug, locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
+  const content = await getContent()
+  const categories = content.catalogCategories?.length ? content.catalogCategories : catalogCategories
 
-  const category = catalogCategories.find((c) => c.id === slug)
+  const category = categories.find((c) => c.id === slug)
   if (!category) {
     return { title: 'Category Not Found', robots: { index: false, follow: false } }
   }
 
-  const content = await getContent()
   const allProducts = content?.products || []
   const categoryProducts = allProducts.filter(
-    (p) => p.categoryId === category.id || `category-${p.categoryId}` === category.id
+    (p) => p.categoryId === category.id || p.categoryId?.replace(/^category-/, '') === category.id
   )
 
   // E6 Condition: Index only if >= 3 eligible products exist and category has description
@@ -74,14 +94,15 @@ export default async function ProductCategoryPage({
   const { slug, locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
+  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
+  const categories = content.catalogCategories?.length ? content.catalogCategories : catalogCategories
 
-  const category = catalogCategories.find((c) => c.id === slug)
+  const category = categories.find((c) => c.id === slug)
   if (!category) return notFound()
 
-  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
   const allProducts = content?.products || []
   const categoryProducts = allProducts.filter(
-    (p) => p.categoryId === category.id || `category-${p.categoryId}` === category.id
+    (p) => p.categoryId === category.id || p.categoryId?.replace(/^category-/, '') === category.id
   )
 
   const categoryTitle = isAr ? category.name.ar : category.name.en || category.name.ar
@@ -130,8 +151,7 @@ export default async function ProductCategoryPage({
 
   return (
     <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-16">
-      <JsonLd graph={breadcrumbListSchema} />
-      <JsonLd graph={itemListSchema} />
+      <JsonLd graph={[breadcrumbListSchema, itemListSchema]} />
 
       {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" className="mb-6 text-xs sm:text-sm text-forest/60">
@@ -186,7 +206,7 @@ export default async function ProductCategoryPage({
           {isAr ? 'تصنيفات الأصناف التموينية الأخرى:' : 'Other Foodservice Categories:'}
         </h2>
         <div className="flex flex-wrap gap-2">
-          {catalogCategories.map((cat) => {
+          {categories.map((cat) => {
             const isActive = cat.id === slug
             const catName = isAr ? cat.name.ar : cat.name.en || cat.name.ar
             return (

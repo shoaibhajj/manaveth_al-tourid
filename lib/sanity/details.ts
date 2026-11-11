@@ -30,7 +30,7 @@ async function fetchDetail(query: string, draftQuery: string, slug: string, tags
  * If a product does not exist in Sanity (or is hidden/deleted), return null -> 404.
  * Fallback to static files only if Sanity is not configured at all.
  */
-export const getProductBySlug = async (slug: string) => {
+export const getProductBySlug = async (slug: string): Promise<DetailDocument> => {
   const fromSanity = await fetchDetail(productBySlugQuery, productBySlugDraftQuery, slug, ['products', `product:${slug}`])
   if (fromSanity) return fromSanity
 
@@ -40,7 +40,7 @@ export const getProductBySlug = async (slug: string) => {
 
   // Local offline development fallback only when no Sanity credentials exist
   const fromDefault = fallbackProducts.find((p) => p.slug === slug || p.id === slug)
-  if (fromDefault) return fromDefault
+  if (fromDefault) return fromDefault as unknown as DetailDocument
 
   return null
 }

@@ -35,12 +35,12 @@ export async function generateMetadata({
   const customSeo = content.aboutPage?.seo
 
   const title = (isAr ? customSeo?.title?.ar : customSeo?.title?.en) || (isAr
-    ? 'عن الشركة والاعتمادات | شركة منافذ التوريد للتجارة (سجل: 1116011768)'
-    : 'About Us & Certifications | Mnaveth ALTourid Trading Co. (CR: 1116011768)')
+    ? 'عن شركة منافذ التوريد | توريد اللحوم بالجملة في السعودية'
+    : 'About Mnaveth ALTourid | Wholesale Meat Supply in Saudi Arabia')
 
   const description = (isAr ? customSeo?.description?.ar : customSeo?.description?.en) || (isAr
-    ? 'تعرف على شركة منافذ التوريد للتجارة: المورد المعتمد للمواد الغذائية والتموينية، اللحوم المجمدة، والأرز لكبرى المطاعم والفنادق بالمملكة بسجل تجاري 1116011768.'
-    : 'Learn about Mnaveth ALTourid Trading Co.: certified food supply, frozen meats, and catering staples for hotels and restaurants in Saudi Arabia (CR: 1116011768).')
+    ? 'تعرف على شركة منافذ التوريد المتخصصة في توريد اللحوم بالجملة لقطاع الأعمال في المملكة العربية السعودية.'
+    : 'Learn about Mnaveth ALTourid, a wholesale meat supplier serving businesses across Saudi Arabia.')
 
   return buildMetadata({
     path: '/about',
@@ -62,18 +62,27 @@ export default async function AboutPage({
 
   const [content, base] = await Promise.all([getContent(), getSiteUrl()])
   const aboutDoc = content.aboutPage
-  const badgeText = (isAr ? aboutDoc?.badge?.ar : aboutDoc?.badge?.en) || (isAr ? 'سجل تجاري معتمد: 1116011768' : 'Commercial Registration: 1116011768')
+  const badgeText = (isAr ? aboutDoc?.badge?.ar : aboutDoc?.badge?.en) || (isAr ? 'توريد بالجملة لقطاع الأعمال' : 'Wholesale supply for businesses')
   const heroTitle = (isAr ? aboutDoc?.title?.ar : aboutDoc?.title?.en) || (isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.')
-  const heroSubtitle = (isAr ? aboutDoc?.subtitle?.ar : aboutDoc?.subtitle?.en) || (isAr ? 'رواد تجارة الجملة والتوريد التمويني المتخصص للمطاعم، الفنادق، ومطابخ الإعاشة الكبرى في المملكة العربية السعودية منذ عام 2004.' : 'Leading foodservice wholesale distributor supplying premium meats, basmati rice, frying oils, and dry goods to commercial hospitality kitchens across Saudi Arabia since 2004.')
-  const legalName = (isAr ? aboutDoc?.legalName?.ar : aboutDoc?.legalName?.en) || (isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.')
-  const crNumber = aboutDoc?.crNumber || content.site.brand.commercialRegistration || '1116011768'
-  const headquarters = (isAr ? aboutDoc?.headquarters?.ar : aboutDoc?.headquarters?.en) || (isAr ? 'الرياض - المملكة العربية السعودية' : 'Riyadh, Kingdom of Saudi Arabia')
-  const activity = (isAr ? aboutDoc?.activity?.ar : aboutDoc?.activity?.en) || (isAr ? 'تجارة الجملة في المواد الغذائية واللحوم والإعاشة' : 'Wholesale Foodservice Supply & Meats')
-  const foodSafety = (isAr ? aboutDoc?.foodSafety?.ar : aboutDoc?.foodSafety?.en) || (isAr ? 'مستودعات مرخصة ومطابقة لاشتراطات SFDA' : 'SFDA Licensed & Inspected Facilities')
-  const coldChain = (isAr ? aboutDoc?.coldChain?.ar : aboutDoc?.coldChain?.en) || (isAr ? 'أسطول شاحنات مبردة ومجمدة (-18° إلى +4°)' : 'Dedicated Temperature-Controlled Fleet')
+  const heroSubtitle = (isAr ? aboutDoc?.subtitle?.ar : aboutDoc?.subtitle?.en) || (isAr ? 'شركة متخصصة في توريد منتجات اللحوم بالجملة لقطاع الأعمال في المملكة العربية السعودية.' : 'A wholesale supplier focused on meat products for businesses across Saudi Arabia.')
+  const legalName = isAr ? aboutDoc?.legalName?.ar : aboutDoc?.legalName?.en
+  const crNumber = aboutDoc?.crNumber || content.site.brand.commercialRegistration
+  const headquarters = (isAr ? aboutDoc?.headquarters?.ar : aboutDoc?.headquarters?.en)
+  const activity = (isAr ? aboutDoc?.activity?.ar : aboutDoc?.activity?.en) || (isAr ? 'توريد منتجات اللحوم بالجملة لقطاع الأعمال' : 'Wholesale meat supply for businesses')
+  const foodSafety = (isAr ? aboutDoc?.foodSafety?.ar : aboutDoc?.foodSafety?.en)
+  const coldChain = (isAr ? aboutDoc?.coldChain?.ar : aboutDoc?.coldChain?.en)
   const ctaTitle = (isAr ? aboutDoc?.ctaTitle?.ar : aboutDoc?.ctaTitle?.en) || (isAr ? 'هل تود استعراض أصنافنا أو طلب عرض سعر رسمي؟' : 'Ready to explore our catalog or request a quote?')
   const ctaSubtitle = (isAr ? aboutDoc?.ctaSubtitle?.ar : aboutDoc?.ctaSubtitle?.en) || (isAr ? 'تصفح قائمة الأصناف المعتمدة أو تواصل مباشرة مع فريق المبيعات والتعاقدات.' : 'Browse certified products or get in touch with our commercial sales department.')
 
+  const pillars = (aboutDoc?.pillars || []).filter((pillar: any) =>
+    (isAr ? pillar.title?.ar : pillar.title?.en || pillar.title?.ar) &&
+    (isAr ? pillar.description?.ar : pillar.description?.en || pillar.description?.ar)
+  )
+  const visiblePillars = pillars.length ? pillars : [
+    { title: { ar: 'أصنافنا الرئيسية', en: 'Our Core Products' }, description: { ar: 'كبدة كلاسيك وكبدة جوني جولد، مخ، لسان، وريش.', en: 'Classic and Johny Gold liver, brain, tongue, and ribs.' }, icon: 'award' },
+    { title: { ar: 'توريد بالجملة', en: 'Wholesale Supply' }, description: { ar: 'تركيز الشركة على توريد منتجات اللحوم لقطاع الأعمال في المملكة العربية السعودية.', en: 'Focused wholesale meat supply for businesses across Saudi Arabia.' }, icon: 'truck' },
+    { title: { ar: 'تغطية التوريد', en: 'Supply Coverage' }, description: { ar: 'تغطية المدن الرئيسية، والمناطق الأبعد حسب الطلب أو للكميات الكبيرة.', en: 'Coverage for major cities, with farther regions served by order or for large quantities.' }, icon: 'fileCheck' },
+  ]
   const orgSchema = buildOrganizationSchema(content.site, locale, base)
 
   const aboutPageSchema = {
@@ -107,108 +116,81 @@ export default async function AboutPage({
       </div>
 
       {/* Official Legal Entity Credentials (G2) */}
-      <section className="mt-12 rounded-2xl border border-forest/15 bg-white p-6 sm:p-8 shadow-sm">
+      {(legalName || crNumber || headquarters || activity || foodSafety || coldChain) && <section className="mt-12 rounded-2xl border border-forest/15 bg-white p-6 sm:p-8 shadow-sm">
         <div className="flex items-center gap-2 mb-6 border-b border-forest/10 pb-4">
           <Building2 className="size-5 text-forest" />
           <h2 className="text-lg sm:text-xl font-bold text-forest-deep">
-            {isAr ? 'بيانات الكيان التجاري والاعتمادات الرسمية' : 'Corporate Identity & Legal Credentials'}
+            {isAr ? 'بيانات الشركة' : 'Company Information'}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
-          <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
+          {legalName && <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
             <span className="text-xs text-forest/60 block mb-1 font-medium">
               {isAr ? 'الاسم القانوني الكامل' : 'Legal Corporate Name'}
             </span>
             <strong className="text-forest-deep font-bold text-base block">
               {legalName}
             </strong>
-          </div>
+          </div>}
 
-          <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
+          {crNumber && <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
             <span className="text-xs text-forest/60 block mb-1 font-medium">
               {isAr ? 'رقم السجل التجاري' : 'Commercial Registration (CR)'}
             </span>
             <strong className="text-forest-deep font-mono font-bold text-base block">
               {crNumber}
             </strong>
-          </div>
+          </div>}
 
-          <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
+          {headquarters && <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
             <span className="text-xs text-forest/60 block mb-1 font-medium">
               {isAr ? 'المقر الرئيسي' : 'Headquarters'}
             </span>
             <strong className="text-forest-deep font-bold text-base block">
               {headquarters}
             </strong>
-          </div>
+          </div>}
 
-          <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
+          {activity && <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
             <span className="text-xs text-forest/60 block mb-1 font-medium">
               {isAr ? 'النشاط الرئيسي' : 'Core Business Activity'}
             </span>
             <strong className="text-forest-deep font-bold block">
               {activity}
             </strong>
-          </div>
+          </div>}
 
-          <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
+          {foodSafety && <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
             <span className="text-xs text-forest/60 block mb-1 font-medium">
               {isAr ? 'مطابقة سلامة الغذاء' : 'Food Safety Standard'}
             </span>
             <strong className="text-emerald-700 font-bold block">
               {foodSafety}
             </strong>
-          </div>
+          </div>}
 
-          <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
+          {coldChain && <div className="rounded-xl bg-[#FBF8F2] p-4 border border-forest/10">
             <span className="text-xs text-forest/60 block mb-1 font-medium">
               {isAr ? 'سلسلة التبريد (Cold Chain)' : 'Cold Chain Logistics'}
             </span>
             <strong className="text-forest-deep font-bold block">
               {coldChain}
             </strong>
-          </div>
+          </div>}
         </div>
-      </section>
+      </section>}
 
       {/* Strategic Supply Pillars */}
       <section className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="rounded-2xl border border-forest/15 bg-white p-6 shadow-xs">
-          <Award className="size-8 text-gold mb-3" />
-          <h3 className="text-base font-bold text-forest-deep mb-2">
-            {isAr ? 'جودة معتمدة وشهادات حلال' : 'Certified Quality & Halal'}
-          </h3>
-          <p className="text-xs text-forest/70 leading-relaxed">
-            {isAr
-              ? 'كافة اللحوم والدواجن والأرز وزيوت القلي مستوردة من مسالخ ومصانع معتمدة عالمياً مع شهادات ذبح حلال 100% ومطابقة للمواصفات السعودية.'
-              : 'All imported meats, rice, and cooking oils originate from globally accredited suppliers with 100% Halal certification and full SFDA clearance.'}
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-forest/15 bg-white p-6 shadow-xs">
-          <Truck className="size-8 text-forest mb-3" />
-          <h3 className="text-base font-bold text-forest-deep mb-2">
-            {isAr ? 'توصيل مجدول وأسطول احترافي' : 'Scheduled Commercial Logistics'}
-          </h3>
-          <p className="text-xs text-forest/70 leading-relaxed">
-            {isAr
-              ? 'مواعيد توريد دقيقة صباحية ومسائية تلائم أوقات تشغيل المطابخ المركزية وسلاسل المطاعم لضمان عدم توقف عمليات الطهي.'
-              : 'Reliable scheduled morning and evening supply windows tailored to commercial kitchen operating schedules, preventing downtime.'}
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-forest/15 bg-white p-6 shadow-xs">
-          <FileCheck className="size-8 text-emerald-600 mb-3" />
-          <h3 className="text-base font-bold text-forest-deep mb-2">
-            {isAr ? 'عقود مرنة وتسهيلات ائتمانية' : 'Corporate Supply Agreements'}
-          </h3>
-          <p className="text-xs text-forest/70 leading-relaxed">
-            {isAr
-              ? 'عقود توريد شهرية وسنوية بأسعار ثابتة تحمي شركاءنا من تقلبات السوق العالمية، مع فواتير ضريبية نظامية وتقارير متابعة دورية.'
-              : 'Monthly and annual contract structures offering stable pricing against market volatility, with formal tax invoicing and volume discounts.'}
-          </p>
-        </div>
+        {visiblePillars.map((pillar: any, index: number) => {
+          const Icon = pillar.icon === 'truck' ? Truck : pillar.icon === 'fileCheck' ? FileCheck : Award
+          return <div key={`${pillar.title?.ar || pillar.title?.en}-${index}`} className="rounded-2xl border border-forest/15 bg-white p-6 shadow-xs">
+            <Icon className="size-8 text-gold mb-3" />
+            <h3 className="text-base font-bold text-forest-deep mb-2">{(isAr ? pillar.title?.ar : pillar.title?.en) || pillar.title?.ar}</h3>
+            <p className="text-xs text-forest/70 leading-relaxed">{(isAr ? pillar.description?.ar : pillar.description?.en) || pillar.description?.ar}</p>
+          </div>
+        })}
       </section>
 
       {/* Direct Action Links */}

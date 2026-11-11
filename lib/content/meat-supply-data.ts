@@ -210,43 +210,23 @@ export const VERIFIED_CITIES: Record<string, Record<Locale, CityLandingData>> = 
       slug: 'riyadh',
       name: 'الرياض',
       region: 'منطقة الرياض',
-      coveredDistricts:
-        'مستودعات السلي الصناعية، الشفا، العارض، حي المصانع، السليمانية، العليا، الدرعية، والخرج.',
-      deliveryTime: 'توصيل يومي فجرًا من الساعة 4:00 إلى 8:00 صباحًا من مستودع السلي المركزي.',
-      minOrder: '30 كرتون للحوم المجمدة أو 500 كجم إجمالي توريد للمطاعم والفنادق.',
-      pickupPoint: 'مستودع شركة منافذ التوريد المركزي - حي السلي التجاري، الرياض.',
-      coldChainFacility: 'مستودعات تبريد وتجميد مرخصة ومسجلة رسميًا لدى الهيئة العامة للغذاء والدواء SFDA.',
-      faqs: [
-        {
-          question: 'هل يتوفر استلام فوري من مستودع الرياض؟',
-          answer: 'نعم، يمكن للمطاعم والشركات الاستلام المباشر بشاحنات مبردة من مستودع السلي بعد تأكيد إذن الصرف.',
-        },
-        {
-          question: 'كم يستغرق التوصيل داخل مدينة الرياض وضواحيها؟',
-          answer: 'يتم التوصيل خلال أقل من 12 إلى 24 ساعة للطلبات المجدولة على مدار 6 أيام أسبوعياً.',
-        },
-      ],
+      coveredDistricts: 'تغطية مدينة الرياض والمناطق التجارية الرئيسية؛ يُؤكد نطاق الأحياء عند تنسيق الطلب.',
+      deliveryTime: 'يُحدد موعد التوصيل عند تأكيد الطلب بحسب المدينة وتوفر الصنف.',
+      minOrder: 'يُحدد الحد الأدنى بحسب الصنف والكمية؛ المناطق الأبعد للطلبات أو الكميات الكبيرة.',
+      pickupPoint: 'يُنسق موقع الاستلام مباشرة مع الشركة عند الحاجة؛ لا يوجد عنوان استلام عام منشور.',
+      coldChainFacility: 'تُؤكد ترتيبات الحفظ والنقل مع كل طلب؛ التغطية للمدن الرئيسية بسيارات الشركة.',
+      faqs: [],
     },
     en: {
       slug: 'riyadh',
       name: 'Riyadh',
       region: 'Riyadh Region',
-      coveredDistricts:
-        'Al-Sulai Logistics Hub, Al-Shifa, Al-Arid, Al-Masan’e, Olaya, Sulaimaniyah, Diriyah, and Al-Kharj.',
-      deliveryTime: 'Daily early morning delivery between 4:00 AM and 8:00 AM dispatched from Al-Sulai hub.',
-      minOrder: '30 cartons of frozen meat or 500 kg minimum order quantity for commercial kitchens.',
-      pickupPoint: 'Mnaveth ALTourid Central Cold Distribution Warehouse - Al-Sulai, Riyadh.',
-      coldChainFacility: 'Licensed deep-freeze facility officially approved and inspected by the Saudi FDA.',
-      faqs: [
-        {
-          question: 'Is direct dock pickup available at the Riyadh warehouse?',
-          answer: 'Yes, commercial clients with refrigerated transport may collect directly following order confirmation.',
-        },
-        {
-          question: 'What is the delivery lead time across Riyadh city?',
-          answer: 'Orders are fulfilled within 12 to 24 hours via scheduled refrigerated route trucks.',
-        },
-      ],
+      coveredDistricts: 'Riyadh and its main commercial areas; confirm the served districts when arranging an order.',
+      deliveryTime: 'Delivery time is agreed when the order is confirmed, based on location and availability.',
+      minOrder: 'Minimum quantities depend on the product and order size; farther areas require an order or larger quantity.',
+      pickupPoint: 'Arrange pickup directly with the company when needed; no public pickup address is listed.',
+      coldChainFacility: 'Handling and transport arrangements are confirmed per order; company vehicles serve major cities.',
+      faqs: [],
     },
   },
   jeddah: {
@@ -254,43 +234,23 @@ export const VERIFIED_CITIES: Record<string, Record<Locale, CityLandingData>> = 
       slug: 'jeddah',
       name: 'جدة',
       region: 'منطقة مكة المكرمة والساحل الغربي',
-      coveredDistricts:
-        'منطقة الخمرة اللوجستية، حي النزهة، ميناء جدة الإسلامي، البلد، التحلية، ومحيط مطار الملك عبدالعزيز، مع إمداد فنادق مكة المكرمة.',
-      deliveryTime: 'جدولة مسائية وصباحية منتظمة من مستودع الخمرة المبرد لتفادي أوقات الذروة.',
-      minOrder: '40 كرتون أو 750 كجم لمطاعم جدة وفنادق المشاعر ومكة المكرمة.',
-      pickupPoint: 'مركز التوزيع اللوجستي المبرد - منطقة الخمرة الصناعية، جدة.',
-      coldChainFacility: 'مستودع لوجستي مبرد مرخص ومطابق لمعايير الحفظ الدولي لسلامة الأغذية.',
-      faqs: [
-        {
-          question: 'هل تشمل التغطية فنادق مكة المكرمة خلال مواسم العمرة والحج؟',
-          answer: 'نعم، نوفر خطوط إمداد مبردة يومية مخصصة لفنادق الإيواء ومطابخ التموين بمكة المكرمة وجدة.',
-        },
-        {
-          question: 'ما هي آلية فحص الشحنات عند رصيف الاستلام في جدة؟',
-          answer: 'يتم توفير بطاقة حرارية رقمية مسجلة لبيان درجات الحرارة طوال الرحلة لضمان عدم حدوث أي انقطاع في التبريد.',
-        },
-      ],
+      coveredDistricts: 'تغطية مدينة جدة والمناطق التجارية الرئيسية؛ يُؤكد نطاق الأحياء عند تنسيق الطلب.',
+      deliveryTime: 'يُحدد موعد التوصيل عند تأكيد الطلب بحسب المدينة وتوفر الصنف.',
+      minOrder: 'يُحدد الحد الأدنى بحسب الصنف والكمية؛ المناطق الأبعد للطلبات أو الكميات الكبيرة.',
+      pickupPoint: 'يُنسق موقع الاستلام مباشرة مع الشركة عند الحاجة؛ لا يوجد عنوان استلام عام منشور.',
+      coldChainFacility: 'تُؤكد ترتيبات الحفظ والنقل مع كل طلب؛ التغطية للمدن الرئيسية بسيارات الشركة.',
+      faqs: [],
     },
     en: {
       slug: 'jeddah',
       name: 'Jeddah',
       region: 'Makkah Province & Western Logistics Corridor',
-      coveredDistricts:
-        'Al-Khumrah Logistics Zone, Al-Nuzhah, Jeddah Islamic Port district, Al-Balad, Tahlia, and Makkah hotel supply lines.',
-      deliveryTime: 'Off-peak scheduled night and early morning dispatches from Al-Khumrah cold facility.',
-      minOrder: '40 master cartons or 750 kg minimum order for Jeddah restaurants and hospitality venues.',
-      pickupPoint: 'Mnaveth Cold Logistics Center - Al-Khumrah Industrial District, Jeddah.',
-      coldChainFacility: 'SFDA-registered temperature-monitored facility operating at continuous -18°C.',
-      faqs: [
-        {
-          question: 'Does the Jeddah distribution network serve Makkah hospitality operators?',
-          answer: 'Yes, dedicated refrigerated lines run daily between Jeddah hubs and Makkah hotel commissaries.',
-        },
-        {
-          question: 'How is temperature compliance documented upon Western Province deliveries?',
-          answer: 'Digital data-logger readings certifying continuous -18°C cold-chain are signed off with delivery dockets.',
-        },
-      ],
+      coveredDistricts: 'Jeddah and its main commercial areas; confirm the served districts when arranging an order.',
+      deliveryTime: 'Delivery time is agreed when the order is confirmed, based on location and availability.',
+      minOrder: 'Minimum quantities depend on the product and order size; farther areas require an order or larger quantity.',
+      pickupPoint: 'Arrange pickup directly with the company when needed; no public pickup address is listed.',
+      coldChainFacility: 'Handling and transport arrangements are confirmed per order; company vehicles serve major cities.',
+      faqs: [],
     },
   },
 }

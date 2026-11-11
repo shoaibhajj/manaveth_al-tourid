@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 import { requiredTranslation } from '../../lib/localization'
 
 export const brand = defineType({
@@ -116,37 +116,55 @@ export const city = defineType({
       title: 'التوريد مؤكد إلى المدينة',
       description: 'شرط النشر: يجب تفعيل هذا الحقل مع توفر 3 عناصر فعلية على الأقل لإنشاء صفحة المدينة',
       type: 'boolean',
-      initialValue: true,
+      initialValue: false,
     }),
     defineField({
       name: 'coveredDistricts',
       title: 'الأحياء والمناطق المغطاة',
-      description: 'قائمة الأحياء الصناعية والتجارية المخدومة بالشاحنات المبردة',
+      description: 'اكتب نطاق التغطية المعتمد. لا تذكر أحياء إلا بعد تأكيد تغطيتها.',
       type: 'localizedText',
     }),
     defineField({
       name: 'deliveryTime',
-      title: 'زمن التوصيل وجدولة الشحن المبرد',
-      description: 'مثال: توصيل يومي صباحي بين 4:00 إلى 8:00 صباحاً للمطابخ والفنادق',
+      title: 'موعد التوصيل والتنسيق',
+      description: 'أضف مواعيد دقيقة عند اعتمادها؛ يمكن كتابة أن الموعد يحدد عند تأكيد الطلب.',
       type: 'localizedString',
     }),
     defineField({
       name: 'minOrder',
       title: 'الحد الأدنى للطلب (MOQ)',
-      description: 'مثال: 30 كرتون للحوم المجمدة أو 500 كجم إجمالي توريد',
+      description: 'أضف حدًا رقميًا عند اعتماده؛ وإلا اذكر أن الحد يحدد بحسب الصنف والكمية.',
       type: 'localizedString',
     }),
     defineField({
       name: 'pickupPoint',
-      title: 'نقطة أو مستودع الاستلام الفوري',
-      description: 'عنوان مستودع الشركة المعتمد في المدينة',
+      title: 'نقطة أو طريقة الاستلام',
+      description: 'أدخل عنوانًا معتمدًا فقط، أو اذكر أن التنسيق يتم مباشرة مع الشركة.',
       type: 'localizedString',
     }),
     defineField({
       name: 'coldChainFacility',
-      title: 'مستودع التبريد والتخزين المرخص',
-      description: 'ترخيص الهيئة العامة للغذاء والدواء SFDA',
+      title: 'تفاصيل الحفظ والنقل',
+      description: 'لا تذكر ترخيصًا أو درجة حرارة إلا إذا كانت موثقة ومعتمدة.',
       type: 'localizedString',
+    }),
+    defineField({
+      name: 'faqs',
+      title: 'الأسئلة الشائعة عن التوريد في المدينة',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'question', title: 'السؤال', type: 'localizedString' }),
+            defineField({ name: 'answer', title: 'الإجابة', type: 'localizedText' }),
+          ],
+          preview: {
+            select: { question: 'question.ar' },
+            prepare: ({ question }) => ({ title: question || 'سؤال شائع' }),
+          },
+        }),
+      ],
     }),
   ],
   preview: {
@@ -178,6 +196,17 @@ export const certificate = defineType({
       name: 'issuer',
       title: 'الجهة المانحة للاعتماد',
       type: 'localizedString',
+    }),
+    defineField({
+      name: 'description',
+      title: 'وصف الشهادة أو الوثيقة',
+      type: 'localizedText',
+    }),
+    defineField({
+      name: 'category',
+      title: 'نوع الوثيقة',
+      type: 'string',
+      options: { list: [{ title: 'تنظيمية', value: 'regulatory' }, { title: 'جودة', value: 'quality' }] },
     }),
     defineField({
       name: 'validUntil',

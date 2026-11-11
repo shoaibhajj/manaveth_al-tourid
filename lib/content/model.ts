@@ -61,6 +61,15 @@ export type ContactData = {
 }
 
 export type GalleryCategory = { id: string; label: Localized }
+export type CatalogCommodity = {
+  id: string
+  name: Localized
+  description: Localized
+  icon: string
+  packagingSummary: Localized
+  sampleItems: { ar: string[]; en: string[] }
+}
+export type CatalogCategory = { id: string; name: Localized; icon: string; description?: Localized; order: number }
 
 export type PageSeo = { title: Localized; description: Localized; shareImage?: string }
 
@@ -116,7 +125,13 @@ export type SiteContent = {
     bannerAlert?: Localized
     downloadNote?: Localized
     inquiryWhatsApp?: string
+    coreSpecialtiesHeading?: Localized
+    supportingCommoditiesHeading?: Localized
+    supportingCommoditiesNote?: Localized
+    seo?: PageSeo
+    supportingCommodities?: CatalogCommodity[]
   }
+  catalogCategories?: CatalogCategory[]
   aboutPage?: {
     badge?: Localized
     title?: Localized

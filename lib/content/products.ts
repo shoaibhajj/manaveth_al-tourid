@@ -23,6 +23,8 @@ export type Product = {
   certifications?: Localized
   usage?: Localized
   targetPhrases?: Localized[]
+  /** Explicitly included in the catalog's primary specialty section. */
+  isCoreSpecialty?: boolean
   seo?: {
     title?: Localized
     description?: Localized

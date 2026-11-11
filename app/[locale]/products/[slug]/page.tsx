@@ -106,8 +106,9 @@ export default async function ProductDetailPage({
     product.categoryId ||
     (typeof product.category === 'object' ? product.category?.id : undefined) ||
     'meat-poultry'
-  const category = catalogCategories.find(
-    (c) => c.id === categoryId || `category-${c.id}` === categoryId
+  const categories = content.catalogCategories?.length ? content.catalogCategories : catalogCategories
+  const category = categories.find(
+    (c) => c.id === categoryId || `category-${c.id}` === categoryId || categoryId.replace(/^category-/, '') === c.id
   )
   const categoryName = category ? (isAr ? category.name.ar : category.name.en || category.name.ar) : ''
 
@@ -116,7 +117,7 @@ export default async function ProductDetailPage({
   const relatedProducts = allProducts
     .filter(
       (p) =>
-        (p.categoryId === categoryId || p.category?.id === categoryId) &&
+        (p.categoryId === categoryId || p.categoryId?.replace(/^category-/, '') === category?.id) &&
         p.slug !== slug &&
         (p as any).visible !== false
     )

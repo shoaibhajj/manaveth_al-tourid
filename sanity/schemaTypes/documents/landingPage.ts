@@ -74,6 +74,12 @@ export const landingPage = defineType({
       validation: requiredTranslation,
     }),
     defineField({
+      name: 'serviceCoverage',
+      title: 'مدن ونطاق التغطية',
+      description: 'اذكر المدن الرئيسية المشمولة، ووضّح أن المناطق الأبعد تخدم للطلبات أو الكميات الكبيرة بعد التنسيق.',
+      type: 'localizedText',
+    }),
+    defineField({
       name: 'minOrderText',
       title: 'نص الحد الأدنى للطلب (MOQ)',
       description: 'مثال: الحد الأدنى للتوريد 50 كرتون أو 1 طن مع جدولة عقود شهرية وسنوية',
@@ -151,6 +157,13 @@ export const landingPage = defineType({
       name: 'seo',
       title: 'إعدادات محركات البحث المتقدمة (SEO)',
       type: 'seo',
+    }),
+    defineField({
+      name: 'targetPhrases',
+      title: 'عبارات البحث المستهدفة',
+      description: 'عبارات طبيعية مرتبطة بتوريد اللحوم في السعودية والمدن التي تخدمها الشركة.',
+      type: 'array',
+      of: [defineArrayMember({ type: 'localizedString' })],
     }),
   ],
   preview: {

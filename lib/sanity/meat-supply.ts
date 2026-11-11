@@ -1,6 +1,8 @@
 import { getLayoutContent } from './get-content'
 import { sanityFetch } from './live'
+import { sanityServerClient } from './server-client'
 import {
+  confirmedCitiesQuery,
   landingPageBySlugQuery,
   meatSupplyProductsQuery,
 } from './queries'
@@ -93,9 +95,33 @@ export function getSectorData(slug: string, locale: Locale): SectorLandingData |
 }
 
 export function getCityData(slug: string, locale: Locale): CityLandingData | null {
-  const city = VERIFIED_CITIES[slug]
-  if (city) {
-    return city[locale]
+  return VERIFIED_CITIES[slug]?.[locale] ?? null
+}
+
+export async function getConfirmedCityData(slug: string, locale: Locale): Promise<CityLandingData | null> {
+  if (sanityServerClient) {
+    try {
+      const cities = await sanityServerClient.fetch(confirmedCitiesQuery)
+      const city = ((cities ?? []) as any[]).find((item: any) => item.slug === slug)
+      if (city) {
+        const text = (value: any) => typeof value === 'string' ? value : value?.[locale] || value?.ar || value?.en || ''
+        return {
+          slug: city.slug,
+          name: text(city.name),
+          region: text(city.region),
+          coveredDistricts: text(city.coveredDistricts),
+          deliveryTime: text(city.deliveryTime),
+          minOrder: text(city.minOrder),
+          pickupPoint: text(city.pickupPoint),
+          coldChainFacility: text(city.coldChainFacility),
+          faqs: Array.isArray(city.faqs)
+            ? city.faqs.map((faq: any) => ({ question: text(faq.question), answer: text(faq.answer) }))
+            : [],
+        }
+      }
+    } catch {
+      // Keep existing city routes available until a complete, confirmed Sanity record is published.
+    }
   }
-  return null
+  return getCityData(slug, locale)
 }

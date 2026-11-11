@@ -26,8 +26,8 @@ export async function generateMetadata({
 
   const description =
     locale === 'ar'
-      ? 'شركة توريد لحوم مجمدة بالجملة للمطاعم والفنادق ومطابخ الإعاشة في الرياض وجدة: لحوم برازيلية وهندية معتمدة، شهادات حلال، رقابة SFDA، شحن مبرد عند -18°م.'
-      : 'Wholesale frozen beef and mutton supplier in Saudi Arabia for restaurants, hotels and catering kitchens: certified Halal, SFDA inspected, -18°C cold chain.'
+      ? 'توريد لحوم بالجملة للمطاعم والفنادق في المملكة العربية السعودية، مع التركيز على كبدة Classic وJohny Gold والمخ واللسان والريش. المدن الرئيسية عبر أسطول الشركة، والمناطق الأبعد للطلبات أو الكميات الكبيرة.'
+      : 'Wholesale meat supply for restaurants and hotels across Saudi Arabia, specializing in Classic and Johny Gold liver, brain, tongue and ribs. Major cities are served by the company fleet; farther areas are arranged for orders or larger quantities.'
 
   return buildMetadata({
     path: '/meat-supply',
@@ -40,8 +40,11 @@ export async function generateMetadata({
       'مورد لحوم للمطاعم',
       'شركات توريد لحوم',
       'لحوم مجمدة جملة',
+      'توريد لحوم في السعودية',
+      'مورد لحوم في المملكة العربية السعودية',
       'موردين لحوم الرياض',
       'مورد لحوم جدة',
+      'مورد لحوم مكة',
     ],
   })
 }
@@ -81,8 +84,27 @@ export default async function MeatSupplyPage({
         },
         areaServed: [
           { '@type': 'Country', name: 'Saudi Arabia' },
-          { '@type': 'City', name: 'Riyadh' },
-          { '@type': 'City', name: 'Jeddah' },
+          ...[
+            'Riyadh',
+            'Jeddah',
+            'Makkah',
+            'Madinah',
+            'Dammam',
+            'Al Khobar',
+            'Dhahran',
+            'Taif',
+            'Buraidah',
+            'Abha',
+            'Khamis Mushait',
+            'Jubail',
+            'Al-Ahsa',
+            'Yanbu',
+            'Tabuk',
+            'Hail',
+            'Jazan',
+            'Najran',
+            'Al-Baha',
+          ].map((name) => ({ '@type': 'City', name })),
         ],
         offers: {
           '@type': 'Offer',

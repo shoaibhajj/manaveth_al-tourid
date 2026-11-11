@@ -39,21 +39,21 @@ export async function POST(request: NextRequest) {
 
     // 1. Invalidate global site content
     try {
-      revalidateTag('site')
+      revalidateTag('site', 'max')
       revalidated.push('tag:site')
     } catch {}
 
     // 2. Document-specific tag, path revalidation, and IndexNow notifications
     if (_type === 'product') {
       try {
-        revalidateTag('products')
+        revalidateTag('products', 'max')
         revalidated.push('tag:products')
         if (slugCurrent) {
-          revalidateTag(`product:${slugCurrent}`)
+          revalidateTag(`product:${slugCurrent}`, 'max')
           revalidated.push(`tag:product:${slugCurrent}`)
         }
         if (payload.categoryId) {
-          revalidateTag(`category:${payload.categoryId}`)
+          revalidateTag(`category:${payload.categoryId}`, 'max')
           revalidated.push(`tag:category:${payload.categoryId}`)
         }
       } catch {}
@@ -88,12 +88,37 @@ export async function POST(request: NextRequest) {
           console.warn('[IndexNow] Product notification failed (non-blocking):', err)
         })
       }
+    } else if (_type === 'catalogPage' || _type === 'productCategory') {
+      try {
+        revalidateTag('products', 'max')
+        revalidated.push('tag:products')
+        if (_type === 'productCategory' && payload._id) {
+          revalidateTag(`category:${payload._id}`, 'max')
+          revalidated.push(`tag:category:${payload._id}`)
+        }
+      } catch {}
+
+      try {
+        revalidatePath('/catalog')
+        revalidatePath('/ar/catalog')
+        revalidatePath('/en/catalog')
+        revalidatePath('/products')
+        revalidatePath('/ar/products')
+        revalidatePath('/en/products')
+        revalidatePath('/sitemap.xml')
+        if (_type === 'productCategory' && slugCurrent) {
+          revalidatePath(`/products/category/${slugCurrent}`)
+          revalidatePath(`/ar/products/category/${slugCurrent}`)
+          revalidatePath(`/en/products/category/${slugCurrent}`)
+        }
+        revalidated.push('paths:catalog,products,sitemap')
+      } catch {}
     } else if (_type === 'service') {
       try {
-        revalidateTag('services')
+        revalidateTag('services', 'max')
         revalidated.push('tag:services')
         if (slugCurrent) {
-          revalidateTag(`service:${slugCurrent}`)
+          revalidateTag(`service:${slugCurrent}`, 'max')
           revalidated.push(`tag:service:${slugCurrent}`)
         }
       } catch {}
@@ -121,12 +146,33 @@ export async function POST(request: NextRequest) {
           console.warn('[IndexNow] Service notification failed (non-blocking):', err)
         })
       }
+    } else if (_type === 'city') {
+      try {
+        revalidateTag('cities', 'max')
+        revalidated.push('tag:cities')
+      } catch {}
+
+      try {
+        revalidatePath('/')
+        revalidatePath('/ar')
+        revalidatePath('/en')
+        revalidatePath('/meat-supply')
+        revalidatePath('/ar/meat-supply')
+        revalidatePath('/en/meat-supply')
+        if (slugCurrent) {
+          revalidatePath(`/meat-supply/${slugCurrent}`)
+          revalidatePath(`/ar/meat-supply/${slugCurrent}`)
+          revalidatePath(`/en/meat-supply/${slugCurrent}`)
+        }
+        revalidatePath('/sitemap.xml')
+        revalidated.push('paths:meat-supply,sitemap')
+      } catch {}
     } else if (_type === 'article') {
       try {
-        revalidateTag('articles')
+        revalidateTag('articles', 'max')
         revalidated.push('tag:articles')
         if (slugCurrent) {
-          revalidateTag(`article:${slugCurrent}`)
+          revalidateTag(`article:${slugCurrent}`, 'max')
           revalidated.push(`tag:article:${slugCurrent}`)
         }
       } catch {}
@@ -160,8 +206,8 @@ export async function POST(request: NextRequest) {
     } else {
       // General layout / singleton changes
       try {
-        revalidateTag('home')
-        revalidateTag('sections')
+        revalidateTag('home', 'max')
+        revalidateTag('sections', 'max')
         revalidatePath('/')
         revalidatePath('/ar')
         revalidatePath('/en')

@@ -9,6 +9,7 @@ export const catalogPage = defineType({
     { name: 'general', title: 'العناوين والنصوص', default: true },
     { name: 'pdf', title: 'ملف الـ PDF والتنزيل' },
     { name: 'features', title: 'مميزات التوريد' },
+    { name: 'commodities', title: 'السلع المساندة' },
     { name: 'seo', title: 'محركات البحث' },
   ],
   fields: [
@@ -93,6 +94,32 @@ export const catalogPage = defineType({
         ar: 'إلى جانب تركيزنا التخصصي الرائد في توريد أصناف اللحوم، توفر شركة منافذ التوريد كافة السلع التموينية والمواد الاستهلاكية الأساسية لتشغيل المطابخ المركزية والمطاعم لتلبية احتياجاتكم من مورد واحد معتمد.',
         en: 'Alongside our specialized focus on wholesale meat cuts, Mnaveth ALTourid supplies supporting catering commodities and food packaging to ensure seamless single-source foodservice fulfillment.',
       },
+    }),
+    defineField({
+      name: 'supportingCommodities',
+      title: 'فئات السلع التموينية المساندة',
+      description: 'أضف فئات مثل الأرز والطحين والزيوت ومواد التغليف. تظهر كفئات عامة ولا تزاحم أصناف اللحوم الرئيسية.',
+      type: 'array',
+      group: 'commodities',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'id', title: 'معرّف ثابت بالإنجليزية', type: 'string', validation: (rule) => rule.required() }),
+            defineField({ name: 'name', title: 'اسم الفئة', type: 'localizedString', validation: requiredTranslation }),
+            defineField({ name: 'description', title: 'وصف الفئة', type: 'localizedText' }),
+            defineField({ name: 'icon', title: 'الأيقونة', type: 'string' }),
+            defineField({ name: 'packagingSummary', title: 'ملخص التعبئة', type: 'localizedString' }),
+            defineField({
+              name: 'sampleItems',
+              title: 'أمثلة مختصرة (كل مثال في عنصر مستقل)',
+              type: 'array',
+              of: [defineArrayMember({ type: 'localizedString' })],
+            }),
+          ],
+          preview: { select: { title: 'name.ar', subtitle: 'id' } },
+        }),
+      ],
     }),
     defineField({
       name: 'pdfFile',

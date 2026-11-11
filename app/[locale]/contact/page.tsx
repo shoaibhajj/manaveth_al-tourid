@@ -67,7 +67,7 @@ export default async function ContactPage({
 
   const [layout, base] = await Promise.all([getLayoutContent(), getSiteUrl()])
   const phone = layout.contact?.directPhone || layout.contact?.phone || '+966509971699'
-  const email = layout.contact?.supportEmail || layout.site?.email || 'info@mnafeth.com'
+  const email = layout.contact?.supportEmail || 'info@mnafeth.com'
   const quotesNumber = (layout.contact?.whatsapp?.quote?.number || layout.contact?.phone || '966509971699').replace(/\D/g, '')
   const ordersNumber = (layout.contact?.whatsapp?.orders?.number || quotesNumber || '966503000295').replace(/\D/g, '')
   const cr = layout.site?.brand?.commercialRegistration || '1116011768'

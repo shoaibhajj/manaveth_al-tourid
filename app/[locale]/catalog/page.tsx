@@ -8,6 +8,16 @@ import { isSanityConfigured } from '@/sanity/env'
 import { JsonLd } from '@/components/json-ld'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 
+// Keep known launch specialties visible until the live Sanity records are migrated
+// to the explicit catalog flag. Other meat and poultry items stay out of this section.
+const legacyCoreSpecialtySlugs = new Set([
+  'frozen-liver-classic',
+  'frozen-liver-johny-gold',
+  'frozen-brain',
+  'frozen-tongue',
+  'frozen-ribs-wagstaff',
+])
+
 export function generateStaticParams() {
   return [{ locale: 'ar' }, { locale: 'en' }]
 }
@@ -20,20 +30,22 @@ export async function generateMetadata({
   const { locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
+  const content = await getContent()
 
-  const title = isAr
+  const title = content.catalogPage?.seo?.title[locale] || (isAr
     ? 'كتالوج وقائمة الأصناف التموينية | شركة منافذ التوريد'
-    : 'Wholesale Foodservice Product Catalog | Mnaveth ALTourid'
+    : 'Wholesale Foodservice Product Catalog | Mnaveth ALTourid')
 
-  const description = isAr
+  const description = content.catalogPage?.seo?.description[locale] || (isAr
     ? 'تصفح قائمة الأصناف التموينية والغذائية المعتمدة لشركة منافذ التوريد: لحوم مجمدة، أرز بسمتي هندي، زيوت طعام فندقية، معلبات، وتمور للمطاعم والفنادق.'
-    : 'Browse the certified wholesale food products menu of Mnaveth ALTourid: frozen meats, basmati rice, frying oils, canned goods, and dates for restaurants.'
+    : 'Browse the certified wholesale food products menu of Mnaveth ALTourid: frozen meats, basmati rice, frying oils, canned goods, and dates for restaurants.')
 
   return buildMetadata({
     path: '/catalog',
     locale,
     title,
     description,
+    image: content.catalogPage?.seo?.shareImage,
   })
 }
 
@@ -47,6 +59,7 @@ export default async function CatalogPage({
   const [content, base] = await Promise.all([getContent(), getSiteUrl()])
   const sanityProducts = content?.products || []
   const isAr = locale === 'ar'
+  const categories = content.catalogCategories?.length ? content.catalogCategories : catalogCategories
 
   // F1: Sanity is the SINGLE source of truth when configured.
   let productsToUse = []
@@ -54,7 +67,7 @@ export default async function CatalogPage({
   if (isSanityConfigured && sanityProducts.length > 0) {
     productsToUse = sanityProducts.map((p, idx) => {
       const catId = p.categoryId || 'meat-poultry'
-      const foundCategory = catalogCategories.find((c) => c.id === catId || `category-${c.id}` === catId)
+      const foundCategory = categories.find((c) => c.id === catId || `category-${c.id}` === catId)
       const categoryName = foundCategory?.name || { ar: 'أصناف تموينية', en: 'Foodservice Staples' }
 
       return {
@@ -65,7 +78,7 @@ export default async function CatalogPage({
         categoryId: foundCategory?.id || 'meat-poultry',
         categoryName,
         description: p.description,
-        origin: p.origin || undefined,
+        origin: p.origin || { ar: 'غير محدد', en: 'Not specified' },
         packaging: p.packaging || undefined,
         storage: p.storage || undefined,
         certifications: p.certifications || undefined,
@@ -77,7 +90,7 @@ export default async function CatalogPage({
             : 'ambient') as any,
         image: p.image || undefined,
         gallery: p.gallery || undefined,
-        isCoreSpecialty: p.isCoreSpecialty ?? (p.order <= 5 || p.featured),
+        isCoreSpecialty: p.isCoreSpecialty === true || legacyCoreSpecialtySlugs.has(p.slug || ''),
         order: p.order ?? idx,
         featured: p.featured,
         updatedAt: p.updatedAt,
@@ -112,7 +125,7 @@ export default async function CatalogPage({
       <JsonLd schema={itemListSchema} />
       <CatalogView
         products={productsToUse}
-        categories={catalogCategories}
+        categories={categories}
         catalogMeta={content.catalogPage}
       />
     </div>

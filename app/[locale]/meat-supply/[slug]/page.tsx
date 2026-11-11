@@ -2,7 +2,9 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
-import { getSectorData, getCityData, getMeatSupplyPageData, VERIFIED_CITIES } from '@/lib/sanity/meat-supply'
+import { getSectorData, getConfirmedCityData, getMeatSupplyPageData, VERIFIED_CITIES } from '@/lib/sanity/meat-supply'
+import { sanityServerClient } from '@/lib/sanity/server-client'
+import { confirmedCitiesQuery } from '@/lib/sanity/queries'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import { JsonLd } from '@/components/json-ld'
 import {
@@ -22,8 +24,16 @@ import {
 
 export const dynamicParams = false
 
-export function generateStaticParams() {
-  const slugs = ['restaurants', 'hotels', 'catering', 'riyadh', 'jeddah']
+export async function generateStaticParams() {
+  const slugs = new Set(['restaurants', 'hotels', 'catering', ...Object.keys(VERIFIED_CITIES)])
+  if (sanityServerClient) {
+    try {
+      const cities = await sanityServerClient.fetch(confirmedCitiesQuery)
+      for (const city of (cities ?? []) as any[]) if (city.slug) slugs.add(city.slug)
+    } catch {
+      // Existing verified routes remain available if Sanity is unavailable during build.
+    }
+  }
   const params: { locale: string; slug: string }[] = []
   for (const locale of ['ar', 'en']) {
     for (const slug of slugs) {
@@ -52,14 +62,15 @@ export async function generateMetadata({
     })
   }
 
-  const city = getCityData(slug, locale)
+  const city = await getConfirmedCityData(slug, locale)
   if (city) {
     const title = isAr
       ? `توريد لحوم مجمدة بالجملة في ${city.name} للمطاعم والفنادق | منافذ التوريد`
       : `Wholesale Frozen Meat Supply in ${city.name} for Restaurants | Mnaveth ALTourid`
+    const verifiedDetails = [city.coveredDistricts, city.deliveryTime, city.coldChainFacility].filter(Boolean).join(' ')
     const description = isAr
-      ? `مورد لحوم مجمدة معتمد في ${city.name}: توصيل مبرد يومي (-18°م) لمستودعات ومطابخ ${city.name}، لحوم برازيلية وهندية معتمدة حلال ورقابة SFDA.`
-      : `Approved frozen beef and mutton distributor in ${city.name}: daily cold-chain delivery (-18°C) to restaurants and hotels with full SFDA compliance.`
+      ? `توريد اللحوم المجمدة بالجملة للمطاعم والفنادق في ${city.name}. ${verifiedDetails}`
+      : `Wholesale frozen meat supply for restaurants and hotels in ${city.name}. ${verifiedDetails}`
 
     return buildMetadata({
       path: `/meat-supply/${slug}`,
@@ -82,7 +93,7 @@ export default async function MeatSupplySubPage({
   const isAr = locale === 'ar'
 
   const sector = getSectorData(slug, locale)
-  const city = getCityData(slug, locale)
+  const city = await getConfirmedCityData(slug, locale)
 
   if (!sector && !city) {
     notFound()

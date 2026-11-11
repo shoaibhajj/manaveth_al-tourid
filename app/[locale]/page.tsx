@@ -37,7 +37,6 @@ export default async function Home() {
     contact,
     services,
     sectors,
-    stats,
     featuredProducts,
     galleryItems,
     galleryCategories,
@@ -92,7 +91,7 @@ export default async function Home() {
               />
             )
           case 'stats':
-            return <Stats key={`stats-${idx}`} stats={stats} statsSection={site.statsSection} />
+            return <Stats key={`stats-${idx}`} stats={site.stats.items} />
           case 'sectors':
             return <Sectors key={`sectors-${idx}`} items={sectors} sectionHeading={site.sectorsSection} />
           case 'branches':

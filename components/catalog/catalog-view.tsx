@@ -49,6 +49,7 @@ type Props = {
     coreSpecialtiesHeading?: { ar: string; en: string }
     supportingCommoditiesHeading?: { ar: string; en: string }
     supportingCommoditiesNote?: { ar: string; en: string }
+    supportingCommodities?: typeof supportingCommodities
     inquiryWhatsApp?: string
   }
   catalogMeta?: {
@@ -62,6 +63,7 @@ type Props = {
     coreSpecialtiesHeading?: { ar: string; en: string }
     supportingCommoditiesHeading?: { ar: string; en: string }
     supportingCommoditiesNote?: { ar: string; en: string }
+    supportingCommodities?: typeof supportingCommodities
     inquiryWhatsApp?: string
   }
 }
@@ -81,6 +83,9 @@ export function CatalogView({
   const isAr = locale === 'ar'
 
   const effectiveConfig = catalogConfig || catalogMeta
+  const commodities = effectiveConfig?.supportingCommodities?.length
+    ? effectiveConfig.supportingCommodities
+    : supportingCommodities
 
   const productsList = useMemo(() => {
     const list = products || initialProducts
@@ -90,9 +95,9 @@ export function CatalogView({
 
   // Core Specialty Meats (First priority focus)
   const coreSpecialties = useMemo(() => {
-    return productsList.filter(
-      (p) => p.isCoreSpecialty || p.featured || p.categoryId === 'meat-poultry' || p.order <= 5
-    )
+    return productsList
+      .filter((p) => p.isCoreSpecialty === true)
+      .sort((left, right) => left.order - right.order)
   }, [productsList])
 
   // Search query
@@ -152,9 +157,9 @@ export function CatalogView({
 
   // Filtered Supporting Commodities by Search
   const filteredCommodities = useMemo(() => {
-    if (!searchQuery.trim()) return supportingCommodities
+    if (!searchQuery.trim()) return commodities
     const q = searchQuery.toLowerCase().trim()
-    return supportingCommodities.filter((item) => {
+    return commodities.filter((item) => {
       const matchName =
         item.name.ar.toLowerCase().includes(q) || item.name.en.toLowerCase().includes(q)
       const matchDesc =
@@ -164,7 +169,7 @@ export function CatalogView({
         item.sampleItems.en.some((s) => s.toLowerCase().includes(q))
       return matchName || matchDesc || matchSample
     })
-  }, [searchQuery])
+  }, [searchQuery, commodities])
 
   // Core Meat Selection handlers
   const toggleSelectMeat = (product: CatalogProduct) => {
@@ -223,8 +228,8 @@ export function CatalogView({
 
   const selectedMeatList = useMemo(() => Object.values(selectedMeats), [selectedMeats])
   const selectedCommodityList = useMemo(() => {
-    return supportingCommodities.filter((c) => selectedCommodities[c.id])
-  }, [selectedCommodities])
+    return commodities.filter((c) => selectedCommodities[c.id])
+  }, [selectedCommodities, commodities])
 
   const totalSelectedCount = selectedMeatList.length + selectedCommodityList.length
   const totalMeatUnits = useMemo(
@@ -384,7 +389,7 @@ export function CatalogView({
               </tr>
             </thead>
             <tbody>
-              {supportingCommodities.map((comm, idx) => (
+              {commodities.map((comm, idx) => (
                 <tr key={comm.id} className="border-b border-gray-200">
                   <td className="p-2 font-bold">{idx + 1}</td>
                   <td className="p-2 font-black text-gray-900">{comm.name.ar}</td>

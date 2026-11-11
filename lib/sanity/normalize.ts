@@ -228,7 +228,9 @@ function toProduct(doc: Doc, index: number, featuredIds: Set<string>): Product {
     certifications: optionalLocalized(doc.certifications),
     usage: optionalLocalized(doc.usage),
     targetPhrases: list(doc.targetPhrases).map((phrase) => localized(phrase, { ar: '', en: '' })),
+    isCoreSpecialty: doc.isCoreSpecialty === true,
     image: imageUrl(doc.image, 900) ?? staticContent.site.brand.heroImage,
+    gallery: list(doc.gallery).map((image) => imageUrl(image, 900)).filter((image): image is string => Boolean(image)),
     alt: altOf(doc.image, name),
     price,
     tiers,
@@ -449,6 +451,15 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
   const galleryCategories: GalleryCategory[] = list(data.galleryCategories)
     .filter(isVisible)
     .map((category) => ({ id: category._id, label: localized(category.name, { ar: '', en: '' }) }))
+  const catalogCategories = list(data.productCategories)
+    .filter(isVisible)
+    .map((category, index) => ({
+      id: clean(category.slug?.current) || clean(category._id).replace(/^category-/, ''),
+      name: localized(category.name, { ar: '', en: '' }),
+      icon: clean(category.icon) || 'beef',
+      description: optionalLocalized(category.description),
+      order: Number(category.order ?? index),
+    }))
   const featuredAlt = featuredDoc ? altOf(featuredDoc.image, localized(featuredDoc.alt, base.galleryFeatured.alt)) : undefined
 
   // Contact
@@ -609,8 +620,21 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
           supportingCommoditiesNote: optionalLocalized(data.catalogPage.supportingCommoditiesNote),
           downloadNote: optionalLocalized(data.catalogPage.downloadNote),
           inquiryWhatsApp: clean(data.catalogPage.inquiryWhatsApp) || '966509971699',
+          seo: seo(data.catalogPage.seo, base.seo.products),
+          supportingCommodities: list(data.catalogPage.supportingCommodities).map((item, index) => ({
+            id: clean(item.id) || `commodity-${index + 1}`,
+            name: localized(item.name, { ar: '', en: '' }),
+            description: localized(item.description, { ar: '', en: '' }),
+            icon: clean(item.icon) || 'package',
+            packagingSummary: localized(item.packagingSummary, { ar: '', en: '' }),
+            sampleItems: {
+              ar: list(item.sampleItems).map((value) => localized(value, { ar: '', en: '' }).ar).filter(Boolean),
+              en: list(item.sampleItems).map((value) => localized(value, { ar: '', en: '' }).en).filter(Boolean),
+            },
+          })),
         }
       : undefined,
+    catalogCategories: catalogCategories.length ? catalogCategories : undefined,
     aboutPage: data.aboutPage
       ? {
           badge: optionalLocalized(data.aboutPage.badge),

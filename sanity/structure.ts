@@ -42,6 +42,7 @@ const orderedList = (
 
 export const structure: StructureResolver = (S) =>
   S.list()
+    .id('site-content')
     .title('محتوى الموقع')
     .items([
       S.listItem()
@@ -60,8 +61,8 @@ export const structure: StructureResolver = (S) =>
         ),
       singleton(S, 'homePage', 'الصفحة الرئيسية وتنسيق الأقسام'),
       singleton(S, 'catalogPage', 'كتالوج المنتجات ودليل الأصناف (PDF)'),
-      S.documentTypeListItem('customSection').title('الأقسام المخصصة (قابلة للنسخ والتكرار)'),
-      S.documentTypeListItem('companyPost').title('نبض الشركة وآخر الأخبار والفعاليات'),
+      S.documentTypeListItem('customSection').id('custom-sections').title('الأقسام المخصصة (قابلة للنسخ والتكرار)'),
+      S.documentTypeListItem('companyPost').id('company-posts').title('نبض الشركة وآخر الأخبار والفعاليات'),
       S.divider(),
       orderedList(S, 'service', 'الخدمات', 'service'),
       orderedList(S, 'sector', 'القطاعات', 'sector'),
@@ -86,9 +87,9 @@ export const structure: StructureResolver = (S) =>
                     .title('صفحة توريد اللحوم الرئيسية (/meat-supply)')
                 ),
               S.divider(),
-              S.documentTypeListItem('landingPage').title('📑 كافة صفحات الهبوط والتوريد المخصصة'),
-              S.documentTypeListItem('sector').title('🏢 قطاعات توريد اللحوم (مطاعم، فنادق، إعاشة)'),
-              S.documentTypeListItem('city').title('📍 مدن وتغطية توريد اللحوم (الرياض، جدة، مكة...)'),
+              S.documentTypeListItem('landingPage').id('meat-supply-pages').title('📑 كافة صفحات الهبوط والتوريد المخصصة'),
+              S.documentTypeListItem('sector').id('meat-supply-sectors').title('🏢 قطاعات توريد اللحوم (مطاعم، فنادق، إعاشة)'),
+              S.documentTypeListItem('city').id('meat-supply-cities').title('📍 مدن وتغطية توريد اللحوم (الرياض، جدة، مكة...)'),
               S.divider(),
               orderedList(
                 S,
@@ -112,7 +113,7 @@ export const structure: StructureResolver = (S) =>
             .items([
               singleton(S, 'certificationsPage', '📄 إعدادات صفحة الشهادات (/certifications)'),
               S.divider(),
-              S.documentTypeListItem('certificate').title('📜 كافة وثائق وتراخيص الجودة المعتمدة'),
+              S.documentTypeListItem('certificate').id('all-certificates').title('📜 كافة وثائق وتراخيص الجودة المعتمدة'),
             ])
         ),
       S.listItem()
@@ -127,10 +128,10 @@ export const structure: StructureResolver = (S) =>
               orderedList(S, 'product', 'المنتجات والأصناف', 'product'),
               orderedList(S, 'productCategory', 'التصنيفات', 'productCategory'),
               S.divider(),
-              S.documentTypeListItem('brand').title('العلامات التجارية (Brands)'),
-              S.documentTypeListItem('country').title('دول المنشأ (Origin Countries)'),
-              S.documentTypeListItem('city').title('مناطق ومدن الخدمة (Service Areas)'),
-              S.documentTypeListItem('certificate').title('الشهادات والاعتمادات (Certificates)'),
+              S.documentTypeListItem('brand').id('product-brands').title('العلامات التجارية (Brands)'),
+              S.documentTypeListItem('country').id('origin-countries').title('دول المنشأ (Origin Countries)'),
+              S.documentTypeListItem('city').id('service-area-cities').title('مناطق ومدن الخدمة (Service Areas)'),
+              S.documentTypeListItem('certificate').id('product-certificates').title('الشهادات والاعتمادات (Certificates)'),
             ]),
         ),
       S.listItem()
@@ -180,8 +181,8 @@ export const structure: StructureResolver = (S) =>
               singleton(S, 'seoProducts', 'صفحة المنتجات'),
               singleton(S, 'seoBranches', 'صفحة الفروع والمستودعات'),
               S.divider(),
-              S.documentTypeListItem('redirect').title('روابط إعادة التوجيه (301 Redirects)'),
-              S.documentTypeListItem('keywordCluster').title('مجموعات الكلمات المفتاحية (Keyword Clusters)'),
+              S.documentTypeListItem('redirect').id('redirects').title('روابط إعادة التوجيه (301 Redirects)'),
+              S.documentTypeListItem('keywordCluster').id('keyword-clusters').title('مجموعات الكلمات المفتاحية (Keyword Clusters)'),
             ]),
         ),
     ])

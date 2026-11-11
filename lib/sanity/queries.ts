@@ -76,6 +76,8 @@ export const siteContentQuery = defineQuery(`{
   }
 }`)
 
+export const aboutPageQuery = defineQuery(`*[_type == "aboutPage"][0]{...}`)
+
 export const catalogPageQuery = defineQuery(`{
   "catalogPage": *[_type == "catalogPage"][0]{
     ...,
@@ -123,6 +125,11 @@ export const meatSupplyProductsQuery = defineQuery(`*[_type == "product" && (vis
 }`)
 
 export const confirmedCitiesQuery = defineQuery(`*[_type == "city" && isSupplyConfirmed == true && defined(slug.current) && defined(name.ar) && defined(region.ar) && defined(coveredDistricts.ar) && defined(deliveryTime.ar) && defined(minOrder.ar) && defined(pickupPoint.ar) && defined(coldChainFacility.ar)] | order(name.ar asc){
+  ...,
+  "slug": slug.current
+}`)
+
+export const confirmedCityBySlugQuery = defineQuery(`*[_type == "city" && isSupplyConfirmed == true && slug.current == $slug && defined(name.ar) && defined(region.ar) && defined(coveredDistricts.ar) && defined(deliveryTime.ar) && defined(minOrder.ar) && defined(pickupPoint.ar) && defined(coldChainFacility.ar)][0]{
   ...,
   "slug": slug.current
 }`)

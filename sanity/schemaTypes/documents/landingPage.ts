@@ -22,24 +22,21 @@ export const landingPage = defineType({
     },
     eyebrow: {
       _type: 'localizedString',
-      ar: 'اعتماد الغذاء والدواء SFDA · ذبح حلال 100% · توريد مبرد ومجمد',
-      en: 'SFDA Approved · 100% Halal Slaughter · Cold Chain Logistics',
+      ar: 'أصناف لحوم مختارة للبيع بالجملة',
+      en: 'Selected meat specialties for wholesale',
     },
     intro: {
       _type: 'localizedText',
-      ar: 'شركة منافذ التوريد للتجارة شريكك المعتمد في استيراد وتوريد اللحوم البقرية ولحوم الضأن والكبدة المجمدة وقطعيات الدواجن الفاخرة مباشرة من كبرى المسالخ المعتمدة في البرازيل والهند، مع الالتزام التام بالمواصفات القياسية السعودية وتأمين الفنادق والمطاعم ومطابخ الإعاشة.',
-      en: 'Mnaveth ALTourid is your certified partner for importing and supplying bulk frozen beef, mutton, beef liver, and poultry cuts directly from SFDA-approved abattoirs in Brazil and India to restaurants, hotels, and institutional caterers.',
+      ar: 'شركة منافذ التوريد متخصصة في توريد اللحوم بالجملة للمطاعم والفنادق ومطابخ الإعاشة في المملكة العربية السعودية.',
+      en: 'Mnaveth ALTourid specializes in wholesale meat supply for restaurants, hotels, and catering kitchens across Saudi Arabia.',
     },
-    minOrderText: {
-      _type: 'localizedString',
-      ar: 'الحد الأدنى للطلب: 50 كرتون أو 1 طن مع عقود توريد دورية ميسرة',
-      en: 'MOQ: 50 Master Cartons or 1 Ton with Scheduled Contract Deliveries',
-    },
-    whatsappButtonText: {
-      _type: 'localizedString',
-      ar: 'طلب تسعير توريد اللحوم الفوري',
-      en: 'Request Instant Meat Supply Quote',
-    },
+    coreSpecialties: [
+      { _type: 'localizedString', ar: 'كبدة Classic', en: 'Classic liver' },
+      { _type: 'localizedString', ar: 'كبدة Johny Gold', en: 'Johny Gold liver' },
+      { _type: 'localizedString', ar: 'مخ', en: 'Brain' },
+      { _type: 'localizedString', ar: 'لسان', en: 'Tongue' },
+      { _type: 'localizedString', ar: 'ريش', en: 'Ribs' },
+    ],
   }),
   fields: [
     defineField({
@@ -69,7 +66,7 @@ export const landingPage = defineType({
     defineField({
       name: 'intro',
       title: 'المقدمة التعريفية التوريدية (ماذا، لمن، أين، الشروط)',
-      description: 'إجابة واضحة ومباشرة عن المنتجات الموردة، القطاعات المستهدفة، التغطية الجغرافية، والحد الأدنى للطلب',
+      description: 'اكتب الأصناف الرئيسية والقطاعات المستهدفة ونطاق التغطية المعتمد.',
       type: 'localizedText',
       validation: requiredTranslation,
     }),
@@ -80,20 +77,11 @@ export const landingPage = defineType({
       type: 'localizedText',
     }),
     defineField({
-      name: 'minOrderText',
-      title: 'نص الحد الأدنى للطلب (MOQ)',
-      description: 'مثال: الحد الأدنى للتوريد 50 كرتون أو 1 طن مع جدولة عقود شهرية وسنوية',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'whatsappButtonText',
-      title: 'نص زر الواتساب المباشر',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'whatsappPrefill',
-      title: 'الرسالة الافتراضية للواتساب',
-      type: 'localizedString',
+      name: 'coreSpecialties',
+      title: 'الأصناف الرئيسية التي تركز عليها الشركة',
+      description: 'أضف أو أعد ترتيب الأصناف الرئيسية المعروضة في صفحة توريد اللحوم.',
+      type: 'array',
+      of: [defineArrayMember({ type: 'localizedString' })],
     }),
     defineField({
       name: 'orderSteps',

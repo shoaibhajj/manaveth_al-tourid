@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
 import { getContent } from '@/lib/sanity/get-content'
+import { sanityServerClient } from '@/lib/sanity/server-client'
+import { aboutPageQuery } from '@/lib/sanity/queries'
 import { getSiteUrl } from '@/lib/site-url'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import { buildOrganizationSchema } from '@/lib/seo/schema/organization'
@@ -31,8 +33,8 @@ export async function generateMetadata({
   const { locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
-  const content = await getContent()
-  const customSeo = content.aboutPage?.seo
+  const customAbout = sanityServerClient ? await sanityServerClient.fetch(aboutPageQuery).catch(() => null) : null
+  const customSeo = customAbout?.seo
 
   const title = (isAr ? customSeo?.title?.ar : customSeo?.title?.en) || (isAr
     ? 'عن شركة منافذ التوريد | توريد اللحوم بالجملة في السعودية'
@@ -60,8 +62,12 @@ export default async function AboutPage({
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   const isAr = locale === 'ar'
 
-  const [content, base] = await Promise.all([getContent(), getSiteUrl()])
-  const aboutDoc = content.aboutPage
+  const [content, base, sanityAbout] = await Promise.all([
+    getContent(),
+    getSiteUrl(),
+    sanityServerClient ? sanityServerClient.fetch(aboutPageQuery).catch(() => null) : Promise.resolve(null),
+  ])
+  const aboutDoc = sanityAbout || content.aboutPage
   const badgeText = (isAr ? aboutDoc?.badge?.ar : aboutDoc?.badge?.en) || (isAr ? 'توريد بالجملة لقطاع الأعمال' : 'Wholesale supply for businesses')
   const heroTitle = (isAr ? aboutDoc?.title?.ar : aboutDoc?.title?.en) || (isAr ? 'شركة منافذ التوريد للتجارة' : 'Mnaveth ALTourid Trading Co.')
   const heroSubtitle = (isAr ? aboutDoc?.subtitle?.ar : aboutDoc?.subtitle?.en) || (isAr ? 'شركة متخصصة في توريد منتجات اللحوم بالجملة لقطاع الأعمال في المملكة العربية السعودية.' : 'A wholesale supplier focused on meat products for businesses across Saudi Arabia.')

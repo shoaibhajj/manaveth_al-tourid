@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { defaultLocale, isLocale, localePath, type Locale } from '@/lib/i18n'
-import { sanityFetch } from '@/lib/sanity/live'
+import { sanityServerClient } from '@/lib/sanity/server-client'
 import { defineQuery } from 'next-sanity'
 import { buildMetadata } from '@/lib/seo/build-metadata'
 import { getSiteUrl } from '@/lib/site-url'
@@ -40,10 +40,9 @@ export async function generateMetadata({
   const { locale: rawLocale } = await params
   const locale = (isLocale(rawLocale) ? rawLocale : defaultLocale) as Locale
   let page: any = null
-  if (sanityFetch) {
+  if (sanityServerClient) {
     try {
-      const result = await sanityFetch({ query: certificationsPageQuery, tags: ['certificationsPage'] })
-      page = result.data
+      page = await sanityServerClient.fetch(certificationsPageQuery)
     } catch {
       // Keep safe generic metadata when Sanity is unavailable during build.
     }
@@ -76,16 +75,14 @@ export default async function CertificationsPage({
 
   let customCertPage: any = null
   let sanityCertificates: any[] = []
-  if (sanityFetch) {
+  if (sanityServerClient) {
     try {
       const [pageRes, certsRes] = await Promise.all([
-        sanityFetch({ query: certificationsPageQuery, tags: ['certificationsPage'] }),
-        sanityFetch({ query: certificatesQuery, tags: ['certificates'] }),
+        sanityServerClient.fetch(certificationsPageQuery),
+        sanityServerClient.fetch(certificatesQuery),
       ])
-      if (pageRes?.data) customCertPage = pageRes.data
-      if (Array.isArray(certsRes?.data) && certsRes.data.length > 0) {
-        sanityCertificates = certsRes.data
-      }
+      if (pageRes) customCertPage = pageRes
+      if (Array.isArray(certsRes)) sanityCertificates = certsRes
     } catch {}
   }
 

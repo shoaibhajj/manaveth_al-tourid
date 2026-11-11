@@ -99,7 +99,7 @@ export default async function MeatSupplySubPage({
     notFound()
   }
 
-  const { products, contacts } = await getMeatSupplyPageData(locale)
+  const { contacts } = await getMeatSupplyPageData(locale)
 
   const defaultWhatsappMsg = encodeURIComponent(
     isAr

@@ -325,7 +325,12 @@ export default async function ProductDetailPage({
             {relatedProducts.map((relProduct) => {
               const relHref = localePath(`/products/${relProduct.slug || relProduct.id}`, locale)
               const relName = isAr ? relProduct.name.ar : relProduct.name.en || relProduct.name.ar
-              const relImg = typeof relProduct.image === 'string' && relProduct.image.trim() ? relProduct.image : null
+              const relImg =
+                typeof relProduct.image === 'string' &&
+                relProduct.image.trim() &&
+                !/(?:^|\/)hero\.png(?:$|[?#])/i.test(relProduct.image)
+                  ? relProduct.image
+                  : null
 
               return (
                 <Link

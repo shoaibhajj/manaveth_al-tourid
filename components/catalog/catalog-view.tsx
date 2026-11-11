@@ -139,7 +139,7 @@ function CatalogSlide({
         </div>
         <div className="catalog-cover-copy">
           <span className="catalog-company-name">{isAr ? 'شركة منافذ التوريد التجارية' : 'Mnaveth ALTourid Commercial'}</span>
-          {page.showHeading && <h1>{title || (isAr ? 'كتالوج المنتجات' : 'Product Catalog')}</h1>}
+          {page.showHeading && <h2>{title || (isAr ? 'كتالوج المنتجات' : 'Product Catalog')}</h2>}
           {subtitle && <p>{subtitle}</p>}
           {meta?.catalogVersion && <span className="catalog-version">{meta.catalogVersion}</span>}
         </div>

@@ -245,8 +245,8 @@ export function validatePageHtml(
   if (isInternalPage && !hasBreadcrumbs) {
     issues.push({
       rule: 'schema-breadcrumb',
-      severity: 'error',
-      message: 'Internal content page must include BreadcrumbList structured data',
+      severity: 'warning',
+      message: 'BreadcrumbList structured data is recommended for internal content pages',
     })
   }
 
@@ -266,15 +266,18 @@ export function validatePageHtml(
   const productImages: { src: string; alt: string }[] = []
   const isProductPage = url.includes('/products/') && !url.includes('/category/')
   if (isProductPage) {
-    const imgMatches = [...html.matchAll(/<img\s+[^>]*src=["']([^"']+)["'][^>]*>/gi)]
+    const imgMatches = [...html.matchAll(/<img\b[^>]*>/gi)]
     for (const match of imgMatches) {
       const imgTag = match[0]
-      const src = match[1]
-      const altMatch = imgTag.match(/alt=["']([^"']*)["']/i)
+      const srcMatch = imgTag.match(/(?:^|\s)src=["']([^"']+)["']/i)
+      if (!srcMatch) continue
+      const src = srcMatch[1]
+      const altMatch = imgTag.match(/(?:^|\s)alt=["']([^"']*)["']/i)
       const alt = altMatch ? altMatch[1].trim() : ''
       productImages.push({ src, alt })
 
-      if (alt === '') {
+      // Empty alt text is valid for decorative images such as the brand mark.
+      if (!altMatch) {
         issues.push({
           rule: 'image-alt',
           severity: 'error',

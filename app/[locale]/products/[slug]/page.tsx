@@ -325,7 +325,7 @@ export default async function ProductDetailPage({
             {relatedProducts.map((relProduct) => {
               const relHref = localePath(`/products/${relProduct.slug || relProduct.id}`, locale)
               const relName = isAr ? relProduct.name.ar : relProduct.name.en || relProduct.name.ar
-              const relImg = typeof relProduct.image === 'string' ? relProduct.image : '/images/hero.png'
+              const relImg = typeof relProduct.image === 'string' && relProduct.image.trim() ? relProduct.image : null
 
               return (
                 <Link
@@ -334,13 +334,19 @@ export default async function ProductDetailPage({
                   className="group rounded-2xl border border-border bg-card p-3 shadow-xs hover:border-gold hover:shadow-md transition-all flex flex-col justify-between"
                 >
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-forest/5 mb-3">
-                    <Image
-                      src={relImg}
-                      alt={relName}
-                      fill
-                      sizes="(max-width: 640px) 100vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-transform"
-                    />
+                    {relImg ? (
+                      <Image
+                        src={relImg}
+                        alt={relName}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform"
+                      />
+                    ) : (
+                      <div aria-hidden="true" className="flex h-full items-center justify-center bg-gradient-to-br from-forest/10 via-cream to-gold/10">
+                        <span className="font-serif text-5xl font-bold text-forest/30">M</span>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <h3 className="font-bold text-sm text-foreground group-hover:text-gold transition-colors line-clamp-1">

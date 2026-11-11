@@ -65,11 +65,46 @@ export type CatalogCommodity = {
   id: string
   name: Localized
   description: Localized
-  icon: string
-  packagingSummary: Localized
-  sampleItems: { ar: string[]; en: string[] }
+  image?: Localized
 }
 export type CatalogCategory = { id: string; name: Localized; icon: string; description?: Localized; order: number }
+
+export type CatalogPageProduct = {
+  id: string
+  slug: string
+  name: Localized
+  description?: Localized
+  image?: Localized
+  gallery: string[]
+  isCoreSpecialty: boolean
+  order: number
+}
+
+export type CatalogPageItemData = {
+  id: string
+  title?: Localized
+  subtitle?: Localized
+  caption?: Localized
+  product?: CatalogPageProduct
+  images: Array<{ url: string; alt?: Localized; caption?: Localized }>
+}
+
+export type CatalogPageBlockData = {
+  id: string
+  pageType: 'cover' | 'productIndex' | 'productGroup' | 'fullPageImage' | 'supportingCommodities' | 'closing' | 'custom'
+  visible: boolean
+  includeInIndex: boolean
+  showHeading: boolean
+  title?: Localized
+  subtitle?: Localized
+  description?: Localized
+  backgroundMode: 'white' | 'image'
+  backgroundImage?: string
+  fullPageImage?: string
+  fullPageImageAlt?: Localized
+  items: CatalogPageItemData[]
+  categories: Array<{ id: string; slug: string; name: Localized; description?: Localized; image?: string }>
+}
 
 export type PageSeo = { title: Localized; description: Localized; shareImage?: string }
 
@@ -120,12 +155,10 @@ export type SiteContent = {
     subtitle: Localized
     catalogVersion?: string
     lastUpdated?: string
-    pdfFileUrl?: string
-    externalPdfUrl?: string
-    bannerAlert?: Localized
+    pageFormat?: 'a4Landscape'
     downloadNote?: Localized
-    inquiryWhatsApp?: string
-    coreSpecialtiesHeading?: Localized
+    keywords?: Localized[]
+    pages?: CatalogPageBlockData[]
     supportingCommoditiesHeading?: Localized
     supportingCommoditiesNote?: Localized
     seo?: PageSeo

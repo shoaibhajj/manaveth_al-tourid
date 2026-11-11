@@ -60,7 +60,7 @@ export const structure: StructureResolver = (S) =>
             ]),
         ),
       singleton(S, 'homePage', 'الصفحة الرئيسية وتنسيق الأقسام'),
-      singleton(S, 'catalogPage', 'كتالوج المنتجات ودليل الأصناف (PDF)'),
+      singleton(S, 'catalogPage', 'الكتالوج وصفحاته'),
       S.documentTypeListItem('customSection').id('custom-sections').title('الأقسام المخصصة (قابلة للنسخ والتكرار)'),
       S.documentTypeListItem('companyPost').id('company-posts').title('نبض الشركة وآخر الأخبار والفعاليات'),
       S.divider(),
@@ -124,7 +124,7 @@ export const structure: StructureResolver = (S) =>
             .id('products-group')
             .title('المنتجات والكتالوج')
             .items([
-              singleton(S, 'catalogPage', 'إعدادات الكتالوج والـ PDF'),
+              singleton(S, 'catalogPage', 'إعدادات وصفحات الكتالوج'),
               orderedList(S, 'product', 'المنتجات والأصناف', 'product'),
               orderedList(S, 'productCategory', 'التصنيفات', 'productCategory'),
               S.divider(),

@@ -10,6 +10,7 @@ import {
   staticContent,
   staticLayoutContent,
   type CtaButton,
+  type CatalogPageBlockData,
   type GalleryCategory,
   type LayoutContent,
   type PageSeo,
@@ -67,6 +68,13 @@ const isVisible = (doc: Doc | null | undefined) => doc?.visible !== false
 function altOf(image: Doc | null | undefined, fallback: Localized): Localized {
   const alt = optionalLocalized(image?.alt)
   return alt ? { ar: clean(alt.ar), en: clean(alt.en) } : fallback
+}
+
+function localizedImageUrls(value: Doc | null | undefined, width = 1600): Localized | undefined {
+  const ar = imageUrl(value?.ar, width)
+  const en = imageUrl(value?.en, width)
+  if (!ar && !en) return undefined
+  return { ar: ar ?? en!, en: en ?? ar! }
 }
 
 function buttons(value: unknown, fallback: CtaButton[]): CtaButton[] {
@@ -330,7 +338,7 @@ function whatsapp(
 }
 
 export function normalizeContent(data: Doc | null | undefined): SiteContent {
-  if (!data || (!data.settings && !data.home && !data.products?.length)) return staticContent
+  if (!data || (!data.settings && !data.home && !data.products?.length && !data.catalogPage)) return staticContent
 
   const base = staticContent
   const settings: Doc = data.settings ?? {}
@@ -610,27 +618,68 @@ export function normalizeContent(data: Doc | null | undefined): SiteContent {
             ar: 'الدليل المعتمد للأصناف والمواد الغذائية التموينية لكبرى المطاعم، الفنادق، ومطابخ الإعاشة في المملكة العربية السعودية.',
             en: 'Official certified catalog of wholesale foodservice ingredients and staples for restaurants, hotels, and central catering kitchens across Saudi Arabia.',
           }),
-          catalogVersion: clean(data.catalogPage.catalogVersion) || '2025.1',
-          lastUpdated: clean(data.catalogPage.lastUpdated) || '2025-03-01',
-          pdfFileUrl: clean(data.catalogPage.pdfFileUrl) || undefined,
-          externalPdfUrl: clean(data.catalogPage.externalPdfUrl) || undefined,
-          bannerAlert: optionalLocalized(data.catalogPage.bannerAlert),
-          coreSpecialtiesHeading: optionalLocalized(data.catalogPage.coreSpecialtiesHeading),
+          catalogVersion: clean(data.catalogPage.catalogVersion) || undefined,
+          lastUpdated: clean(data.catalogPage.lastUpdated) || undefined,
+          pageFormat: 'a4Landscape',
           supportingCommoditiesHeading: optionalLocalized(data.catalogPage.supportingCommoditiesHeading),
           supportingCommoditiesNote: optionalLocalized(data.catalogPage.supportingCommoditiesNote),
           downloadNote: optionalLocalized(data.catalogPage.downloadNote),
-          inquiryWhatsApp: clean(data.catalogPage.inquiryWhatsApp) || '966509971699',
+          keywords: list(data.catalogPage.keywords)
+            .map((phrase) => localized(phrase, { ar: '', en: '' }))
+            .filter((phrase) => phrase.ar || phrase.en),
+          pages: list(data.catalogPage.pages).map((page, index): CatalogPageBlockData => ({
+            id: clean(page._key) || `catalog-page-${index + 1}`,
+            pageType: ['cover', 'productIndex', 'productGroup', 'fullPageImage', 'supportingCommodities', 'closing', 'custom'].includes(clean(page.pageType))
+              ? clean(page.pageType) as CatalogPageBlockData['pageType']
+              : 'custom',
+            visible: page.visible !== false,
+            includeInIndex: page.includeInIndex !== false,
+            showHeading: page.showHeading !== false,
+            title: optionalLocalized(page.title),
+            subtitle: optionalLocalized(page.subtitle),
+            description: optionalLocalized(page.description),
+            backgroundMode: clean(page.backgroundMode) === 'image' ? 'image' : 'white',
+            backgroundImage: imageUrl(page.backgroundImage, 1600),
+            fullPageImage: imageUrl(page.fullPageImage, 1800),
+            fullPageImageAlt: optionalLocalized(page.fullPageImage?.alt),
+            items: list(page.items).filter(Boolean).map((item, itemIndex) => ({
+              id: clean(item._key) || `catalog-item-${itemIndex + 1}`,
+              title: optionalLocalized(item.title),
+              subtitle: optionalLocalized(item.subtitle),
+              caption: optionalLocalized(item.caption),
+              product: item.product?._id
+                ? {
+                    id: clean(item.product._id),
+                    slug: clean(item.product.slug) || clean(item.product._id),
+                    name: localized(item.product.name, { ar: '', en: '' }),
+                    description: optionalLocalized(item.product.description),
+                    image: localizedImageUrls(item.product.image, 1200),
+                    gallery: list(item.product.gallery).map((image) => imageUrl(image, 1200)).filter((url): url is string => Boolean(url)),
+                    isCoreSpecialty: item.product.isCoreSpecialty === true,
+                    order: typeof item.product.order === 'number' ? item.product.order : itemIndex,
+                  }
+                : undefined,
+              images: list(item.images).flatMap((image) => {
+                const url = imageUrl(image, 1200)
+                return url
+                  ? [{ url, alt: optionalLocalized(image.alt), caption: optionalLocalized(image.caption) }]
+                  : []
+              }),
+            })),
+            categories: list(page.categories).filter(Boolean).map((category, categoryIndex) => ({
+              id: clean(category._id) || `catalog-category-${categoryIndex + 1}`,
+              slug: clean(category.slug) || clean(category._id),
+              name: localized(category.name, { ar: '', en: '' }),
+              description: optionalLocalized(category.description),
+              image: imageUrl(category.image, 1200),
+            })),
+          })),
           seo: seo(data.catalogPage.seo, base.seo.products),
           supportingCommodities: list(data.catalogPage.supportingCommodities).map((item, index) => ({
             id: clean(item.id) || `commodity-${index + 1}`,
             name: localized(item.name, { ar: '', en: '' }),
             description: localized(item.description, { ar: '', en: '' }),
-            icon: clean(item.icon) || 'package',
-            packagingSummary: localized(item.packagingSummary, { ar: '', en: '' }),
-            sampleItems: {
-              ar: list(item.sampleItems).map((value) => localized(value, { ar: '', en: '' }).ar).filter(Boolean),
-              en: list(item.sampleItems).map((value) => localized(value, { ar: '', en: '' }).en).filter(Boolean),
-            },
+            image: localizedImageUrls(item.image, 900),
           })),
         }
       : undefined,

@@ -33,12 +33,15 @@ export async function generateMetadata({
   const content = await getContent()
 
   const title = content.catalogPage?.seo?.title[locale] || (isAr
-    ? 'كتالوج وقائمة الأصناف التموينية | شركة منافذ التوريد'
-    : 'Wholesale Foodservice Product Catalog | Mnaveth ALTourid')
+    ? 'توريد كبدة كلاسيك وجوني جولد ومخ ولسان وريش بالجملة في السعودية | منافذ التوريد'
+    : 'Wholesale Classic & Johny Gold Liver, Brain, Tongue and Ribs in Saudi Arabia | Mnaveth ALTourid')
 
   const description = content.catalogPage?.seo?.description[locale] || (isAr
-    ? 'تصفح قائمة الأصناف التموينية والغذائية المعتمدة لشركة منافذ التوريد: لحوم مجمدة، أرز بسمتي هندي، زيوت طعام فندقية، معلبات، وتمور للمطاعم والفنادق.'
-    : 'Browse the certified wholesale food products menu of Mnaveth ALTourid: frozen meats, basmati rice, frying oils, canned goods, and dates for restaurants.')
+    ? 'كتالوج شركة منافذ التوريد التجارية لتوريد اللحوم بالجملة في المملكة العربية السعودية: كبدة كلاسيك، كبدة جوني جولد، مخ، لسان وريش للمنشآت والمطاعم.'
+    : 'Explore Mnaveth ALTourid’s wholesale meat catalog in Saudi Arabia: Classic and Johny Gold liver, brain, tongue, and ribs for restaurants and commercial kitchens.')
+  const keywords = content.catalogPage?.keywords?.map((phrase) => phrase[locale]).filter(Boolean) || (isAr
+    ? ['توريد لحوم بالجملة في السعودية', 'مورد لحوم للمطاعم', 'توريد لحوم الرياض', 'توريد لحوم جدة', 'توريد لحوم مكة', 'كبدة كلاسيك بالجملة', 'كبدة جوني جولد بالجملة', 'توريد مخ ولسان وريش للمطاعم']
+    : ['wholesale meat supply Saudi Arabia', 'restaurant meat supplier Saudi Arabia', 'meat supply Riyadh', 'meat supply Jeddah', 'meat supply Makkah', 'Classic liver wholesale', 'Johny Gold liver wholesale', 'wholesale brain tongue and ribs'])
 
   return buildMetadata({
     path: '/catalog',
@@ -46,6 +49,7 @@ export async function generateMetadata({
     title,
     description,
     image: content.catalogPage?.seo?.shareImage,
+    keywords,
   })
 }
 
@@ -79,16 +83,16 @@ export default async function CatalogPage({
         categoryName,
         description: p.description,
         origin: p.origin || { ar: 'غير محدد', en: 'Not specified' },
-        packaging: p.packaging || undefined,
-        storage: p.storage || undefined,
-        certifications: p.certifications || undefined,
+        packaging: p.packaging || { ar: '', en: '' },
+        storage: p.storage || { ar: '', en: '' },
+        certifications: p.certifications || { ar: '', en: '' },
         usage: p.usage,
         tempType: (p.storage?.ar?.includes('مجمد') || p.storage?.ar?.includes('-18')
           ? 'frozen'
           : p.storage?.ar?.includes('مبرد')
             ? 'chilled'
             : 'ambient') as any,
-        image: p.image || undefined,
+        image: p.image || '/images/hero.png',
         gallery: p.gallery || undefined,
         isCoreSpecialty: p.isCoreSpecialty === true || legacyCoreSpecialtySlugs.has(p.slug || ''),
         order: p.order ?? idx,
@@ -104,15 +108,16 @@ export default async function CatalogPage({
   }
 
   // F3: ItemList Schema for indexed catalog products
+  const focusedProducts = productsToUse.filter((product) => product.isCoreSpecialty)
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: isAr ? 'قائمة الأصناف والمنتجات التموينية' : 'Wholesale Foodservice Products Catalog',
+    name: isAr ? 'كتالوج توريد اللحوم بالجملة في السعودية' : 'Wholesale Meat Supply Catalog in Saudi Arabia',
     description: isAr
-      ? 'الدليل المعتمد للأصناف والمواد الغذائية التموينية لكبرى المطاعم والفنادق'
-      : 'Certified wholesale foodservice catalog for hotels and restaurants',
-    numberOfItems: productsToUse.length,
-    itemListElement: productsToUse.map((product, idx) => ({
+      ? 'أصناف منافذ التوريد الرئيسية: كبدة كلاسيك، كبدة جوني جولد، مخ، لسان وريش.'
+      : 'Mnaveth ALTourid’s focused wholesale specialties: Classic liver, Johny Gold liver, brain, tongue, and ribs.',
+    numberOfItems: focusedProducts.length,
+    itemListElement: focusedProducts.map((product, idx) => ({
       '@type': 'ListItem',
       position: idx + 1,
       name: isAr ? product.name.ar : product.name.en || product.name.ar,
@@ -121,11 +126,10 @@ export default async function CatalogPage({
   }
 
   return (
-    <div className="pt-28 md:pt-36">
+    <div className="pt-28 md:pt-36 print:pt-0">
       <JsonLd schema={itemListSchema} />
       <CatalogView
         products={productsToUse}
-        categories={categories}
         catalogMeta={content.catalogPage}
       />
     </div>

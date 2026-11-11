@@ -137,7 +137,7 @@
     color: #111827 !important;
     font-size: 11pt;
   }
-  header, footer, nav, [data-floating-action], [aria-label*="whatsapp"], [aria-label*="واتساب"] {
+  [data-floating-action], [aria-label*="whatsapp"], [aria-label*="واتساب"] {
     display: none !important;
   }
   .print\:hidden {

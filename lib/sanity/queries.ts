@@ -33,7 +33,39 @@ export const siteContentQuery = defineQuery(`{
   "aboutPage": *[_type == "aboutPage"][0]{...},
   "catalogPage": *[_type == "catalogPage"][0]{
     ...,
-    "pdfFileUrl": pdfFile.asset->url
+    "pages": pages[]{
+      ...,
+      "backgroundImage": backgroundImage{..., "assetUrl": asset->url},
+      "fullPageImage": fullPageImage{..., "assetUrl": asset->url},
+      "items": items[]{
+        ...,
+        "product": product->{
+          _id,
+          name,
+          "slug": slug.current,
+          description,
+          image,
+          "gallery": gallery[]{..., "assetUrl": asset->url},
+          isCoreSpecialty,
+          order
+        },
+        "images": images[]{..., "assetUrl": asset->url}
+      },
+      "categories": categories[]->{
+        _id,
+        name,
+        "slug": slug.current,
+        description,
+        image{..., "assetUrl": asset->url}
+      }
+    },
+    "supportingCommodities": supportingCommodities[]{
+      ...,
+      "image": {
+        "ar": image.ar{..., "assetUrl": asset->url},
+        "en": image.en{..., "assetUrl": asset->url}
+      }
+    }
   },
   "home": *[_type == "homePage"][0]{
     ...,
@@ -81,7 +113,39 @@ export const aboutPageQuery = defineQuery(`*[_type == "aboutPage"][0]{...}`)
 export const catalogPageQuery = defineQuery(`{
   "catalogPage": *[_type == "catalogPage"][0]{
     ...,
-    "pdfFileUrl": pdfFile.asset->url
+    "pages": pages[]{
+      ...,
+      "backgroundImage": backgroundImage{..., "assetUrl": asset->url},
+      "fullPageImage": fullPageImage{..., "assetUrl": asset->url},
+      "items": items[]{
+        ...,
+        "product": product->{
+          _id,
+          name,
+          "slug": slug.current,
+          description,
+          image,
+          "gallery": gallery[]{..., "assetUrl": asset->url},
+          isCoreSpecialty,
+          order
+        },
+        "images": images[]{..., "assetUrl": asset->url}
+      },
+      "categories": categories[]->{
+        _id,
+        name,
+        "slug": slug.current,
+        description,
+        image{..., "assetUrl": asset->url}
+      }
+    },
+    "supportingCommodities": supportingCommodities[]{
+      ...,
+      "image": {
+        "ar": image.ar{..., "assetUrl": asset->url},
+        "en": image.en{..., "assetUrl": asset->url}
+      }
+    }
   },
   "products": *[_type == "product" && (visible != false)] | order(order asc){
     ...,

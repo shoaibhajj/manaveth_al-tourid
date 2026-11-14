@@ -303,7 +303,7 @@ export function CatalogView({ products, catalogMeta }: Props) {
     try {
       const [{ jsPDF }, html2canvasModule] = await Promise.all([
         import('jspdf'),
-        import('html2canvas'),
+        import('html2canvas-pro'),
       ])
       const html2canvas = html2canvasModule.default
       const sourceSlides = Array.from(document.querySelectorAll<HTMLElement>('.catalog-print-slide'))

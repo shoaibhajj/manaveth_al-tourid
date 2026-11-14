@@ -340,8 +340,8 @@ export function CatalogView({ products, catalogMeta }: Props) {
 
         if (image) await image.decode().catch(() => undefined)
 
-        const widthPx = isFullImage && image?.naturalWidth ? image.naturalWidth : a4WidthPx
-        const heightPx = isFullImage && image?.naturalHeight ? image.naturalHeight : a4HeightPx
+        let widthPx = isFullImage && image?.naturalWidth ? image.naturalWidth : a4WidthPx
+        let heightPx = isFullImage && image?.naturalHeight ? image.naturalHeight : a4HeightPx
         Object.assign(slide.style, {
           width: `${widthPx}px`,
           height: `${heightPx}px`,
@@ -360,32 +360,52 @@ export function CatalogView({ products, catalogMeta }: Props) {
           ),
         )
 
-        stage = 'rendering page images'
-        const canvas = await html2canvas(slide, {
-          foreignObjectRendering: true,
-          onclone: (clonedDocument) => {
-            const clonedRoot = clonedDocument.getElementById('catalog-pdf-capture')
-            if (clonedRoot) {
-              clonedRoot.style.left = '0'
-              clonedRoot.style.top = '0'
-              clonedRoot.style.opacity = '1'
-              clonedRoot.style.zIndex = '2147483647'
-            }
-          },
-          backgroundColor: '#ffffff',
-          scale: isFullImage ? 1 : 2,
-          useCORS: true,
-          logging: false,
-          width: widthPx,
-          height: heightPx,
-          windowWidth: window.innerWidth,
-          windowHeight: window.innerHeight,
-        })
-        const pageWidthPt = isFullImage ? widthPx * 0.75 : a4WidthPt
+            let data: string
+        if (isFullImage && image) {
+          stage = 'loading full-page image'
+          const response = await fetch(image.currentSrc || image.src, { mode: 'cors' })
+          if (!response.ok) throw new Error(`Image request failed (${response.status})`)
+          const bitmap = await createImageBitmap(await response.blob())
+          widthPx = bitmap.width
+          heightPx = bitmap.height
+          const imageCanvas = document.createElement('canvas')
+          imageCanvas.width = widthPx
+          imageCanvas.height = heightPx
+          const imageContext = imageCanvas.getContext('2d')
+          if (!imageContext) {
+            bitmap.close()
+            throw new Error('Could not prepare the full-page image')
+          }
+          imageContext.drawImage(bitmap, 0, 0)
+          bitmap.close()
+          data = imageCanvas.toDataURL('image/png')
+        } else {
+          stage = 'rendering page images'
+          const canvas = await html2canvas(slide, {
+            onclone: (clonedDocument) => {
+              const clonedRoot = clonedDocument.getElementById('catalog-pdf-capture')
+              if (clonedRoot) {
+                clonedRoot.style.left = '0'
+                clonedRoot.style.top = '0'
+                clonedRoot.style.opacity = '1'
+                clonedRoot.style.zIndex = '2147483647'
+              }
+            },
+            backgroundColor: '#ffffff',
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            width: widthPx,
+            height: heightPx,
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight,
+          })
+          data = canvas.toDataURL('image/jpeg', 0.96)
+        }
+    const pageWidthPt = isFullImage ? widthPx * 0.75 : a4WidthPt
         const pageHeightPt = isFullImage ? heightPx * 0.75 : a4HeightPt
         const orientation = pageWidthPt >= pageHeightPt ? 'landscape' : 'portrait'
         const format: [number, number] = [pageWidthPt, pageHeightPt]
-        const data = canvas.toDataURL(isFullImage ? 'image/png' : 'image/jpeg', 0.96)
 
         stage = 'assembling PDF pages'
         if (!pdf) {

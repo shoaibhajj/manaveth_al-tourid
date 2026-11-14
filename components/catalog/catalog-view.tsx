@@ -382,6 +382,7 @@ export function CatalogView({ products, catalogMeta }: Props) {
         } else {
           stage = 'rendering page images'
           const canvas = await html2canvas(slide, {
+            foreignObjectRendering: true,
             onclone: (clonedDocument) => {
               const clonedRoot = clonedDocument.getElementById('catalog-pdf-capture')
               if (clonedRoot) {

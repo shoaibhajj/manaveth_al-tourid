@@ -120,7 +120,11 @@ function CatalogSlide({
 
   if (page.pageType === 'fullPageImage') {
     return (
-      <article className={`catalog-slide catalog-full-image ${print ? 'catalog-print-slide' : ''}`} dir={direction}>
+            <article
+        className={`catalog-slide catalog-full-image ${print ? 'catalog-print-slide catalog-print-full-image' : ''}`}
+        data-print-page-index={print ? pageIndex : undefined}
+        dir={direction}
+      >
         {page.fullPageImage ? <img src={page.fullPageImage} alt={text(page.fullPageImageAlt, locale, title)} /> : (
           <div className="catalog-slide-empty">{isAr ? 'أضف صورة تصميم الصفحة في Sanity' : 'Add a full-page design image in Sanity'}</div>
         )}
@@ -288,7 +292,37 @@ export function CatalogView({ products, catalogMeta }: Props) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [isAr, pages.length])
 
-  const downloadPdf = () => window.print()
+  const downloadPdf = async () => {
+    const imageSlides = Array.from(document.querySelectorAll<HTMLElement>('.catalog-print-full-image'))
+    const pageRules: string[] = []
+
+    await Promise.all(imageSlides.map(async (slide) => {
+      slide.style.removeProperty('page')
+      const image = slide.querySelector('img')
+      const pageIndex = slide.dataset.printPageIndex
+      if (!image || pageIndex === undefined) return
+
+      await image.decode().catch(() => undefined)
+      if (!image.naturalWidth || !image.naturalHeight) return
+
+      const pageName = `catalog-full-${pageIndex}`
+      slide.style.setProperty('page', pageName)
+      pageRules.push(`@page ${pageName} { size: ${image.naturalWidth}px ${image.naturalHeight}px; margin: 0; }`)
+    }))
+
+    document.getElementById('catalog-print-page-sizes')?.remove()
+    const printStyles = document.createElement('style')
+    printStyles.id = 'catalog-print-page-sizes'
+    printStyles.textContent = pageRules.join('\n')
+    document.head.append(printStyles)
+
+    window.addEventListener('afterprint', () => {
+      printStyles.remove()
+      imageSlides.forEach((slide) => slide.style.removeProperty('page'))
+    }, { once: true })
+
+    window.print()
+  }
   const title = text(catalogMeta?.title, locale, isAr ? 'كتالوج المنتجات' : 'Product Catalog')
 
   if (!activePage) return null

@@ -297,6 +297,8 @@ export function CatalogView({ products, catalogMeta }: Props) {
   const downloadPdf = async () => {
     setIsExporting(true)
     let captureRoot: HTMLDivElement | undefined
+    let currentPage = 0
+    let stage = 'loading PDF libraries'
 
     try {
       const [{ jsPDF }, html2canvasModule] = await Promise.all([
@@ -307,16 +309,19 @@ export function CatalogView({ products, catalogMeta }: Props) {
       const sourceSlides = Array.from(document.querySelectorAll<HTMLElement>('.catalog-print-slide'))
       if (!sourceSlides.length) return
 
+      stage = 'preparing catalog pages'
       captureRoot = document.createElement('div')
+      captureRoot.id = 'catalog-pdf-capture'
       captureRoot.setAttribute('aria-hidden', 'true')
       Object.assign(captureRoot.style, {
         position: 'fixed',
-        left: '-20000px',
+        left: '0',
         top: '0',
         display: 'block',
         visibility: 'visible',
         pointerEvents: 'none',
         zIndex: '-1',
+        opacity: '0',
       })
       document.body.append(captureRoot)
 
@@ -326,7 +331,9 @@ export function CatalogView({ products, catalogMeta }: Props) {
       const a4HeightPt = (210 / 25.4) * 72
       let pdf: InstanceType<typeof jsPDF> | undefined
 
-      for (const sourceSlide of sourceSlides) {
+      for (const [pageIndex, sourceSlide] of sourceSlides.entries()) {
+        currentPage = pageIndex + 1
+        stage = 'loading page images'
         const slide = sourceSlide.cloneNode(true) as HTMLElement
         const isFullImage = sourceSlide.classList.contains('catalog-print-full-image')
         const image = slide.querySelector<HTMLImageElement>('img')
@@ -353,7 +360,17 @@ export function CatalogView({ products, catalogMeta }: Props) {
           ),
         )
 
+        stage = 'rendering page images'
         const canvas = await html2canvas(slide, {
+          onclone: (clonedDocument) => {
+            const clonedRoot = clonedDocument.getElementById('catalog-pdf-capture')
+            if (clonedRoot) {
+              clonedRoot.style.left = '0'
+              clonedRoot.style.top = '0'
+              clonedRoot.style.opacity = '1'
+              clonedRoot.style.zIndex = '2147483647'
+            }
+          },
           backgroundColor: '#ffffff',
           scale: isFullImage ? 1 : 2,
           useCORS: true,
@@ -369,6 +386,7 @@ export function CatalogView({ products, catalogMeta }: Props) {
         const format: [number, number] = [pageWidthPt, pageHeightPt]
         const data = canvas.toDataURL(isFullImage ? 'image/png' : 'image/jpeg', 0.96)
 
+        stage = 'assembling PDF pages'
         if (!pdf) {
           pdf = new jsPDF({ orientation, unit: 'pt', format, compress: true })
         } else {
@@ -379,14 +397,16 @@ export function CatalogView({ products, catalogMeta }: Props) {
       }
 
       if (pdf) {
+        stage = 'downloading PDF'
         const safeTitle = title.replace(/[\\/:*?"<>|]+/g, '-').trim() || 'catalog'
         pdf.save(`${safeTitle}.pdf`)
       }
     } catch (error) {
-      console.error('Catalog PDF generation failed:', error)
+      const detail = error instanceof Error ? error.message : String(error)
+      console.error('Catalog PDF generation failed:', { stage, currentPage, error })
       window.alert(isAr
-        ? 'تعذر إنشاء ملف PDF. تحقق من اتصال الصور ثم أعد المحاولة.'
-        : 'Could not create the PDF. Check the image connection and try again.')
+        ? `تعذر إنشاء ملف PDF عند الصفحة ${currentPage || 1} (${stage}). ${detail}`
+        : `Could not create the PDF on page ${currentPage || 1} (${stage}). ${detail}`)
     } finally {
       captureRoot?.remove()
       setIsExporting(false)

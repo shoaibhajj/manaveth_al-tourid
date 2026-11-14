@@ -277,6 +277,7 @@ export function CatalogView({ products, catalogMeta }: Props) {
   )
   const format = 'a4Landscape'
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isExporting, setIsExporting] = useState(false)
   const activePage = pages[Math.min(activeIndex, Math.max(pages.length - 1, 0))]
   const PreviousIcon = isAr ? ArrowRight : ArrowLeft
   const NextIcon = isAr ? ArrowLeft : ArrowRight
@@ -292,38 +293,105 @@ export function CatalogView({ products, catalogMeta }: Props) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [isAr, pages.length])
 
-  const downloadPdf = async () => {
-    const imageSlides = Array.from(document.querySelectorAll<HTMLElement>('.catalog-print-full-image'))
-    const pageRules: string[] = []
-
-    await Promise.all(imageSlides.map(async (slide) => {
-      slide.style.removeProperty('page')
-      const image = slide.querySelector('img')
-      const pageIndex = slide.dataset.printPageIndex
-      if (!image || pageIndex === undefined) return
-
-      await image.decode().catch(() => undefined)
-      if (!image.naturalWidth || !image.naturalHeight) return
-
-      const pageName = `catalog-full-${pageIndex}`
-      slide.style.setProperty('page', pageName)
-      pageRules.push(`@page ${pageName} { size: ${image.naturalWidth}px ${image.naturalHeight}px; margin: 0; }`)
-    }))
-
-    document.getElementById('catalog-print-page-sizes')?.remove()
-    const printStyles = document.createElement('style')
-    printStyles.id = 'catalog-print-page-sizes'
-    printStyles.textContent = pageRules.join('\n')
-    document.head.append(printStyles)
-
-    window.addEventListener('afterprint', () => {
-      printStyles.remove()
-      imageSlides.forEach((slide) => slide.style.removeProperty('page'))
-    }, { once: true })
-
-    window.print()
-  }
   const title = text(catalogMeta?.title, locale, isAr ? 'كتالوج المنتجات' : 'Product Catalog')
+  const downloadPdf = async () => {
+    setIsExporting(true)
+    let captureRoot: HTMLDivElement | undefined
+
+    try {
+      const [{ jsPDF }, html2canvasModule] = await Promise.all([
+        import('jspdf'),
+        import('html2canvas'),
+      ])
+      const html2canvas = html2canvasModule.default
+      const sourceSlides = Array.from(document.querySelectorAll<HTMLElement>('.catalog-print-slide'))
+      if (!sourceSlides.length) return
+
+      captureRoot = document.createElement('div')
+      captureRoot.setAttribute('aria-hidden', 'true')
+      Object.assign(captureRoot.style, {
+        position: 'fixed',
+        left: '-20000px',
+        top: '0',
+        display: 'block',
+        visibility: 'visible',
+        pointerEvents: 'none',
+        zIndex: '-1',
+      })
+      document.body.append(captureRoot)
+
+      const a4WidthPx = Math.round((297 / 25.4) * 96)
+      const a4HeightPx = Math.round((210 / 25.4) * 96)
+      const a4WidthPt = (297 / 25.4) * 72
+      const a4HeightPt = (210 / 25.4) * 72
+      let pdf: InstanceType<typeof jsPDF> | undefined
+
+      for (const sourceSlide of sourceSlides) {
+        const slide = sourceSlide.cloneNode(true) as HTMLElement
+        const isFullImage = sourceSlide.classList.contains('catalog-print-full-image')
+        const image = slide.querySelector<HTMLImageElement>('img')
+
+        if (image) await image.decode().catch(() => undefined)
+
+        const widthPx = isFullImage && image?.naturalWidth ? image.naturalWidth : a4WidthPx
+        const heightPx = isFullImage && image?.naturalHeight ? image.naturalHeight : a4HeightPx
+        Object.assign(slide.style, {
+          width: `${widthPx}px`,
+          height: `${heightPx}px`,
+          maxWidth: 'none',
+          maxHeight: 'none',
+          aspectRatio: 'auto',
+          flex: 'none',
+          margin: '0',
+          boxShadow: 'none',
+        })
+        captureRoot.append(slide)
+
+        await Promise.all(
+          Array.from(slide.querySelectorAll('img')).map((pageImage) =>
+            pageImage.decode().catch(() => undefined),
+          ),
+        )
+
+        const canvas = await html2canvas(slide, {
+          backgroundColor: '#ffffff',
+          scale: isFullImage ? 1 : 2,
+          useCORS: true,
+          logging: false,
+          width: widthPx,
+          height: heightPx,
+          windowWidth: window.innerWidth,
+          windowHeight: window.innerHeight,
+        })
+        const pageWidthPt = isFullImage ? widthPx * 0.75 : a4WidthPt
+        const pageHeightPt = isFullImage ? heightPx * 0.75 : a4HeightPt
+        const orientation = pageWidthPt >= pageHeightPt ? 'landscape' : 'portrait'
+        const format: [number, number] = [pageWidthPt, pageHeightPt]
+        const data = canvas.toDataURL(isFullImage ? 'image/png' : 'image/jpeg', 0.96)
+
+        if (!pdf) {
+          pdf = new jsPDF({ orientation, unit: 'pt', format, compress: true })
+        } else {
+          pdf.addPage(format, orientation)
+        }
+        pdf.addImage(data, isFullImage ? 'PNG' : 'JPEG', 0, 0, pageWidthPt, pageHeightPt)
+        slide.remove()
+      }
+
+      if (pdf) {
+        const safeTitle = title.replace(/[\\/:*?"<>|]+/g, '-').trim() || 'catalog'
+        pdf.save(`${safeTitle}.pdf`)
+      }
+    } catch (error) {
+      console.error('Catalog PDF generation failed:', error)
+      window.alert(isAr
+        ? 'تعذر إنشاء ملف PDF. تحقق من اتصال الصور ثم أعد المحاولة.'
+        : 'Could not create the PDF. Check the image connection and try again.')
+    } finally {
+      captureRoot?.remove()
+      setIsExporting(false)
+    }
+  }
 
   if (!activePage) return null
 
@@ -334,7 +402,7 @@ export function CatalogView({ products, catalogMeta }: Props) {
           <div className="catalog-title-lockup"><span className="catalog-lockup-mark">M</span><div><p>{isAr ? 'كتالوج شركة منافذ التوريد' : 'MNAVETH ALTOURID CATALOG'}</p><h1>{title}</h1></div></div>
           <div className="catalog-toolbar-actions">
             <span className="catalog-format-label"><Maximize2 size={15} />{format === 'a4Landscape' ? (isAr ? 'أفقي · A4' : 'LANDSCAPE · A4') : '16:9'}</span>
-            <button className="catalog-download-button" type="button" onClick={downloadPdf}><Download size={17} /><span>{isAr ? 'تنزيل PDF' : 'Download PDF'}</span></button>
+            <button className="catalog-download-button" type="button" onClick={downloadPdf} disabled={isExporting}><Download size={17} /><span>{isExporting ? (isAr ? 'جارٍ تجهيز PDF' : 'Preparing PDF') : (isAr ? 'تنزيل PDF' : 'Download PDF')}</span></button>
           </div>
         </div>
         <div className="catalog-stage">

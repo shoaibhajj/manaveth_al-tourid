@@ -402,7 +402,7 @@ export function CatalogView({ products, catalogMeta }: Props) {
           })
           data = canvas.toDataURL('image/jpeg', 0.96)
         }
-    const pageWidthPt = isFullImage ? widthPx * 0.75 : a4WidthPt
+        const pageWidthPt = isFullImage ? widthPx * 0.75 : a4WidthPt
         const pageHeightPt = isFullImage ? heightPx * 0.75 : a4HeightPt
         const orientation = pageWidthPt >= pageHeightPt ? 'landscape' : 'portrait'
         const format: [number, number] = [pageWidthPt, pageHeightPt]
